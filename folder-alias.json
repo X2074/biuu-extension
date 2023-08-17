@@ -1,0 +1,20 @@
+{
+    "src/background": {
+        "description": "background相关"
+    },
+    "src/background/index.js": {
+        "description": "处理多个html加载"
+    },
+    "src/plugins/inject.js": {
+        "description": "注入当前页面的js"
+    },
+    "src/plugins/manifest.json": {
+        "description": "扩展的相关配置"
+    },
+    "src/popup/components/create": {
+        "description": "创建钱包"
+    },
+    "src/popup/components/loginWallt": {
+        "description": "登录钱包"
+    }
+}
