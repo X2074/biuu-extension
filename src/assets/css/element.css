@@ -1,0 +1,7 @@
+div.el-message{
+    min-width: 60%;
+    padding:10px
+}
+.el-message .el-message__content{
+    font-size: 12px;
+}
