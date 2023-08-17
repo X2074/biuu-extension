@@ -1,11 +1,11 @@
 {
 	"manifest_version": 2,
-	"name": "my-vue3-plugin",
+	"name": "meer-wallt",
 	"description": "基于vue3.x版本的chrome插件",
 	"version": "1.0.0",
 	"default_locale": "en",
 	"browser_action": {
-		"default_title": "my-vue3-plugin",
+		"default_title": "meer-wallt",
 		"default_icon": "assets/images/icon48.png",
 		"default_popup": "popup.html"
 	},

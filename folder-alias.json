@@ -16,5 +16,17 @@
     },
     "src/popup/components/loginWallt": {
         "description": "登录钱包"
+    },
+    "src/components/popup/components/details": {
+        "description": "账户基本信息"
+    },
+    "src/components/popup/components/privateKeys": {
+        "description": "导出私钥"
+    },
+    "src/components/popup/components/sites": {
+        "description": "链接多少网络"
+    },
+    "src/components/popup/components/activity": {
+        "description": "转账信息"
     }
 }

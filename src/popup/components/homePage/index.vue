@@ -16,15 +16,13 @@ onMounted(() => {
 	// 	toWei(txHash)
 	// }
 })
-
-const closeMore = () => {
-	console.log(787878);
-	moreShow.value = false;
-}
 // 关闭更多相关页面
-const modalOperate = () => {
+bus.on('modalOperate', (res) => {
 	moreShow.value = false;
-}
+})
+bus.on('closeMore', () => {
+	moreShow.value = false;
+})
 const onCopy = () => {
 	// navigator.clipboard.writeText(props.walltContent.address);
 	// $message.success('Copy Success!')

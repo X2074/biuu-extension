@@ -2,17 +2,17 @@
     <div class="more-options" v-show="optionsBol">
         <div class="options-list flex" v-for="item in options" :key="item.to" @click="toModal(item.to)">
             <img :src="item.url" alt="">
-            <p class="ml-5">{{item.text}}</p>
+            <p class="ml-5">{{item.text}}00</p>
         </div>
     </div>
     <div class="components-content" v-show="!optionsBol">
         <!-- 账户基本信息 -->
-        <!-- <details-page v-if="optionType == 'details'" @toModal="toModal" v-bind="$attrs" v-on="$listeners"/> -->
+        <details-popup v-if="optionType == 'details'" />
         <!-- 转账信息 -->
-        <!-- <activity-page v-if="optionType == 'activity'" v-bind="$attrs"  v-on="$listeners"/> -->
+        <activity-popup v-if="optionType == 'activity'" />
         <!-- 导出私钥 -->
-        <!-- <private-keys v-if="optionType == 'private'" v-bind="$attrs" v-on="$listeners"/> -->
+        <private-keys-popup v-if="optionType == 'private'" v-bind="$attrs" v-on="$listeners" />
         <!-- 链接多少网络 -->
-        <!-- <sites-page v-if="optionType == 'private'" v-bind="$attrs" v-on="$listeners"/> -->
+        <sites-popup v-if="optionType == 'private'" v-bind="$attrs" v-on="$listeners" />
     </div>
 </div>

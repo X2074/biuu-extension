@@ -32,21 +32,24 @@ const options = ref([
 ])
 const optionType = ref('')
 // 打开那个相关页面
+bus.on('toModal', (res) => {
+	toModal(res)
+})
 const toModal = (res) => {
-	// optionsBol.value = false;
-	// if (res == 'expand') {
-	// 	modalOperate();
-	// 	window.open('chrome-extension://' + localStorage.getItem('googleId') + '/walltBackground.html?pageType=userContent')
-	// }
-	// if (res == 'account') {
-	// 	alert('跳转到ateonscan首页')
-	// }
-	// if (res == 'activity') optionType.value = 'activity';
-	// if (res == 'details') optionType.value = 'details';
-	// if (res == 'private') optionType.value = 'private';
+	optionsBol.value = false;
+	if (res == 'expand') {
+		modalOperate();
+		window.open('chrome-extension://' + localStorage.getItem('googleId') + '/walltBackground.html?pageType=userContent')
+	}
+	if (res == 'account') {
+		alert('跳转到ateonscan首页')
+	}
+	if (res == 'activity') optionType.value = 'activity';
+	if (res == 'details') optionType.value = 'details';
+	if (res == 'private') optionType.value = 'private';
 }
 const modalOperate = () => {
-	// bus.emit('modalOperate', '')
+	bus.emit('modalOperate', '')
 }
 </script>
 <style lang="scss">
