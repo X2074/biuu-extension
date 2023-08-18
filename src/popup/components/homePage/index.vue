@@ -4,17 +4,17 @@ import { ref, onMounted, inject } from 'vue';
 import bus from '@/utils/bus.js';
 const transactionHash = ref(0);
 const moreShow = ref(false);
-// const props = defineProps(['walltContent'])
+const props = defineProps(['walltContent'])
 onMounted(() => {
-	// if (props.walltContent.txHash && props.walltContent.txHash.length > 1) {
-	// 	let index = props.walltContent.txHash.length - 1;
-	// 	let txHash = props.walltContent.txHash[index];
-	// 	toWei(txHash)
-	// } else {
-	// 	if (!props.walltContent.txHash) return;
-	// 	let txHash = props.walltContent.txHash[0];
-	// 	toWei(txHash)
-	// }
+	if (props.walltContent.txHash && props.walltContent.txHash.length > 1) {
+		let index = props.walltContent.txHash.length - 1;
+		let txHash = props.walltContent.txHash[index];
+		toWei(txHash)
+	} else {
+		if (!props.walltContent.txHash) return;
+		let txHash = props.walltContent.txHash[0];
+		toWei(txHash)
+	}
 })
 // 关闭更多相关页面
 bus.on('modalOperate', (res) => {

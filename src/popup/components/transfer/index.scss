@@ -1,0 +1,288 @@
+.send-to{
+    padding:0 12.5px;
+    .send-header{
+        position: relative;
+        p{
+            line-height: 24px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #000;
+            text-align: center;
+            &.cancel{
+                font-size: 12px;
+                color: #1592E6;
+                font-weight: 400;
+                line-height: 16px;
+                position: absolute;
+                right: 15px;
+                bottom: 0;
+                cursor: pointer;
+            }
+        }
+    }
+    .address-input{
+        .el-input-group__prepend{
+            background-color: transparent;
+            border-right: 0 !important;
+            padding: 0 10px;
+            cursor: pointer;
+            i{
+                font-size: 20px;
+            }
+        }
+        .el-input-group__append{
+            background-color: transparent;
+            border-left: 0 !important;
+            padding: 0 10px;
+            cursor: pointer;
+            i{
+                font-size: 20px;
+            }
+        }
+        .el-input__inner{
+            border-right: 0 !important;
+            border-left: 0 !important;
+            padding: 0;
+            &:focus{
+                border-color: #DCDFE6;
+            }
+        }
+    }
+    .invalid{
+        width: 280px;
+        height: 43px;
+        line-height: 43px;
+        border: 1px solid #FE0101;
+        background-color: #FED7D7;
+        color: #000;
+        font-size: 14px;
+        border-radius: 3px;
+    }
+    .send-account{
+        .account-content{
+            padding: 0 12.5px;
+            border: 1px solid #1592E6;
+            border-radius: 3px;
+            padding: 0 10px;
+            align-items: center;
+            width: 280px;
+            height: 55px;
+            position: relative;
+            .el-icon-close{
+                font-size: 20px;
+                position: absolute;
+                right: 5px;
+                top: 5px;
+                cursor: pointer;
+            }
+            img{
+                width: 15px;
+                height: 15px;
+            }
+            .user{
+                p{
+                    font-size: 12px;
+                    line-height: 15px;
+                }
+                .name{
+                    color: #1592E6;
+                }
+                .address{
+                    color: #000;
+                    transform: scale(0.8);
+                    margin-left: -25px;
+                }
+            }
+        }
+        .hex-data{
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            >p{
+                font-size: 14px;
+                color: #000;
+            }
+            >div{
+                border-radius: 5px;
+                padding: 10px;
+                width: 184px;
+                border: 1px solid;
+                .num-unit{
+                    .unit{
+                        font-size: 14px;
+                        color: #000;
+                        line-height: 20px;
+                    }
+                    .blance{
+                        font-size: 12px;
+                        line-height: 20px;
+                    }
+                    >div{
+                        align-items: center;
+                        .unit.el-input-number{
+                            width: 40px;
+                            >span{
+                                display: none;
+                            }
+                            .el-input{
+                                .el-input__inner{
+                                    height: 20px;
+                                }
+                            }
+                        }
+                    }
+                }
+                .asset.el-input-number{
+                    width: 50px;
+                    >span{
+                        display: none;
+                    }
+                }
+                .el-input{
+                    .el-input__inner{
+                        padding: 0;
+                        border: 0;
+                        text-align: left;
+                    }
+                }
+            }
+            .gas{
+                border: 0;
+                padding: 0;
+                justify-content: space-between;
+                .gas-num{
+                    p{
+                        font-size: 12px;
+                        color: #000;
+                        transform: scale(0.85);
+                        margin-left: -10px;
+                    }
+                    .el-input-number{
+                        width: 88px;
+                        border: 1px solid #000;
+                        border-radius: 3px;
+                        padding-left: 5px;
+                        line-height: 22px;
+                        .el-input__inner{
+                            height: 22px;
+                        }
+                        >span{
+                            line-height: 11px;
+                            border: 0;
+                            width: 20px;
+                            font-size: 12px;
+                            border-left: 1px solid #000;
+                            &.el-input-number__increase{
+                                margin-top: -1px;    
+                            }
+                            &.el-input-number__decrease{
+                                margin-bottom: -1px;
+                            }
+                            i{
+                                font-size: 12px;
+                                color: #000;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .send-btn{
+        align-items: center;
+        justify-content: space-around;
+        border-top: 1px solid #000;
+        width: calc(100% + 25px);
+        margin-left: -12.5px;
+        p{
+            width: 110px;
+            height: 38px;
+            line-height: 38px;
+            text-align: center;
+            font-size: 14px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .cancel{
+            border: 1px solid #1592E6;
+            color: #1592E6;
+        }
+        .confirm{
+            background-color: #1592E6;
+            color: #fff;
+        }
+    }
+    .secondary-confirmation{
+        .secondary-header{
+            justify-content: space-between;
+            align-items: center;
+            p{
+                font-size: 12px;
+                color: #000;
+            }
+            i{
+                font-size: 20px;
+            }
+        }
+        .secondary-edit{
+            i{
+                font-size: 20px;
+                color: #000;
+            }
+            p{
+                font-size: 12px;
+            }
+        }
+        .send-num{
+            background-color: #f2f4f6;
+            padding: 12px 20px;
+            .sending{
+                padding: 5px 10px;
+                border: 1px solid #000;
+                border-radius: 3px;
+                font-size: 12px;
+                width: 108px;
+            }
+            .num{
+                font-size: 20px;
+                line-height: 35px;
+            }
+            .usa{
+                font-size: 12px;
+            }
+        }
+        .gas-fee{
+            justify-content: space-between;
+            align-items: center;
+            &.border{
+                border-bottom: 1px solid #000;
+            }
+            .left{
+                font-weight: 600px;
+                font-size: 12px;
+                width: 80px;
+            }
+            .right{
+                &.total{
+                    width: 180px;
+                    div{
+                        width: 100%;
+                    }
+                }
+                div{
+                    justify-content: end;
+                    width: 120px;
+                    p{
+                        font-size: 12px;
+                    }
+                    .thick{
+                        font-weight: 600;
+                    }
+                    .ness{
+                        font-weight: 400;
+                    }
+                }
+            }
+        }
+    }
+}

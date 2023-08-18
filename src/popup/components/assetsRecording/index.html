@@ -1,0 +1,103 @@
+<div class="assets-recording">
+    <div class="user-info pt-35">
+        <div class="info-name flex">
+            <div class="ate flex">
+                <i class="el-icon-arrow-left mr-5"></i>
+                <p class="user-name">{{walltContent&&walltContent.userName?walltContent.userName:'Account 1'}}</p>
+                <p class="unit"> / ATE</p>
+            </div>
+            <div class="more-components">
+                <img src="images/more.png" @click="moreShow = true;" alt="">
+                <options-popup v-if="moreShow" />
+            </div>
+        </div>
+        <div class="user-currency mt-45 flex">
+            <img src="images/unitLogo.png" alt="">
+            <p class="ml-10">{{walltContent.balance}} {{walltContent.balanceUnit}}</p>
+        </div>
+        <div class="uesr-btn mt-30 flex">
+            <p @click="toPage('buyPage')">
+                <img src="images/buy.png" alt="">
+            </p>
+            <p class="ml-20 mr-20">
+                <img src="images/swap.png" alt="">
+            </p>
+            <p @click="sendTo">
+                <img src="images/send.png" alt="">
+            </p>
+        </div>
+        <div class="transactions mt-30" v-if="walltContent.txHash && txHashList.length">
+            <div class="pl-20 pr-10 flex" v-for="(item,index) in txHashList"
+                @click="transferContent = item;detailBol = true;" :key="index">
+                <div class="flex">
+                    <img v-if="(address!=item.to)" class="mr-10" src="images/homePage/to.png" alt="">
+                    <img v-else class="mr-10" src="images/homePage/zhaoweifu.png" alt="">
+                    <div>
+                        <p class="title">{{(address==item.to?'Receive':'Send')}}</p>
+                        <div class="time-address flex">
+                            <p class="date mr-5" v-if="item.time">{{item.time}}.</p>
+                            <p class="address">to: {{item.to.substr(0,4)}}...{{item.to.substr(-4)}}</p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="hkd">
+                    <p class="title">{{toWei(item.value)}}{{balanceUnit}}</p>
+                    <p class="text mt-5">HK$xxHKD</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 转账详情 -->
+    <div class="transfer-madel flex" v-if="detailBol">
+        <div class="transfer-detail">
+            <i @click="detailBol = false" class="el-icon-close"></i>
+            <p class="transfer-title">Receive</p>
+            <div class="transfer-text mt-30 flex">
+                <p class="status-to">Status</p>
+                <p class="view-id">View on block explorer</p>
+            </div>
+            <div class="transfer-text mt-10 flex">
+                <p class="confirmed">Confirmed</p>
+                <p class="view-id">View on block explorer</p>
+            </div>
+            <div class="transfer-text mt-10 flex">
+                <p class="status-to">From</p>
+                <p class="status-to">To</p>
+            </div>
+            <div class="transfer-text mt-10 flex">
+                <img class="user ml-5" src="images/user.png" alt="">
+                <p>{{transferContent?.from?.substr(0,4)}}...{{transferContent?.from?.substr(-4)}}</p>
+                <i class="el-icon-right"></i>
+                <img class="user ml-5" src="images/user.png" alt="">
+                <p>{{transferContent?.to?.substr(0,4)}}...{{transferContent?.to?.substr(-4)}}</p>
+            </div>
+            <div class="transfer-text mt-10 flex">
+                <p class="status-to">Transaction</p>
+            </div>
+            <div class="transfer-text mt-10 flex">
+                <p class="status-un">nonce</p>
+                <p class="status-un">{{transferContent.nonce}}</p>
+            </div>
+            <div class="transfer-text mt-10 flex">
+                <p class="status-un">Amount</p>
+                <p class="status-to">不知道对应啥</p>
+            </div>
+            <div class="transfer-text mt-10 flex">
+                <p class="status-un">Gas Limit(Units)</p>
+                <p class="status-to">{{transferContent.gas}}</p>
+            </div>
+            <div class="transfer-text mt-10 flex">
+                <p class="status-un">Gas Price</p>
+                <p class="status-to">{{transferContent.gasPrice}}</p>
+            </div>
+            <div class="transfer-text mt-10 flex">
+                <p class="status-un">Total</p>
+                <div>
+                    <p class="status-to">{{transferContent.valueOld}}{{walltContent.balanceUnit}}</p>
+                    <p class="mt-5">HK$xxHKD</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

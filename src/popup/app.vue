@@ -1,39 +1,35 @@
 <template>
 	<div class="meer-wallt">
-		{{ pageTypes }}
-		<!-- <div class="background_page_main" @click="openUrl()">
-			this is background page main
-		</div> -->
 		<headerPage v-if="(pageTypes && pagesArray.indexOf(pageTypes) > 1)" :walltContent="walltContent" />
 		<!-- 首次进入 -->
-		<!-- <create v-if="!loading && pageTypes == 'create'" /> -->
+		<create v-if="!loading && pageTypes == 'create'" />
 		<!-- 输入密码 -->
 		<loginwallt v-if="!loading && pageTypes == 'login'" />
 		<!-- 主页 -->
-		<homePage />
+		<homePage :walltContent="walltContent" v-if="!loading && pageTypes == 'homePage'" />
 		<!-- 跳转购买页面 -->
 		<!-- <buy-page @closeModal="closeModal" v-if="!loading && buyModal" /> -->
 		<!-- 交易记录页面 -->
-		<!-- <assetsRecording @nextPage="nextPage" v-if="!loading && pageTypes == 'assetsRecording'" :walltContent.value="walltContent.value" /> -->
+		<assetsRecording v-if="!loading && pageTypes == 'assetsRecording'" :walltContent="walltContent" />
 		<!-- 转账页面 -->
-		<!-- <send-to v-if="!loading && pageTypes == 'sendTo'" :walltContent.value="walltContent.value" @closeModal="closeModal"/> -->
+		<transfer v-if="!loading && pageTypes == 'sendTo'" :walltContent="walltContent" />
 		<!-- swap -->
 		<!-- <swap-page @nextPage="nextPage" v-if="!loading && pageTypes == 'swap'"/> -->
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, provide, watch } from 'vue';
+import { ref, onMounted, getCurrentInstance } from 'vue';
 // 因为popup的特殊原因，此处只有一个入口，页面切换靠各种类型的判断
 // import HomePage from '@/components/homePage.vue'
 // 已有账号，重新进入需要登录 
 import loginwallt from './components/loginwallt/index.vue'
-import create from './components/create/index.vue'
+// import create from './components/create/index.vue'
 import homePage from './components/homePage/index.vue'
 import headerPage from './components/header/index.vue'
 // import buyPage from './components/buyPage/index.vue'
-// import assetsRecording from './components/assetsRecording/index.vue'
-// import sendTo from './components/sendTo/index.vue'
+import assetsRecording from './components/assetsRecording/index.vue'
+import transfer from './components/transfer/index.vue'
 // import swapPage from './components/swap/index.vue'
 import { getCookie, setCookie, clearAllCookie } from '@/utils/index';
 import indexDbData from '@/utils/indexDB';
@@ -45,12 +41,15 @@ const userAddress = ref(null)
 const walltContent = ref(null)//账户相关信息
 const pageTypes = ref('')//判断当前应该展示那个页面
 const pagesArray = ref(['create', 'login', 'homePage', 'assetsRecording', 'sendTo', 'swap'])//页面地址数组,数组顺序为正常流程顺序
-
 onMounted(() => {
+	let data = getCurrentInstance();
+	// 定义rpc
+	// 全局定义web3
+	data.appContext.config.globalProperties.$web3 = new Web3(new Web3.providers.HttpProvider('https://testnet-amana.rpc.qitmeer.io'));
 	getInfo()
 })
 const openUrl = () => {
-	chrome.tabs.create({ url: 'background.html' });
+	// chrome.tabs.create({ url: 'background.html' });
 }
 const closeModal = (res) => {
 	if (res == 'buyPage') buyModal.value = false;
@@ -88,7 +87,6 @@ const getBlance = () => {
 		// 定义rpc
 		let web3 = new Web3(new Web3.providers.HttpProvider(res.url));
 		// Vue.prototype.$web3 = web3;
-		provide('web3', web3);
 		// 指定钱包单位
 		walltContent.value.balanceUnit = res.unit;
 		walltContent.value.url = res.url;

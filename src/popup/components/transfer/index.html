@@ -1,0 +1,118 @@
+<div class="send-to">
+    <div v-if="numberStep < 3" class="send-header mt-25">
+        <p>Send to</p>
+        <p class="cancel" @click="closeMore">cancel</p>
+    </div>
+    <!-- 输入转账地址 -->
+    <el-input v-if="numberStep == 1" class="address-input mt-10" v-model="sendAddress" placeholder="">
+        <i slot="prepend" class="el-icon-search" @click="searchInput"></i>
+        <i slot="append" class="el-icon-close" @click="cancelInput"></i>
+    </el-input>
+    <div v-if="sendBol" class="invalid pl-15 mt-25">
+        Recipient address is invalid
+    </div>
+    <!-- 转账的数量 -->
+    <div class="send-account" v-if="numberStep == 2">
+        <div class="account-content mt-10 flex">
+            <i @click="numberStep = true" class="el-icon-close"></i>
+            <img src="images/checkrue.png" alt="">
+            <div class="user">
+                <p class="name ml-5">Send To</p>
+                <p class="address mt- 5">{{sendAddress}}</p>
+            </div>
+        </div>
+        <div class="hex-data mt-15 flex">
+            <p>Asset:</p>
+            <div class="flex">
+                <div class="num-unit">
+                    <P class="unit">{{walltContent.balanceUnit}}</P>
+                    <P class="blance">Blance: {{blance}}{{walltContent.balanceUnit}}</P>
+                </div>
+            </div>
+        </div>
+        <div class="hex-data mt-10 flex">
+            <p>Amount:</p>
+            <div class="flex">
+                <div class="num-unit">
+                    <div class="flex">
+                        <el-input-number class="unit" v-model="assetNum" controls-position="right" :min="0" :max="1000">
+                        </el-input-number>
+                        <P class="unit">{{walltContent.balanceUnit}}</P>
+                    </div>
+                    <P class="blance">Blance: {{blance}}{{walltContent.balanceUnit}}</P>
+                </div>
+            </div>
+        </div>
+        <div class="hex-data mt-15 flex">
+            <p></p>
+            <div class="gas flex">
+                <div class="gas-num">
+                    <P class="mb-5">Gas price(GWEI)</P>
+                    <el-input-number v-model="gasPrice" controls-position="right" @change="handleChangeAsset" :min="10"
+                        :max="10000000000000"></el-input-number>
+                </div>
+                <div class="gas-num">
+                    <P class="mb-5">Gas limit</P>
+                    <el-input-number v-model="gasLimit" controls-position="right" @change="handleChangeAsset" :min="5"
+                        :max="1000000"></el-input-number>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="send-btn flex mt-35 pt-15" v-if="numberStep == 2">
+        <p class="cancel" @click="closeMore">Cancel</p>
+        <p class="confirm" @click="handleChangeAsset">Confirm</p>
+    </div>
+    <!-- 二次确认 -->
+    <div class="secondary-confirmation" v-if="numberStep == 3">
+        <div class="secondary-edit flex" @click="numberStep = 2">
+            <i class="el-icon-arrow-left"></i>
+            <p>Edit</p>
+        </div>
+        <div class="secondary-header mt-15 flex">
+            <p>Account 1</p>
+            <i class="el-icon-right"></i>
+            <p>{{sendAddress.substr(0,4)}}...{{sendAddress.substr(-4)}}</p>
+        </div>
+        <div class="send-num mt-10">
+            <p class="sending">SENDING {{walltContent.balanceUnit}}</p>
+            <p class="num mt-10">{{assetNum}}</p>
+            <p class="usa mt-5">$0.00</p>
+        </div>
+        <div class="gas-fee border pt-30 pb-10 flex">
+            <div class="left">Estimated gas fee</div>
+            <div class="right">
+                <div class="flex">
+                    <p class="ness">$0.00</p>
+                    <p class="thick ml-10">0.00021 {{walltContent.balanceUnit}}</p>
+                </div>
+                <div class="flex mt-20">
+                    <p class="thick">Max fee:</p>
+                    <p class="ness ml-5">$0.00</p>
+                </div>
+            </div>
+        </div>
+        <div class="gas-fee pt-30 pb-10 flex">
+            <div class="right">
+                <div class="">
+                    <p class="thick">Total</p>
+                    <p class="ness mt-10">Amount + gas fee</p>
+                </div>
+            </div>
+            <div class="right total">
+                <div class="flex">
+                    <p class="ness">$0.00</p>
+                    <p class="thick ml-10">{{sendTotal.substr(0,6)}} {{walltContent.balanceUnit}}</p>
+                </div>
+                <div class="flex mt-10">
+                    <p class="thick">Max amount:</p>
+                    <p class="ness ml-5">{{sendMaxTotal.substr(0,6)}} {{walltContent.balanceUnit}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="send-btn flex mt-35 pt-15" v-if="numberStep == 3">
+        <p class="cancel" @click="closeMore">Reject</p>
+        <p class="confirm" @click="swapBlance">Confirm</p>
+    </div>
+</div>

@@ -28,5 +28,47 @@
     },
     "src/components/popup/components/activity": {
         "description": "转账信息"
+    },
+    "src/popup/components/homePage": {
+        "description": "首页"
+    },
+    "src/popup/components/loginwallt": {
+        "description": "登陆"
+    },
+    "src/popup/components/buyPage": {
+        "description": "购买-暂不调试"
+    },
+    "src/popup/components/sendTo": {
+        "description": "转账"
+    },
+    "src/popup/components/assetsRecording": {
+        "description": "交易记录"
+    },
+    "src/popup/components/transfer": {
+        "description": "转账"
+    },
+    "src/components/background": {
+        "description": "背景页面生成"
+    },
+    "src/components/background/creasteWalletPage": {
+        "description": "创建钱包"
+    },
+    "src/components/background/header": {
+        "description": "公共头部，用来切换rpc地址"
+    },
+    "src/components/background/creasteWalletPage/addMnemonic": {
+        "description": "助记词"
+    },
+    "src/components/background/creasteWalletPage/homePage": {
+        "description": "生成助记词"
+    },
+    "src/components/background/creasteWalletPage/verifyMnemonic": {
+        "description": "二次验证助记词"
+    },
+    "src/components/background/creasteWalletPage/createMnemonic": {
+        "description": "生成助记词"
+    },
+    "src/components/background/indexPage": {
+        "description": "测试首页"
     }
 }

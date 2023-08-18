@@ -27,14 +27,23 @@ const plugins = [
 // 页面文件
 const pages = {};
 // 配置 popup.html 页面
-const chromeName = ["popup", "background"];
+const chromeName = ["popup", "background","indexPage","creasteWalletPage"];
 
 chromeName.forEach(name => {
-	pages[name] = {
-		entry: `src/${name}/main.js`,
-		template: `src/${name}/index.html`,
-		filename: `${name}.html`
-	};
+	// 如果是background页面，路径特殊处理
+	if(name.includes('Page')){
+		pages[name] = {
+			entry: `src/components/background/${name}/main.js`,
+			template: `src/components/background/${name}/index.html`,
+			filename: `${name}.html`
+		};
+	}else{
+		pages[name] = {
+			entry: `src/${name}/main.js`,
+			template: `src/${name}/index.html`,
+			filename: `${name}.html`
+		};
+	}
 });
 
 module.exports = {

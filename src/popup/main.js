@@ -14,4 +14,5 @@ app.component('activity-popup', activityPopup);
 app.component('details-popup', detailsPopup);
 app.component('private-keys-popup', privateKeysPopup);
 app.component('sites-popup', sitesPopup);
+app.config.globalProperties.$web3 = 'null';
 app.mount('#app')

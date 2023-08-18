@@ -1,24 +1,24 @@
 {
-    "compilerOptions": {
-      "noImplicitAny":false,
-      "target": "esnext",
-      "useDefineForClassFields": true,
-      "module": "ESNext",
-      "moduleResolution": "Node",
-      "jsx": "preserve",
-      "sourceMap": true,
-      "resolveJsonModule": true,
-      "isolatedModules": true,
-      "esModuleInterop": true,
-      "lib": ["ESNext", "DOM"],
-      "skipLibCheck": true,
-  //添加配置 start
-      "baseUrl": "./",// 解析非相对模块的基础地址，默认是当前目录
-      "paths": {
-      // 路径映射，相对于baseUrl
-        "@/*":["src/*"]
-      }
-      //添加配置 end
-    },
-    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
-  }
+  "compilerOptions": {
+    "target": "esnext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "jsx": "preserve",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "lib": ["ESNext", "DOM"],
+    "skipLibCheck": true,
+//添加配置 start
+    "baseUrl": "./",// 解析非相对模块的基础地址，默认是当前目录
+    "paths": {
+    // 路径映射，相对于baseUrl
+      "@/*":["src/*"]
+    }
+    //添加配置 end
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "exclude": ["node_modules"]
+}
