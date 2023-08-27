@@ -1,45 +1,126 @@
-<template>
-    <div class="new-mnemonic margin-auto" v-loading="loading">
-        <img class="return-img" @click="onPage" src="images/return.png" alt="">
-        <p class="mnemonic-title">Import wallet using account mnemonic</p>
-        <p class="mnemonic-text">Only the first account on this wallet will be loaded automatically. After completing this process, to add additional accounts, click the drop-down menu and select Create Account.</p>
-        <div class="title-select flex">
-            <p>Mnemonic</p>
-        </div>
-        <div class="mnemonic-tips flex">
-            <i class="el-icon-warning"></i>
-            <p>You can paste the whole mnemonic into any field.</p>
-        </div>
-        <div class="mnemonic-input flex" v-if="(mnemonicList && mnemonicList.length)">
-            <div class="input-list" v-for="item in mnemonicList" :key="item.id" :class="item.class?'bgc':''">
-                <p>{{item.id}}.</p>
-                <input @paste="pasteFun" :type="item.yn=='y'?'text':'password'" v-model="item.mnemonic" maxlength="15">
-                <img :class="item.yn=='y'?'none':'show'" :src="'images/'+(item.yn=='y'?'none':'show')+'.png'" @click="item.yn=='y'?(item.yn='n'):(item.yn='y')" alt="">
-            </div>
-        </div>
-        <div class="set-password flex">
-            <div class="new">
-                <p>New password (minimum 8 characters)</p>
-                <input class="mt-10" type="password" maxlength="16" v-model="newPsd">
-                <span v-if="newPsdBol">Please enter a minimum 8-digit passcode</span>
-            </div>
-            <div class="confirm">
-                <p>Confirm password</p>
-                <input class="mt-10" type="password" maxlength="16" v-model="confirmPsd">
-                <span v-if="confirmPsdBol">The passwords entered are inconsistent</span>
-            </div>
-        </div>
-        <div class="import flex">
-            <div class="flex">
-                <img :src="'images/'+(useCheck=='y'?'check':'uncheck')+'.png'" alt="">
-                <p class="flex"> I have read and agree to the terms of <a href="">use</a></p>
-            </div>
-            <button @click="creatKeyStory">import</button>
-        </div>
-    </div>
-  </template>
-  <script lang="js" src="./index.js"></script>
-  <style lang="scss">
-  @import "./index.scss";
-  </style>
-  
+<template src='./index.html'></template>
+<script lang='ts' setup>
+
+import { ref, onMounted, watchEffect, getCurrentInstance } from 'vue';
+import indexDbData from '../../../../utils/indexDB.js';
+import bus from '@/utils/bus.js';
+import md5 from 'js-md5';
+import Web3 from 'web3'
+let mnemonicList = ref([])//助记词数组
+let newPsd = ref('')//钱包密码
+let confirmPsd = ref('')//钱包密码
+let newPsdBol = ref(false)
+let confirmPsdBol = ref(false)
+let useCheck = ref('n')//是否阅读条款
+let walltInfo = ref(null)//钱包相关信息
+let loading = ref(true)
+let verifyBol = ref(false)
+
+onMounted(() => {
+    apendContent()
+})
+
+// 生成keystory文件
+const creatKeyStory = () => {
+    newPsdBol.value = false;
+    confirmPsdBol.value = false;
+    if (!verifyBol.value) return;
+    if (!newPsd.value || newPsd.value.length < 8) {
+        newPsdBol.value = true;
+        confirmPsd.value = '';
+        return;
+    }
+    if (!confirmPsd.value) {
+        confirmPsdBol.value = true;
+        return;
+    }
+    if (newPsd.value != confirmPsd.value) {
+        confirmPsdBol.value = true;
+        return;
+    }
+
+    let web3 = new Web3();
+    //生成keystore
+    let keystore = web3.eth.accounts.encrypt(walltInfo.value.privateKey, newPsd.value);
+    indexDbData.putData({
+        id: walltInfo.value.address,
+        userName: '',
+        userUrl: '',
+        logotype: 'keystore',
+        keystore: keystore
+    })
+    // 存储密码
+    indexDbData.putData({
+        id: md5('secret'),
+        secret: md5(newPsd.value)
+    })
+    // 存为当前展示的钱包数据
+    indexDbData.getData('currentWalltAddress').then(res => {
+        if (res && res.address) {
+            indexDbData.putData({
+                id: 'currentWalltAddress',
+                address: walltInfo.value.address,
+                userName: '',
+                userUrl: '',
+                NoIndex: res.NoIndex + 1//当前第几个用户
+            })
+        } else {
+            indexDbData.putData({
+                id: 'currentWalltAddress',
+                userName: '',
+                userUrl: '',
+                address: walltInfo.value.address,
+                NoIndex: 1
+            })
+        }
+    }).catch(err => { })
+    indexDbData.putData({
+        id: 'rpc_url',
+        unit: 'ETH',
+        CHAIN_ID: 1,
+        url: 'https://bsc-dataseed1.ninicoin.io'
+    })
+    indexDbData.putData({
+        id: 'currentWalltAddress',
+        address: walltInfo.value.address
+    })
+    // setTimeout(()=>{
+    // 	$emit('nextPage','userContent');
+    // },500)
+}
+// 监听粘贴事件
+const pasteFun = (e) => {
+    verifyBol.value = true;
+    let clipboardData = e.clipboardData.getData('Text');//获取粘贴内容
+    clipboardData = clipboardData.replace(/\r\n\r/g, ' ')
+    clipboardData = clipboardData.split(' ');
+    clipboardData.forEach((item, index) => {
+        console.log(walltInfo.value.mnemonicArray[index].length, item.length, walltInfo.value.mnemonicArray[index] == item.replace(/\s*/g, ''));
+        let data = {
+            id: index + 1,
+            mnemonic: item.replace(/\s*/g, ''),
+            yn: 'y',
+            class: walltInfo.value.mnemonicArray[index] == item.replace(/\s*/g, '') ? '' : 'un'
+        }
+        if (walltInfo.value.mnemonicArray[index] != item.replace(/\s*/g, '')) verifyBol.value = false;
+        mnemonicList.value[index] = data;
+    });
+}
+// 添加助记词显示
+const apendContent = () => {
+    for (let i = 0; i <= 11; ++i) {
+        let data = {
+            id: i + 1,
+            mnemonic: '',
+            yn: 'y'
+        }
+        mnemonicList.value.push(data)
+    }
+}
+const onPage = () => {
+    bus.emit('nextPage', 'createMnemonic')
+}
+</script>
+<style lang='scss'>
+@import './index.scss';
+</style>

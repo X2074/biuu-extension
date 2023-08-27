@@ -1,0 +1,31 @@
+<div class="meer-background">
+    <div v-if="pageTypes != 'urlConnect'">
+        <img class="return" src="/images/return.png" v-if="pageTypes == ' '" @click="returnPage" alt="">
+        <div class="header flex" v-if="(pageTypes && pagesArray.indexOf(pageTypes) > 2)">
+            <img class="spotpay" src="/images/logoMnemonic.png" alt="">
+            <div class="user-type flex">
+                <select id="my-select" v-model="walltEnvironment" @change="rpcChange">
+                    <option value="mainnet">QITMEER Mainnet</option>
+                    <option value="test">QITMEER Test</option>
+                    <option value="Qitmeer">Qitmeer Test</option>
+                </select>
+                <img class="user ml-5" src="/images/user.png" alt="">
+            </div>
+        </div>
+        <!-- 提示页面 -->
+        <div v-if="!loading && (pageTypes == 'create' || pageTypes == 'createWallt')">
+            <!-- <home-page @nextPage="nextPage" v-show="pageTypes == 'create'"/> -->
+            <!-- 创建钱包 -->
+            <!-- <add-mnemonic @nextPage="nextPage" v-show="pageTypes == 'createWallt'" /> -->
+        </div>
+        <!-- 导入钱包 -->
+        <!-- <import-mnemonic @nextPage="nextPage" v-if="!loading && pageTypes == 'importWallt'" /> -->
+        <!-- 用户信息页面 -->
+        <!-- <user-content @nextPage="nextPage" v-if="!loading && pageTypes == 'userContent'" :walltContent="walltContent" /> -->
+        <!-- 交易详情 -->
+        <!-- <hash-detail @nextPage="nextPage" v-if="!loading && pageTypes == 'hashDetail'" :walltContent="walltContent" /> -->
+        <!-- 用户购买页面 -->
+        <!-- <buy-page v-show="!loading && pageTypes == 'buyPage'" /> -->
+    </div>
+    <!-- <url-connect v-else /> -->
+</div>

@@ -4,7 +4,8 @@
         2、验证助记词
     -->
     <div class="create-wallt">
-        <createMnemonic />
+        <createMnemonic v-if="step == 1" />
+        <verifyMnemonic v-if="step == 2" />
     </div>
 </template>
 <script lang='ts' setup>
@@ -14,6 +15,7 @@ import indexDbData from '../../../utils/indexDB';
 import Web3 from 'web3'
 import bus from '../../../utils/bus.js';
 import createMnemonic from './createMnemonic/index.vue'
+import verifyMnemonic from './verifyMnemonic/index.vue'
 const mnemonicList = ref([])//助记词数组
 const newPsd = ref('')//钱包密码
 const confirmPsd = ref('')//钱包密码
@@ -24,8 +26,12 @@ const walltInfo = ref(null)//钱包相关信息
 const loading = ref(true)
 const web3 = ref(new Web3())
 const verifyBol = ref(false)
-bus.on('mnemonicContent', (res) => {
-    walltInfo.value = res;
+const step = ref(2);
+bus.on('nextPage', (res) => {
+    console.log(res, 'redssdsrssrer');
+
+    if (res == 'createMnemonic') step.value = 1;
+    if (res == 'verifyMnemonic') step.value = 2;
 })
 onMounted(() => {
 })

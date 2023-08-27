@@ -6,7 +6,7 @@ import { ref, onMounted, watchEffect, getCurrentInstance } from 'vue';
 // import { hdkey } from 'ethereumjs-wallet'
 // import util from 'ethereumjs-util'
 // import eip55 from 'eip55'
-import database from '../../../../utils/indexDB.js';
+import indexDbData from '../../../../utils/indexDB.js';
 import Web3 from 'web3';
 import bus from '../../../../utils/bus.js';
 const { hdkey } = require('ethereumjs-wallet')
@@ -21,7 +21,7 @@ onMounted(() => {
     createWallet()
 })
 const nextPage = () => {
-    //   this.$emit('nextPage','createWallt')
+    bus.emit('nextPage', 'verifyMnemonic')
 }// 生成相关信息
 const createWallet = async () => {
     try {

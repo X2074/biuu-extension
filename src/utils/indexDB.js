@@ -1,12 +1,12 @@
 import Dexie from 'dexie';
 
-const databaseName = 'QITMEERWallt';
-const databaseVersion = 1;
+const indexDbDataName = 'QITMEERWallt';
+const indexDbDataVersion = 1;
 
 // 初始化数据库
-const indexDbData = new Dexie(databaseName);
+const indexDbData = new Dexie(indexDbDataName);
 // 按版本 初始化表和字段
-indexDbData.version(databaseVersion).stores({
+indexDbData.version(indexDbDataVersion).stores({
   ateons: '++id, name, *logotype',
   mycreation: '++id, name, *logotype'
 });
@@ -36,8 +36,8 @@ export async function getDatas(key) {
   return await indexDbData.mycreation.where(key);
   // 创建时间倒序 (由于没有倒序 自己加个reverse就是倒序)
   // 这里我为了配合分页，加了offset limit 结合起来就是MySql的limit(i,n) 不需要的话也可以直接去掉
-  // return await database.mycreation.orderBy('createTime').reverse().offset(i).limit(n).toArray();
-  // return await database.mycreation.where('id').equals('logotype').toArray();
+  // return await indexDbData.mycreation.orderBy('createTime').reverse().offset(i).limit(n).toArray();
+  // return await indexDbData.mycreation.where('id').equals('logotype').toArray();
 }
 
 /** 查询数据个数 */

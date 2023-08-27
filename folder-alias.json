@@ -70,5 +70,17 @@
     },
     "src/components/background/indexPage": {
         "description": "测试首页"
+    },
+    "src/components/background/hashDetail": {
+        "description": "交易详情"
+    },
+    "src/components/background/importMnemonic": {
+        "description": "导入钱包"
+    },
+    "src/components/background/buyPage": {
+        "description": "购买"
+    },
+    "src/components/background/userContent": {
+        "description": "用户信息"
     }
 }

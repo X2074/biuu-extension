@@ -1,0 +1,41 @@
+<div class="new-mnemonic margin-auto">
+    <img class="return-img" @click="onPage" src="images/return.png" alt="">
+    <p class="mnemonic-title">Import wallet using account mnemonic</p>
+    <p class="mnemonic-text">只有该钱包上的第一个帐户才会自动加载。 完成此过程后，要添加其他帐户，请单击下拉菜单并选择创建帐户。</p>
+    <div class="title-select flex">
+        <p>助记符</p>
+    </div>
+    <div class="mnemonic-tips flex">
+        <i class="el-icon-warning"></i>
+        <p>您可以将整个助记词粘贴到任何字段中。</p>
+    </div>
+    <div class="mnemonic-input flex" v-if="(mnemonicList && mnemonicList.length)">
+        <div class="input-list" v-for="item in mnemonicList" :key="item.id" :class="item.class ? 'bgc' : ''">
+            <p>{{ item.id }}.</p>
+            <input @paste="pasteFun" :type="item.yn == 'y' ? 'text' : 'password'" v-model="item.mnemonic"
+                maxlength="15">
+            <img :class="item.yn == 'y' ? 'none' : 'show'"
+                :src="'images/' + (item.yn == 'y' ? 'none' : 'show') + '.png'"
+                @click="item.yn == 'y' ? (item.yn = 'n') : (item.yn = 'y')" alt="">
+        </div>
+    </div>
+    <div class="set-password flex">
+        <div class="new">
+            <p>New password (minimum 8 characters)</p>
+            <input class="mt-10" type="password" maxlength="16" v-model="newPsd">
+            <span v-if="newPsdBol">Please enter a minimum 8-digit passcode</span>
+        </div>
+        <div class="confirm">
+            <p>Confirm password</p>
+            <input class="mt-10" type="password" maxlength="16" v-model="confirmPsd">
+            <span v-if="confirmPsdBol">The passwords entered are inconsistent</span>
+        </div>
+    </div>
+    <div class="import flex">
+        <div class="flex">
+            <img :src="'images/' + (useCheck == 'y' ? 'check' : 'uncheck') + '.png'" alt="">
+            <p class="flex"> I have read and agree to the terms of <a href="">use</a></p>
+        </div>
+        <button @click="creatKeyStory">import</button>
+    </div>
+</div>

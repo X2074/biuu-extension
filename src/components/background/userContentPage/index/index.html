@@ -1,0 +1,57 @@
+<div class="user-content margin-auto">
+    <div class="user-info">
+        <p class="user-name">{{ walltContent.userName ? 'Account 1' : walltContent.userName }}</p>
+        <div class="user-address mt-5 flex">
+            <p class="mr-10">
+                {{ walltContent.address ? walltContent.address.substr(0, 4) : '' }}...{{ walltContent.address ?
+                walltContent.address.substr(-4) : '' }}
+            </p>
+            <i class="el-icon-copy-document" @click="onCopy"></i>
+        </div>
+        <div class="user-currency mt-30 flex">
+            <img src="images/unitLogo.png" alt="">
+            <p class="ml-10">{{ walltContent.balance }} {{ walltContent.balanceUnit }}</p>
+        </div>
+    </div>
+    <div class="uesr-btn mt-30 flex">
+        <p @click="toPage('buy')">
+            <img src="images/buy.png" alt="">
+        </p>
+        <p class="ml-20 mr-20">
+            <img src="images/swap.png" alt="">
+        </p>
+        <p>
+            <img src="images/send.png" alt="">
+        </p>
+    </div>
+    <div class="assets-nft mt-20 flex">
+        <p class="check">ASSETS</p>
+        <P class="uncheck">NFT</P>
+    </div>
+    <img class="platform mt-10 mb-10" src="images/platform.png" alt="">
+    <!-- 转账记录 -->
+    <div class="hesh-content">
+        <div class="transactions flex" v-if="walltContent.txHash" @click="hashDetail">
+            <div class="flex">
+                <img src="images/unitLogo.png" alt="">
+                <div class="trade-number ml-25">
+                    <p class="ate">{{transactionHash}} {{walltContent.balanceUnit}}</p>
+                    <p class="hk">HK$0.75 HKD</p>
+                </div>
+            </div>
+            <i class="el-icon-arrow-right"></i>
+        </div>
+    </div>
+    <div class="footer mt-20">
+        <p class="token">Don't see your token？</p>
+        <div class="refresh mt-10 flex">
+            <p @click="refresh">Refresh The List</p>
+            <span class="ml-5 mr-5"> Or </span>
+            <p>Add Assets</p>
+        </div>
+        <div class="refresh mt-10 flex">
+            <span>Need help?Please contact </span>
+            <p class="ml-5">Ateon</p>
+        </div>
+    </div>
+</div>
