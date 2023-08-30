@@ -17,6 +17,9 @@ let loading = ref(true)
 let verifyBol = ref(false)
 
 onMounted(() => {
+    bus.$on('mnemonicContent', (res) => {
+        walltInfo.value = res;
+    })
     apendContent()
 })
 

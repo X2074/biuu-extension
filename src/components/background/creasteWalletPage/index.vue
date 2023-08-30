@@ -4,7 +4,7 @@
         2、验证助记词
     -->
     <div class="create-wallt">
-        <createMnemonic v-if="step == 1" />
+        <createMnemonic v-show="step == 1" />
         <verifyMnemonic v-if="step == 2" />
     </div>
 </template>
@@ -26,7 +26,7 @@ const walltInfo = ref(null)//钱包相关信息
 const loading = ref(true)
 const web3 = ref(new Web3())
 const verifyBol = ref(false)
-const step = ref(2);
+const step = ref(1);
 bus.on('nextPage', (res) => {
     console.log(res, 'redssdsrssrer');
 

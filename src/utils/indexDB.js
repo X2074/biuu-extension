@@ -7,7 +7,7 @@ const indexDbDataVersion = 1;
 const indexDbData = new Dexie(indexDbDataName);
 // 按版本 初始化表和字段
 indexDbData.version(indexDbDataVersion).stores({
-  ateons: '++id, name, *logotype',
+  // ateons: '++id, name, *logotype',
   mycreation: '++id, name, *logotype'
 });
 

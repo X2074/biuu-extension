@@ -47,24 +47,24 @@ const getInfo = () => {
 const getBlance = () => {
 	let data = getCurrentInstance();
 	indexDbData.getData('rpc_url').then(res => {
-		// 定义rpc
-		web3.value = new Web3(new Web3.providers.HttpProvider(res.url));
-		// 全局定义web3
-		if (data) data.appContext.config.globalProperties.$web3 = web3.value;
-		// 指定钱包单位
-		walltContent.value.balanceUnit = res.unit;
-		walltContent.value.url = res.url;
-		walltContent.value.CHAIN_ID = res.CHAIN_ID;
-		// 钱包地址
-		walltContent.value.address = userAddress.value;
-		// 获取钱包余额
-		web3.value.eth.getBalance(userAddress.value).then(res => {
-			console.log(res);
-			let balance = web3.value.utils.fromWei(res, 'ether') * 1;
-			balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
-			walltContent.value.balance = balance;
-			getHexHash()
-		}).catch(err => { });
+		// // 定义rpc
+		// web3.value = new Web3(new Web3.providers.HttpProvider(res.url));
+		// // 全局定义web3
+		// if (data) data.appContext.config.globalProperties.$web3 = web3.value;
+		// // 指定钱包单位
+		// walltContent.value.balanceUnit = res.unit;
+		// walltContent.value.url = res.url;
+		// walltContent.value.CHAIN_ID = res.CHAIN_ID;
+		// // 钱包地址
+		// walltContent.value.address = userAddress.value;
+		// // 获取钱包余额
+		// web3.value.eth.getBalance(userAddress.value).then(res => {
+		// 	console.log(res);
+		// 	let balance = web3.value.utils.fromWei(res, 'ether') * 1;
+		// 	balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
+		// 	walltContent.value.balance = balance;
+		// 	getHexHash()
+		// }).catch(err => { });
 	}).catch(err => { })
 }
 const getHexHash = () => {

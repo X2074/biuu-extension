@@ -3,7 +3,7 @@
 
 import { ref, onMounted, watchEffect, getCurrentInstance } from 'vue';
 import indexDbData from '../../../../utils/indexDB.js';
-import bus from '@/utils/bus.js';
+import bus from '../../../../utils/bus.js';
 import md5 from 'js-md5';
 import bip39 from 'bip39';
 import { hdkey } from 'ethereumjs-wallet';
@@ -13,7 +13,7 @@ import Web3 from 'web3';
 const EthereumTx = require('ethereumjs-tx');
 const loading = ref(false);
 const userAddress = ref('');
-const web3 = ref(null);
+const web3 = ref({});
 const balance = ref(0);//余额
 const balanceUnit = ref('ETH');
 const transactionHash = ref(0);

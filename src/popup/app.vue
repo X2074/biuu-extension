@@ -24,7 +24,7 @@ import { ref, onMounted, getCurrentInstance } from 'vue';
 // import HomePage from '@/components/homePage.vue'
 // 已有账号，重新进入需要登录 
 import loginwallt from './components/loginwallt/index.vue'
-// import create from './components/create/index.vue'
+import create from './components/create/index.vue'
 import homePage from './components/homePage/index.vue'
 import headerPage from './components/header/index.vue'
 // import buyPage from './components/buyPage/index.vue'
@@ -67,6 +67,8 @@ bus.on('nextPage', (res) => {
 const getInfo = () => {
 	// 当前用户信息
 	indexDbData.getData('currentWalltAddress').then(res => {
+		console.log(res, 'res');
+
 		if (res && res.address) {
 			if (getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') && getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') != 'false') {
 				pageTypes.value = 'homePage';

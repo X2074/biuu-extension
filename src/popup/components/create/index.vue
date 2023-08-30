@@ -19,7 +19,7 @@ const toCreate = (res) => {
     //   })
     if (!googleId.value) return;
     localStorage.setItem('googleId', googleId.value)
-    window.open('chrome-extension://' + googleId.value + '/background.html?pageType=' + res)
+    window.open('chrome-extension://' + googleId.value + '/creasteWalletPage.html')
 }
 </script>
 <style lang="scss">
