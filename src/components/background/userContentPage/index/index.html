@@ -1,4 +1,22 @@
 <div class="user-content margin-auto">
+    <div class="type-btn flex">
+        <button @click="netWorkChange('EVM')">EVM</button>
+        <button @click="netWorkChange('UTXO')">UTXO</button>
+    </div>
+
+    <div class="user-type" v-if="netWorkList && netWorkList.length">
+        <p>网络</p>
+        <select id="my-select" v-model="walltEnvironment" @change="rpcChange">
+            <option :value="item.CHAIN_ID" v-for="item in netWorkList">{{item.unit}}</option>
+        </select>
+    </div>
+
+    <div class="user-type" v-if="userList && userList.length">
+        <p>用户数据</p>
+        <select id="my-select" v-model="walltUser" @change="userChange">
+            <option :value="item.address" v-for="item in userList">{{item.address}}</option>
+        </select>
+    </div>
     <div class="user-info">
         <p class="user-name">{{ walltContent.userName ? 'Account 1' : walltContent.userName }}</p>
         <div class="user-address mt-5 flex">
@@ -17,18 +35,7 @@
         <p @click="toPage('buy')">
             <img src="images/buy.png" alt="">
         </p>
-        <p class="ml-20 mr-20">
-            <img src="images/swap.png" alt="">
-        </p>
-        <p>
-            <img src="images/send.png" alt="">
-        </p>
     </div>
-    <div class="assets-nft mt-20 flex">
-        <p class="check">ASSETS</p>
-        <P class="uncheck">NFT</P>
-    </div>
-    <img class="platform mt-10 mb-10" src="images/platform.png" alt="">
     <!-- 转账记录 -->
     <div class="hesh-content">
         <div class="transactions flex" v-if="walltContent.txHash" @click="hashDetail">
@@ -43,15 +50,9 @@
         </div>
     </div>
     <div class="footer mt-20">
-        <p class="token">Don't see your token？</p>
+        <p class="token">没有看到您的数据？</p>
         <div class="refresh mt-10 flex">
-            <p @click="refresh">Refresh The List</p>
-            <span class="ml-5 mr-5"> Or </span>
-            <p>Add Assets</p>
-        </div>
-        <div class="refresh mt-10 flex">
-            <span>Need help?Please contact </span>
-            <p class="ml-5">Ateon</p>
+            <p @click="refresh">刷新列表</p>
         </div>
     </div>
 </div>

@@ -5,7 +5,7 @@
     -->
     <div class="create-wallt">
         <createMnemonic v-show="step == 1" />
-        <verifyMnemonic v-if="step == 2" />
+        <verifyMnemonic v-show="step == 2" />
     </div>
 </template>
 <script lang='ts' setup>

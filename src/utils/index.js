@@ -1,3 +1,12 @@
+const CryptoJS = require('crypto-js'); //引用AES源码js
+const qitmeer = require('qitmeer-js')
+const ethUtil = require('ethereumjs-util')
+const bip39 = require('bip39')
+// 使用最新版本浏览器不支持，只能使用1.x版本替换
+const ecc = require('tiny-secp256k1')
+const { BIP32Factory } = require('bip32')
+const bip32 = BIP32Factory(ecc)
+
 export function getCookie(cookieName) {
 	const strCookie = document.cookie
 	const cookieList = strCookie.split('; ')
@@ -67,4 +76,56 @@ export function clearAllCookie() {
 		ddate = ddate + suffix[2];
 	}
 	return month + ' ' + ddate;
+}
+
+//解密方法
+export function Decrypt(ciphertext, key) {
+	// 解密
+	const decryptedBytes = CryptoJS.AES.decrypt(ciphertext, key);
+	const decryptedPlaintext = decryptedBytes.toString(CryptoJS.enc.Utf8);
+	return decryptedPlaintext;
+}
+
+//加密方法
+export function Encrypt(mnemonic, key) {
+	return CryptoJS.AES.encrypt(mnemonic, key).toString();
+}
+// utxo助记词转私钥
+export async function utxoKey (mnemonic) {
+    try {
+        // //2.将助记词转成seed
+        let seed = await bip39.mnemonicToSeed(mnemonic, '');
+        // // 通过种子生成BIP32主节点
+        const hdWallet = bip32.fromSeed(seed);
+        const rootPrivateKey = hdWallet.privateKey.toString('hex');
+        const rootPublicKey = hdWallet.publicKey.toString('hex');
+        return {
+            utxoRootPrivateKey: rootPrivateKey, //私钥
+            utxoRootPublicKey: rootPublicKey, //公钥
+        }
+    } catch (err) {
+        console.log(err, '55555555');
+    }
+}
+// evm助记词转私钥
+export async function evmKey (mnemonic) {
+    try {
+        // //2.将助记词转成seed
+        let seed = await bip39.mnemonicToSeed(mnemonic, '');
+        // // 通过种子生成BIP32主节点
+        const hdWallet = bip32.fromSeed(seed);
+        // //4.派生一个子密钥对的BIP32导出路径
+        let key = hdWallet.derivePath("m/44'/60'/0'/0/0");
+        // // 获取子私钥的WIF格式
+        const privateKeyWIF = key.toWIF();
+        // // 获取子公私钥的十六进制格式
+        const privateKeyHex = key.privateKey.toString('hex');
+        const publicKeyHex = key.publicKey.toString('hex');
+        return {
+            privateKey: privateKeyHex, //私钥
+            publicKey: publicKeyHex, //公钥
+        }
+    } catch (err) {
+        console.log(err, '55555555');
+    }
 }

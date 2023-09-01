@@ -1,47 +1,104 @@
-.user-content{
+.user-content {
     padding: 20px 27px;
     width: 560px;
     height: 500px;
     background-color: #fff;
     border-radius: 5px;
-    .user-info{
+
+    .user-type {
+        align-items: center;
+
+        p {
+            font-size: 14px;
+        }
+
+        select {
+            width: 140px;
+            height: 33px;
+            position: relative;
+            font-size: 14px;
+
+            &::after {
+                content: '';
+                width: 10px;
+                height: 10px;
+                border-radius: 10px;
+                background-color: #03FF14;
+                display: block;
+                position: absolute;
+                left: 10px;
+                top: 50%;
+                margin-top: -5px;
+            }
+
+            option {
+                height: 33px;
+                font-size: 12px;
+                padding-right: 25px;
+                padding-left: 25px;
+            }
+        }
+    }
+
+    .type-btn {
+        button {
+            padding: 5px 15px;
+            color: #000;
+            font-size: 14px;
+
+            &.check {
+                color: #1592E6;
+            }
+        }
+    }
+
+    .user-info {
         text-align: center;
         width: 100%;
-        .user-name{
+
+        .user-name {
             height: 18px;
             font-size: 13px;
             text-align: center;
             font-weight: 600;
             color: #000000;
         }
-        .user-address{
+
+        .user-address {
             align-items: center;
             justify-content: center;
-            p{
+
+            p {
                 font-size: 11px;
                 font-weight: 400;
                 color: #000;
             }
-            i{
+
+            i {
                 font-size: 20px;
                 cursor: pointer;
             }
         }
-        .user-currency{
+
+        .user-currency {
             align-items: center;
             justify-content: center;
-            p{
+
+            p {
                 font-size: 24px;
                 font-weight: 600;
             }
-            i{
+
+            i {
                 font-size: 24px;
             }
         }
     }
+
     .uesr-btn {
         justify-content: center;
-        p{
+
+        p {
             cursor: pointer;
             width: 69px;
             height: 30px;
@@ -49,33 +106,39 @@
             border-radius: 5px 5px 5px 5px;
             text-align: center;
             padding-top: 7px;
-            img{
+
+            img {
                 height: 15px;
                 width: auto;
             }
         }
     }
-    .assets-nft{
+
+    .assets-nft {
         width: calc(100% + 54px);
         margin-left: -27px;
-        p{
+
+        p {
             width: 50%;
             height: 42px;
             line-height: 42px;
             text-align: center;
             font-size: 14px;
         }
-        .check{
+
+        .check {
             background-color: #1592E6;
             color: #fff;
             cursor: pointer;
         }
-        .uncheck{
+
+        .uncheck {
             background-color: #F0F4F6;
             cursor: no-drop;
         }
     }
-    .platform{
+
+    .platform {
         width: 79px;
         height: 14px;
         display: block;
@@ -83,34 +146,41 @@
         margin-right: auto;
         cursor: pointer;
     }
-    .footer{
-        .token{
+
+    .footer {
+        .token {
             text-align: center;
             font-size: 11px;
             font-weight: 600;
             color: #707070;
             line-height: 15px;
         }
-        .refresh{
+
+        .refresh {
             justify-content: center;
-            p,span{
+
+            p,
+            span {
                 text-align: center;
                 font-size: 11px;
                 line-height: 15px;
             }
-            p{
+
+            p {
                 color: #1592E6;
                 cursor: pointer;
             }
-            span{
+
+            span {
                 color: #707070;
             }
         }
     }
 
-    .hesh-content{
+    .hesh-content {
         width: 100%;
-        .transactions{
+
+        .transactions {
             width: calc(100% + 54px);
             padding: 15px 12.5px;
             margin-left: -26.5px;
@@ -119,27 +189,32 @@
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            img{
+
+            img {
                 width: 32px;
                 height: 32px;
             }
-            >div{
+
+            >div {
                 justify-content: left;
             }
-            .trade-number{
-                .ate{
+
+            .trade-number {
+                .ate {
                     font-size: 12px;
                     font-weight: 600;
                     color: #000;
                     line-height: 17px;
                 }
-                .hk{
+
+                .hk {
                     color: #999;
                     font-size: 12px;
                     line-height: 16px;
                 }
             }
-            >i{
+
+            >i {
                 font-size: 16px;
                 color: #000;
                 font-weight: 600;

@@ -28,7 +28,7 @@ const plugins = [
 const pages = {};
 // 配置 popup.html 页面
 // ,"importMnemonicPage","userContentPage"
-const chromeName = ["popup", "background","indexPage","creasteWalletPage"];
+const chromeName = ["popup", "background","indexPage","creasteWalletPage","userContentPage"];
 
 chromeName.forEach(name => {
 	// 如果是background页面，路径特殊处理

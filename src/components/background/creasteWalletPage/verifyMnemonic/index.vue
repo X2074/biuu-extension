@@ -3,9 +3,10 @@
 
 import { ref, onMounted, watchEffect, getCurrentInstance } from 'vue';
 import indexDbData from '../../../../utils/indexDB.js';
-import bus from '@/utils/bus.js';
+import bus from '../../../../utils/bus.js';
+import { Encrypt, Decrypt } from '../../../../utils/index.js';
 import md5 from 'js-md5';
-import Web3 from 'web3'
+const CryptoJS = require('crypto-js'); //引用AES源码js
 let mnemonicList = ref([])//助记词数组
 let newPsd = ref('')//钱包密码
 let confirmPsd = ref('')//钱包密码
@@ -17,8 +18,20 @@ let loading = ref(true)
 let verifyBol = ref(false)
 
 onMounted(() => {
-    bus.$on('mnemonicContent', (res) => {
+    bus.on('mnemonicContent', (res) => {
+        console.log(res, '第二部验证');
         walltInfo.value = res;
+    })
+    // 存储evm、utxo
+    indexDbData.putData({
+        id: 'EVM',
+        content: {},
+        keyStore: null
+    })
+    indexDbData.putData({
+        id: 'UTXO',
+        content: {},
+        keyStore: null
     })
     apendContent()
 })
@@ -41,55 +54,78 @@ const creatKeyStory = () => {
         confirmPsdBol.value = true;
         return;
     }
-
-    let web3 = new Web3();
-    //生成keystore
-    let keystore = web3.eth.accounts.encrypt(walltInfo.value.privateKey, newPsd.value);
+    UtxoEvmKey()
+    // setTimeout(() => {
+    //     $emit('nextPage', 'userContent');
+    // }, 500)
+}
+// 助记词加密
+const UtxoEvmKey = () => {
+    let ciphertext = Encrypt(walltInfo.value.mnemonic, newPsd.value);
+    console.log(ciphertext, '加密后的数据');
     indexDbData.putData({
-        id: walltInfo.value.address,
-        userName: '',
-        userUrl: '',
-        logotype: 'keystore',
-        keystore: keystore
+        id: 'keyStore',
+        secret: ciphertext
+    })
+    evmNetwork();//新增并存储evm网络
+    utxoNetwork();//新增并存储evm网络
+}
+const evmNetwork = () => {
+    indexDbData.getData('EVM').then(res => {
+        // 新增默认evm网络
+        res.content = {
+            1: {
+                id: 'rpc_url',
+                unit: 'ETH',
+                CHAIN_ID: 1,
+                url: 'https://bsc-dataseed1.ninicoin.io',
+                walltInfo: []
+            }
+        }
+        Object.keys(res.content).forEach((item, index) => {
+            res.content[item].walltInfo.push({
+                address: walltInfo.value.address, //当前用户地址
+                userName: '',
+                userUrl: '',
+                NoIndex: index + 1//当前第几个用户
+            })
+        })
+        console.log(res, 1111111);
+        indexDbData.putData(res)
     })
     // 存储密码
     indexDbData.putData({
         id: md5('secret'),
         secret: md5(newPsd.value)
     })
-    // 存为当前展示的钱包数据
-    indexDbData.getData('currentWalltAddress').then(res => {
-        if (res && res.address) {
-            indexDbData.putData({
-                id: 'currentWalltAddress',
-                address: walltInfo.value.address,
-                userName: '',
-                userUrl: '',
-                NoIndex: res.NoIndex + 1//当前第几个用户
-            })
-        } else {
-            indexDbData.putData({
-                id: 'currentWalltAddress',
-                userName: '',
-                userUrl: '',
-                address: walltInfo.value.address,
-                NoIndex: 1
-            })
+}
+const utxoNetwork = () => {
+    indexDbData.getData('UTXO').then(res => {
+        // 新增默认utxo网络
+        res.content = {
+            8131: {
+                id: 'rpc_url',
+                unit: 'MEER',
+                CHAIN_ID: 8131,
+                url: 'https://testnet-qng.rpc.qitmeer.io',
+                walltInfo: []
+            }
         }
-    }).catch(err => { })
-    indexDbData.putData({
-        id: 'rpc_url',
-        unit: 'ETH',
-        CHAIN_ID: 1,
-        url: 'https://bsc-dataseed1.ninicoin.io'
+        Object.keys(res.content).forEach((item, index) => {
+            res.content[item].walltInfo.push({
+                address: walltInfo.value.utxoAddressTest, //当前用户地址
+                userName: '',
+                userUrl: '',
+                NoIndex: index + 1//当前第几个用户
+            })
+        })
+        indexDbData.putData(res)
     })
+    // 存储密码
     indexDbData.putData({
-        id: 'currentWalltAddress',
-        address: walltInfo.value.address
+        id: md5('secret'),
+        secret: md5(newPsd.value)
     })
-    // setTimeout(()=>{
-    // 	$emit('nextPage','userContent');
-    // },500)
 }
 // 监听粘贴事件
 const pasteFun = (e) => {

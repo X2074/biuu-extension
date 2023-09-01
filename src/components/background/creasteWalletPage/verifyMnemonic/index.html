@@ -21,21 +21,17 @@
     </div>
     <div class="set-password flex">
         <div class="new">
-            <p>New password (minimum 8 characters)</p>
+            <p>新密码（至少 8 个字符）</p>
             <input class="mt-10" type="password" maxlength="16" v-model="newPsd">
-            <span v-if="newPsdBol">Please enter a minimum 8-digit passcode</span>
+            <span v-if="newPsdBol">请输入至少 8 位密码</span>
         </div>
         <div class="confirm">
-            <p>Confirm password</p>
+            <p>确认密码</p>
             <input class="mt-10" type="password" maxlength="16" v-model="confirmPsd">
-            <span v-if="confirmPsdBol">The passwords entered are inconsistent</span>
+            <span v-if="confirmPsdBol">输入的密码不一致</span>
         </div>
     </div>
     <div class="import flex">
-        <div class="flex">
-            <img :src="'images/' + (useCheck == 'y' ? 'check' : 'uncheck') + '.png'" alt="">
-            <p class="flex"> I have read and agree to the terms of <a href="">use</a></p>
-        </div>
-        <button @click="creatKeyStory">import</button>
+        <button @click="creatKeyStory">生成钱包信息</button>
     </div>
 </div>

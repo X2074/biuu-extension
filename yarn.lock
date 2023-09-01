@@ -2494,6 +2494,11 @@
   dependencies:
     "safe-buffer" "^5.0.1"
 
+"base-x@^4.0.0":
+  "integrity" "sha512-FuwxlW4H5kh37X/oW59pwTzzTKRzfrrQwhmyspRM7swOEZcHtDZSCt45U6oKgtuFE+WYPblePMVIPR4RZrh/hw=="
+  "resolved" "https://registry.npmjs.org/base-x/-/base-x-4.0.0.tgz"
+  "version" "4.0.0"
+
 "base@^0.11.1":
   "integrity" "sha1-e95c7RRbbVUakNuH+DxVi060io8="
   "resolved" "https://registry.npm.taobao.org/base/download/base-0.11.2.tgz"
@@ -2524,6 +2529,11 @@
   dependencies:
     "tweetnacl" "^0.14.3"
 
+"bech32@^2.0.0":
+  "integrity" "sha512-LcknSilhIGatDAsY1ak2I8VtGaHNhgMSYVxFrGLXv+xLHytaKZKcaUJJUE7qmBr7h33o5YQwP55pMI0xmkpJwg=="
+  "resolved" "https://registry.npmjs.org/bech32/-/bech32-2.0.0.tgz"
+  "version" "2.0.0"
+
 "bfj@^6.1.1":
   "integrity" "sha1-MlyGGoIryzWKQceKM7jm4ght3n8="
   "resolved" "https://registry.npm.taobao.org/bfj/download/bfj-6.1.2.tgz"
@@ -2543,6 +2553,11 @@
   "integrity" "sha1-ZfCvOC9Xi83HQr2cKB6cstd2gyg="
   "resolved" "https://registry.npm.taobao.org/big.js/download/big.js-5.2.2.tgz"
   "version" "5.2.2"
+
+"bigi@^1.1.0", "bigi@^1.2.0":
+  "integrity" "sha512-ddkU+dFIuEIW8lE7ZwdIAf2UPoM90eaprg5m3YXAVVTmKlqV/9BX4A2M8BOK2yOq6/VgZFVhK6QAxJebhlbhzw=="
+  "resolved" "https://registry.npmjs.org/bigi/-/bigi-1.4.2.tgz"
+  "version" "1.4.2"
 
 "bignumber.js@^9.0.0":
   "integrity" "sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug=="
@@ -2566,6 +2581,11 @@
   dependencies:
     "file-uri-to-path" "1.0.0"
 
+"bip174@^2.1.0":
+  "integrity" "sha512-mdFV5+/v0XyNYXjBS6CQPLo9ekCx4gtKZFnJm5PMto7Fs9hTTDpkkzOB7/FtluRI6JbUUAu+snTYfJRgHLZbZQ=="
+  "resolved" "https://registry.npmjs.org/bip174/-/bip174-2.1.1.tgz"
+  "version" "2.1.1"
+
 "bip32@^4.0.0":
   "integrity" "sha512-aOGy88DDlVUhspIXJN+dVEtclhIsfAUppD43V0j40cPTld3pv/0X/MlrZSZ6jowIaQQzFwP8M6rFU2z2mVYjDQ=="
   "resolved" "https://registry.npmjs.org/bip32/-/bip32-4.0.0.tgz"
@@ -2575,6 +2595,20 @@
     "@scure/base" "^1.1.1"
     "typeforce" "^1.11.5"
     "wif" "^2.0.6"
+
+"bip38@^3.1.1":
+  "integrity" "sha512-d5AQWuXS95rdrEBnaKeZ9osMkvDR3QDULbAfoE7xRw0W8jfDrza9CsZwf+UhqjV6lbbfaWCrJIu5uObJlfo5Rw=="
+  "resolved" "https://registry.npmjs.org/bip38/-/bip38-3.1.1.tgz"
+  "version" "3.1.1"
+  dependencies:
+    "bigi" "^1.2.0"
+    "browserify-aes" "^1.0.1"
+    "bs58check" "<3.0.0"
+    "buffer-xor" "^1.0.2"
+    "create-hash" "^1.1.1"
+    "ecurve" "^1.0.0"
+    "safe-buffer" "~5.1.1"
+    "scryptsy" "^2.1.0"
 
 "bip39@^3.1.0":
   "integrity" "sha512-c9kiwdk45Do5GL0vJMe7tS95VjCii65mYAH7DfWl3uW8AVzXKQVUm64i3hzVybBDMp9r7j9iNxR85+ul8MdN/A=="
@@ -2589,6 +2623,18 @@
   "version" "1.1.5"
   dependencies:
     "safe-buffer" "^5.0.1"
+
+"bitcoinjs-lib@^6.1.3":
+  "integrity" "sha512-TYXs/Qf+GNk2nnsB9HrXWqzFuEgCg0Gx+v3UW3B8VuceFHXVvhT+7hRnTSvwkX0i8rz2rtujeU6gFaDcFqYFDw=="
+  "resolved" "https://registry.npmjs.org/bitcoinjs-lib/-/bitcoinjs-lib-6.1.3.tgz"
+  "version" "6.1.3"
+  dependencies:
+    "@noble/hashes" "^1.2.0"
+    "bech32" "^2.0.0"
+    "bip174" "^2.1.0"
+    "bs58check" "^3.0.1"
+    "typeforce" "^1.11.3"
+    "varuint-bitcoin" "^1.1.2"
 
 "blakejs@^1.1.0", "blakejs@^1.1.1":
   "integrity" "sha512-QXUSXI3QVc/gJME0dBpXrag1kbzOqCjCX8/b54ntNyW6sjtoqxqRk3LTmXzaJoh71zMsDCjM+47jS7XiwN/+fQ=="
@@ -2716,7 +2762,7 @@
   "resolved" "https://registry.npm.taobao.org/brorand/download/brorand-1.1.0.tgz"
   "version" "1.1.0"
 
-"browserify-aes@^1.0.0", "browserify-aes@^1.0.4", "browserify-aes@^1.2.0":
+"browserify-aes@^1.0.0", "browserify-aes@^1.0.1", "browserify-aes@^1.0.4", "browserify-aes@^1.2.0":
   "integrity" "sha1-Mmc0ZC9APavDADIJhTu3CtQo70g="
   "resolved" "https://registry.npm.taobao.org/browserify-aes/download/browserify-aes-1.2.0.tgz"
   "version" "1.2.0"
@@ -2795,6 +2841,13 @@
   dependencies:
     "base-x" "^3.0.2"
 
+"bs58@^5.0.0":
+  "integrity" "sha512-r+ihvQJvahgYT50JD05dyJNKlmmSlMoOGwn1lCcEzanPglg7TxYjioQUYehQ9mAR/+hOSd2jRc/Z2y5UxBymvQ=="
+  "resolved" "https://registry.npmjs.org/bs58/-/bs58-5.0.0.tgz"
+  "version" "5.0.0"
+  dependencies:
+    "base-x" "^4.0.0"
+
 "bs58check@^2.1.2", "bs58check@<3.0.0":
   "integrity" "sha512-0TS1jicxdU09dwJMNZtVAfzPi6Q6QeN0pM1Fkzrjn+XYHvzMKPU3pHVpva+769iNVSfIYWf7LJ6WR+BuuMf8cA=="
   "resolved" "https://registry.npmjs.org/bs58check/-/bs58check-2.1.2.tgz"
@@ -2803,6 +2856,14 @@
     "bs58" "^4.0.0"
     "create-hash" "^1.1.0"
     "safe-buffer" "^5.1.2"
+
+"bs58check@^3.0.1":
+  "integrity" "sha512-hjuuJvoWEybo7Hn/0xOrczQKKEKD63WguEjlhLExYs2wUBcebDC1jDNK17eEAD2lYfw82d5ASC1d7K3SWszjaQ=="
+  "resolved" "https://registry.npmjs.org/bs58check/-/bs58check-3.0.1.tgz"
+  "version" "3.0.1"
+  dependencies:
+    "@noble/hashes" "^1.2.0"
+    "bs58" "^5.0.0"
 
 "buffer-from@^1.0.0":
   "integrity" "sha1-MnE7wCj3XAL9txDXx7zsHyxgcO8="
@@ -2824,7 +2885,7 @@
   "resolved" "https://registry.npmjs.org/buffer-to-arraybuffer/-/buffer-to-arraybuffer-0.0.5.tgz"
   "version" "0.0.5"
 
-"buffer-xor@^1.0.3":
+"buffer-xor@^1.0.2", "buffer-xor@^1.0.3":
   "integrity" "sha1-JuYe0UIvtw3ULm42cp7VHYVf6Nk="
   "resolved" "https://registry.npm.taobao.org/buffer-xor/download/buffer-xor-1.0.3.tgz"
   "version" "1.0.3"
@@ -3701,7 +3762,7 @@
     "bn.js" "^4.1.0"
     "elliptic" "^6.5.3"
 
-"create-hash@^1.1.0", "create-hash@^1.1.2", "create-hash@^1.2.0":
+"create-hash@^1.1.0", "create-hash@^1.1.1", "create-hash@^1.1.2", "create-hash@^1.2.0":
   "integrity" "sha1-iJB4rxGmN1a8+1m9IhmWvjqe8ZY="
   "resolved" "https://registry.npm.taobao.org/create-hash/download/create-hash-1.2.0.tgz"
   "version" "1.2.0"
@@ -3794,6 +3855,11 @@
     "public-encrypt" "^4.0.0"
     "randombytes" "^2.0.0"
     "randomfill" "^1.0.3"
+
+"crypto-js@^4.1.1":
+  "integrity" "sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw=="
+  "resolved" "https://registry.npmjs.org/crypto-js/-/crypto-js-4.1.1.tgz"
+  "version" "4.1.1"
 
 "css-color-names@^0.0.4", "css-color-names@0.0.4":
   "integrity" "sha1-gIrcLnnPhHOAabZGyyDsJ762KeA="
@@ -4360,6 +4426,14 @@
   dependencies:
     "jsbn" "~0.1.0"
     "safer-buffer" "^2.1.0"
+
+"ecurve@^1.0.0":
+  "integrity" "sha512-/BzEjNfiSuB7jIWKcS/z8FK9jNjmEWvUV2YZ4RLSmcDtP7Lq0m6FvDuSnJpBlDpGRpfRQeTLGLBI8H+kEv0r+w=="
+  "resolved" "https://registry.npmjs.org/ecurve/-/ecurve-1.0.6.tgz"
+  "version" "1.0.6"
+  dependencies:
+    "bigi" "^1.1.0"
+    "safe-buffer" "^5.0.1"
 
 "ee-first@1.1.1":
   "integrity" "sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0="
@@ -10111,6 +10185,11 @@
   "resolved" "https://registry.npmjs.org/scrypt-js/-/scrypt-js-3.0.1.tgz"
   "version" "3.0.1"
 
+"scryptsy@^2.1.0":
+  "integrity" "sha512-1CdSqHQowJBnMAFyPEBRfqag/YP9OF394FV+4YREIJX4ljD7OxvQRDayyoyyCk+senRjSkP6VnUNQmVQqB6g7w=="
+  "resolved" "https://registry.npmjs.org/scryptsy/-/scryptsy-2.1.0.tgz"
+  "version" "2.1.0"
+
 "scss-tokenizer@^0.4.3":
   "integrity" "sha512-raKLgf1LI5QMQnG+RxHz6oK0sL3x3I4FN2UDLqgLOGO8hodECNnNh5BXn7fAyBxrA8zVzdQizQ6XjNJQ+uBwMw=="
   "resolved" "https://registry.npmjs.org/scss-tokenizer/-/scss-tokenizer-0.4.3.tgz"
@@ -11437,7 +11516,7 @@
   "resolved" "https://registry.npm.taobao.org/typedarray/download/typedarray-0.0.6.tgz"
   "version" "0.0.6"
 
-"typeforce@^1.11.5":
+"typeforce@^1.11.3", "typeforce@^1.11.5":
   "integrity" "sha512-7uc1O8h1M1g0rArakJdf0uLRSSgFcYexrVoKo+bzJd32gd4gDy2L/Z+8/FjPnU9ydY3pEnVPtr9FyscYY60K1g=="
   "resolved" "https://registry.npmjs.org/typeforce/-/typeforce-1.18.0.tgz"
   "version" "1.18.0"
