@@ -1,25 +1,27 @@
 <template>
 	<div class="meer-wallt">
+		{{ pageTypes }}
 		<headerPage v-if="(pageTypes && pagesArray.indexOf(pageTypes) > 1)" :walltContent="walltContent" />
 		<!-- 首次进入 -->
-		<create v-if="!loading && pageTypes == 'create'" />
+		<create v-if="pageTypes == 'create'" />
 		<!-- 输入密码 -->
-		<loginwallt v-if="!loading && pageTypes == 'login'" />
+		<loginwallt v-if="pageTypes == 'login'" />
 		<!-- 主页 -->
 		<homePage :walltContent="walltContent" v-if="!loading && pageTypes == 'homePage'" />
 		<!-- 跳转购买页面 -->
-		<!-- <buy-page @closeModal="closeModal" v-if="!loading && buyModal" /> -->
+		<buy-page @closeModal="closeModal" v-if="buyModal" />
 		<!-- 交易记录页面 -->
-		<assetsRecording v-if="!loading && pageTypes == 'assetsRecording'" :walltContent="walltContent" />
+		<assetsRecording v-if="pageTypes == 'assetsRecording'" :walltContent="walltContent" />
 		<!-- 转账页面 -->
 		<transfer v-if="!loading && pageTypes == 'sendTo'" :walltContent="walltContent" />
 		<!-- swap -->
-		<!-- <swap-page @nextPage="nextPage" v-if="!loading && pageTypes == 'swap'"/> -->
+		<!-- <swap-page @nextPage="nextPage" v-if="pageTypes == 'swap'"/> -->
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, getCurrentInstance } from 'vue';
+import md5 from 'js-md5';
 // 因为popup的特殊原因，此处只有一个入口，页面切换靠各种类型的判断
 // import HomePage from '@/components/homePage.vue'
 // 已有账号，重新进入需要登录 
@@ -27,7 +29,7 @@ import loginwallt from './components/loginwallt/index.vue'
 import create from './components/create/index.vue'
 import homePage from './components/homePage/index.vue'
 import headerPage from './components/header/index.vue'
-// import buyPage from './components/buyPage/index.vue'
+import buyPage from './components/buyPage/index.vue'
 import assetsRecording from './components/assetsRecording/index.vue'
 import transfer from './components/transfer/index.vue'
 // import swapPage from './components/swap/index.vue'
@@ -42,10 +44,6 @@ const walltContent = ref(null)//账户相关信息
 const pageTypes = ref('')//判断当前应该展示那个页面
 const pagesArray = ref(['create', 'login', 'homePage', 'assetsRecording', 'sendTo', 'swap'])//页面地址数组,数组顺序为正常流程顺序
 onMounted(() => {
-	let data = getCurrentInstance();
-	// 定义rpc
-	// 全局定义web3
-	data.appContext.config.globalProperties.$web3 = new Web3(new Web3.providers.HttpProvider('https://testnet-amana.rpc.qitmeer.io'));
 	getInfo()
 })
 const openUrl = () => {
@@ -61,22 +59,24 @@ const openModal = (res) => {
 }
 
 bus.on('nextPage', (res) => {
+	console.log(res, 'rererere');
+
 	pageTypes.value = res;
 });
 // 获取账户相关信息
 const getInfo = () => {
-	// 当前用户信息
+	// 如果有当前用户信息，说明已经是生成钱包啦
 	indexDbData.getData('currentWalltAddress').then(res => {
 		console.log(res, 'res');
-
-		if (res && res.address) {
+		let data = res.content;
+		if (data && data.address) {
 			if (getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') && getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') != 'false') {
 				pageTypes.value = 'homePage';
 			} else {
 				pageTypes.value = 'login';
 			}
-			userAddress.value = res.address;
-			walltContent.value.userName = res.userName ? res.userName : '';
+			userAddress.value = data.address;
+			walltContent.value = data.userName ? res.userName : '';
 			getBlance()
 		} else {
 			pageTypes.value = 'create'
@@ -86,13 +86,10 @@ const getInfo = () => {
 }
 const getBlance = () => {
 	indexDbData.getData('rpc_url').then(res => {
+		let data = res.content;
 		// 定义rpc
-		let web3 = new Web3(new Web3.providers.HttpProvider(res.url));
-		// Vue.prototype.$web3 = web3;
-		// 指定钱包单位
-		walltContent.value.balanceUnit = res.unit;
-		walltContent.value.url = res.url;
-		walltContent.value.CHAIN_ID = res.CHAIN_ID;
+		let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
+		walltContent.value = data;
 		// 钱包地址
 		walltContent.value.address = userAddress.value;
 		// 获取钱包余额
@@ -119,6 +116,7 @@ const getHexHash = () => {
 			// 转账记录
 			walltContent.value.txHash = res.txHashList;
 		}
+		loading.value = false;
 		// 测试
 		setTimeout(() => {
 			loading.value = false;

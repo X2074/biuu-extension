@@ -1,0 +1,27 @@
+{
+    "EVM":{
+        "8131": {
+            "unit": "ETH",
+            "netName":"ETH_TESTNET",
+            "CHAIN_ID": 8131,
+            "url": "https://testnet-qng.rpc.qitmeer.io",
+            "walltInfo": []
+        },
+        "97": {
+            "unit": "BNB",
+            "netName":"BSC_TESTNET",
+            "CHAIN_ID": 97,
+            "url": "https://data-seed-prebsc-1-s1.binance.org:8545/",
+            "walltInfo": []
+        }
+    },
+    "UTXO":{
+        "8131": {
+            "unit": "MEER",
+            "netName":"MEER_TESTNET",
+            "CHAIN_ID": 8131,
+            "url": "https://testnet-qng.rpc.qitmeer.io",
+            "walltInfo": []
+        }
+    }
+}

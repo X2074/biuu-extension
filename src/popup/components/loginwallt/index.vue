@@ -4,16 +4,21 @@ import { ref, onMounted, watch } from 'vue';
 import bus from '@/utils/bus';
 import md5 from 'js-md5';
 import Cookies from 'js-cookie';
-import Web3 from 'web3';
+import indexDbData from '@/utils/indexDB';
 const password = ref('');
 const loading = ref(false);
 const incorrect = ref(false);
 const address = ref('');
 const passKey = ref('');
+onMounted(() => {
+    // 获取密码
+    indexDbData.getData('5ebe2294ecd0e0f08eab7690d2a6ee69').then(res => {
+        passKey.value = res.secret;
+    }).catch(err => { })
+})
 const login = () => {
-    bus.emit('nextPage', 'homePage');
     incorrect.value = false;
-    if (!password.value || password.value.length < 8) {
+    if (!password.value) {
         incorrect.value = true;
     }
     if (md5(password.value) == passKey.value) {

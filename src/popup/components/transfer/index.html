@@ -1,45 +1,43 @@
 <div class="send-to">
     <div v-if="numberStep < 3" class="send-header mt-25">
-        <p>Send to</p>
-        <p class="cancel" @click="closeMore">cancel</p>
+        <p>发送：</p>
+        <p class="cancel" @click="closeMore">关闭</p>
     </div>
     <!-- 输入转账地址 -->
-    <el-input v-if="numberStep == 1" class="address-input mt-10" v-model="sendAddress" placeholder="">
-        <i slot="prepend" class="el-icon-search" @click="searchInput"></i>
-        <i slot="append" class="el-icon-close" @click="cancelInput"></i>
-    </el-input>
-    <div v-if="sendBol" class="invalid pl-15 mt-25">
-        Recipient address is invalid
+    <input v-if="numberStep == 1" class="address-input mt-10" v-model="sendAddress" placeholder="">
+    <div class="btn-list">
+        <button @click="searchInput">搜索</button>
+        <button @click="cancelInput">关闭</button>
     </div>
+    <div v-if="sendBol" class="invalid pl-15 mt-25">地址无效</div>
     <!-- 转账的数量 -->
     <div class="send-account" v-if="numberStep == 2">
         <div class="account-content mt-10 flex">
             <i @click="numberStep = true" class="el-icon-close"></i>
             <img src="images/checkrue.png" alt="">
             <div class="user">
-                <p class="name ml-5">Send To</p>
+                <p class="name ml-5">发送：</p>
                 <p class="address mt- 5">{{sendAddress}}</p>
             </div>
         </div>
         <div class="hex-data mt-15 flex">
-            <p>Asset:</p>
+            <p>资产:</p>
             <div class="flex">
                 <div class="num-unit">
-                    <P class="unit">{{walltContent.balanceUnit}}</P>
-                    <P class="blance">Blance: {{blance}}{{walltContent.balanceUnit}}</P>
+                    <P class="unit">{{walltContent.unit}}</P>
+                    <P class="blance">Blance: {{blance}}{{walltContent.unit}}</P>
                 </div>
             </div>
         </div>
         <div class="hex-data mt-10 flex">
-            <p>Amount:</p>
+            <p>数量:</p>
             <div class="flex">
                 <div class="num-unit">
                     <div class="flex">
-                        <el-input-number class="unit" v-model="assetNum" controls-position="right" :min="0" :max="1000">
-                        </el-input-number>
-                        <P class="unit">{{walltContent.balanceUnit}}</P>
+                        <input type="number" v-model="assetNum">
+                        <P class="unit">{{walltContent.unit}}</P>
                     </div>
-                    <P class="blance">Blance: {{blance}}{{walltContent.balanceUnit}}</P>
+                    <P class="blance">Blance: {{blance}}{{walltContent.unit}}</P>
                 </div>
             </div>
         </div>
@@ -48,13 +46,11 @@
             <div class="gas flex">
                 <div class="gas-num">
                     <P class="mb-5">Gas price(GWEI)</P>
-                    <el-input-number v-model="gasPrice" controls-position="right" @change="handleChangeAsset" :min="10"
-                        :max="10000000000000"></el-input-number>
+                    <input type="number" v-model="gasPrice">
                 </div>
                 <div class="gas-num">
                     <P class="mb-5">Gas limit</P>
-                    <el-input-number v-model="gasLimit" controls-position="right" @change="handleChangeAsset" :min="5"
-                        :max="1000000"></el-input-number>
+                    <input type="number" v-model="gasLimit">
                 </div>
             </div>
         </div>
@@ -67,7 +63,7 @@
     <div class="secondary-confirmation" v-if="numberStep == 3">
         <div class="secondary-edit flex" @click="numberStep = 2">
             <i class="el-icon-arrow-left"></i>
-            <p>Edit</p>
+            <p>编辑</p>
         </div>
         <div class="secondary-header mt-15 flex">
             <p>Account 1</p>
@@ -80,7 +76,7 @@
             <p class="usa mt-5">$0.00</p>
         </div>
         <div class="gas-fee border pt-30 pb-10 flex">
-            <div class="left">Estimated gas fee</div>
+            <div class="left">预计gas</div>
             <div class="right">
                 <div class="flex">
                     <p class="ness">$0.00</p>
@@ -112,7 +108,7 @@
         </div>
     </div>
     <div class="send-btn flex mt-35 pt-15" v-if="numberStep == 3">
-        <p class="cancel" @click="closeMore">Reject</p>
-        <p class="confirm" @click="swapBlance">Confirm</p>
+        <p class="cancel" @click="closeMore">拒绝</p>
+        <p class="confirm" @click="swapBlance">确认</p>
     </div>
 </div>

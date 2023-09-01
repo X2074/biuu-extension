@@ -1,21 +1,40 @@
 <template src='./index.html'></template>
 <script lang='ts' setup>
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted, defineProps, nextTick } from 'vue';
 import bus from '@/utils/bus.js';
+import indexDbData from '@/utils/indexDB';
+import Web3 from 'web3'
 const transactionHash = ref(0);
 const moreShow = ref(false);
 const props = defineProps(['walltContent'])
+const web3 = ref(null);
+let walltContent = ref(null)
 onMounted(() => {
-	if (props.walltContent.txHash && props.walltContent.txHash.length > 1) {
-		let index = props.walltContent.txHash.length - 1;
-		let txHash = props.walltContent.txHash[index];
+	indexDbData.getData('rpc_url').then(res => {
+		let data = res.content;
+		// 定义rpc
+		web3.value = new Web3(new Web3.providers.HttpProvider(data.url));
+		getHash()
+	})
+})
+const getHash = () => {
+	walltContent.value = JSON.parse(JSON.stringify(props.walltContent))
+	if (walltContent.value.txHash && walltContent.value.txHash.length > 1) {
+		console.log(1111);
+
+		let index = walltContent.value.txHash.length - 1;
+		let txHash = walltContent.value.txHash[index];
+		console.log(txHash, 'txHash');
+
 		toWei(txHash)
 	} else {
-		if (!props.walltContent.txHash) return;
-		let txHash = props.walltContent.txHash[0];
+		console.log(walltContent.value, 2222);
+		if (!walltContent.value.txHash) return;
+		console.log(3333);
+		let txHash = walltContent.value.txHash[0];
 		toWei(txHash)
 	}
-})
+}
 // 关闭更多相关页面
 bus.on('modalOperate', (res) => {
 	moreShow.value = false;
@@ -24,7 +43,7 @@ bus.on('closeMore', () => {
 	moreShow.value = false;
 })
 const onCopy = () => {
-	// navigator.clipboard.writeText(props.walltContent.address);
+	// navigator.clipboard.writeText(walltContent.value.address);
 	// $message.success('Copy Success!')
 }
 const refresh = () => {
@@ -32,12 +51,13 @@ const refresh = () => {
 }
 // wei转币
 const toWei = (data) => {
-	// if (!data) return;
-	// let web3 = inject('web3')
-	// web3.eth.getTransaction(data.transactionHash).then(res => {
-	// 	if (!res) return;
-	// 	transactionHash.value = web3.utils.fromWei(res.value, 'ether');
-	// })
+	console.log(web3.value, 'sadsadsadsad');
+
+	if (!data) return;
+	web3.value.eth.getTransaction(data.transactionHash).then(res => {
+		if (!res) return;
+		transactionHash.value = web3.value.utils.fromWei(res.value, 'ether');
+	})
 }
 const toPage = (res) => {
 	bus.emit('openModal', res)

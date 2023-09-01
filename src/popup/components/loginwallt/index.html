@@ -1,16 +1,11 @@
 <div class="login-wallt">
     <img class="margin-auto" src="/images/logo/welcome.png" alt="">
-    <p class="login-wel margin-auto mt-20">Welcome Back！</p>
-    <p class="login-about margin-auto">About to enter the decentralized network</p>
+    <p class="login-wel margin-auto mt-20">欢迎回来！</p>
+    <p class="login-about margin-auto">即将进入去中心化网络</p>
     <div class="login-pass margin-auto mt-40">
-        <p>Passwork</p>
+        <p>密码</p>
         <input type="password" v-model="password">
-        <span v-if="incorrect">The password is incorrect</span>
+        <span v-if="incorrect">密码不正确</span>
     </div>
-    <button class="log-in margin-auto mt-25" @click="login">Log in</button>
-    <p class="forgot margin-auto mt-15">Forgot passwrd?</p>
-    <div class="need-help margin-auto mt-25 flex">
-        <p class="need">Need help? Contact </p>
-        <p class="spot">SpotPay</p>
-    </div>
+    <button class="log-in margin-auto mt-25" @click="login">登录</button>
 </div>

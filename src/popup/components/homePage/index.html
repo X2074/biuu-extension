@@ -1,14 +1,11 @@
 <div class="home-page">
     <div class="user-info pt-35">
         <div class="info-name flex">
-            <p class="flex">
-                <i class="mr-5"></i>
-                Not connexted
-            </p>
-            <div class="name" v-if="walltContent">
-                <p>{{walltContent&&walltContent.userName?walltContent.userName:'Account 1'}}</p>
+            <div class="name" v-if="props.walltContent">
+                <p>{{props.walltContent&&props.walltContent.userName?props.walltContent.userName:'Account 1'}}</p>
                 <div class="user-address mt-5 flex">
-                    <p class="mr-10">{{walltContent.address.substr(0,4)}}...{{walltContent.address.substr(-4)}}</p>
+                    <p class="mr-10">
+                        {{props.walltContent.address.substr(0,4)}}...{{props.walltContent.address.substr(-4)}}</p>
                     <i class="el-icon-copy-document" @click="onCopy"></i>
                 </div>
             </div>
@@ -19,7 +16,8 @@
         </div>
         <div class="user-currency mt-45 flex">
             <img src="images/unitLogo.png" alt="">
-            <p class="ml-10" v-if="walltContent">{{walltContent.balance}} {{walltContent.balanceUnit}}</p>
+            <p class="ml-10" v-if="props.walltContent">{{props.walltContent.balance}} {{props.walltContent.unit}}
+            </p>
         </div>
         <div class="uesr-btn mt-30 flex">
             <p @click="toPage('buyPage')">
@@ -32,16 +30,12 @@
                 <img src="images/send.png" alt="">
             </p>
         </div>
-        <div class="assets-nft mt-20 flex">
-            <p class="check">ASSETS</p>
-            <P class="uncheck">NFT</P>
-        </div>
         <img class="platform mt-10 mb-10" src="images/platform.png" alt="">
-        <div class="transactions flex" v-if="walltContent && walltContent.txHash" @click="hashDetail">
+        <div class="transactions flex" v-if="props.walltContent && props.walltContent.txHash" @click="hashDetail">
             <div class="flex">
                 <img src="images/unitLogo.png" alt="">
                 <div class="trade-number ml-25">
-                    <p class="ate">{{transactionHash}} {{walltContent.balanceUnit}}</p>
+                    <p class="ate">{{transactionHash}} {{props.walltContent.unit}}</p>
                     <p class="hk">HK$0.75 HKD</p>
                 </div>
             </div>
@@ -49,15 +43,8 @@
         </div>
     </div>
     <div class="footer mt-20">
-        <p class="token">Don't see your token？</p>
         <div class="refresh mt-10 flex">
-            <p @click="refresh">Refresh The List</p>
-            <span class="ml-5 mr-5"> Or </span>
-            <p>Add Assets</p>
-        </div>
-        <div class="refresh mt-10 flex">
-            <span>Need help?Please contact </span>
-            <p class="ml-5">QITMEER</p>
+            <p @click="refresh">刷新</p>
         </div>
     </div>
 </div>

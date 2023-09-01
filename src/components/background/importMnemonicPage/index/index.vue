@@ -3,7 +3,7 @@
 
 import { ref, onMounted, watchEffect, getCurrentInstance } from 'vue';
 import indexDbData from '../../../../utils/indexDB.js';
-import bus from '@/utils/bus.js';
+import bus from '../../../../utils/bus.js';
 import md5 from 'js-md5';
 import bip39 from 'bip39'
 import { hdkey } from 'ethereumjs-wallet'
@@ -21,7 +21,9 @@ const loading = ref(false)
 const mnemonicArray = ref(null)//助记词数组
 const web3 = ref(new Web3())
 const mnemonic = ref('')//助记词
-
+onMounted(() => {
+    apendContent()
+})
 // 监听粘贴事件
 const pasteFun = (e) => {
     let clipboardData = e.clipboardData.getData('Text');//获取粘贴内容

@@ -1,7 +1,9 @@
+import Web3 from 'web3'
 const CryptoJS = require('crypto-js'); //引用AES源码js
 const qitmeer = require('qitmeer-js')
 const ethUtil = require('ethereumjs-util')
 const bip39 = require('bip39')
+const EthereumTx = require('ethereumjs-tx');
 // 使用最新版本浏览器不支持，只能使用1.x版本替换
 const ecc = require('tiny-secp256k1')
 const { BIP32Factory } = require('bip32')
@@ -128,4 +130,28 @@ export async function evmKey (mnemonic) {
     } catch (err) {
         console.log(err, '55555555');
     }
+}
+
+export async function evmTransfer (data) {
+	let web3 = new Web3(new Web3.providers.HttpProvider(data.rpc));
+	let noce = await web3.eth.getTransactionCount(data.address);
+	let details = {
+		to: data.sendAddress, // 接收方地址                                                             
+		value: web3.utils.toHex(web3.utils.toWei(data.assetNum, 'ether')), // 转账 wei  
+		// gasLimit: web3.utils.toHex(gasLimit.value),
+		// gasPrice: web3.utils.toHex(gasPrice.value),
+		// meer交易此处需要使用int类型
+		gasLimit: web3.utils.toHex(21000),
+		gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
+		nonce: web3.utils.toHex(noce), //meer交易这个可以不填// 序号ID, 重要， 需要一个账号的交易序号，可以通过web3.eth.getTransactionCount(web3.eth.defaultAccount)获得
+		chainId: data.chainId
+	}
+	console.log(details, 'details');
+	let privateKey = Buffer.from(data.key, 'hex');
+	let tx = new EthereumTx(details)
+	tx.sign(privateKey)
+	let serializedTx = tx.serialize();
+	let raw = '0x' + serializedTx.toString('hex');
+	let hash = await web3.eth.sendSignedTransaction(raw)
+	return hash;
 }

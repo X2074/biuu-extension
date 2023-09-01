@@ -1,10 +1,12 @@
 
 <template src='./index.html'></template>
 <script lang='ts' setup>
-import { ref, onMounted, watchEffect, getCurrentInstance } from 'vue';
+import { ref, onMounted, defineProps, getCurrentInstance } from 'vue';
 import bus from '@/utils/bus.js';
+import { evmKey, Decrypt, evmTransfer } from '@/utils/index.js';
 import indexDbData from '@/utils/indexDB';
-import EthereumTx from 'ethereumjs-tx';
+import Web3 from 'web3'
+const EthereumTx = require('ethereumjs-tx');
 const props = defineProps(['walltContent'])
 const transactionHash = ref(0)
 const moreShow = ref(false)
@@ -12,8 +14,8 @@ const sendAddress = ref('0x4445Bbd1f0942857741EEbA3B36970390E9cb887')
 const sendBol = ref(false)
 const numberStep = ref(1)
 const assetNum = ref(0)
-const gasPrice = ref(1000000000000)
-const gasLimit = ref(530000)
+const gasPrice = ref(100000000)
+const gasLimit = ref(53000)
 const sendMaxTotal = ref(0)
 const blance = ref(0)
 const userAddress = ref(null)
@@ -22,20 +24,39 @@ const sendTotal = ref(0)
 const dataKey = ref(null)
 const loading = ref(false)
 const balance = ref(null)
-const web3 = 'getCurrentInstance()?.appContext.config.globalProperties.$web3';
+const web3 = ref(null);
+const rpcUrl = ref(null)
 
 onMounted(() => {
-	let data = getCurrentInstance();
-	setTimeout(() => {
-		console.log(data.appContext.config.globalProperties.$web3, 'web3');
-	}, 1500)
+	indexDbData.getData('rpc_url').then(res => {
+		let data = res.content;
+		rpcUrl.value = data;
+		// 定义rpc
+		web3.value = new Web3(new Web3.providers.HttpProvider(data.url));
+	})
+	getInfo()
+	getKey()
 })
+// 通过助记词生成密钥
+const getKey = () => {
+	indexDbData.getData('keyStore').then(res => {
+		// 第二个参数为密码，后期改为获取数据库密码或者是用户输入
+		let encryption = Decrypt(res.secret, 'admin123456');
+		console.log(encryption);
+		evmKey(encryption).then(keys => {
+			console.log(keys, 'keys');
+			dataKey.value = keys.privateKey;
+		})
+		// let mnemonic
+	})
+}
 // 获取账户相关信息
 const getInfo = () => {
 	// 当前用户信息
 	indexDbData.getData('currentWalltAddress').then(res => {
-		if (res && res.address) {
-			userAddress.value = res.address;
+		let data = res.content;
+		if (data && data.address) {
+			userAddress.value = data.address;
 			getBlance()
 		} else {
 			loading.value = false;
@@ -44,7 +65,7 @@ const getInfo = () => {
 }
 const getBlance = () => {
 	// 获取钱包余额
-	web3.value.eth.getBalance(userAddress)
+	web3.value.eth.getBalance(userAddress.value)
 		.then(res => {
 			blanceWei.value = res;
 			if (!res) {
@@ -60,7 +81,7 @@ const getBlance = () => {
 		})
 }
 const closeMore = () => {
-	bus.emit('closeMore', 'homePage')
+	bus.emit('nextPage', 'homePage')
 }
 const searchInput = () => {
 	sendBol.value = false;
@@ -90,56 +111,38 @@ const handleChangeAsset = () => {
 // 转账功能
 const swapBlance = () => {
 	loading.value = true;
-	web3.value.eth.defaultAccount = props.walltContent.address;
 	console.log('gasPrice', gasPrice.value);
-	web3.value.eth.getTransactionCount(web3.value.eth.defaultAccount).then(res => {
-		let details = {
-			to: sendAddress.value, // 接收方地址                                                             
-			value: web3.value.utils.toHex(web3.value.utils.toWei(assetNum.value + '', 'ether')), // 转账 wei  
-			gasLimit: web3.value.utils.toHex(gasLimit),
-			gasPrice: web3.value.utils.toHex(gasPrice),
-			// meer交易此处需要使用int类型
-			// gasLimit: gasLimit,   
-			// gasPrice: gasPrice,
-			// 'nonce': web3.value.utils.toHex(res+10), //meer交易这个可以不填// 序号ID, 重要， 需要一个账号的交易序号，可以通过web3.eth.getTransactionCount(web3.eth.defaultAccount)获得
-			chainId: props.walltContent.CHAIN_ID
-		}
-		console.log(details, 2222);
-		let privateKey = Buffer.from(dataKey.value.privateKey.substr(2), 'hex')
-		let tx = new EthereumTx(details)
-		tx.sign(privateKey.value)
-		let serializedTx = tx.serialize();
-		let raw = '0x' + serializedTx.toString('hex');
-		console.log(raw, 1111);
-		try {
-			web3.value.eth.sendSignedTransaction(raw).on('receipt', (res) => {
-				console.log(res, '交易后的hash');
-				loading.value = false;
-				indexDbData.getData('txHash').then(info => {
-					if (info && info.txHashList.length > 0) {
-						let data = info;
-						let hash = res;
-						hash.date = Date.now()
-						data.txHashList.push(res);
-						indexDbData.putData(data)
-					} else {
-						let hash = res;
-						hash.date = Date.now()
-						let data = {
-							id: 'txHash',
-							txHashList: [hash]
-						}
-						indexDbData.putData(data)
-					}
-				}).catch(err => { })
-				closeMore()
-			}).on('error', (error) => {
-				// $message.error(error)
-				console.log('error', error)
-			})
-		} catch (err) {
-			console.log(err, 897899878789);
-		}
+	let data = {
+		address: props.walltContent.address,
+		rpc: rpcUrl.value.url,
+		sendAddress: sendAddress.value, // 接收方地址                       
+		assetNum: assetNum.value, // 转账 wei
+		gasLimit: gasLimit.value,
+		gasPrice: gasPrice.value,
+		chainId: rpcUrl.value.CHAIN_ID,
+		key: dataKey.value,
+	}
+	// 转账函数
+	evmTransfer(data).then(res => {
+		console.log(res, 'jiaoyi adsdasd');
+		indexDbData.getData('txHash').then(info => {
+			if (info && info.txHashList.length > 0) {
+				let data = info;
+				let hash = res;
+				hash.date = Date.now()
+				data.txHashList.push(res);
+				indexDbData.putData(data)
+			} else {
+				let hash = res;
+				hash.date = Date.now()
+				let data = {
+					id: 'txHash',
+					txHashList: [hash]
+				}
+				indexDbData.putData(data)
+			}
+		}).catch(err => { })
+		closeMore()
 	})
 }
 </script>

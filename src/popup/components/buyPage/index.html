@@ -1,0 +1,24 @@
+<div class="popup-buy">
+    <div class="buy-content">
+        <div class="buy-header flex">
+            <p class="buy-title">Deposit Token</p>
+            <i @click="closeModal" class="el-icon-close"></i>
+        </div>
+        <p class="buy-text mt-15">To interact with decentralized applications using SpotPay,you need to have ATE in your
+            wallet.</p>
+        <div class="buy-component pb-20">
+            <div class="mt-15" v-for="item in buyComponents" :key="item.url">
+                <div class="image flex">
+                    <img :src="item.img" :width="item.w" :height="item.h" alt="">
+                </div>
+                <div class="text mt-10 ml-15">
+                    <p class="component-title">{{item.title}}</p>
+                    <p class="component-text">{{item.text}}</p>
+                </div>
+                <p class="btn mt-10" @click="openWin(item.url)">
+                    <span>{{item.btn}}</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

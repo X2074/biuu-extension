@@ -5,6 +5,7 @@ import bus from '../../../../utils/bus.js';
 const qitmeer = require('qitmeer-js')
 const ethUtil = require('ethereumjs-util')
 const bip39 = require('bip39')
+const eip55 = require('eip55')
 // 使用最新版本浏览器不支持，只能使用1.x版本替换
 const ecc = require('tiny-secp256k1')
 const { BIP32Factory } = require('bip32')
@@ -52,7 +53,10 @@ const createWallet = async () => {
         // const privateKeyHex = key.privateKey.toString('hex');
         // const publicKeyHex = key.publicKey.toString('hex');
 
-        const address = ethUtil.publicToAddress(key.publicKey, true).toString('hex');
+        let address = ethUtil.publicToAddress(key.publicKey, true).toString('hex');
+        address = eip55.encode(address.toString('hex'));
+        console.log(address, 'address');
+
         // console.log('私钥(WIF):', privateKeyWIF);
         // console.log('私钥 (Hex):', privateKeyHex);
         // console.log('公钥 (Hex):', publicKeyHex);

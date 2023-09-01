@@ -6,6 +6,8 @@ import indexDbData from '../../../../utils/indexDB.js';
 import bus from '../../../../utils/bus.js';
 import { Encrypt, Decrypt } from '../../../../utils/index.js';
 import md5 from 'js-md5';
+// 预制网络
+import netWork from '../../../../utils/netWork.json'
 const CryptoJS = require('crypto-js'); //引用AES源码js
 let mnemonicList = ref([])//助记词数组
 let newPsd = ref('')//钱包密码
@@ -72,17 +74,16 @@ const UtxoEvmKey = () => {
 }
 const evmNetwork = () => {
     indexDbData.getData('EVM').then(res => {
-        // 新增默认evm网络
-        res.content = {
-            1: {
-                id: 'rpc_url',
-                unit: 'ETH',
-                CHAIN_ID: 1,
-                url: 'https://bsc-dataseed1.ninicoin.io',
-                walltInfo: []
+        // 提取数据库存储的网络 chainid
+        let chainId = Object.keys(res.content)
+        Object.keys(netWork.EVM).forEach(item => {
+            if (!chainId.includes(item)) { //如果数据库没有这个网络
+                res.content[item] = netWork.EVM[item];
             }
-        }
+        })
         Object.keys(res.content).forEach((item, index) => {
+            console.log(res.content[item].walltInfo, 'res.content[item].walltInfo');
+
             res.content[item].walltInfo.push({
                 address: walltInfo.value.address, //当前用户地址
                 userName: '',
@@ -101,16 +102,25 @@ const evmNetwork = () => {
 }
 const utxoNetwork = () => {
     indexDbData.getData('UTXO').then(res => {
-        // 新增默认utxo网络
-        res.content = {
-            8131: {
-                id: 'rpc_url',
-                unit: 'MEER',
-                CHAIN_ID: 8131,
-                url: 'https://testnet-qng.rpc.qitmeer.io',
-                walltInfo: []
+        // if (!res.content('8131')) {
+        //     // 新增默认utxo网络
+        //     res.content = {
+        //         8131: {
+        //             id: 'rpc_url',
+        //             unit: 'MEER',
+        //             CHAIN_ID: 8131,
+        //             url: 'https://testnet-qng.rpc.qitmeer.io',
+        //             walltInfo: []
+        //         }
+        //     }
+        // }
+        // 提取数据库存储的网络 chainid
+        let chainId = Object.keys(res.content)
+        Object.keys(netWork.UTXO).forEach(item => {
+            if (!chainId.includes(item)) { //如果数据库没有这个网络
+                res.content[item] = netWork.UTXO[item];
             }
-        }
+        })
         Object.keys(res.content).forEach((item, index) => {
             res.content[item].walltInfo.push({
                 address: walltInfo.value.utxoAddressTest, //当前用户地址
