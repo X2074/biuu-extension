@@ -1,8 +1,11 @@
 <template src='./index/index.html'></template>
 <script lang='ts' setup>
 import { ref, onMounted, watchEffect, getCurrentInstance } from 'vue';
-import { getCookie, setCookie, getQueryParams } from '../../../utils/index';
 import indexDbData from '../../../utils/indexDB';
+import { evmKey, Decrypt, evmTransfer } from '@/utils/index.js';
+// 预制网络
+import netWork from '../../../utils/netWork.json'
+import { getNFTContent, NFTTransfer } from '../../../utils/nft.js'
 import Web3 from 'web3'
 const walltEnvironment = ref('mainnet')//钱包所在的环境
 const loading = ref(true)
@@ -12,111 +15,58 @@ const pageTypes = ref('buyPage')//判断当前应该展示那个页面
 const walltContent = ref({})//钱包所在的环境
 const userAddress = ref('')//钱包所在的环境
 const web3 = ref({})
+
+const netWorkList = ref([]);//下拉列表的网络数据
 onMounted(() => {
-	indexDbData.getData('rpc_url').then(res => {
-		if (res && res.unit) {
-			if (res.unit == 'ETH') walltEnvironment.value = 'mainnet'
-			if (res.unit == 'BNB') walltEnvironment.value = 'test'
-		}
-	}).catch(err => { })
-	indexDbData.getDatas().then(res => {
-		console.log(res, '4545dsada');
-	}).catch(err => { })
+	netWorkChange()
+	getNft();
 })
-// 获取账户相关信息
-const getInfo = () => {
-	let query = getQueryParams();
-	// 当前用户信息
-	indexDbData.getData('currentWalltAddress').then(res => {
-		if (res && res.address) {
-			pageTypes.value = 'userContent'
-			userAddress.value = res.address;
-			getBlance()
-		} else {
-			if (query && query.pageType) {
-				if (query.pageType == 'createWallt') pageTypes.value = 'create';
-				if (query.pageType == 'importWallt') pageTypes.value = 'importWallt';
-				loading.value = false;
-			} else {
-				pageTypes.value = 'create'
-				loading.value = false;
-			}
+// 网络切换
+const netWorkChange = () => {
+	indexDbData.getData('EVM').then(res => {
+		let data = Object.values(res.content);
+		netWorkList.value = data;
+	})
+}
+// 新增网络
+let networkName = ref('');
+let RpcUrl = ref('');
+let tokenId = ref('');
+let symbol = ref('');
+let Blockchain = ref('');
+// 新增evm网络
+const addNetWork = () => {
+	indexDbData.getData('EVM').then(res => {
+		let data = {};
+		data[tokenId.value] = {
+			CHAIN_ID: tokenId.value,
+			netName: networkName.value,
+			unit: symbol.value,
+			url: RpcUrl.value,
+			walltInfo: []
 		}
-	}).catch(err => { })
+		res.content = Object.assign(res.content, data)
+		indexDbData.putData(res)
+	})
 }
-const getBlance = () => {
-	let data = getCurrentInstance();
-	indexDbData.getData('rpc_url').then(res => {
-		// // 定义rpc
-		// web3.value = new Web3(new Web3.providers.HttpProvider(res.url));
-		// // 全局定义web3
-		// if (data) data.appContext.config.globalProperties.$web3 = web3.value;
-		// // 指定钱包单位
-		// walltContent.value.balanceUnit = res.unit;
-		// walltContent.value.url = res.url;
-		// walltContent.value.CHAIN_ID = res.CHAIN_ID;
-		// // 钱包地址
-		// walltContent.value.address = userAddress.value;
-		// // 获取钱包余额
-		// web3.value.eth.getBalance(userAddress.value).then(res => {
-		// 	console.log(res);
-		// 	let balance = web3.value.utils.fromWei(res, 'ether') * 1;
-		// 	balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
-		// 	walltContent.value.balance = balance;
-		// 	getHexHash()
-		// }).catch(err => { });
-	}).catch(err => { })
+// nft相关
+const nftAddress = ref('')
+const nftId = ref('')
+//0x763482F3FA257C82176D1c6A21e0D5582850D4E3   1
+const getNft = async () => {
+	// indexDbData.getData('keyStore').then(res => {
+	// 	// 第二个参数为密码，后期改为获取数据库密码或者是用户输入
+	// 	let encryption = Decrypt(res.secret, 'admin123456');
+	// 	console.log(encryption);
+	// 	evmKey(encryption).then(keys => {
+	// 		console.log(keys, 'keys');
+	// 	})
+	// 	// let mnemonic
+	// })
+	let abi = await getNFTContent('0x995ab346Db2AB84990552DA8cC5Bd474E2888c03', 70)
+	NFTTransfer('0x995ab346Db2AB84990552DA8cC5Bd474E2888c03', '0x243Def9569745c3ae44029526e9449572201B522', '0x533f6FEcE8aF41da6c41de7aF13D289bA92f9fE9', 70)
 }
-const getHexHash = () => {
-	indexDbData.getData('txHash').then(res => {
-		if (res) {
-			// 转账记录
-			walltContent.value.txHash = res.txHashList;
-		}
-		// 测试
-		setTimeout(() => {
-			loading.value = false;
-		}, 500)
-	}).catch(err => { })
-}
-// 返回上个页面
-const returnPage = () => {
-	// let index = this.pagesArray.indexOf(this.pageTypes);
-	// if (this.pageTypes == 'importWallt') this.pageTypes = 'create';
-}
-const rpcChange = (res) => {
-	if (res == 'test') {
-		indexDbData.putData({
-			id: 'rpc_url',
-			unit: 'BNB',
-			CHAIN_ID: 97,
-			url: 'https://data-seed-prebsc-1-s2.binance.org:8545/'
-		})
-	} else if (res == 'mainnet') {
-		indexDbData.putData({
-			id: 'rpc_url',
-			unit: 'ETH',
-			CHAIN_ID: 1,
-			url: 'https://bsc-dataseed1.ninicoin.io'
-		})
-	} else if (res == 'Qitmeer') {
-		indexDbData.putData({
-			id: 'rpc_url',
-			unit: 'Meer',
-			CHAIN_ID: 223,
-			url: 'http://120.79.90.24:18545'
-		})
-	}
-	location.reload()
-}
-// 下一步
-const nextPage = (res) => {
-	if (res == 'userContent') {
-		location.reload()
-	} else {
-		pageTypes.value = res;
-	}
-}
+
 </script>
 <style lang='scss'>
 @import './index/index.scss';

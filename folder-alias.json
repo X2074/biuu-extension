@@ -82,5 +82,14 @@
     },
     "src/components/background/userContent": {
         "description": "用户信息"
+    },
+    "src/utils/nft.js": {
+        "description": "nft相关"
+    },
+    "src/utils/netWork.json": {
+        "description": "默认网络"
+    },
+    "src/utils/index.js": {
+        "description": "交易"
     }
 }

@@ -1,8 +1,8 @@
 {
     "EVM":{
         "8131": {
-            "unit": "ETH",
-            "netName":"ETH_TESTNET",
+            "unit": "Meer",
+            "netName":"Qitmeer Testnet",
             "CHAIN_ID": 8131,
             "url": "https://testnet-qng.rpc.qitmeer.io",
             "walltInfo": []

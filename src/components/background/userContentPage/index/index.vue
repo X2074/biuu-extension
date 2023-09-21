@@ -49,6 +49,7 @@ indexDbData.getData('txHash').then(res => {
 // 获取钱包信息
 indexDbData.getData('rpc_url').then(res => {
 	let data = res.content;
+	console.log(data, 'data');
 	// 定义rpc
 	web3.value = new Web3(new Web3.providers.HttpProvider(data.url));
 	// 获取代币标识
@@ -59,8 +60,8 @@ indexDbData.getData('rpc_url').then(res => {
 	walltContent.value.CHAIN_ID = data.CHAIN_ID;
 	walltEnvironment.value = data.CHAIN_ID;
 	netWorkChange(data.type)
-	getUser()
-	getUserList()
+	// getUser()
+	// getUserList()
 })
 onMounted(() => {
 	if (walltContent.value.txHash && walltContent.value.txHash.length > 1) {
@@ -85,11 +86,13 @@ const netWorkChange = (type) => {
 	netWorkType.value = type;
 	indexDbData.getData(type).then(res => {
 		let data = Object.values(res.content);
+		console.log(data, 'sadasdsad');
+
 		netWorkList.value = data;
 	})
 }
 // 选中的网络
-const rpcChange = (event) => {
+const rpcChange = async (event) => {
 	let id = event.target.value;
 	indexDbData.getData(netWorkType.value).then(res => {
 		let data = res.content[id];
@@ -99,7 +102,17 @@ const rpcChange = (event) => {
 			id: 'rpc_url',
 			content: res.content[id]
 		})
-		userList.value = res.content[id].walltInfo;
+	})
+	// 当前用户信息
+	let currentWalltAddress = await indexDbData.getData('currentWalltAddress');
+	// evm数据
+	let content = await indexDbData.getData('EVM');
+	content.content[id].walltInfo = [currentWalltAddress.content]
+	userList.value = content.content[id].walltInfo;
+	// 选中的网络数据添加用户
+	indexDbData.putData({
+		id: 'EVM',
+		content: content.content
 	})
 }
 // 选中的地址

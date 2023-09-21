@@ -131,7 +131,7 @@ export async function evmKey (mnemonic) {
         console.log(err, '55555555');
     }
 }
-
+// evm转账
 export async function evmTransfer (data) {
 	let web3 = new Web3(new Web3.providers.HttpProvider(data.rpc));
 	let noce = await web3.eth.getTransactionCount(data.address);
