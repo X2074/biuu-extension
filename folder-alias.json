@@ -91,5 +91,8 @@
     },
     "src/utils/index.js": {
         "description": "交易"
+    },
+    "src/utils/indexDB.js": {
+        "description": "存储"
     }
 }

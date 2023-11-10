@@ -30,6 +30,7 @@
     "sass-loader": "^7.0.0",
     "tiny-secp256k1": "^1.1.6",
     "vue": "^3.0.0",
+    "vue3-jazzicon": "^0.1.4",
     "web3": "^1.10.2"
   },
   "devDependencies": {

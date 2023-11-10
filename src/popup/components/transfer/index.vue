@@ -1,4 +1,3 @@
-
 <template src='./index.html'></template>
 <script lang='ts' setup>
 import { ref, onMounted, defineProps, getCurrentInstance } from 'vue';
@@ -21,7 +20,7 @@ const blance = ref(0)
 const userAddress = ref(null)
 const blanceWei = ref(0)
 const sendTotal = ref(0)
-const dataKey = ref(null)
+const dataKey = ref(null);//私钥
 const loading = ref(false)
 const balance = ref(null)
 const web3 = ref(null);
@@ -120,7 +119,7 @@ const swapBlance = () => {
 		gasLimit: gasLimit.value,
 		gasPrice: gasPrice.value,
 		chainId: rpcUrl.value.CHAIN_ID,
-		key: dataKey.value,
+		key: dataKey.value//私钥
 	}
 	// 转账函数
 	evmTransfer(data).then(res => {

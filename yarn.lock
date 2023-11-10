@@ -19,7 +19,7 @@
   "resolved" "https://registry.npm.taobao.org/@babel/compat-data/download/@babel/compat-data-7.12.7.tgz"
   "version" "7.12.7"
 
-"@babel/core@^7.0.0", "@babel/core@^7.0.0-0", "@babel/core@^7.11.0":
+"@babel/core@^7.11.0":
   "integrity" "sha1-t5ouG59w7T2Eu/ttjE74JfYGvM0="
   "resolved" "https://registry.npm.taobao.org/@babel/core/download/@babel/core-7.12.10.tgz?cache=0&sync_timestamp=1607568958901&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fcore%2Fdownload%2F%40babel%2Fcore-7.12.10.tgz"
   "version" "7.12.10"
@@ -1660,7 +1660,7 @@
   "resolved" "https://registry.npm.taobao.org/@vue/cli-plugin-vuex/download/@vue/cli-plugin-vuex-4.5.9.tgz?cache=0&sync_timestamp=1607996072055&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40vue%2Fcli-plugin-vuex%2Fdownload%2F%40vue%2Fcli-plugin-vuex-4.5.9.tgz"
   "version" "4.5.9"
 
-"@vue/cli-service@^3.0.0 || ^4.0.0-0", "@vue/cli-service@~4.5.0":
+"@vue/cli-service@~4.5.0":
   "integrity" "sha1-PKMRKkQYPKrOQR1R0LamFuLhl7E="
   "resolved" "https://registry.npm.taobao.org/@vue/cli-service/download/@vue/cli-service-4.5.9.tgz"
   "version" "4.5.9"
@@ -1760,7 +1760,7 @@
     "@vue/compiler-core" "3.0.4"
     "@vue/shared" "3.0.4"
 
-"@vue/compiler-sfc@^3.0.0", "@vue/compiler-sfc@^3.0.0-beta.14":
+"@vue/compiler-sfc@^3.0.0":
   "integrity" "sha1-IRn+HmjSwmiq+iBGHILBOamt+OA="
   "resolved" "https://registry.npm.taobao.org/@vue/compiler-sfc/download/@vue/compiler-sfc-3.0.4.tgz"
   "version" "3.0.4"
@@ -2037,15 +2037,15 @@
   "resolved" "https://registry.npm.taobao.org/acorn-walk/download/acorn-walk-7.2.0.tgz?cache=0&sync_timestamp=1597235853605&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Facorn-walk%2Fdownload%2Facorn-walk-7.2.0.tgz"
   "version" "7.2.0"
 
-"acorn@^6.0.0 || ^7.0.0 || ^8.0.0", "acorn@^7.1.1", "acorn@^7.4.0":
-  "integrity" "sha1-/q7SVZc9LndVW4PbwIhRpsY1IPo="
-  "resolved" "https://registry.npm.taobao.org/acorn/download/acorn-7.4.1.tgz"
-  "version" "7.4.1"
-
 "acorn@^6.4.1":
   "integrity" "sha1-NYZv1xBSjpLeEM8GAWSY5H454eY="
   "resolved" "https://registry.npm.taobao.org/acorn/download/acorn-6.4.2.tgz"
   "version" "6.4.2"
+
+"acorn@^7.1.1", "acorn@^7.4.0":
+  "integrity" "sha1-/q7SVZc9LndVW4PbwIhRpsY1IPo="
+  "resolved" "https://registry.npm.taobao.org/acorn/download/acorn-7.4.1.tgz"
+  "version" "7.4.1"
 
 "acorn@^8.9.0":
   "integrity" "sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw=="
@@ -2094,7 +2094,7 @@
   "resolved" "https://registry.npm.taobao.org/ajv-keywords/download/ajv-keywords-3.5.2.tgz?cache=0&sync_timestamp=1608062612017&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fajv-keywords%2Fdownload%2Fajv-keywords-3.5.2.tgz"
   "version" "3.5.2"
 
-"ajv@^6.1.0", "ajv@^6.10.0", "ajv@^6.10.2", "ajv@^6.12.3", "ajv@^6.12.4", "ajv@^6.12.5", "ajv@^6.9.1", "ajv@>=5.0.0":
+"ajv@^6.1.0", "ajv@^6.10.0", "ajv@^6.10.2", "ajv@^6.12.3", "ajv@^6.12.4", "ajv@^6.12.5":
   "integrity" "sha1-uvWmLoArB9l3A0WG+MO69a3ybfQ="
   "resolved" "https://registry.npm.taobao.org/ajv/download/ajv-6.12.6.tgz"
   "version" "6.12.6"
@@ -3490,7 +3490,7 @@
   "resolved" "https://registry.npmjs.org/color-support/-/color-support-1.1.3.tgz"
   "version" "1.1.3"
 
-"color@^3.0.0":
+"color@^3.0.0", "color@^3.1.0":
   "integrity" "sha1-ymf7TnuX1hHc3jns7tQiBn2RWW4="
   "resolved" "https://registry.npm.taobao.org/color/download/color-3.1.3.tgz?cache=0&sync_timestamp=1602228725017&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcolor%2Fdownload%2Fcolor-3.1.3.tgz"
   "version" "3.1.3"
@@ -3867,7 +3867,7 @@
     "postcss" "^7.0.1"
     "timsort" "^0.3.0"
 
-"css-loader@*", "css-loader@^3.5.3":
+"css-loader@^3.5.3":
   "integrity" "sha1-Lkssfm4tJ/jI8o9hv/zS5ske9kU="
   "resolved" "https://registry.npm.taobao.org/css-loader/download/css-loader-3.6.0.tgz?cache=0&sync_timestamp=1604507117242&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcss-loader%2Fdownload%2Fcss-loader-3.6.0.tgz"
   "version" "3.6.0"
@@ -4488,7 +4488,7 @@
   "resolved" "https://registry.npm.taobao.org/encodeurl/download/encodeurl-1.0.2.tgz"
   "version" "1.0.2"
 
-"encoding@^0.1.0", "encoding@^0.1.12", "encoding@^0.1.13":
+"encoding@^0.1.12", "encoding@^0.1.13":
   "integrity" "sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A=="
   "resolved" "https://registry.npmjs.org/encoding/-/encoding-0.1.13.tgz"
   "version" "0.1.13"
@@ -4751,7 +4751,7 @@
     "eslint-utils" "^2.0.0"
     "regexpp" "^3.0.0"
 
-"eslint-plugin-import@^2.20.2", "eslint-plugin-import@^2.22.1", "eslint-plugin-import@>= 2.18.0", "eslint-plugin-import@>=1.4.0", "eslint-plugin-import@>=2.18.0", "eslint-plugin-import@~2.24.2":
+"eslint-plugin-import@^2.20.2", "eslint-plugin-import@~2.24.2":
   "integrity" "sha512-hNVtyhiEtZmpsabL4neEj+6M5DCLgpYyG9nzJY8lZQeQXEn5UPW1DpUdsMHMXsq98dbNm7nt1w9ZMSVpfJdi8Q=="
   "resolved" "https://registry.npmjs.org/eslint-plugin-import/-/eslint-plugin-import-2.24.2.tgz"
   "version" "2.24.2"
@@ -4772,7 +4772,7 @@
     "resolve" "^1.20.0"
     "tsconfig-paths" "^3.11.0"
 
-"eslint-plugin-node@^11.1.0", "eslint-plugin-node@>= 9.1.0", "eslint-plugin-node@>=9.1.0", "eslint-plugin-node@~11.1.0":
+"eslint-plugin-node@^11.1.0", "eslint-plugin-node@~11.1.0":
   "integrity" "sha1-yVVEQW7kraJnQKMEdO78VALcZx0="
   "resolved" "https://registry.npm.taobao.org/eslint-plugin-node/download/eslint-plugin-node-11.1.0.tgz"
   "version" "11.1.0"
@@ -4784,17 +4784,17 @@
     "resolve" "^1.10.1"
     "semver" "^6.1.0"
 
-"eslint-plugin-promise@^4.2.1 || ^5.0.0", "eslint-plugin-promise@~5.1.0":
-  "integrity" "sha512-XgdcdyNzHfmlQyweOPTxmc7pIsS6dE4MvwhXWMQ2Dxs1XAL2GJDilUsjWen6TWik0aSI+zD/PqocZBblcm9rdA=="
-  "resolved" "https://registry.npmjs.org/eslint-plugin-promise/-/eslint-plugin-promise-5.1.1.tgz"
-  "version" "5.1.1"
-
-"eslint-plugin-promise@^4.2.1", "eslint-plugin-promise@>= 4.2.1", "eslint-plugin-promise@>=4.2.1":
+"eslint-plugin-promise@^4.2.1":
   "integrity" "sha1-hF/YsiYK2PglZMEiL85ErXHZQYo="
   "resolved" "https://registry.npm.taobao.org/eslint-plugin-promise/download/eslint-plugin-promise-4.2.1.tgz?cache=0&sync_timestamp=1577806289712&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint-plugin-promise%2Fdownload%2Feslint-plugin-promise-4.2.1.tgz"
   "version" "4.2.1"
 
-"eslint-plugin-react@^7.21.5", "eslint-plugin-react@~7.25.1":
+"eslint-plugin-promise@~5.1.0":
+  "integrity" "sha512-XgdcdyNzHfmlQyweOPTxmc7pIsS6dE4MvwhXWMQ2Dxs1XAL2GJDilUsjWen6TWik0aSI+zD/PqocZBblcm9rdA=="
+  "resolved" "https://registry.npmjs.org/eslint-plugin-promise/-/eslint-plugin-promise-5.1.1.tgz"
+  "version" "5.1.1"
+
+"eslint-plugin-react@~7.25.1":
   "integrity" "sha512-ZMbFvZ1WAYSZKY662MBVEWR45VaBT6KSJCiupjrNlcdakB90juaZeDCbJq19e73JZQubqFtgETohwgAt8u5P6w=="
   "resolved" "https://registry.npmjs.org/eslint-plugin-react/-/eslint-plugin-react-7.25.3.tgz"
   "version" "7.25.3"
@@ -4813,12 +4813,12 @@
     "resolve" "^2.0.0-next.3"
     "string.prototype.matchall" "^4.0.5"
 
-"eslint-plugin-standard@^4.0.0", "eslint-plugin-standard@>= 4.0.0", "eslint-plugin-standard@>=4.0.0":
+"eslint-plugin-standard@^4.0.0":
   "integrity" "sha1-DDvzpn6FP4u7xYD7SUX78W9Bt8U="
   "resolved" "https://registry.npm.taobao.org/eslint-plugin-standard/download/eslint-plugin-standard-4.1.0.tgz?cache=0&sync_timestamp=1606091884855&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint-plugin-standard%2Fdownload%2Feslint-plugin-standard-4.1.0.tgz"
   "version" "4.1.0"
 
-"eslint-plugin-vue@^8.4.0", "eslint-plugin-vue@>= 6.1.2":
+"eslint-plugin-vue@^8.4.0":
   "integrity" "sha512-Ga96QRG8GA9AyzKtEDxqYRCMt/VJM4SLkcNmm4FvUiFBE4jpaBr25unRBi9iVmHLYhA9EZ/4I+jD8n1vfWzyAA=="
   "resolved" "https://registry.npmjs.org/eslint-plugin-vue/-/eslint-plugin-vue-8.4.0.tgz"
   "version" "8.4.0"
@@ -4895,7 +4895,7 @@
   "resolved" "https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-3.4.3.tgz"
   "version" "3.4.3"
 
-"eslint@^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0", "eslint@^3 || ^4 || ^5 || ^6 || ^7", "eslint@^6.2.0 || ^7.0.0 || ^8.0.0", "eslint@^6.7.2", "eslint@>= 1.6.0 < 7.0.0", "eslint@>= 4.12.1", "eslint@>=1.6.0 <7.0.0", "eslint@>=4.19.1", "eslint@>=5", "eslint@>=5.0.0", "eslint@>=5.16.0", "eslint@>=6.0.0", "eslint@>=6.2.2":
+"eslint@^6.7.2":
   "integrity" "sha1-YiYtZylzn5J1cjgkMC+yJ8jJP/s="
   "resolved" "https://registry.npm.taobao.org/eslint/download/eslint-6.8.0.tgz?cache=0&sync_timestamp=1608326953541&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint%2Fdownload%2Feslint-6.8.0.tgz"
   "version" "6.8.0"
@@ -4938,7 +4938,7 @@
     "text-table" "^0.2.0"
     "v8-compile-cache" "^2.0.3"
 
-"eslint@^7.0.0", "eslint@^7.12.1", "eslint@~7.18.0":
+"eslint@~7.18.0":
   "integrity" "sha512-fbgTiE8BfUJZuBeq2Yi7J3RB3WGUQ9PNuNbmgi6jt9Iv8qrkxfy19Ds3OpL1Pm7zg3BtTVhvcUZbIRQ0wmSjAQ=="
   "resolved" "https://registry.npmjs.org/eslint/-/eslint-7.18.0.tgz"
   "version" "7.18.0"
@@ -5470,7 +5470,7 @@
   dependencies:
     "flat-cache" "^3.0.4"
 
-"file-loader@*", "file-loader@^4.2.0":
+"file-loader@^4.2.0":
   "integrity" "sha1-eA8ED3KbPRgBnyBgX3I+hEuKWK8="
   "resolved" "https://registry.npm.taobao.org/file-loader/download/file-loader-4.3.0.tgz"
   "version" "4.3.0"
@@ -6276,7 +6276,7 @@
   "resolved" "https://registry.npm.taobao.org/html-tags/download/html-tags-3.1.0.tgz"
   "version" "3.1.0"
 
-"html-webpack-plugin@^3.2.0", "html-webpack-plugin@>=2.26.0":
+"html-webpack-plugin@^3.2.0":
   "integrity" "sha1-sBq71yOsqqeze2r0SS69oD2d03s="
   "resolved" "https://registry.npm.taobao.org/html-webpack-plugin/download/html-webpack-plugin-3.2.0.tgz?cache=0&sync_timestamp=1608278273405&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fhtml-webpack-plugin%2Fdownload%2Fhtml-webpack-plugin-3.2.0.tgz"
   "version" "3.2.0"
@@ -7323,7 +7323,7 @@
     "loader-utils" "^2.0.0"
     "schema-utils" "^3.0.0"
 
-"less@^3.5.0 || ^4.0.0", "less@^4.0.0":
+"less@^4.0.0":
   "integrity" "sha512-av1eEa2D0xZfF7fjLJS/Dld7zAYSLU7EOEJvuOELeaNI3i6L/81AdjbK5/pytaRkBwi7ZEa0433IDvMLskKCOw=="
   "resolved" "https://registry.npmjs.org/less/-/less-4.0.0.tgz"
   "version" "4.0.0"
@@ -7745,6 +7745,11 @@
   "integrity" "sha512-XrNQvUbn1DL5hKNe46Ccs+Tu3/PYOlrcZILuGUhb95oKBPjc/nmIC8D462PQkipVDGKRvwhn+QFg2cCdIvmDJA=="
   "resolved" "https://registry.npmjs.org/merkle-lib/-/merkle-lib-2.0.10.tgz"
   "version" "2.0.10"
+
+"mersenne-twister@^1.1.0":
+  "integrity" "sha512-mUYWsMKNrm4lfygPkL3OfGzOPTR2DBlTkBNHM//F6hGp8cLThY897crAlk3/Jo17LEOOjQUrNAx6DvgO77QJkA=="
+  "resolved" "https://registry.npmjs.org/mersenne-twister/-/mersenne-twister-1.1.0.tgz"
+  "version" "1.1.0"
 
 "methods@~1.1.2":
   "integrity" "sha1-VSmk1nZUE07cxSZmVoNbD4Ua/O4="
@@ -11863,7 +11868,7 @@
   "resolved" "https://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.9.1.tgz"
   "version" "1.9.1"
 
-"vue@^2 || ^3.0.0-0", "vue@^3.0.0", "vue@3.0.4":
+"vue@^3.0.0":
   "integrity" "sha1-hyxlwUP1cXvVOHxhYT2fVfTMD0M="
   "resolved" "https://registry.npm.taobao.org/vue/download/vue-3.0.4.tgz?cache=0&sync_timestamp=1606948640309&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue%2Fdownload%2Fvue-3.0.4.tgz"
   "version" "3.0.4"
@@ -11871,6 +11876,16 @@
     "@vue/compiler-dom" "3.0.4"
     "@vue/runtime-dom" "3.0.4"
     "@vue/shared" "3.0.4"
+
+"vue3-jazzicon@^0.1.4":
+  "integrity" "sha512-8drPXTwQzfqephsgdRpwEytNyH9h2bHJTiz15m5X2PgnIeGT3+5x+aglF5u7DUmvVNerDq1kMmwd3iqZJ9wLDg=="
+  "resolved" "https://registry.npmjs.org/vue3-jazzicon/-/vue3-jazzicon-0.1.4.tgz"
+  "version" "0.1.4"
+  dependencies:
+    "color" "^3.1.0"
+    "core-js" "^3.6.5"
+    "mersenne-twister" "^1.1.0"
+    "vue" "^3.0.0"
 
 "watchpack-chokidar2@^2.0.1":
   "integrity" "sha1-OFAAcu5uzmbzdpk2lQ6hdxvhyVc="
@@ -12239,7 +12254,7 @@
     "source-list-map" "^2.0.0"
     "source-map" "~0.6.1"
 
-"webpack@^1.0.0 || ^2.0.0 || ^3.0.0 || ^4.0.0", "webpack@^2.0.0 || ^3.0.0 || ^4.0.0", "webpack@^3.0.0 || ^4.0.0", "webpack@^3.0.0 || ^4.1.0 || ^5.0.0-0", "webpack@^4.0.0", "webpack@^4.0.0 || ^5.0.0", "webpack@^4.37.0 || ^5.0.0", "webpack@^4.4.0", "webpack@>=1.11.0", "webpack@>=2", "webpack@>=2.0.0 <5.0.0", "webpack@>=4.0.0":
+"webpack@^4.0.0":
   "integrity" "sha1-a/4rCvBVyLLR6Q7SzZNj+EEma3I="
   "resolved" "https://registry.npm.taobao.org/webpack/download/webpack-4.44.2.tgz"
   "version" "4.44.2"
