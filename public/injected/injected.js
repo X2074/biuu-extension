@@ -1,4 +1,4 @@
-function openPagea(){
+function openPage(){
     // let createData = {
     //       url:'chrome-extension://bjogegnhblmapbajppakikonghmglkkb/userContentPage.html',//打开的网页地址（即'http://www.google.com'，不是'www.google.com'）
     //       left:0,//新视窗相对于屏幕的左边缘的位置的像素值。如果没有指定，那么新的视窗从最后一个    有焦点的视窗自然偏移。
@@ -13,27 +13,15 @@ function openPagea(){
     //     //   console.log('打开新页面')
     //     // })
     //     window.open('chrome-extension://bjogegnhblmapbajppakikonghmglkkb/background.html')
-    chrome.runtime.sendMessage({ message: "Hello from content script!" });
+    // chrome.runtime.sendMessage({ message: "Hello from content script!" });
+    console.log(chrome);
     window.top.postMessage('handsome', '*')
-    // console.log(chrome);
     
 }
 
-window.addEventListener('message', function (e)	{
-    console.log(e, 'content01');
-    chrome.runtime.sendMessage({
-        action:'toPopop' , 
-        payload:'i come form  popop'
-      })
-}, true);
-// content不能与当前页面js共享，但是可以共享页面的dom，插入window对象需要js注入的方式
-var script = document.createElement("script");
-script.innerHTML = 'var _alert = window.alert;window.alert = function(){console.log(arguments);_alert(arguments);}'
-document.head.appendChild(script)
-console.log(openPagea,'openPagea');
 function Person(){
     return {
-        openPagea,
+        openPage,
         a:'452415465'
     }
     

@@ -9,7 +9,17 @@
 		"default_icon": "assets/images/icon48.png",
 		"default_popup": "popup.html"
 	},
-	"permissions": ["tabs"],
+	"permissions": [
+	  "<all_urls>",
+	  "*://*/*",
+	  "storage",
+	  "activeTab",
+	  "contextMenus",
+	  "tabs",
+	  "webRequest",
+	  "webRequestBlocing", 
+	  "windows"
+	],
 	"background": {
 		"page":"./background.html"
 	},
@@ -23,9 +33,8 @@
 		{
 			"matches": ["http://*/*", "https://*/*"],
 			"css": ["css/content.css"],
-			"js": ["js/chunk-vendors.js", "js/content.js"],
-			"run_at": "document_idle"
+			"js": ["js/chunk-vendors.js", "js/content.js", "js/inject.js"]
 		}
 	],
-	"web_accessible_resources": ["js/inject.js"]
+	"web_accessible_resources": ["injected/*"]
 }

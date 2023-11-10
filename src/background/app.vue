@@ -12,6 +12,7 @@
 		console.log(chrome, 'chrome');
 		chrome.tabs.create({ url: 'popup.html' });
 	}
+	console.log(1111111);
 </script>
 
 <style lang="less" scoped>

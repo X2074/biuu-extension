@@ -1,8 +1,9 @@
 import { createApp } from 'vue'
 import app from './components/app.vue'
-
 joinContent(app)
 injectJsInsert()
+
+let injectedArray = ['injected/injected.js']
 
 function joinContent (element) {
 	const div = document.createElement('div')
@@ -14,11 +15,12 @@ function joinContent (element) {
 
 function injectJsInsert () {
 	document.addEventListener('readystatechange', () => {
-		const injectPath = 'js/inject.js'
-		const script = document.createElement('script')
-
-		script.setAttribute('type', 'text/javascript')
-		script.src = chrome.extension.getURL(injectPath)
-		document.body.appendChild(script)
+		injectedArray.forEach(item => {
+			const injectPath = item;
+			const script = document.createElement('script')
+			script.setAttribute('type', 'text/javascript')
+			script.src = chrome.extension.getURL(injectPath)
+			document.body.appendChild(script)
+		})
 	})
 }
