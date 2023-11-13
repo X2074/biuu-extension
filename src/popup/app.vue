@@ -68,7 +68,12 @@ const getInfo = () => {
 	// 如果有当前用户信息，说明已经是生成钱包啦
 	indexDbData.getData('currentWalltAddress').then(res => {
 		console.log(res, 'res');
-		let data = res.content;
+		if (!res) {
+			pageTypes.value = 'create'
+			loading.value = false;
+			return;
+		}
+		let data = res;
 		if (data && data.address) {
 			if (getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') && getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') != 'false') {
 				pageTypes.value = 'homePage';

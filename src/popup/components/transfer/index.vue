@@ -39,9 +39,9 @@ onMounted(() => {
 // 通过助记词生成密钥
 const getKey = () => {
 	indexDbData.getData('keyStore').then(res => {
+		console.log(res);
 		// 第二个参数为密码，后期改为获取数据库密码或者是用户输入
-		let encryption = Decrypt(res.secret, 'admin123456');
-		console.log(encryption);
+		let encryption = Decrypt(res.secret, '123456789');
 		evmKey(encryption).then(keys => {
 			console.log(keys, 'keys');
 			dataKey.value = keys.privateKey;
@@ -53,7 +53,7 @@ const getKey = () => {
 const getInfo = () => {
 	// 当前用户信息
 	indexDbData.getData('currentWalltAddress').then(res => {
-		let data = res.content;
+		let data = res;
 		if (data && data.address) {
 			userAddress.value = data.address;
 			getBlance()
@@ -101,6 +101,8 @@ const handleChangeAsset = () => {
 	let numMax = num * 1 + gasLimit.value * 1;
 	sendTotal.value = web3.value.utils.fromWei(nums + '', 'ether');
 	sendMaxTotal.value = web3.value.utils.fromWei(numMax + '', 'ether');
+	console.log(blanceWei.value, 'blanceWei.value', nums, 'nums');
+	
 	if (nums > blanceWei.value * 1) {
 		alert('Insufficient balance!')
 	} else {
@@ -121,7 +123,7 @@ const swapBlance = () => {
 		chainId: rpcUrl.value.CHAIN_ID,
 		key: dataKey.value//私钥
 	}
-	// 转账函数
+	// 转账函数  转账成功后会触发，可以添加loading状态
 	evmTransfer(data).then(res => {
 		console.log(res, 'jiaoyi adsdasd');
 		indexDbData.getData('txHash').then(info => {

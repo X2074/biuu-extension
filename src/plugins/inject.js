@@ -7,20 +7,18 @@ function openPagea(){
     //       height:500,//新视窗的像素高度。如果没有指定，默认为自然高度。
     //       type:"popup",// ( optional enumerated string ["normal", "popup"]可选，枚举字符串["normal", "popup"] ) 指定新建浏览器视窗的类型。
     //     }
-    //     //打开一个浏览器
+    //     //打开一个background页面，只能在content，popup和background部分使用该方法
     //     // chrome.windows.create(createData, ()=>{
     //     //   window.close();
     //     //   console.log('打开新页面')
     //     // })
-    //     window.open('chrome-extension://bjogegnhblmapbajppakikonghmglkkb/background.html')
-    chrome.runtime.sendMessage({ message: "Hello from content script!" });
-    window.top.postMessage('handsome', '*')
-    // console.log(chrome);
     
 }
 
+// 监听来自web页面的通信
 window.addEventListener('message', function (e)	{
     console.log(e, 'content01');
+    // 将通信信息暴露给background页面
     chrome.runtime.sendMessage({
         action:'toPopop' , 
         payload:'i come form  popop'

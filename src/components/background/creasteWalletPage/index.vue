@@ -32,6 +32,9 @@ bus.on('nextPage', (res) => {
 
     if (res == 'createMnemonic') step.value = 1;
     if (res == 'verifyMnemonic') step.value = 2;
+    if (res == 'userContent') {
+        window.location.href = 'userContentPage.html';
+    };
 })
 onMounted(() => {
 })

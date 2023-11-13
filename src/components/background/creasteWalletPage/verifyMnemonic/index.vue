@@ -57,9 +57,9 @@ const creatKeyStory = () => {
         return;
     }
     UtxoEvmKey()
-    // setTimeout(() => {
-    //     $emit('nextPage', 'userContent');
-    // }, 500)
+    setTimeout(() => {
+        bus.emit('nextPage', 'userContent');
+    }, 500)
 }
 // 助记词加密
 const UtxoEvmKey = () => {
@@ -69,12 +69,44 @@ const UtxoEvmKey = () => {
         id: 'keyStore',
         secret: ciphertext
     })
+    // 存为当前展示的钱包数据
+    indexDbData.getData('currentWalltAddress').then(res => {
+        console.log(!res, 'dasdsad');
+        if (!res) {
+            indexDbData.putData({
+                id: 'currentWalltAddress',
+                userName: '',
+                userUrl: '',
+                address: walltInfo.value.address,
+                NoIndex: 1
+            })
+        } else {
+            indexDbData.putData({
+                id: 'currentWalltAddress',
+                address: walltInfo.value.address,
+                userName: '',
+                userUrl: '',
+                NoIndex: res.NoIndex + 1//当前第几个用户
+            })
+        }
+    }).catch(err => {})
     evmNetwork();//新增并存储evm网络
     utxoNetwork();//新增并存储evm网络
 }
 const evmNetwork = () => {
     indexDbData.getData('EVM').then(res => {
         // 提取数据库存储的网络 chainid
+        if (!res || !res.content) {
+            res.content['8031'] = netWork.EVM['8031'];
+            res.content['97'] = netWork.EVM['97'];
+            indexDbData.putData({
+                id: 'rpc_url',
+                unit: 'BNB',
+                CHAIN_ID: 97,
+                type: 'EVM',
+                url: 'https://data-seed-prebsc-1-s2.binance.org:8545/'
+            })
+        }
         let chainId = Object.keys(res.content)
         Object.keys(netWork.EVM).forEach(item => {
             if (!chainId.includes(item)) { //如果数据库没有这个网络
@@ -82,8 +114,6 @@ const evmNetwork = () => {
             }
         })
         Object.keys(res.content).forEach((item, index) => {
-            console.log(res.content[item].walltInfo, 'res.content[item].walltInfo');
-
             res.content[item].walltInfo.push({
                 address: walltInfo.value.address, //当前用户地址
                 userName: '',
@@ -102,18 +132,18 @@ const evmNetwork = () => {
 }
 const utxoNetwork = () => {
     indexDbData.getData('UTXO').then(res => {
-        // if (!res.content('8131')) {
-        //     // 新增默认utxo网络
-        //     res.content = {
-        //         8131: {
-        //             id: 'rpc_url',
-        //             unit: 'MEER',
-        //             CHAIN_ID: 8131,
-        //             url: 'https://testnet-qng.rpc.qitmeer.io',
-        //             walltInfo: []
-        //         }
-        //     }
-        // }
+        if (!res || !res.content) {
+            // 新增默认utxo网络
+            res.content = {
+                8131: {
+                    id: 'rpc_url',
+                    unit: 'MEER',
+                    CHAIN_ID: 8131,
+                    url: 'https://testnet-qng.rpc.qitmeer.io',
+                    walltInfo: []
+                }
+            }
+        }
         // 提取数据库存储的网络 chainid
         let chainId = Object.keys(res.content)
         Object.keys(netWork.UTXO).forEach(item => {

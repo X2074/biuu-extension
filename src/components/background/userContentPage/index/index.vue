@@ -25,7 +25,7 @@ const walltUser = ref('EVM');//选中的用户数据
 const getUser = () => {
 	indexDbData.getData('currentWalltAddress').then(res => {
 		if (res) {
-			let data = res.content;
+			let data = res;
 			// 钱包地址
 			walltUser.value = data.address;
 			walltContent.value.address = data.address;
@@ -59,9 +59,9 @@ indexDbData.getData('rpc_url').then(res => {
 	// chain id
 	walltContent.value.CHAIN_ID = data.CHAIN_ID;
 	walltEnvironment.value = data.CHAIN_ID;
-	netWorkChange(data.type)
-	// getUser()
-	// getUserList()
+	netWorkChange(data.type || 'EVM')
+	getUser()
+	getUserList()
 })
 onMounted(() => {
 	if (walltContent.value.txHash && walltContent.value.txHash.length > 1) {
@@ -86,14 +86,13 @@ const netWorkChange = (type) => {
 	netWorkType.value = type;
 	indexDbData.getData(type).then(res => {
 		let data = Object.values(res.content);
-		console.log(data, 'sadasdsad');
-
 		netWorkList.value = data;
 	})
 }
 // 选中的网络
 const rpcChange = async (event) => {
-	let id = event.target.value;
+	let id = event.target.value + '';
+	console.log(id, 'sadasdsad');
 	indexDbData.getData(netWorkType.value).then(res => {
 		let data = res.content[id];
 		data.type = netWorkType.value;
@@ -105,9 +104,10 @@ const rpcChange = async (event) => {
 	})
 	// 当前用户信息
 	let currentWalltAddress = await indexDbData.getData('currentWalltAddress');
+	console.log(currentWalltAddress, 'currentWalltAddress');
 	// evm数据
 	let content = await indexDbData.getData('EVM');
-	content.content[id].walltInfo = [currentWalltAddress.content]
+	content.content[id].walltInfo = [currentWalltAddress]
 	userList.value = content.content[id].walltInfo;
 	// 选中的网络数据添加用户
 	indexDbData.putData({

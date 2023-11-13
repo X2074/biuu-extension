@@ -1,4 +1,5 @@
-function openPage(){
+// 暴露出来的方法，可以在任意网页的控制台打印该方法
+function openPage02(){
     // let createData = {
     //       url:'chrome-extension://bjogegnhblmapbajppakikonghmglkkb/userContentPage.html',//打开的网页地址（即'http://www.google.com'，不是'www.google.com'）
     //       left:0,//新视窗相对于屏幕的左边缘的位置的像素值。如果没有指定，那么新的视窗从最后一个    有焦点的视窗自然偏移。
@@ -18,11 +19,19 @@ function openPage(){
     window.top.postMessage('handsome', '*')
     
 }
-
-function Person(){
-    return {
-        openPage,
-        a:'452415465'
+// 构造函数 生命的Person用户只有使用new方法才能访问
+class Person {
+    constructor(){}
+    openPage(){
+        console.log('测试数据0010')
     }
-    
+    openPage01(){
+        console.log('测试数据13')
+    }
 }
+// 动态的向Person里面添加函数
+Person.prototype.openPage02 = function() {
+    console.log('测试数据42');
+}
+
+
