@@ -17,12 +17,14 @@ function openPagea(){
 
 // 监听来自web页面的通信
 window.addEventListener('message', function (e)	{
-    console.log(e, 'content01');
-    // 将通信信息暴露给background页面
-    chrome.runtime.sendMessage({
-        action:'toPopop' , 
-        payload:'i come form  popop'
-      })
+    console.log(e, 'content02');
+    // 将通信信息暴露给background页面，将消息过滤，获取属于自己的消息数据
+    if(e.data == '我是主窗口，我接收到消息了'){
+        chrome.runtime.sendMessage({
+            action:'toPopop' , 
+            payload:'i come form  popop'
+          })
+    }
 }, true);
 // content不能与当前页面js共享，但是可以共享页面的dom，插入window对象需要js注入的方式
 var script = document.createElement("script");

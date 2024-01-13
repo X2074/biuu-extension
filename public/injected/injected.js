@@ -1,3 +1,5 @@
+// import {test} from "test.js"
+
 // 暴露出来的方法，可以在任意网页的控制台打印该方法
 function openPage02(){
     // let createData = {
@@ -16,7 +18,6 @@ function openPage02(){
     //     window.open('chrome-extension://bjogegnhblmapbajppakikonghmglkkb/background.html')
     // chrome.runtime.sendMessage({ message: "Hello from content script!" });
     console.log(chrome);
-    window.top.postMessage('handsome', '*')
     
 }
 // 构造函数 生命的Person用户只有使用new方法才能访问
@@ -31,7 +32,7 @@ class Person {
 }
 // 动态的向Person里面添加函数
 Person.prototype.openPage02 = function() {
-    console.log('测试数据42');
+    // 发送消息到后台页面
+    window.postMessage("我是主窗口，我接收到消息了",window.location);
 }
-
 

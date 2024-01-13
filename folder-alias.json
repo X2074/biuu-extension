@@ -94,5 +94,11 @@
     },
     "src/utils/indexDB.js": {
         "description": "存储"
+    },
+    "note.json": {
+        "description": "indexDB数据的注解"
+    },
+    "public/injected": {
+        "description": "可以让网页直接访问的js，作为通信中转站"
     }
 }

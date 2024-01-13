@@ -35,6 +35,9 @@ bus.on('nextPage', (res) => {
     if (res == 'userContent') {
         window.location.href = 'userContentPage.html';
     };
+    if (res == 'buyPage') {
+        window.location.href = 'userContentPage.html';
+    };
 })
 onMounted(() => {
 })
