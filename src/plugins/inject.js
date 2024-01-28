@@ -17,7 +17,6 @@ function openPagea(){
 
 // 监听来自web页面的通信
 window.addEventListener('message', function (e)	{
-    console.log(e, 'content02');
     // 将通信信息暴露给background页面，将消息过滤，获取属于自己的消息数据
     if(e.data == '我是主窗口，我接收到消息了'){
         chrome.runtime.sendMessage({

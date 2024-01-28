@@ -18,7 +18,8 @@
 	  "tabs",
 	  "webRequest",
 	  "webRequestBlocing", 
-	  "windows"
+	  "windows",
+	  "notifications"
 	],
 	"background": {
 		"page":"./background.html"
