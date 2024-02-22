@@ -1,39 +1,28 @@
 <template>
 	<div class="meer-wallt">
-		{{ pageTypes }}
-		<headerPage v-if="(pageTypes && pagesArray.indexOf(pageTypes) > 1)" :walltContent="walltContent" />
 		<!-- 首次进入 -->
 		<create v-if="pageTypes == 'create'" />
-		<!-- 输入密码 -->
-		<loginwallt v-if="pageTypes == 'login'" />
-		<!-- 主页 -->
-		<homePage :walltContent="walltContent" v-if="!loading && pageTypes == 'homePage'" />
-		<!-- 跳转购买页面 -->
-		<buy-page @closeModal="closeModal" v-if="buyModal" />
-		<!-- 交易记录页面 -->
-		<assetsRecording v-if="pageTypes == 'assetsRecording'" :walltContent="walltContent" />
-		<!-- 转账页面 -->
-		<transfer v-if="!loading && pageTypes == 'sendTo'" :walltContent="walltContent" />
-		<!-- swap -->
-		<!-- <swap-page @nextPage="nextPage" v-if="pageTypes == 'swap'"/> -->
-	</div>
+		<!-- 创建钱包 -->
+		<creasteWalletPage v-if="pageTypes == 'creasteWalletPage'" />
+  </div>
+  
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, getCurrentInstance } from 'vue';
 import md5 from 'js-md5';
 // 因为popup的特殊原因，此处只有一个入口，页面切换靠各种类型的判断
-// import HomePage from '@/components/homePage.vue'
+// import homePage from '@/components/homePage.vue'
 // 已有账号，重新进入需要登录 
-import loginwallt from './components/loginwallt/index.vue'
+// import loginwallt from './components/loginwallt/index.vue'
 import create from './components/create/index.vue'
-import homePage from './components/homePage/index.vue'
+import creasteWalletPage from './components/creasteWalletPage/index.vue'
+// import homePage from './components/homePage/index.vue'
 import headerPage from './components/header/index.vue'
-import buyPage from './components/buyPage/index.vue'
-import assetsRecording from './components/assetsRecording/index.vue'
-import transfer from './components/transfer/index.vue'
-// import swapPage from './components/swap/index.vue'
-import { getCookie, setCookie, clearAllCookie } from '@/utils/index';
+// import buyPage from './components/buyPage/index.vue'
+// import assetsRecording from './components/assetsRecording/index.vue'
+// import transfer from './components/transfer/index.vue'
+import { getCookie } from '@/utils/index';
 import indexDbData from '@/utils/indexDB';
 import Web3 from 'web3'
 import bus from '@/utils/bus';
@@ -41,14 +30,15 @@ const buyModal = ref(false)
 const loading = ref(true)
 const userAddress = ref(null)
 const walltContent = ref(null)//账户相关信息
-const pageTypes = ref('')//判断当前应该展示那个页面
+const pageTypes = ref('creasteWalletPage')//判断当前应该展示那个页面
 const pagesArray = ref(['create', 'login', 'homePage', 'assetsRecording', 'sendTo', 'swap'])//页面地址数组,数组顺序为正常流程顺序
-onMounted(() => {
-	getInfo()
-})
 const openUrl = () => {
 	// chrome.tabs.create({ url: 'background.html' });
 }
+onMounted(()=>{
+	// getInfo()
+})
+
 const closeModal = (res) => {
 	if (res == 'buyPage') buyModal.value = false;
 	if (res == 'homePage') pageTypes.value = 'homePage';
@@ -130,14 +120,14 @@ const getHexHash = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 html {
-	width: 305px !important;
-	height: 530px !important;
+	width: 360px !important;
+	height: 600px !important;
 }
 
 .meer-wallt {
-	width: 305px;
-	height: 530px;
+	width: 360px;
+	height: 600px;
 }
 </style>

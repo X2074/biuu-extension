@@ -1,13 +1,12 @@
 import Web3 from 'web3'
-const CryptoJS = require('crypto-js'); //引用AES源码js
-const qitmeer = require('qitmeer-js')
-const ethUtil = require('ethereumjs-util')
-const bip39 = require('bip39')
-const EthereumTx = require('ethereumjs-tx');
+import CryptoJS from 'crypto-js'
+import { bip39 } from 'bip39'
+import { EthereumTx } from 'ethereumjs-tx'
+// import { ecc } from 'tiny-secp256k1'
+// import { BIP32Factory } from 'bip32'
 // 使用最新版本浏览器不支持，只能使用1.x版本替换
-const ecc = require('tiny-secp256k1')
-const { BIP32Factory } = require('bip32')
-const bip32 = BIP32Factory(ecc)
+// const bip32 = BIP32Factory(ecc)
+import { hdkey } from 'ethereumjs-wallet';
 
 export function getCookie(cookieName) {
 	const strCookie = document.cookie
@@ -38,36 +37,36 @@ export function clearAllCookie() {
 				setCookie(keys[i], '');
 				// document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString();
 			}
-		}	
+		}
 	}
 }
 //   获取浏览器参数，判断当前如何显示
-  export function getQueryParams () {
+export function getQueryParams() {
 	var url = document.location.toString()
 	// 如果url中有特殊字符则需要进行一下解码
 	url = decodeURI(url)
 	var arr1 = url.split('?');
 	var obj = {}
 	if (arr1.length > 1) {
-	  var arr2 = arr1[1].split('&');
-	  for (var i = 0; i < arr2.length; i++) {
-		var curArr = arr2[i].split('=');
-		obj[curArr[0]] = decodeURIComponent(curArr[1])
-	  }
+		var arr2 = arr1[1].split('&');
+		for (var i = 0; i < arr2.length; i++) {
+			var curArr = arr2[i].split('=');
+			obj[curArr[0]] = decodeURIComponent(curArr[1])
+		}
 	}
 	return obj
-  }
-  export function formatDate (millinSeconds) {
+}
+export function formatDate(millinSeconds) {
 	let date = new Date(millinSeconds);
 	let monthArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Spt', 'Oct', 'Nov', 'Dec'];
 	let suffix = ['st', 'nd', 'rd', 'th'];
-	
+
 	let year = date.getFullYear(); //年
 	let month = monthArr[date.getMonth()]; //月
 	let ddate = date.getDate(); //日
 	let hours = date.getHours();
 	let minute = date.getMinutes();
-	 
+
 	if (ddate % 10 < 1 || ddate % 10 > 3) {
 		ddate = ddate + suffix[3];
 	} else if (ddate % 10 == 1) {
@@ -93,46 +92,50 @@ export function Encrypt(mnemonic, key) {
 	return CryptoJS.AES.encrypt(mnemonic, key).toString();
 }
 // utxo助记词转私钥
-export async function utxoKey (mnemonic) {
-    try {
-        // //2.将助记词转成seed
-        let seed = await bip39.mnemonicToSeed(mnemonic, '');
-        // // 通过种子生成BIP32主节点
-        const hdWallet = bip32.fromSeed(seed);
-        const rootPrivateKey = hdWallet.privateKey.toString('hex');
-        const rootPublicKey = hdWallet.publicKey.toString('hex');
-        return {
-            utxoRootPrivateKey: rootPrivateKey, //私钥
-            utxoRootPublicKey: rootPublicKey, //公钥
-        }
-    } catch (err) {
-        console.log(err, '55555555');
-    }
+export async function utxoKey(mnemonic) {
+	try {
+		//2.将助记词转成seed
+		let seed = await bip39.mnemonicToSeed(mnemonic, '');
+		// 通过种子生成BIP32主节点
+		// const hdWallet = bip32.fromSeed(seed);
+		let hdWallet = hdkey.fromMasterSeed(Buffer.from(seed, 'hex'));
+		//派生 BIP32 导出的密钥对
+		let key = hdWallet.derivePath("m/44'/60'/0'/0/0").getWallet();
+		const rootPrivateKey = key.privateKey.toString('hex');
+		const rootPublicKey = key.publicKey.toString('hex');
+		return {
+			utxoRootPrivateKey: rootPrivateKey, //私钥
+			utxoRootPublicKey: rootPublicKey, //公钥
+		}
+	} catch (err) {
+		console.log(err, '55555555');
+	}
 }
 // evm助记词转私钥
-export async function evmKey (mnemonic) {
-    try {
-        // //2.将助记词转成seed
-        let seed = await bip39.mnemonicToSeed(mnemonic, '');
-        // // 通过种子生成BIP32主节点
-        const hdWallet = bip32.fromSeed(seed);
-        // //4.派生一个子密钥对的BIP32导出路径
-        let key = hdWallet.derivePath("m/44'/60'/0'/0/0");
-        // // 获取子私钥的WIF格式
-        const privateKeyWIF = key.toWIF();
-        // // 获取子公私钥的十六进制格式
-        const privateKeyHex = key.privateKey.toString('hex');
-        const publicKeyHex = key.publicKey.toString('hex');
-        return {
-            privateKey: privateKeyHex, //私钥
-            publicKey: publicKeyHex, //公钥
-        }
-    } catch (err) {
-        console.log(err, '55555555');
-    }
+export async function evmKey(mnemonic) {
+	try {
+		//2.将助记词转成seed
+		let seed = await bip39.mnemonicToSeed(mnemonic, '');
+		// 通过种子生成BIP32主节点
+		// const hdWallet = bip32.fromSeed(seed);
+		const hdWallet = hdkey.fromMasterSeed(Buffer.from(seed, 'hex'));
+		// //4.派生一个子密钥对的BIP32导出路径
+		let key = hdWallet.derivePath("m/44'/60'/0'/0/0").getWallet();
+		// // 获取子私钥的WIF格式
+		const privateKeyWIF = key.toWIF();
+		// // 获取子公私钥的十六进制格式
+		const privateKeyHex = key.privateKey.toString('hex');
+		const publicKeyHex = key.publicKey.toString('hex');
+		return {
+			privateKey: privateKeyHex, //私钥
+			publicKey: publicKeyHex, //公钥
+		}
+	} catch (err) {
+		console.log(err, '55555555');
+	}
 }
 // evm转账
-export async function evmTransfer (data) {
+export async function evmTransfer(data) {
 	let web3 = new Web3(new Web3.providers.HttpProvider(data.rpc));
 	let noce = await web3.eth.getTransactionCount(data.address);
 	let details = {
@@ -147,11 +150,20 @@ export async function evmTransfer (data) {
 		chainId: data.chainId
 	}
 	console.log(details, 'details');
-	let privateKey = Buffer.from(data.key, 'hex');
+	let privateKey = hexToBytes(data.key);
 	let tx = new EthereumTx(details)
 	tx.sign(privateKey)
 	let serializedTx = tx.serialize();
 	let raw = '0x' + serializedTx.toString('hex');
 	let hash = await web3.eth.sendSignedTransaction(raw)
 	return hash;
+}
+
+
+function hexToBytes(hex) {
+	let bytes = new Uint8Array(Math.ceil(hex.length / 2));
+	for (let i = 0; i < hex.length; i += 2) {
+		bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+	}
+	return bytes;
 }

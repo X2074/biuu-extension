@@ -1,0 +1,140 @@
+.new-mnemonic {
+    border-radius: 5px;
+    background-color: #fff;
+
+    .title-select {
+        margin-top: 18px;
+
+        p {
+            height: 18px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #000000;
+        }
+    }
+
+    .mnemonic-tips {
+        align-items: center;
+        justify-content: center;
+        margin-top: 12px;
+
+        i {
+            font-size: 15px;
+            color: #ABABAB;
+            margin-right: 3px;
+        }
+
+        p {
+            line-height: 15px;
+            font-size: 11px;
+            font-weight: 400;
+            color: #ABABAB;
+        }
+    }
+
+    .mnemonic-input {
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        .input-list {
+            margin-top: 17px;
+            width: 138px;
+            height: 30px;
+            border-radius: 5px 5px 5px 5px;
+            border: 1px solid #707070;
+            position: relative;
+
+            img {
+                transform: scale(0.5);
+                position: absolute;
+                right: 4px;
+                cursor: pointer;
+
+                &.show {
+                    top: 5px;
+                }
+
+                &.none {
+                    top: 2px;
+                }
+            }
+
+            p {
+                font-size: 10px;
+                width: 20px;
+                height: 14px;
+                line-height: 14px;
+                text-align: center;
+                position: absolute;
+                background-color: #fff;
+                top: -7px;
+                left: 8px;
+            }
+
+            input {
+                width: 100%;
+                height: 100%;
+                border: 0;
+                font-size: 14px;
+                padding-left: 10px;
+                padding-right: 35px;
+                border-radius: 5px 5px 5px 5px;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+    }
+
+    .set-password {
+        margin-top: 18px;
+        justify-content: space-between;
+
+        div {
+            position: relative;
+
+            p {
+                font-weight: 400;
+                color: #000000;
+                height: 15px;
+                font-size: 11px;
+            }
+
+            input {
+                width: 230px;
+                height: 30px;
+                padding: 5px 10px;
+                border-radius: 5px 5px 5px 5px;
+                border: 1px solid #707070;
+                font-size: 14px;
+            }
+
+            span {
+                color: red;
+                position: absolute;
+                bottom: -20px;
+                left: -47%;
+                font-size: 20px;
+                transform: scale(0.5);
+                width: 200%;
+            }
+        }
+    }
+
+    .import {
+        margin-top: 18px;
+        justify-content: space-between;
+
+        button {
+            width: 150px;
+            height: 38px;
+            background: #1592E6;
+            border-radius: 5px 5px 5px 5px;
+            color: #fff;
+            font-size: 12px;
+            border: 0;
+            cursor: pointer;
+        }
+    }
+}

@@ -1,104 +1,32 @@
 {
-    "src/background": {
-        "description": "background相关"
-    },
-    "src/background/index.js": {
-        "description": "处理多个html加载"
-    },
-    "src/plugins/inject.js": {
-        "description": "注入当前页面的js"
-    },
-    "src/plugins/manifest.json": {
-        "description": "扩展的相关配置"
+    "src/popup/components/assetsRecording": {
+        "description": "交易记录"
     },
     "src/popup/components/create": {
-        "description": "创建钱包"
-    },
-    "src/popup/components/loginWallt": {
-        "description": "登录钱包"
-    },
-    "src/components/popup/components/details": {
-        "description": "账户基本信息"
-    },
-    "src/components/popup/components/privateKeys": {
-        "description": "导出私钥"
-    },
-    "src/components/popup/components/sites": {
-        "description": "链接多少网络"
-    },
-    "src/components/popup/components/activity": {
-        "description": "转账信息"
+        "description": "没有钱包时候"
     },
     "src/popup/components/homePage": {
         "description": "首页"
     },
     "src/popup/components/loginwallt": {
-        "description": "登陆"
-    },
-    "src/popup/components/buyPage": {
-        "description": "购买-暂不调试"
-    },
-    "src/popup/components/sendTo": {
-        "description": "转账"
-    },
-    "src/popup/components/assetsRecording": {
-        "description": "交易记录"
+        "description": "登录"
     },
     "src/popup/components/transfer": {
         "description": "转账"
     },
-    "src/components/background": {
-        "description": "背景页面生成"
-    },
-    "src/components/background/creasteWalletPage": {
+    "src/components/creasteWalletPage": {
         "description": "创建钱包"
     },
-    "src/components/background/header": {
-        "description": "公共头部，用来切换rpc地址"
+    "src/components/creasteWalletPage/createMnemonic": {
+        "description": "创建钱包"
     },
-    "src/components/background/creasteWalletPage/addMnemonic": {
-        "description": "助记词"
+    "src/components/creasteWalletPage/verifyMnemonic": {
+        "description": "导入钱包助记词"
     },
-    "src/components/background/creasteWalletPage/homePage": {
-        "description": "生成助记词"
+    "src/components/creasteWalletPage/setPsd": {
+        "description": "设置密码"
     },
-    "src/components/background/creasteWalletPage/verifyMnemonic": {
-        "description": "二次验证助记词"
-    },
-    "src/components/background/creasteWalletPage/createMnemonic": {
-        "description": "生成助记词"
-    },
-    "src/components/background/indexPage": {
-        "description": "测试首页"
-    },
-    "src/components/background/hashDetail": {
-        "description": "交易详情"
-    },
-    "src/components/background/importMnemonic": {
-        "description": "导入钱包"
-    },
-    "src/components/background/buyPage": {
-        "description": "购买"
-    },
-    "src/components/background/userContent": {
-        "description": "用户信息"
-    },
-    "src/utils/nft.js": {
-        "description": "nft相关"
-    },
-    "src/utils/netWork.json": {
-        "description": "默认网络"
-    },
-    "src/utils/index.js": {
-        "description": "交易"
-    },
-    "src/utils/indexDB.js": {
-        "description": "存储"
-    },
-    "note.json": {
-        "description": "indexDB数据的注解"
-    },
-    "public/injected": {
-        "description": "可以让网页直接访问的js，作为通信中转站"
+    "src/popup/components/creasteWalletPage": {
+        "description": "创建钱包"
     }
 }

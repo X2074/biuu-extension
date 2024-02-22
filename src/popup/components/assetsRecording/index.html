@@ -7,31 +7,31 @@
                 <p class="unit"> / ATE</p>
             </div>
             <div class="more-components">
-                <img src="images/more.png" @click="moreShow = true;" alt="">
+                <img src="../../../assets/images/more.png" @click="moreShow = true;" alt="">
                 <options-popup v-if="moreShow" />
             </div>
         </div>
         <div class="user-currency mt-45 flex">
-            <img src="images/unitLogo.png" alt="">
+            <img src="../../../assets/images/unitLogo.png" alt="">
             <p class="ml-10">{{walltContent.balance}} {{walltContent.balanceUnit}}</p>
         </div>
         <div class="uesr-btn mt-30 flex">
             <p @click="toPage('buyPage')">
-                <img src="images/buy.png" alt="">
+                <img src="../../../assets/images/buy.png" alt="">
             </p>
             <p class="ml-20 mr-20">
-                <img src="images/swap.png" alt="">
+                <img src="../../../assets/images/swap.png" alt="">
             </p>
             <p @click="sendTo">
-                <img src="images/send.png" alt="">
+                <img src="../../../assets/images/send.png" alt="">
             </p>
         </div>
         <div class="transactions mt-30" v-if="walltContent.txHash && txHashList.length">
             <div class="pl-20 pr-10 flex" v-for="(item,index) in txHashList"
                 @click="transferContent = item;detailBol = true;" :key="index">
                 <div class="flex">
-                    <img v-if="(address!=item.to)" class="mr-10" src="images/homePage/to.png" alt="">
-                    <img v-else class="mr-10" src="images/homePage/zhaoweifu.png" alt="">
+                    <img v-if="(address!=item.to)" class="mr-10" src="../../../assets/images/homePage/to.png" alt="">
+                    <img v-else class="mr-10" src="../../../assets/images/homePage/zhaoweifu.png" alt="">
                     <div>
                         <p class="title">{{(address==item.to?'Receive':'Send')}}</p>
                         <div class="time-address flex">
@@ -66,10 +66,10 @@
                 <p class="status-to">To</p>
             </div>
             <div class="transfer-text mt-10 flex">
-                <img class="user ml-5" src="images/user.png" alt="">
+                <img class="user ml-5" src="../../../assets/images/user.png" alt="">
                 <p>{{transferContent?.from?.substr(0,4)}}...{{transferContent?.from?.substr(-4)}}</p>
                 <i class="el-icon-right"></i>
-                <img class="user ml-5" src="images/user.png" alt="">
+                <img class="user ml-5" src="../../../assets/images/user.png" alt="">
                 <p>{{transferContent?.to?.substr(0,4)}}...{{transferContent?.to?.substr(-4)}}</p>
             </div>
             <div class="transfer-text mt-10 flex">

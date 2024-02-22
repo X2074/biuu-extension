@@ -5,7 +5,6 @@
 </style>
 <script lang='ts' setup>
 import { ref, onMounted, reactive, watch } from 'vue';
-import { getCookie, setCookie, clearAllCookie } from '@/utils/index.js';
 import indexDbData from '@/utils/indexDB.js';
 
 const walltEnvironment = ref('mainnet')//钱包所在的环境

@@ -1,0 +1,37 @@
+<div class="meer-background">
+    <jazzicon address="0x4445Bbd1f0942857741EEbA3B36970390E9cb887" :diameter="40" />
+    <div v-if="pageTypes != 'urlConnect'">
+        <!-- <img class="return" src="/images/return.png" v-if="pageTypes == ' '" @click="returnPage" alt=""> -->
+        <div class="header flex" v-if="(pageTypes && pagesArray.indexOf(pageTypes) > 2)">
+            <!-- <img class="spotpay" src="/images/logoMnemonic.png" alt=""> -->
+
+            <div class="user-type" v-if="netWorkList && netWorkList.length">
+                <p>网络</p>
+                <select id="my-select" v-model="walltEnvironment" @change="rpcChange">
+                    <option :value="item.CHAIN_ID" v-for="item in netWorkList">{{item.unit}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="nft-test">
+        <!-- 添加网络 -->
+        <div class="add-network">
+            <p>网络名称</p>
+            <input type="text" v-model="networkName">
+            <p>新的 RPC URL</p>
+            <input type="text" v-model="RpcUrl">
+            <p>链 ID</p>
+            <input type="text" v-model="tokenId">
+            <p>货币符号</p>
+            <input type="text" v-model="symbol">
+            <p>区块浏览器 URL（可选）</p>
+            <input type="text" v-model="Blockchain">
+            <button @click="addNetWork">新增网络</button>
+        </div>
+        <p>NFT地址</p>
+        <input type="text" v-model="nftAddress">
+        <p>NFT ID</p>
+        <input type="text" v-model="nftId">
+        <button @click="getNft">查询nft</button>
+    </div>
+</div>

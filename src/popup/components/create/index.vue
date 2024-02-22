@@ -2,7 +2,8 @@
 <template src="./index.html"></template>
 <script lang="ts" setup>
 import { ref, onMounted, reactive, watch } from 'vue';
-const googleId = ref('')
+const googleId = ref('fkhnghcgmjcgeniccpjpmlfpgbibmmge')
+import bus from '@/utils/bus';
 const toCreate = (res) => {
     // let createData = {
     //     url:'chrome-extension://kkhfpjkgnkckiofggkkiedpfjknmpemo/walltBackground.html?pageType=create',//打开的网页地址（即'http://www.google.com'，不是'www.google.com'）
@@ -17,9 +18,10 @@ const toCreate = (res) => {
     //     window.close();
     //     console.log('打开新页面')
     //   })
+    bus.emit('nextPage','creasteWalletPage')
     if (!googleId.value) return;
     localStorage.setItem('googleId', googleId.value)
-    window.open('chrome-extension://' + googleId.value + '/creasteWalletPage.html')
+    window.open('chrome-extension://' + googleId.value + '/components/creasteWalletPage/index.html')
 }
 </script>
 <style lang="scss">

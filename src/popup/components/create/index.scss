@@ -1,47 +1,53 @@
-.create-wallt {
-    padding-top: 102px;
+.create-page {
+    position: relative;
 
     img {
-        width: 115px;
-        height: 116px;
+        width: 100%;
+        height: auto;
         display: block;
-        margin-left: auto;
-        margin-right: auto;
     }
 
-    .create-wel {
-        font-size: 22px;
-        line-height: 30px;
-        width: 120px;
-        text-align: left;
-    }
-
-    .create-about {
-        width: 219px;
-        font-size: 12px;
-        line-height: 15px;
+    .title {
         text-align: center;
+        font-size: 30px;
+        line-height: 38px;
+        font-weight: 600;
+        color: #000;
+        margin-top: 240px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+
+        font {
+            font-size: 30px;
+            line-height: 38px;
+            color: rgba(177, 218, 90, 1);
+
+            &.red {
+                color: rgba(255, 72, 160, 1);
+            }
+        }
     }
 
     button {
         display: block;
-        width: 231px;
-        height: 38px;
+        width: 328px;
+        height: 72px;
         border: 0;
         cursor: pointer;
-        font-size: 12px;
-        border-radius: 5px 5px 5px 5px;
+        font-size: 19px;
+        border-radius: 72px;
+        color: #000;
+        font-weight: 600;
     }
 
     .create-in {
-        border: 1px solid #707070;
-        background-color: #fff;
-        color: #1592E6;
+        background: rgba(177, 218, 90, 1);
     }
 
     .log-in {
-        background: #1592E6;
-        color: #fff;
+        border: 1px solid rgba(177, 218, 90, 1);
     }
 
     .google-id {
