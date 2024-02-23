@@ -1,11 +1,11 @@
 import Web3 from 'web3'
 import CryptoJS from 'crypto-js'
-import { bip39 } from 'bip39'
+import bip39 from 'bip39'
 import { EthereumTx } from 'ethereumjs-tx'
-// import { ecc } from 'tiny-secp256k1'
-// import { BIP32Factory } from 'bip32'
+import ecc from 'tiny-secp256k1'
+import { BIP32Factory } from 'bip32'
 // 使用最新版本浏览器不支持，只能使用1.x版本替换
-// const bip32 = BIP32Factory(ecc)
+const bip32 = BIP32Factory(ecc)
 import { hdkey } from 'ethereumjs-wallet';
 
 export function getCookie(cookieName) {
@@ -83,7 +83,9 @@ export function formatDate(millinSeconds) {
 export function Decrypt(ciphertext, key) {
 	// 解密
 	const decryptedBytes = CryptoJS.AES.decrypt(ciphertext, key);
+	console.log(decryptedBytes, 'decryptedBytes');
 	const decryptedPlaintext = decryptedBytes.toString(CryptoJS.enc.Utf8);
+	console.log(decryptedPlaintext, 'decryptedPlaintext');
 	return decryptedPlaintext;
 }
 
@@ -108,7 +110,7 @@ export async function utxoKey(mnemonic) {
 			utxoRootPublicKey: rootPublicKey, //公钥
 		}
 	} catch (err) {
-		console.log(err, '55555555');
+		console.log(err, '11111');
 	}
 }
 // evm助记词转私钥
@@ -117,21 +119,16 @@ export async function evmKey(mnemonic) {
 		//2.将助记词转成seed
 		let seed = await bip39.mnemonicToSeed(mnemonic, '');
 		// 通过种子生成BIP32主节点
-		// const hdWallet = bip32.fromSeed(seed);
-		const hdWallet = hdkey.fromMasterSeed(Buffer.from(seed, 'hex'));
-		// //4.派生一个子密钥对的BIP32导出路径
-		let key = hdWallet.derivePath("m/44'/60'/0'/0/0").getWallet();
-		// // 获取子私钥的WIF格式
-		const privateKeyWIF = key.toWIF();
+		const hdWallet = bip32.fromSeed(seed);
 		// // 获取子公私钥的十六进制格式
-		const privateKeyHex = key.privateKey.toString('hex');
-		const publicKeyHex = key.publicKey.toString('hex');
+		const privateKeyHex = hdWallet.privateKey.toString('hex');
+		const publicKeyHex = hdWallet.publicKey.toString('hex');
 		return {
 			privateKey: privateKeyHex, //私钥
 			publicKey: publicKeyHex, //公钥
 		}
 	} catch (err) {
-		console.log(err, '55555555');
+		console.log(err, '22222');
 	}
 }
 // evm转账

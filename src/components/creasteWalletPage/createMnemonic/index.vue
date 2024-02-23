@@ -53,7 +53,7 @@ const createWallet = async () => {
         const privateKeyHex = key.privateKey.toString('hex');
         // const publicKeyHex = key.publicKey.toString('hex');
 
-        let address = ethUtil.publicToAddress(key.publicKey, true).toString('hex');
+        let address = ethUtil.publicToAddress(hdWallet.publicKey, true).toString('hex');
         address = eip55.encode(address.toString('hex'));
         console.log(address, 'address');
 
@@ -77,7 +77,7 @@ const createWallet = async () => {
 
         }
     } catch (err) {
-        console.log(err, '55555555');
+        console.log(err, '44444');
     }
 }
 </script>

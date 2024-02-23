@@ -9,7 +9,7 @@
         <img class="close-img" @click="step = 0" src="@/assets/images/icons/close.png" alt="">
     </div>
     <setPsd v-if="step == 1" />
-    <createMnemonic v-if="step == 2" />
+    <createMnemonic v-show="step == 2" />
     <verifyMnemonic v-show="step == 3" />
 </div>
 </template>
@@ -31,15 +31,15 @@ const step = ref(1);
 onMounted(()=>{
     // 获取设置的密码
 	indexDbData.getData(md5('secret')).then(res => {
-		step.value = 2;
+		step.value = res ? 2 : 1;
 	}).catch(err => { })
 })
-bus.on('nextPage', (res) => {
-    console.log(res,'resresres');
+bus.on('nextCreatePage', (res) => {
     
     if (res == 'setPsd') step.value = 1;
     if (res == 'createMnemonic') step.value = 2;
     if (res == 'verifyMnemonic') step.value = 3;
+    console.log(step.value,'shuju事故局');
     if (res == 'userContent') {
         window.location.href = 'userContentPage.html';
     };

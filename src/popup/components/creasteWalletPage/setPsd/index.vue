@@ -43,7 +43,7 @@ const creatKeyStory = () => {
         secret: md5(newPsd.value)
     })
     setTimeout(() => {
-        bus.emit('nextPage', 'createMnemonic');
+        bus.emit('nextCreatePage', 'createMnemonic');
     }, 500)
 }
 

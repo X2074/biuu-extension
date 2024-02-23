@@ -21,9 +21,12 @@
   "permissions": [
     "activeTab",
     "tabs",
-    "alarms"
+    "alarms",
+    "storage"
   ],
-  "host_permissions": [],
+  "host_permissions": [
+    "*://*/*"
+  ],
   "content_scripts": [
     {
       "js": [

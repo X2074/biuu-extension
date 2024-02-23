@@ -19,7 +19,7 @@ onMounted(() => {
     })
 })
 const nextPage = () => {
-    bus.emit('nextPage', 'verifyMnemonic')
+    bus.emit('nextCreatePage', 'verifyMnemonic')
 }// 生成相关信息
 const createWallet = async () => {
     try {
@@ -77,7 +77,7 @@ const createWallet = async () => {
 
         }
     } catch (err) {
-        console.log(err, '55555555');
+        console.log(err, '33333');
     }
 }
 </script>

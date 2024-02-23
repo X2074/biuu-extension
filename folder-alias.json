@@ -28,5 +28,8 @@
     },
     "src/popup/components/creasteWalletPage": {
         "description": "创建钱包"
+    },
+    "src/popup/components/secret": {
+        "description": "输入密码页面"
     }
 }

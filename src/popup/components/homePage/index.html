@@ -1,46 +1,38 @@
 <div class="home-page">
-    <div class="user-info pt-35">
-        <div class="info-name flex">
-            <div class="name" v-if="props.walltContent">
-                <p>{{props.walltContent&&props.walltContent.userName?props.walltContent.userName:'Account 1'}}</p>
-                <div class="user-address mt-5 flex">
-                    <p class="mr-10">
-                        {{props.walltContent.address.substr(0,4)}}...{{props.walltContent.address.substr(-4)}}</p>
-                    <i class="el-icon-copy-document" @click="onCopy"></i>
-                </div>
-            </div>
-            <div class="more-components">
-                <img src="../../../assets/images/more.png" @click="moreShow = !moreShow;" alt="">
-                <options-popup v-if="moreShow" />
-            </div>
+    <div class="user-type flex">
+        <select v-if="netWorkList && netWorkList.length" id="my-select" v-model="walltEnvironment" @change="rpcChange">
+            <option :value="item.CHAIN_ID" v-for="item in netWorkList">{{item.unit}}</option>
+        </select>
+        <p>钱包管理</p>
+        <div class="more-components">
+            <img src="@/assets/images/more.png" @click="moreShow = !moreShow;" alt="">
+            <options-popup v-if="moreShow" />
         </div>
-        <div class="user-currency mt-45 flex">
-            <img src="../../../assets/images/unitLogo.png" alt="">
+    </div>
+    <div class="user-info pt-25">
+        <div class="info-name" v-if="props.walltContent">
+            <div class="user-address flex">
+                <p class="mr-5">
+                    {{props.walltContent.address.substr(0,6)}}...{{props.walltContent.address.substr(-4)}}</p>
+                <img @click="onCopy" src="@/assets/images/icons/copy.png" alt="">
+            </div>
+            <!-- <p>{{props.walltContent&&props.walltContent.userName?props.walltContent.userName:'Account 1'}}</p> -->
+
+        </div>
+        <div class="user-currency mt-10 flex">
             <p class="ml-10" v-if="props.walltContent">{{props.walltContent.balance}} {{props.walltContent.unit}}
             </p>
         </div>
-        <div class="uesr-btn mt-30 flex">
-            <p @click="toPage('buyPage')">
+        <div class="uesr-btn mt-25 flex">
+            <!-- <p @click="toPage('buyPage')">
                 <img src="../../../assets/images/buy.png" alt="">
             </p>
             <p class="ml-20 mr-20" @click="toPage('swap')">
                 <img src="../../../assets/images/swap.png" alt="">
-            </p>
-            <p @click="sendTo">
-                <img src="../../../assets/images/send.png" alt="">
-            </p>
+            </p> -->
+            <p @click="sendTo">转账</p>
         </div>
-        <img class="platform mt-10 mb-10" src="../../../assets/images/platform.png" alt="">
-        <div class="transactions flex" v-if="props.walltContent && props.walltContent.txHash" @click="hashDetail">
-            <div class="flex">
-                <img src="../../../assets/images/unitLogo.png" alt="">
-                <div class="trade-number ml-25">
-                    <p class="ate">{{transactionHash}} {{props.walltContent.unit}}</p>
-                    <p class="hk">HK$0.75 HKD</p>
-                </div>
-            </div>
-            <i class="el-icon-arrow-right"></i>
-        </div>
+
     </div>
     <div class="footer mt-20">
         <div class="refresh mt-10 flex">

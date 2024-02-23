@@ -2,10 +2,11 @@
 <script lang='ts' setup>
 import { ref, onMounted, defineProps, getCurrentInstance } from 'vue';
 import bus from '@/utils/bus.js';
-import { evmKey, Decrypt, evmTransfer } from '@/utils/index.js';
+import { evmKey, Decrypt,Encrypt, evmTransfer } from '@/utils/index.js';
 import indexDbData from '@/utils/indexDB';
 import Web3 from 'web3'
-const EthereumTx = require('ethereumjs-tx');
+import EthereumTx from 'ethereumjs-tx';
+import md5 from 'js-md5';
 const props = defineProps(['walltContent'])
 const transactionHash = ref(0)
 const moreShow = ref(false)
@@ -25,7 +26,7 @@ const loading = ref(false)
 const balance = ref(null)
 const web3 = ref(null);
 const rpcUrl = ref(null)
-
+let passKey = ref('')
 onMounted(() => {
 	indexDbData.getData('rpc_url').then(res => {
 		let data = res.content;
@@ -34,14 +35,20 @@ onMounted(() => {
 		web3.value = new Web3(new Web3.providers.HttpProvider(data.url));
 	})
 	getInfo()
-	getKey()
+    // 获取设置的密码
+	indexDbData.getData(md5('secret')).then(res => {
+		passKey.value = res.secret;
+		getKey()
+	}).catch(err => { })
 })
 // 通过助记词生成密钥
 const getKey = () => {
 	indexDbData.getData('keyStore').then(res => {
 		console.log(res);
 		// 第二个参数为密码，后期改为获取数据库密码或者是用户输入
-		let encryption = Decrypt(res.secret, '123456789');
+		let encryption = Decrypt(res.secret, passKey.value);
+		console.log(encryption,'encryption');
+		
 		evmKey(encryption).then(keys => {
 			console.log(keys, 'keys');
 			dataKey.value = keys.privateKey;

@@ -1,0 +1,74 @@
+.more-account{
+    width: 260px;
+    height: 390px;
+    padding: 15px 17px;
+    position: relative;
+    .account-info{
+        text-align: center;
+        >img{
+            margin-top: -45px;
+            width: 60px;
+            height: 60px;
+            border: 2px solid #1592E6;
+            border-radius: 100%;
+        }
+        .qrcode{
+            width: 116px;
+            height: 116px;
+        }
+        .account-name{
+            align-items: center;
+            justify-content: center;
+            p{
+                color: #000;
+                font-size: 14px;
+                font-weight: 600;
+            }
+            i{
+                font-size: 20px;
+                color: #000;
+            }
+        }
+        .qrcode{
+            margin-left: auto;
+            margin-right: auto;
+
+        }
+    }
+    .copy-address{
+        width: 195px;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        p{
+            width: 100%;
+            padding: 6px 21px;
+            font-size: 12px;
+            line-height: 15px;
+            color: #000;
+            text-align: center;
+            background-color: #f0f4f6;
+            word-wrap: break-word;
+        }
+        i{
+            position: absolute;
+            top: 50%;
+            right: -22px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #000;
+            margin-top: -8px;
+        }
+    }
+    .account-btn{
+        width: 227px;
+        height: 29px;
+        line-height: 29px;
+        color: #fff;
+        background-color: #1592E6;
+        font-size: 12px;
+        border-radius: 3px;
+        text-align: center;
+        cursor: pointer;
+    }
+}

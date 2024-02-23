@@ -1,9 +1,17 @@
 <template>
 	<div class="meer-wallt">
+		<!-- 输入密码页面 -->
+		<secret v-if="pageTypes == 'secret'" />
 		<!-- 首次进入 -->
 		<create v-if="pageTypes == 'create'" />
 		<!-- 创建钱包 -->
 		<creasteWalletPage v-if="pageTypes == 'creasteWalletPage'" />
+		<!-- 输入密码 -->
+		<loginwallt v-if="pageTypes == 'login'" />
+		<!-- 主页 -->
+		<homePage :walltContent="walltContent" v-if="pageTypes == 'homePage'" />
+		<!-- 转账页面 -->
+		<transfer v-if="pageTypes == 'sendTo'" :walltContent="walltContent" />
   </div>
   
 </template>
@@ -14,14 +22,15 @@ import md5 from 'js-md5';
 // 因为popup的特殊原因，此处只有一个入口，页面切换靠各种类型的判断
 // import homePage from '@/components/homePage.vue'
 // 已有账号，重新进入需要登录 
-// import loginwallt from './components/loginwallt/index.vue'
+import loginwallt from './components/loginwallt/index.vue'
 import create from './components/create/index.vue'
+import secret from './components/secret/index.vue'
 import creasteWalletPage from './components/creasteWalletPage/index.vue'
-// import homePage from './components/homePage/index.vue'
+import homePage from './components/homePage/index.vue'
 import headerPage from './components/header/index.vue'
 // import buyPage from './components/buyPage/index.vue'
 // import assetsRecording from './components/assetsRecording/index.vue'
-// import transfer from './components/transfer/index.vue'
+import transfer from './components/transfer/index.vue'
 import { getCookie } from '@/utils/index';
 import indexDbData from '@/utils/indexDB';
 import Web3 from 'web3'
@@ -30,13 +39,24 @@ const buyModal = ref(false)
 const loading = ref(true)
 const userAddress = ref(null)
 const walltContent = ref(null)//账户相关信息
-const pageTypes = ref('creasteWalletPage')//判断当前应该展示那个页面
-const pagesArray = ref(['create', 'login', 'homePage', 'assetsRecording', 'sendTo', 'swap'])//页面地址数组,数组顺序为正常流程顺序
+const pageTypes = ref('')//判断当前应该展示那个页面
+const pagesArray = ref(['create', 'login', 'homePage', 'assetsRecording', 'sendTo', 'swap','secret'])//页面地址数组,数组顺序为正常流程顺序
 const openUrl = () => {
 	// chrome.tabs.create({ url: 'background.html' });
 }
+const psdPage = ref('');//是否进入输入密码页面
 onMounted(()=>{
-	// getInfo()
+	console.log(chrome,'chrome.storage');
+	// 发送消息给 background 页面请求数据
+	
+	chrome.runtime.sendMessage({ action: 'getSecret' }, (response) => {
+		if(!response.secret){
+			pageTypes.value = 'secret'
+		}else{
+			getInfo()
+		}
+		console.log('Received data from background:', response);
+	});
 })
 
 const closeModal = (res) => {
@@ -50,7 +70,6 @@ const openModal = (res) => {
 
 bus.on('nextPage', (res) => {
 	console.log(res, 'rererere');
-
 	pageTypes.value = res;
 });
 // 获取账户相关信息
@@ -65,14 +84,14 @@ const getInfo = () => {
 		}
 		let data = res;
 		if (data && data.address) {
-			if (getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') && getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') != 'false') {
-				pageTypes.value = 'homePage';
-			} else {
-				pageTypes.value = 'login';
-			}
 			userAddress.value = data.address;
 			walltContent.value = data.userName ? res.userName : '';
 			getBlance()
+			// if (getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') && getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') != 'false') {
+				pageTypes.value = 'homePage';
+			// } else {
+			// 	pageTypes.value = 'login';
+			// }
 		} else {
 			pageTypes.value = 'create'
 			loading.value = false;

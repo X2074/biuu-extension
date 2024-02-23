@@ -9,14 +9,27 @@ const moreShow = ref(false);
 const props = defineProps(['walltContent'])
 const web3 = ref(null);
 let walltContent = ref(null)
+const netWorkList = ref([]);//下拉列表的网络数据
+const userList = ref([]);//下拉列表的用户数据
+const netWorkType = ref('EVM');//网络类型
+const walltUser = ref('EVM');//选中的用户数据
+const walltEnvironment = ref({})//钱包所在的网络
 onMounted(() => {
 	indexDbData.getData('rpc_url').then(res => {
-		let data = res.content;
-		// 定义rpc
-		web3.value = new Web3(new Web3.providers.HttpProvider(data.url));
-		getHash()
+		if(!res) {
+			netWorkChange('EVM')
+		}else{
+			netWorkChange('EVM')
+			let data = res.content;
+			walltEnvironment.value = data.CHAIN_ID;
+			// 定义rpc
+			web3.value = new Web3(new Web3.providers.HttpProvider(data.url));
+			getHash()
+		};
+		
 	})
 })
+// 交易hash
 const getHash = () => {
 	walltContent.value = JSON.parse(JSON.stringify(props.walltContent))
 	if (walltContent.value.txHash && walltContent.value.txHash.length > 1) {
@@ -43,8 +56,8 @@ bus.on('closeMore', () => {
 	moreShow.value = false;
 })
 const onCopy = () => {
-	// navigator.clipboard.writeText(walltContent.value.address);
-	// $message.success('Copy Success!')
+	navigator.clipboard.writeText(walltContent.value.address);
+	alert('Copy Success!')
 }
 const refresh = () => {
 	location.reload()
@@ -67,6 +80,43 @@ const sendTo = () => {
 }
 const hashDetail = () => {
 	bus.emit('nextPage', 'assetsRecording')
+}
+
+// 网络切换
+const netWorkChange = (type) => {
+	netWorkType.value = type;
+	indexDbData.getData(type).then(res => {
+		let data = Object.values(res.content);
+		netWorkList.value = data;
+		console.log(netWorkList.value,'netWorkList.value');
+		
+	})
+}
+// 选中的网络
+const rpcChange = async (event) => {
+	let id = event.target.value + '';
+	console.log(id, 'sadasdsad');
+	indexDbData.getData(netWorkType.value).then(res => {
+		let data = res.content[id];
+		data.type = netWorkType.value;
+		// 存储选中的网络数据
+		indexDbData.putData({
+			id: 'rpc_url',
+			content: res.content[id]
+		})
+	})
+	// 当前用户信息
+	let currentWalltAddress = await indexDbData.getData('currentWalltAddress');
+	console.log(currentWalltAddress, 'currentWalltAddress');
+	// evm数据
+	let content = await indexDbData.getData('EVM');
+	content.content[id].walltInfo = [currentWalltAddress]
+	userList.value = content.content[id].walltInfo;
+	// 选中的网络数据添加用户
+	indexDbData.putData({
+		id: 'EVM',
+		content: content.content
+	})
 }
 
 // 因为matemask与以太坊和web3高度集成，js部分没有什么参考价值
