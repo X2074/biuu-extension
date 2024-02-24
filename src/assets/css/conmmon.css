@@ -95,3 +95,8 @@ html {
 .flex {
 	display: flex;
 }
+
+
+input,textarea{
+	outline: none;
+}

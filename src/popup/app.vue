@@ -48,7 +48,6 @@ const psdPage = ref('');//是否进入输入密码页面
 onMounted(()=>{
 	console.log(chrome,'chrome.storage');
 	// 发送消息给 background 页面请求数据
-	
 	chrome.runtime.sendMessage({ action: 'getSecret' }, (response) => {
 		if(!response.secret){
 			pageTypes.value = 'secret'
@@ -70,7 +69,25 @@ const openModal = (res) => {
 
 bus.on('nextPage', (res) => {
 	console.log(res, 'rererere');
-	pageTypes.value = res;
+	let type = res;
+	if(res == 'homePage'){
+		indexDbData.getData('currentWalltAddress').then(res => {
+			console.log(res, 'res');
+			if (!res) {
+				pageTypes.value = 'create'
+				loading.value = false;
+				return;
+			}
+			let data = res;
+			if (data && data.address) {
+				userAddress.value = data.address;
+				walltContent.value = data.userName ? res.userName : '';
+				getBlance(type)
+			}
+		}).catch(err => { })
+	}else{
+		pageTypes.value = res;
+	}
 });
 // 获取账户相关信息
 const getInfo = () => {
@@ -98,7 +115,7 @@ const getInfo = () => {
 		}
 	}).catch(err => { })
 }
-const getBlance = () => {
+const getBlance = (type='homePage') => {
 	indexDbData.getData('rpc_url').then(res => {
 		let data = res.content;
 		// 定义rpc
@@ -117,14 +134,14 @@ const getBlance = () => {
 					balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
 					walltContent.value.balance = balance;
 				}
-				getHexHash()
+				getHexHash(type)
 			}).catch(err => {
 				console.log(err, 'err');
 				loading.value = false;
 			});
 	}).catch(err => { })
 }
-const getHexHash = () => {
+const getHexHash = (type='homePage') => {
 	indexDbData.getData('txHash').then(res => {
 		if (res) {
 			// 转账记录
@@ -134,6 +151,7 @@ const getHexHash = () => {
 		// 测试
 		setTimeout(() => {
 			loading.value = false;
+			pageTypes.value = type;
 		}, 500)
 	}).catch(err => { })
 }

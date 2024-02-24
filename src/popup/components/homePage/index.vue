@@ -32,9 +32,8 @@ onMounted(() => {
 // 交易hash
 const getHash = () => {
 	walltContent.value = JSON.parse(JSON.stringify(props.walltContent))
+	if(!walltContent.value || !walltContent.value.txHash) return;
 	if (walltContent.value.txHash && walltContent.value.txHash.length > 1) {
-		console.log(1111);
-
 		let index = walltContent.value.txHash.length - 1;
 		let txHash = walltContent.value.txHash[index];
 		console.log(txHash, 'txHash');

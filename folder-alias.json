@@ -31,5 +31,8 @@
     },
     "src/popup/components/secret": {
         "description": "输入密码页面"
+    },
+    "src/utils/createUser.js": {
+        "description": "创建钱包\\导入钱包"
     }
 }
