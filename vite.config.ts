@@ -11,6 +11,7 @@ export default defineConfig({
     copy({
       targets: [
         { src: 'manifest.json', dest: 'dist' },
+        { src: 'src/content/content.js', dest: 'dist/content' },
         { src: "src/icons/**", dest: 'dist/icons' }
       ]
     }),
@@ -23,6 +24,7 @@ export default defineConfig({
     },
   },
   build: {
+    minify: false,
     sourcemap: true,
     outDir: path.resolve(__dirname, 'dist'),
     rollupOptions: {
@@ -31,7 +33,7 @@ export default defineConfig({
         contentPage: path.resolve(__dirname, 'src/contentPage/index.html'),
         indexPage: path.resolve(__dirname, 'src/components/indexPage/index.html'),
         creasteWalletPage: path.resolve(__dirname, 'src/components/creasteWalletPage/index.html'),
-        content: path.resolve(__dirname, 'src/content/content.ts'),
+        // content: path.resolve(__dirname, 'src/content/content.js'),
         background: path.resolve(__dirname, 'src/background/service-worker.ts'),
       },
       output: {

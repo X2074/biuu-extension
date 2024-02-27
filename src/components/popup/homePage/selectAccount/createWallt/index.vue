@@ -4,7 +4,6 @@ import { ref, onMounted, defineProps, nextTick } from 'vue';
 import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB';
 import Web3 from 'web3'
-import selectAccount from "@/components/popup/homePage/selectAccount/index/index.vue"
 const transactionHash = ref(0);
 const moreShow = ref(false);
 const props = defineProps(['walltContent'])
@@ -22,7 +21,7 @@ onMounted(() => {
 		}else{
 			netWorkChange('EVM')
 			let data = res.content;
-			walltEnvironment.value = data.netName;
+			walltEnvironment.value = data.unit;
 			// 定义rpc
 			web3.value = new Web3(new Web3.providers.HttpProvider(data.url));
 			getHash()

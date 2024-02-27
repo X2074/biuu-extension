@@ -46,7 +46,9 @@ const unlock = ()=>{
         confirmPsd.value = '您输入的密码有误';
         return;
     }
-
+	// 发送消息给 background 页面请求数据
+	chrome.runtime.sendMessage({ action: 'setSecret',text:md5(psdText.value) });
+    bus.emit('nextPage','homePage');
 }
 
 // 匹配钱包的助记词

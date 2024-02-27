@@ -18,24 +18,17 @@
         }
 
         .select {
-            width: 80px;
+            min-width: 80px;
             height: 30px;
+            font-size: 14px;
             border-radius: 28px;
             text-align: center;
             background-color: #fff;
+            color: #000;
             outline: none;
             cursor: pointer;
             align-items: center;
-            padding-left: 10px;
-
-            p {
-                font-size: 14px;
-                width: 40px;
-                color: #000;
-                line-height: 30px;
-                height: 30px;
-                overflow: hidden;
-            }
+            line-height: 30px;
         }
     }
 

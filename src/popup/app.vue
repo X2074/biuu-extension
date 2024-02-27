@@ -46,9 +46,9 @@ const openUrl = () => {
 }
 const psdPage = ref('');//是否进入输入密码页面
 onMounted(()=>{
-	console.log(chrome,'chrome.storage');
 	// 发送消息给 background 页面请求数据
 	chrome.runtime.sendMessage({ action: 'getSecret' }, (response) => {
+		// 获取缓存的密码，浏览器关闭，删除缓存数据
 		if(!response.secret){
 			pageTypes.value = 'secret'
 		}else{

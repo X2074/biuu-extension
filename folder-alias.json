@@ -34,5 +34,23 @@
     },
     "src/utils/createUser.js": {
         "description": "创建钱包\\导入钱包"
+    },
+    "src/components/popup/homePage/createWallt": {
+        "description": "创建钱包"
+    },
+    "src/components/popup/homePage/ImportWallt": {
+        "description": "导入钱包"
+    },
+    "src/components/popup/homePage/selectAccount": {
+        "description": "选择账户"
+    },
+    "src/components/popup/homePage/manageAccount": {
+        "description": "管理账户"
+    },
+    "src/components/popup": {
+        "description": "popup页面的功能组件"
+    },
+    "src/components/loading": {
+        "description": "全局loading指令"
     }
 }
