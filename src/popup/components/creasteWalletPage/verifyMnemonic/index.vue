@@ -43,39 +43,44 @@ onMounted(() => {
 // 生成keystory文件
 const creatKeyStory = () => {
     UtxoEvmKey()
-    // setTimeout(() => {
-    //     bus.emit('nextPage', 'userContent');
-    // }, 500)
+    setTimeout(() => {
+    console.log('nextPagenextPagenextPagenextPage.value');
+        bus.emit('nextPage', 'homePage');
+    }, 500)
 }
 // 助记词加密
 const UtxoEvmKey = () => {
+    console.log(walltInfo.value,'walltInfo.value');
+    
     let ciphertext = Encrypt(walltInfo.value.mnemonic, passKey.value);
     console.log(ciphertext, '加密后的数据');
+    let data:any = {};
+    data[walltInfo.value.keystore] = ciphertext;
     indexDbData.putData({
         id: 'keyStore',
-        secret: ciphertext
+        secret: data
     })
     // 存为当前展示的钱包数据
-    indexDbData.getData('currentWalltAddress').then(res => {
-        console.log(!res, 'dasdsad');
-        if (!res) {
-            indexDbData.putData({
-                id: 'currentWalltAddress',
-                userName: '',
-                userUrl: '',
-                address: walltInfo.value.address,
-                NoIndex: 1
-            })
-        } else {
-            indexDbData.putData({
-                id: 'currentWalltAddress',
-                address: walltInfo.value.address,
-                userName: '',
-                userUrl: '',
-                NoIndex: res.NoIndex + 1//当前第几个用户
-            })
+    // indexDbData.getData('currentWalltAddress').then(res => {
+    //     console.log(!res, 'dasdsad');
+        let content = {
+            address: walltInfo.value.address,
+            userName: 'Wallt 01',
+            userUrl: '',
+            NoIndex: 1//当前第几个用户
         }
-    }).catch(err => {})
+        indexDbData.putData(Object.assign({id:'currentWalltAddress'},content))
+        let info = {
+            id:'rpc_url',
+            "unit": "Meer",
+            "netName":"Qitmeer Testnet",
+            "CHAIN_ID": 8131,
+            "url": "https://testnet-qng.rpc.qitmeer.io",
+            "walltInfo": []
+        }
+        info['walltInfo'].push(content);
+        indexDbData.putData(info)
+    // }).catch(err => {})
     evmNetwork();//新增并存储evm网络
     utxoNetwork();//新增并存储evm网络
 }

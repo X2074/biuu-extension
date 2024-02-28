@@ -4,10 +4,10 @@
             <option :value="item.CHAIN_ID" v-for="item in netWorkList">{{item.unit}}</option>
         </select> -->
         <div class="select flex">
-            <p>{{walltEnvironment}}</p>
+            <p>{{walltEnvironment?.netName}}</p>
             <img class="ml-5" src="@/assets/images/icons/arrowhead-g.svg" alt="">
         </div>
-        <p class="flex"> 钱包管理
+        <p class="flex" @click="walltAccount = 'selectAccount'"> 钱包管理
             <img class="ml-5" src="@/assets/images/icons/arrowhead.svg" alt="">
         </p>
         <div class="more-components">
@@ -18,6 +18,8 @@
     <div class="user-info pt-20">
         <div class="user-currency mt-10 flex">
             <p class="ml-10" v-if="props.walltContent">{{props.walltContent.balance}} {{props.walltContent.unit}}
+            </p>
+            <p class="ml-10" v-else>0 {{props.walltContent.unit}}
             </p>
         </div>
         <div class="info-name" v-if="props.walltContent">
@@ -46,4 +48,4 @@
         </div>
     </div>
 </div>
-<selectAccount />
+<selectAccount v-if="walltAccount == 'selectAccount'" />

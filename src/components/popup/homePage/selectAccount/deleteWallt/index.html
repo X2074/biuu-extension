@@ -1,0 +1,30 @@
+<div class="delete-wallt" v-loading:[loadingText]="loading">
+    <div class="content mb-5 flex" v-if="nowAccount">
+        <div class="name-num">
+            <p>{{nowAccount.userName || nowAccount.NoIndex}}</p>
+            <p class="price">{{nowAccount&&nowAccount.balance?item.balance : 0}} {{accountContent?.unit}}</p>
+        </div>
+        <div class="address-check flex mr-40">
+            <p>{{nowAccount.address.substr(0,4)}}...{{nowAccount.address.substr(-4)}}</p>
+            <img class="mr-15" src="@/assets/images/icons/check-fill.png" alt="">
+        </div>
+    </div>
+    <div class="confirm-content">
+        <img src="@/assets/images/icons/warn-red.png" alt="">
+        <p class="mb-10 mt-15">确定要删除此钱包吗？</p>
+        <div class="wallt-content flex">
+            <div class="jazzicon mr-15">
+                <jazzicon address="0x4445Bbd1f0942857741EEbA3B36970390E9cb887" :diameter="48" />
+            </div>
+            <div class="name-address">
+                <p class="name">{{nowAccount?.userName}}</p>
+                <p class="address">{{nowAccount?.address}}</p>
+            </div>
+        </div>
+        <p class="content-tips">确定要删除会将此钱包从应用中移除，你可以用备份钱包时生成的助记词重新导入。不会影响你的资产。请务必在删除钱包，否则你讲永久丢失此钱包及其中财产。</p>
+        <div class="footer-btn flex">
+            <p class="close" @click="accountOperate = 'show'">取消</p>
+            <p class="confirm" @click="confirmRemove">我明白，确认删除</p>
+        </div>
+    </div>
+</div>

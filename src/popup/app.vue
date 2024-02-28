@@ -14,6 +14,8 @@
 		<transfer v-if="pageTypes == 'sendTo'" :walltContent="walltContent" />
   </div>
   
+    <!-- 全局自动关闭提示 -->
+    <prompt></prompt>
 </template>
 
 <script lang="ts" setup>
@@ -31,6 +33,8 @@ import headerPage from './components/header/index.vue'
 // import buyPage from './components/buyPage/index.vue'
 // import assetsRecording from './components/assetsRecording/index.vue'
 import transfer from './components/transfer/index.vue'
+// 全局提示
+import prompt from '@/components/popup/components/prompt/index.vue'
 import { getCookie } from '@/utils/index';
 import indexDbData from '@/utils/indexDB';
 import Web3 from 'web3'
@@ -71,20 +75,22 @@ bus.on('nextPage', (res) => {
 	console.log(res, 'rererere');
 	let type = res;
 	if(res == 'homePage'){
-		indexDbData.getData('currentWalltAddress').then(res => {
-			console.log(res, 'res');
-			if (!res) {
-				pageTypes.value = 'create'
-				loading.value = false;
-				return;
-			}
-			let data = res;
-			if (data && data.address) {
-				userAddress.value = data.address;
-				walltContent.value = data.userName ? res.userName : '';
-				getBlance(type)
-			}
-		}).catch(err => { })
+		// indexDbData.getData('currentWalltAddress').then(res => {
+		// 	console.log(res, 'res');
+		// 	if (!res) {
+		// 		pageTypes.value = 'create'
+		// 		loading.value = false;
+		// 		return;
+		// 	}
+		// 	let data = res;
+		// 	if (data && data.address) {
+		// 		userAddress.value = data.address;
+		// 		walltContent.value = data;
+		// 		getBlance(type)
+		// 	}
+		// }).catch(err => { })
+		
+		getInfo()
 	}else{
 		pageTypes.value = res;
 	}
@@ -99,10 +105,9 @@ const getInfo = () => {
 			loading.value = false;
 			return;
 		}
-		let data = res;
-		if (data && data.address) {
-			userAddress.value = data.address;
-			walltContent.value = data.userName ? res.userName : '';
+		if (res && res.address) {
+			userAddress.value = res.address;
+			walltContent.value = res;
 			getBlance()
 			// if (getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') && getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') != 'false') {
 				pageTypes.value = 'homePage';
@@ -134,27 +139,29 @@ const getBlance = (type='homePage') => {
 					balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
 					walltContent.value.balance = balance;
 				}
-				getHexHash(type)
+				
+				pageTypes.value = type;
+				// getHexHash(type)
 			}).catch(err => {
 				console.log(err, 'err');
 				loading.value = false;
 			});
 	}).catch(err => { })
 }
-const getHexHash = (type='homePage') => {
-	indexDbData.getData('txHash').then(res => {
-		if (res) {
-			// 转账记录
-			walltContent.value.txHash = res.txHashList;
-		}
-		loading.value = false;
-		// 测试
-		setTimeout(() => {
-			loading.value = false;
-			pageTypes.value = type;
-		}, 500)
-	}).catch(err => { })
-}
+// const getHexHash = (type='homePage') => {
+// 	indexDbData.getData('txHash').then(res => {
+// 		if (res) {
+// 			// 转账记录
+// 			walltContent.value.txHash = res.txHashList;
+// 		}
+// 		loading.value = false;
+// 		// 测试
+// 		setTimeout(() => {
+// 			loading.value = false;
+// 			pageTypes.value = type;
+// 		}, 500)
+// 	}).catch(err => { })
+// }
 </script>
 
 <style lang="less">

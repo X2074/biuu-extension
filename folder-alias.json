@@ -52,5 +52,17 @@
     },
     "src/components/loading": {
         "description": "全局loading指令"
+    },
+    "src/components/popup/homePage/selectAccount/accountOperate": {
+        "description": "查看私钥"
+    },
+    "src/utils/editContent.js": {
+        "description": "信息修改"
+    },
+    "src/components/popup/homePage/selectAccount/showPrivateKey": {
+        "description": "展示私钥"
+    },
+    "src/components/popup/homePage/selectAccount/deleteWallt": {
+        "description": "删除钱包"
     }
 }

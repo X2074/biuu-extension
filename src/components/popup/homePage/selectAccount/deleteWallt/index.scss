@@ -1,0 +1,96 @@
+.delete-wallt {
+    .confirm-content {
+        text-align: center;
+
+        >img {
+            width: 34px;
+            height: 34px;
+        }
+
+        >p {
+            font-size: 22px;
+            line-height: 30px;
+            color: #000;
+        }
+
+        .wallt-content {
+            align-items: center;
+            justify-content: space-between;
+            width: 300px;
+            padding: 7px 12px;
+            background: rgba(177, 218, 90, 0.3);
+            border-radius: 8px;
+            margin: 0 auto;
+
+            .jazzicon {
+                width: 48px;
+                align-items: center;
+                justify-content: center;
+                height: 48px;
+            }
+
+            .name-address {
+                width: 200px;
+
+                p {
+                    text-align: left;
+                    word-wrap: break-word;
+                    color: #000;
+
+                    &.name {
+                        font-size: 14px;
+                        line-height: 20px;
+                    }
+
+                    &.address {
+                        font-size: 12px;
+                        line-height: 20px;
+                    }
+                }
+
+            }
+        }
+
+        .content-tips {
+            font-size: 14px;
+            line-height: 20px;
+            width: 300px;
+            margin: 20px auto 40px;
+        }
+
+        .footer-btn {
+            justify-content: space-between;
+            align-items: center;
+            width: 300px;
+            box-shadow: none;
+            margin: 20px auto 10px;
+            height: 50px;
+            box-shadow: none;
+
+            p {
+                font-size: 16px;
+                font-weight: 500;
+                color: #000;
+                line-height: 48px;
+                height: 48px;
+                border-radius: 30px;
+
+                &.close {
+                    width: 104px;
+                    border: 1px solid rgba(177, 218, 90, 1);
+                    background-color: #fff;
+                }
+
+                &.confirm {
+                    width: 184px;
+                    background: rgba(177, 218, 90, 1);
+
+                    &.confirm-key {
+                        width: 300px;
+                    }
+                }
+
+            }
+        }
+    }
+}

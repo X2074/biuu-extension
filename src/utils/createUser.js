@@ -1,7 +1,7 @@
 
 import indexDbData from './indexDB.js';
 import { Encrypt } from '@/utils/index.js';
-import netWork from './utils/netWork.json'
+import netWork from '@/utils/netWork.json'
 import qitmeer from 'qitmeer-js'
 import ethUtil from 'ethereumjs-util'
 import bip39 from 'bip39'
@@ -10,11 +10,17 @@ import eip55 from 'eip55'
 import ecc from 'tiny-secp256k1'
 import { BIP32Factory } from 'bip32'
 const bip32 = BIP32Factory(ecc)
+// 生成助记词
+export async function createMnemonic() {
+    // 1.生成助记词
+    let mnemonic = bip39.generateMnemonic();
+    return mnemonic;
+}
 // 助记词生成钱包信息
-const createWallet = async (mnemonic) => {
+export async function createWallet(mnemonic) {
     try {
         console.log(mnemonic, 'bip39');
-        mnemonicArray.value = mnemonic.split(' ');
+        let mnemonicArray = mnemonic.split(' ');
         // console.log(mnemonicArray.value, '助记词');
         // //2.将助记词转成seed
         let seed = await bip39.mnemonicToSeed(mnemonic, '');
@@ -23,10 +29,13 @@ const createWallet = async (mnemonic) => {
         const hdWallet = bip32.fromSeed(seed);
         // EVM
         console.log(hdWallet, '将助记词转成seed');
-        const rootPrivateKey = hdWallet.privateKey.toString('hex');
-        const rootPublicKey = hdWallet.publicKey.toString('hex');
-        console.log('私钥:', rootPrivateKey);
-        console.log('公钥:', rootPublicKey);
+        // //4.派生一个子密钥对的BIP32导出路径
+        let key = hdWallet.derivePath("m/44'/60'/0'/0/0");
+        // // 获取子私钥的WIF格式
+        // const privateKeyWIF = key.toWIF();
+        // // 获取子公私钥的十六进制格式
+        const privateKeyHex = key.privateKey.toString('hex');
+        const publicKeyHex = key.publicKey.toString('hex');
         // UTXO
         const testNetwork = qitmeer.networks.testnet;
         console.log('Meer UTXO Address:', testNetwork)
@@ -34,13 +43,10 @@ const createWallet = async (mnemonic) => {
         const hash160 = qitmeer.hash.hash160(hdWallet.publicKey);
         const p2pkhAddressTest = qitmeer.address.toBase58Check(hash160, testNetwork.pubKeyHashAddrId);
         const p2pkhAddressMain = qitmeer.address.toBase58Check(hash160, mainNetwork.pubKeyHashAddrId);
-        // //4.派生一个子密钥对的BIP32导出路径
-        let key = hdWallet.derivePath("m/44'/60'/0'/0/0");
-        // // 获取子私钥的WIF格式
-        // const privateKeyWIF = key.toWIF();
-        // // 获取子公私钥的十六进制格式
-        const privateKeyHex = key.privateKey.toString('hex');
-        // const publicKeyHex = key.publicKey.toString('hex');
+        const rootPrivateKey = hdWallet.privateKey.toString('hex');
+        const rootPublicKey = hdWallet.publicKey.toString('hex');
+        console.log('私钥:', rootPrivateKey);
+        console.log('公钥:', rootPublicKey);
 
         let address = ethUtil.publicToAddress(key.publicKey, true).toString('hex');
         address = eip55.encode(address.toString('hex'));
@@ -53,12 +59,12 @@ const createWallet = async (mnemonic) => {
         //     mnemonic, privateKeyHex, publicKeyHex, address
         // });
         return {
-            mnemonicArray: mnemonicArray.value,
+            mnemonicArray: mnemonicArray,
             mnemonic: mnemonic, //助记词
             privateKey: privateKeyHex, //私钥
             publicKey: publicKeyHex, //公钥
             address: address, //钱包地址
-            // keystore: {}, //钱包的keystore
+            keystore: address, //钱包的对象名
             utxoRootPrivateKey: rootPrivateKey, //私钥
             utxoRootPublicKey: rootPublicKey, //公钥
             utxoAddressTest: p2pkhAddressTest, //UTXO测试网地址

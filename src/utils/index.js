@@ -99,7 +99,6 @@ export async function utxoKey(mnemonic) {
 		//2.将助记词转成seed
 		let seed = await bip39.mnemonicToSeed(mnemonic, '');
 		// 通过种子生成BIP32主节点
-		// const hdWallet = bip32.fromSeed(seed);
 		let hdWallet = hdkey.fromMasterSeed(Buffer.from(seed, 'hex'));
 		//派生 BIP32 导出的密钥对
 		let key = hdWallet.derivePath("m/44'/60'/0'/0/0").getWallet();
@@ -120,9 +119,11 @@ export async function evmKey(mnemonic) {
 		let seed = await bip39.mnemonicToSeed(mnemonic, '');
 		// 通过种子生成BIP32主节点
 		const hdWallet = bip32.fromSeed(seed);
+		// //4.派生一个子密钥对的BIP32导出路径
+		let key = hdWallet.derivePath("m/44'/60'/0'/0/0");
 		// // 获取子公私钥的十六进制格式
-		const privateKeyHex = hdWallet.privateKey.toString('hex');
-		const publicKeyHex = hdWallet.publicKey.toString('hex');
+		const privateKeyHex = key.privateKey.toString('hex');
+		const publicKeyHex = key.publicKey.toString('hex');
 		return {
 			privateKey: privateKeyHex, //私钥
 			publicKey: publicKeyHex, //公钥

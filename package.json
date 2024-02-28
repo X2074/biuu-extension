@@ -28,6 +28,8 @@
     "node-stdlib-browser": "^1.2.0",
     "pinia": "^2.1.7",
     "qitmeer-js": "^1.0.18",
+    "qrcodejs2": "^0.0.2",
+    "qrcodejs2-fix": "^0.0.1",
     "tiny-secp256k1": "^1.1.6",
     "vite-plugin-node-stdlib-browser": "^0.2.1",
     "vue": "^3.3.11",
@@ -36,8 +38,8 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.6",
-    "@vue/cli-plugin-babel": "~4.5.0",
     "@vitejs/plugin-vue": "^4.5.2",
+    "@vue/cli-plugin-babel": "~4.5.0",
     "buffer": "^6.0.3",
     "chrome-types": "^0.1.253",
     "ethereumjs-wallet": "^1.0.2",

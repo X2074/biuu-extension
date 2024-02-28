@@ -51,7 +51,7 @@ const createWallet = async () => {
         // const privateKeyWIF = key.toWIF();
         // // 获取子公私钥的十六进制格式
         const privateKeyHex = key.privateKey.toString('hex');
-        // const publicKeyHex = key.publicKey.toString('hex');
+        const publicKeyHex = key.publicKey.toString('hex');
 
         let address = ethUtil.publicToAddress(key.publicKey, true).toString('hex');
         address = eip55.encode(address.toString('hex'));
@@ -66,10 +66,10 @@ const createWallet = async () => {
         return {
             mnemonicArray: mnemonicArray.value,
             mnemonic: mnemonic, //助记词
-            // privateKey: privateKeyHex, //私钥
-            // publicKey: publicKeyHex, //公钥
+            privateKey: privateKeyHex, //私钥
+            publicKey: publicKeyHex, //公钥
             address: address, //钱包地址
-            // keystore: {}, //钱包的keystore
+            keystore: address, //钱包的keystore
             // utxoRootPrivateKey: rootPrivateKey, //私钥
             // utxoRootPublicKey: rootPublicKey, //公钥
             utxoAddressTest: p2pkhAddressTest, //UTXO测试网地址

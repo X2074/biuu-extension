@@ -1,26 +1,36 @@
 <div class="select-wallt" v-loading:[loadingText]="loading">
     <div class="header flex">
-        <img class="back-img" @click="step = step - 1;" src="@/assets/images/icons/back.png" alt="">
+        <img class="back-img" @click="backPage" src="@/assets/images/icons/back.png" alt="">
         <p>选择账户</p>
     </div>
-    <div class="account-list pt-10 pb-10">
-        <div class="content flex" v-for="item in accountList">
+    <!-- 账户的展示与操作 -->
+    <div class="account-content pt-10 pb-10">
+        <!-- 账户展示 -->
+        <div v-if="accountType == 'list'" class="content flex" v-for="item in accountList" @click="checkAddress(item)">
             <div class="name-num">
                 <p>{{item.userName || item.NoIndex}}</p>
                 <p class="price">{{item&&item.balance?item.balance : 0}} {{accountContent.unit}}</p>
             </div>
             <div class="address-check flex mr-40">
-                <p>{{item.address.slice(0,4)}}...{{item.address.slice(-4)}}</p>
+                <p>{{item.address.substr(0,4)}}...{{item.address.substr(-4)}}</p>
                 <img v-if="nowAccount && nowAccount.address == item.address" class="mr-15"
                     src="@/assets/images/icons/check-fill.png" alt="">
             </div>
         </div>
+        <showPrivateKey v-if="accountType == 'showKey'" :address="checkAddressText" />
+        <deleteWallt v-if="accountType == 'delete'" :address="checkAddressText" />
     </div>
     <div class="footer-btn">
-        <p>添加账号</p>
+        <p @click="createAccount">添加账号</p>
         <p class="flex">
             <img class="mr-10" src="@/assets/images/icons/import.png" alt="">
             导入账户
         </p>
+    </div>
+</div>
+<div class="account-operate flex" v-if="accountType == 'model'">
+    <div class="operate-list">
+        <p @click="accountType = 'showKey'">详情</p>
+        <p @click="accountType = 'deleteAccount'">删除该账号</p>
     </div>
 </div>
