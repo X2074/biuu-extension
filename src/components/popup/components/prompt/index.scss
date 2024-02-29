@@ -1,5 +1,5 @@
 .prompt-tips {
-    height: 50px;
+    height: 40px;
     background: rgba(26, 26, 26, 1);
     position: fixed;
     left: 50%;
@@ -12,13 +12,13 @@
     align-items: center;
 
     p {
-        font-size: 14px;
+        font-size: 12px;
         color: #fff;
     }
 
     .prompt-status {
-        width: 22px;
-        height: 22px;
+        width: 18px;
+        height: 18px;
     }
 
     .prompt-close {

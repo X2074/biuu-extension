@@ -17,7 +17,9 @@
                     src="@/assets/images/icons/check-fill.png" alt="">
             </div>
         </div>
+        <!-- 私钥展示 -->
         <showPrivateKey v-if="accountType == 'showKey'" :address="checkAddressText" />
+        <!-- 删除账户 -->
         <deleteWallt v-if="accountType == 'delete'" :address="checkAddressText" />
     </div>
     <div class="footer-btn">
@@ -30,6 +32,7 @@
 </div>
 <div class="account-operate flex" v-if="accountType == 'model'">
     <div class="operate-list">
+        <p @click="checkAccount">选为主账号</p>
         <p @click="accountType = 'showKey'">详情</p>
         <p @click="accountType = 'deleteAccount'">删除该账号</p>
     </div>

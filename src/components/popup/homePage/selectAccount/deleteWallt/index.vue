@@ -16,6 +16,7 @@ let userName = ref('');//账户昵称
 const props = defineProps(['address'])
 let rpcData = ref(null)
 let currentWallt = ref(null);//当前展示的钱包
+let doubleConfirmation = ref('first');//首次确认删除
 onMounted(() => {
     initializeInfo()
 })
@@ -27,30 +28,34 @@ const initializeInfo = ()=>{
 	}).catch(err => { })
     
     // 存为当前展示的钱包数据
-    indexDbData.getData('currentWalltAddress').then(res => {
-        nowAccount.value = res;
-        currentWallt.value = res;
-        userName.value = nowAccount.value.userName ? nowAccount.value.userName : nowAccount.value.NoIndex;
-    })
+    // indexDbData.getData('currentWalltAddress').then(res => {
+    //     nowAccount.value = res;
+    //     currentWallt.value = res;
+    //     userName.value = nowAccount.value.userName ? nowAccount.value.userName : nowAccount.value.NoIndex;
+    // })
 
-    // indexDbData.getData('rpc_url').then(res => {
-    //     console.log(res,'res');
-    //     rpcData.value = res;
-    //     if (res && res.walltInfo) {
-    //         let data = res.walltInfo.filter(item=>{
-    //             return item.address == props.address;
-    //         });
-    //     console.log(data,'data');
-    //         nowAccount.value = data[0];
-    //         userName.value = nowAccount.value.userName ? nowAccount.value.userName : nowAccount.value.NoIndex;
-    //         // 指定钱包单位
-    //         accountList.value = res.walltInfo.reverse();
-    //         getBlances(res,data)
-    //     }
-    // }).catch(err=>{})
+    indexDbData.getData('rpc_url').then(res => {
+        console.log(res,'res');
+        rpcData.value = res;
+        if (res && res.walltInfo) {
+            let data = res.walltInfo.filter(item=>{
+                return item.address == props.address;
+            });
+        console.log(data,'data');
+            nowAccount.value = data[0];
+            userName.value = nowAccount.value.userName ? nowAccount.value.userName : nowAccount.value.NoIndex;
+            // 指定钱包单位
+            accountList.value = res.walltInfo.reverse();
+            getBlances(res,data)
+        }
+    }).catch(err=>{})
     loading.value = false;
 }
-
+// 取消
+const toBack = ()=>{
+    bus.emit('selectAccountPage','list')
+}
+// 获取余额
 const getBlances = async (data,content)=>{
     // 定义rpc
     let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
@@ -59,47 +64,53 @@ const getBlances = async (data,content)=>{
     balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
     nowAccount.value['balance'] = balance;
 }
-// 删除
-const confirmRemove = ()=>{
+
+// 二次确认删除
+const confirmRemove = async ()=>{
     console.log("删除");
-    
+    if(!passKeyModel.value){
+        bus.emit('promptModalErr','请输入密码')
+        return;
+    }
+    if(md5(passKeyModel.value) != passKey.value){
+        bus.emit('promptModalErr','您输入的密码有误')
+        return;
+    }
     // 删除加密数据
-    indexDbData.getData('keyStore').then(res => {
-        let objName = nowAccount.value.address;
-        const { [objName]:deletedItem, ...rest } = res.secret;
-        // 保存key
-        indexDbData.putData({
-            id: 'keyStore',
-            secret: rest
-        })
+    let keyStore = await indexDbData.getData('keyStore')
+    let objName = nowAccount.value.address;
+    const { [objName]:deletedItem, ...rest } = keyStore.secret;
+    // 保存key
+    indexDbData.putData({
+        id: 'keyStore',
+        secret: rest
     })
     let firstWallt:any = {};
     // 删除选中的网络中数据
-    indexDbData.getData('rpc_url').then(res => {
-        let data = res.walltInfo.filter(item=>{
-            return item.address != nowAccount.value.address;
-        })
-        res.walltInfo = data;
-        firstWallt = data[0];
-        firstWallt['keyStore'] = firstWallt['address'];
-        // 保存key
-        indexDbData.putData(res);
-        
-        // 如果当前的就是选中的钱包
-        if(nowAccount.value.address == currentWallt.value.address){
-            console.log(firstWallt,'firstWallt');
-            firstWallt['id'] = 'currentWalltAddress';
-            console.log(firstWallt,'firstWallt002');
-            indexDbData.putData(firstWallt)
-        }
-    bus.emit('selectAccountPage','list')
+    let rpc_url = await indexDbData.getData('rpc_url')
+    let data = rpc_url.walltInfo.filter(item=>{
+        return item.address != nowAccount.value.address;
     })
-    evmNetwork();//删除存储evm网络
-    utxoNetwork();//删除并存储evm网络
+    rpc_url.walltInfo = data;
+    firstWallt = data[0];
+    firstWallt['keyStore'] = firstWallt['address'];
+    // 保存key
+    indexDbData.putData(rpc_url);
+    
+    // 如果当前的就是选中的钱包
+    if(nowAccount.value.address == currentWallt.value.address){
+        console.log(firstWallt,'firstWallt');
+        firstWallt['id'] = 'currentWalltAddress';
+        console.log(firstWallt,'firstWallt002');
+        indexDbData.putData(firstWallt)
+    }
+    await evmNetwork();//删除存储evm网络
+    await utxoNetwork();//删除并存储evm网络
+    bus.emit('selectAccountPage','list')
 }
 
 
-const evmNetwork = () => {
+const evmNetwork = async () => {
     indexDbData.getData('EVM').then(res => {
         let data:any;
         Object.keys(res.content).forEach((item, index) => {
@@ -111,7 +122,7 @@ const evmNetwork = () => {
         indexDbData.putData(res)
     })
 }
-const utxoNetwork = () => {
+const utxoNetwork = async () => {
     indexDbData.getData('UTXO').then(res => {
         let data:any;
         Object.keys(res.content).forEach((item, index) => {

@@ -15,7 +15,7 @@ let nowAccount = ref(null)
 let accountContent = ref(null)
 let passKey = ref('');//密码
 
-let accountType = ref('delete')//当前展示钱包那一套流程
+let accountType = ref('list')//当前展示钱包那一套流程
 
 let loading = ref(false)
 let loadingText = ref('加载中...')
@@ -145,6 +145,27 @@ const checkAddress = (data)=>{
     checkAddressText.value = data.address;
     accountType.value = 'model';
     // accountType.value = 'showKey';
+}
+// 选为主账号
+const checkAccount = ()=>{
+    if(checkAddressText.value == nowAccount.value.address){
+        bus.emit('promptModalWarn','当前已是主账号')
+        return;
+    }
+    let data = JSON.parse(JSON.stringify(accountList.value))
+    let dbData = data.filter(item=>{
+        return item.address == checkAddressText.value;
+    })
+    if(!dbData || !dbData.length){
+        bus.emit('promptModalErr','您选择的账号有误')
+        return;
+    }
+    console.log(dbData,'data[0]');
+    
+    indexDbData.putData(dbData[0]);
+    setTimeout(()=>{
+        bus.emit('nextPage','homePage')
+    },300)
 }
 // 上一页
 const backPage = ()=>{

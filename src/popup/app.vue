@@ -1,5 +1,6 @@
 <template>
-	<div class="meer-wallt">
+	<div class="meer-wallt" v-loading:[loadingText]="loading">
+		{{pageTypes}}
 		<!-- 输入密码页面 -->
 		<secret v-if="pageTypes == 'secret'" />
 		<!-- 首次进入 -->
@@ -39,8 +40,9 @@ import { getCookie } from '@/utils/index';
 import indexDbData from '@/utils/indexDB';
 import Web3 from 'web3'
 import bus from '@/utils/bus';
+let loading = ref(false)
+let loadingText = ref('加载中...')
 const buyModal = ref(false)
-const loading = ref(true)
 const userAddress = ref(null)
 const walltContent = ref(null)//账户相关信息
 const pageTypes = ref('')//判断当前应该展示那个页面
@@ -73,8 +75,10 @@ const openModal = (res) => {
 
 bus.on('nextPage', (res) => {
 	console.log(res, 'rererere');
+	pageTypes.value = '';
 	let type = res;
 	if(res == 'homePage'){
+		loading.value = true;
 		// indexDbData.getData('currentWalltAddress').then(res => {
 		// 	console.log(res, 'res');
 		// 	if (!res) {
@@ -95,43 +99,22 @@ bus.on('nextPage', (res) => {
 		pageTypes.value = res;
 	}
 });
-// 获取账户相关信息
-const getInfo = () => {
-	// 如果有当前用户信息，说明已经是生成钱包啦
-	indexDbData.getData('currentWalltAddress').then(res => {
-		console.log(res, 'res');
-		if (!res) {
-			pageTypes.value = 'create'
-			loading.value = false;
-			return;
-		}
-		if (res && res.address) {
-			userAddress.value = res.address;
-			walltContent.value = res;
-			getBlance()
-			// if (getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') && getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') != 'false') {
-				pageTypes.value = 'homePage';
-			// } else {
-			// 	pageTypes.value = 'login';
-			// }
-		} else {
-			pageTypes.value = 'create'
-			loading.value = false;
-		}
-	}).catch(err => { })
-}
 const getBlance = (type='homePage') => {
+	console.log(111111111);
+	
 	indexDbData.getData('rpc_url').then(res => {
-		let data = res.content;
+		let data = res;
 		// 定义rpc
 		let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
 		walltContent.value = data;
 		// 钱包地址
 		walltContent.value.address = userAddress.value;
+		console.log(web3,'web3web3web3');
+		
 		// 获取钱包余额
 		web3.eth.getBalance(userAddress.value)
 			.then(res => {
-				console.log(res);
+				console.log(res,'resres');
 				if (!res) {
 					walltContent.value.balance = 0;
 				} else {
@@ -147,6 +130,33 @@ const getBlance = (type='homePage') => {
 				loading.value = false;
 			});
 	}).catch(err => { })
+}
+// 获取账户相关信息
+const getInfo = () => {
+	// 如果有当前用户信息，说明已经是生成钱包啦
+	indexDbData.getData('currentWalltAddress').then(res => {
+		console.log(res, 'res');
+		if (!res) {
+			pageTypes.value = 'create'
+			loading.value = false;
+			return;
+		}
+		if (res && res.address) {
+			userAddress.value = res.address;
+			walltContent.value = res;
+			getBlance()
+			// if (getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') && getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') != 'false') {
+			// } else {
+			// 	pageTypes.value = 'login';
+			// }
+		} else {
+			pageTypes.value = 'create'
+			loading.value = false;
+		}
+		loading.value = false;
+	}).catch(err => {
+		loading.value = false;
+	})
 }
 // const getHexHash = (type='homePage') => {
 // 	indexDbData.getData('txHash').then(res => {

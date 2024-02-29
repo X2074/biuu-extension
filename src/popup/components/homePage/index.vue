@@ -15,7 +15,7 @@ const userList = ref([]);//下拉列表的用户数据
 const netWorkType = ref('EVM');//网络类型
 const walltUser = ref('EVM');//选中的用户数据
 const walltEnvironment = ref({})//钱包所在的网络
-const walltAccount = ref('selectAccount')
+const walltAccount = ref('')
 onMounted(() => {
 	console.log(props,'propspropsprops');
 	
@@ -119,6 +119,7 @@ bus.on('modalOperate', (res) => {
 bus.on('closeMore', () => {
 	moreShow.value = false;
 })
+// homepage模块里面的返回按钮
 bus.on('homePageBack', (res) => {
 	walltAccount.value = res || '';
 })

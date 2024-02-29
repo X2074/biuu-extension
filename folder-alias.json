@@ -64,5 +64,11 @@
     },
     "src/components/popup/homePage/selectAccount/deleteWallt": {
         "description": "删除钱包"
+    },
+    "src/components/popup/components/prompt": {
+        "description": "提示弹框"
+    },
+    "src/components/popup/homePage/selectAccount/index": {
+        "description": "选中账户模块"
     }
 }
