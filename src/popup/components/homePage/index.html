@@ -1,18 +1,42 @@
 <div class="home-page">
     <div class="user-type flex">
-        <!-- <select v-if="netWorkList && netWorkList.length" id="my-select" v-model="walltEnvironment" @change="rpcChange">
-            <option :value="item.CHAIN_ID" v-for="item in netWorkList">{{item.unit}}</option>
-        </select> -->
         <div class="select flex">
             <p>{{walltEnvironment?.netName}}</p>
             <img class="ml-5" src="@/assets/images/icons/arrowhead-g.svg" alt="">
         </div>
-        <p class="flex" @click="walltAccount = 'selectAccount'"> 钱包管理
+        <p class="flex" @click="walltAccount = 'selectAccount';pageType=''"> 钱包管理
             <img class="ml-5" src="@/assets/images/icons/arrowhead.svg" alt="">
         </p>
         <div class="more-components">
-            <img src="@/assets/images/more.png" @click="moreShow = !moreShow;" alt="">
-            <options-popup v-if="moreShow" />
+            <img src="@/assets/images/icons/more.png" @click="moreShow = !moreShow;" alt="">
+            <div class="more-content" v-if="moreShow" @click.self="moreShow = !moreShow">
+                <div class="options-list">
+                    <div class="option flex" @click="toPage('detail')">
+                        <img class="mr-10" src="@/assets/images/icons/detail.png" alt="">
+                        <p>账户详情</p>
+                    </div>
+                    <div class="option flex">
+                        <img class="mr-10" src="@/assets/images/icons/explorer.png" alt="">
+                        <p>View on explorer</p>
+                    </div>
+                    <div class="option flex">
+                        <img class="mr-10" src="@/assets/images/icons/netWork.png" alt="">
+                        <p>已连接的网络</p>
+                    </div>
+                    <div class="option flex">
+                        <img class="mr-10" src="@/assets/images/icons/unfold.png" alt="">
+                        <p>展开视窗</p>
+                    </div>
+                    <div class="option flex">
+                        <img class="mr-10" src="@/assets/images/icons/setting.png" alt="">
+                        <p>设置</p>
+                    </div>
+                    <div class="option flex">
+                        <img class="mr-10" src="@/assets/images/icons/out.png" alt="">
+                        <p>退出</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="user-info pt-20">
@@ -48,4 +72,5 @@
         </div>
     </div>
 </div>
-<selectAccount v-if="walltAccount == 'selectAccount'" />
+<selectAccount v-if="walltAccount == 'selectAccount'" :pageType="pageType" />
+<setting />

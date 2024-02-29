@@ -19,7 +19,7 @@ let privateKey = ref('')//私钥
 let userName = ref('');//账户昵称
 let userNameStatus = ref(false);//昵称展示还是编辑
 let qrCodeDiv = ref(null)
-let accountOperate = ref('show')
+let accountOperate = ref('password')
 const props = defineProps(['address'])
 let rpcData = ref(null)
 onMounted(() => {
@@ -31,21 +31,6 @@ const initializeInfo = ()=>{
 	indexDbData.getData(md5('secret')).then(res => {
 		passKey.value = res.secret;
 	}).catch(err => { })
-    console.log(props,'qrCodeDiv.value');
-    
-    new QRCode(qrCodeDiv.value, {
-        text: props.address,
-        width: 200,
-        height: 200,
-        colorDark: "#333333", //二维码颜色
-        colorLight: "#ffffff", //二维码背景色
-        correctLevel: QRCode.CorrectLevel.L//容错率，L/M/H
-    })
-    // 存为当前展示的钱包数据
-    // indexDbData.getData('currentWalltAddress').then(res => {
-    //     nowAccount.value = res;
-    //     userName.value = nowAccount.value.userName ? nowAccount.value.userName : nowAccount.value.NoIndex;
-    // })
     indexDbData.getData('rpc_url').then(res => {
         console.log(res,'res');
         rpcData.value = res;

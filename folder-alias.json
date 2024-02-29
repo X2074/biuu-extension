@@ -70,5 +70,35 @@
     },
     "src/components/popup/homePage/selectAccount/index": {
         "description": "选中账户模块"
+    },
+    "src/popup/components/creasteWalletPage/createMnemonic": {
+        "description": "生成助记词"
+    },
+    "src/popup/components/creasteWalletPage/setPsd": {
+        "description": "密码校验"
+    },
+    "src/popup/components/creasteWalletPage/verifyMnemonic": {
+        "description": "二次确认生成"
+    },
+    "src/popup/components/setting": {
+        "description": "设置"
+    },
+    "src/components/popup/homePage/setting": {
+        "description": "设置"
+    },
+    "src/components/popup/homePage/setting/components/safe": {
+        "description": "安全问答"
+    },
+    "src/components/popup/homePage/setting/components/contacts": {
+        "description": "地址簿"
+    },
+    "src/components/popup/homePage/showPrivateKey": {
+        "description": "显示私钥"
+    },
+    "src/components/popup/homePage/setting/components/showPrivateKey": {
+        "description": "显示私钥"
+    },
+    "src/components/popup/homePage/setting/components/privateKey": {
+        "description": "私钥"
     }
 }

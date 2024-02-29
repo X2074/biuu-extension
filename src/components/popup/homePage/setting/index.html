@@ -1,0 +1,38 @@
+<div class="setting" v-loading:[loadingText]="loading">
+    <div class="header flex" v-if="settingStep == 'options'">
+        <img @click="toBack('homePage')" class="back-img" src="@/assets/images/icons/back.png" alt="">
+        <p>设置</p>
+    </div>
+    <div class="header flex" v-if="settingStep == 'privateKey'">
+        <img @click="toBack('options')" class="back-img" src="@/assets/images/icons/back.png" alt="">
+        <p>显示私钥</p>
+    </div>
+    <ul class="setting-options" v-if="settingStep == 'options'">
+        <li class="flex">
+            <img class="mr-10" src="@/assets/images/icons/wallt.png" alt="">
+            <p>钱包管理</p>
+        </li>
+        <li class="flex">
+            <img class="mr-10" src="@/assets/images/icons/safe.png" alt="">
+            <p>钱包安全</p>
+        </li>
+        <li class="flex">
+            <img class="mr-10" src="@/assets/images/icons/contacts.png" alt="">
+            <p>地址簿</p>
+        </li>
+        <li class="flex">
+            <img class="mr-10" src="@/assets/images/icons/preference.png" alt="">
+            <p>偏好设置</p>
+        </li>
+        <li class="flex">
+            <img class="mr-10" src="@/assets/images/icons/netWork.png" alt="">
+            <p>网络</p>
+        </li>
+        <li class="flex">
+            <img class="mr-10" src="@/assets/images/icons/concerning.png" alt="">
+            <p>关于</p>
+        </li>
+    </ul>
+    <!-- 显示私钥  -->
+    <privateKey v-if="settingStep == 'privateKey'" :address="currentWalltAddress.address" />
+</div>

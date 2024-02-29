@@ -5,6 +5,7 @@ import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB';
 import Web3 from 'web3'
 import selectAccount from "@/components/popup/homePage/selectAccount/index/index.vue"
+import setting from "@/components/popup/homePage/setting/index.vue"
 const transactionHash = ref(0);
 const moreShow = ref(false);
 const props = defineProps(['walltContent'])
@@ -16,9 +17,8 @@ const netWorkType = ref('EVM');//网络类型
 const walltUser = ref('EVM');//选中的用户数据
 const walltEnvironment = ref({})//钱包所在的网络
 const walltAccount = ref('')
+const pageType = ref('');//当前需要展示的页面
 onMounted(() => {
-	console.log(props,'propspropsprops');
-	
 	indexDbData.getData('rpc_url').then(res => {
 		if(!res) {
 			netWorkChange('EVM')
@@ -67,7 +67,9 @@ const toWei = (data) => {
 	})
 }
 const toPage = (res) => {
-	bus.emit('openModal', res)
+	moreShow.value = !moreShow.value;
+	pageType.value = 'showKey';
+	walltAccount.value = 'selectAccount';
 }
 const sendTo = () => {
 	bus.emit('nextPage', 'sendTo')

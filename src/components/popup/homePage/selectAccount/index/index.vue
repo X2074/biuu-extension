@@ -1,6 +1,6 @@
 <template src='./index.html'></template>
 <script lang='ts' setup>
-import { ref, onMounted, defineProps, nextTick } from 'vue';
+import { ref, onMounted, nextTick,defineProps } from 'vue';
 import bus from '@/utils/bus.js'; 
 import indexDbData from '@/utils/indexDB';
 import { Encrypt, Decrypt } from '@/utils/index.js';
@@ -9,27 +9,37 @@ import showPrivateKey from '../showPrivateKey/index.vue'
 import deleteWallt from '../deleteWallt/index.vue'
 import Web3 from 'web3'
 import md5 from 'js-md5';
-let step = ref('accountList');//当前所在的页
 let accountList = ref([]);
 let nowAccount = ref(null)
 let accountContent = ref(null)
 let passKey = ref('');//密码
 
-let accountType = ref('list')//当前展示钱包那一套流程
+let checkAddressText = ref('')
+let accountType = ref('')//当前展示钱包那一套流程
 
 let loading = ref(false)
 let loadingText = ref('加载中...')
-onMounted(() => {
-    initializeInfo()
+
+let prop = defineProps(['pageType'])
+onMounted(async () => {
+    loading.value = true;
+    await initializeInfo()
+    if(prop && prop.pageType){
+        indexDbData.getData('currentWalltAddress').then(res => {
+            checkAddressText.value = res.address;
+            accountType.value = prop.pageType;
+        })
+    }else{
+        accountType.value = 'list';
+    }
 })
 
-const initializeInfo = ()=>{
-    
+const initializeInfo = async()=>{
     // 获取设置的密码
 	indexDbData.getData(md5('secret')).then(res => {
 		passKey.value = res.secret;
 	}).catch(err => { })
-    // 存为当前展示的钱包数据
+    // 获取当前展示的钱包数据
     indexDbData.getData('currentWalltAddress').then(res => {
         nowAccount.value = res;
     })
@@ -140,7 +150,6 @@ const utxoNetwork = (data) => {
 }
 
 // 选中的账号
-let checkAddressText = ref('')
 const checkAddress = (data)=>{
     checkAddressText.value = data.address;
     accountType.value = 'model';
@@ -169,6 +178,9 @@ const checkAccount = ()=>{
 }
 // 上一页
 const backPage = ()=>{
+    if(prop && prop.pageType && accountType.value == 'showKey'){
+        bus.emit('homePageBack','')
+    }
     if(accountType.value == 'list'){
         bus.emit('homePageBack','')
     }else{

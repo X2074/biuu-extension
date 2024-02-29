@@ -1,0 +1,252 @@
+.setting-private-key {
+    .jazzicon {
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        height: 48px;
+    }
+
+    .user-name-edit {
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        width: 300px;
+        margin: 0 auto;
+
+        p {
+            font-size: 22px;
+            line-height: 30px;
+        }
+
+        img {
+            width: 16px;
+            height: 16px;
+            display: block;
+            cursor: pointer;
+        }
+
+        input {
+            height: 45px;
+            padding: 12px 12px 12px 12px;
+            width: 200px;
+            border-radius: 8px;
+            border: 1px solid rgba(217, 217, 217, 1);
+            font-size: 14px;
+        }
+
+        span {
+            position: absolute;
+            color: red;
+            font-size: 12px;
+            left: 40px;
+            top: 50px;
+        }
+    }
+
+    .user-name {
+        width: 100%;
+        text-align: center;
+
+        .address-copy {
+            border-radius: 8px;
+            background: rgba(177, 218, 90, 0.3);
+            width: 300px;
+            height: 52px;
+            padding: 5px 16px;
+            align-items: center;
+            justify-content: space-between;
+            margin: 20px auto 10px;
+
+            &.address-copy-key {
+                width: 150px;
+                height: 37px;
+            }
+
+            p {
+                width: 200px;
+                font-size: 14px;
+                line-height: 21px;
+                word-wrap: break-word;
+                text-align: left;
+            }
+
+            img {
+                width: 16px;
+                height: 16px;
+                cursor: pointer;
+            }
+        }
+
+        .show-key {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0px;
+            line-height: 16px;
+            text-decoration-line: underline;
+            color: rgba(255, 72, 160, 1);
+            margin: 0 auto;
+            cursor: pointer;
+            text-align: center;
+        }
+    }
+
+    .private-key {
+        overflow-y: auto;
+
+        .address-copy {
+            border-radius: 8px;
+            background: rgba(177, 218, 90, 0.3);
+            width: 150px;
+            height: 37px;
+            padding: 5px 16px;
+            align-items: center;
+            justify-content: space-between;
+            margin: 20px auto 10px;
+
+            p {
+                width: 200px;
+                font-size: 14px;
+                line-height: 21px;
+                word-wrap: break-word;
+                text-align: left;
+            }
+
+            img {
+                width: 16px;
+                height: 16px;
+                cursor: pointer;
+            }
+        }
+
+        .input-pass-word {
+            width: 300px;
+            margin: 5px auto;
+
+            p {
+                font-size: 14px;
+                line-height: 21px;
+                color: rgba(0, 0, 0, 1);
+            }
+
+            .input-psd {
+                width: 300px;
+                height: 45px;
+                padding: 12px;
+                border-radius: 8px;
+                align-items: center;
+                justify-content: space-between;
+                border: 1px solid rgba(217, 217, 217, 1);
+
+                input {
+                    width: 200px;
+                    font-size: 14px;
+                    border: 0;
+                    outline: none;
+                }
+
+                img {
+                    width: 16px;
+                    height: 16px;
+                    cursor: pointer;
+                }
+            }
+
+        }
+
+        .wran-tips {
+            width: 300px;
+            background: rgba(177, 218, 90, 0.3);
+            border-radius: 8px;
+            padding: 12px 10px;
+            margin: 0 auto;
+
+            p {
+                font-size: 14px;
+                color: #000;
+                line-height: 20px;
+            }
+
+            div {
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    width: 16px;
+                    height: 16px;
+
+                }
+            }
+        }
+
+        .footer-btn {
+            justify-content: space-between;
+            align-items: center;
+            width: 300px;
+            box-shadow: none;
+            margin: 20px auto 10px;
+            height: 50px;
+
+            p {
+                font-size: 16px;
+                font-weight: 500;
+                color: #000;
+                line-height: 48px;
+                height: 48px;
+                border-radius: 30px;
+                text-align: center;
+                cursor: pointer;
+
+                &.close {
+                    width: 104px;
+                    border: 1px solid rgba(177, 218, 90, 1);
+                    background-color: #fff;
+                }
+
+                &.confirm {
+                    width: 184px;
+                    background: rgba(177, 218, 90, 1);
+
+                    &.confirm-key {
+                        width: 300px;
+                    }
+                }
+
+            }
+        }
+
+        .private-key-content {
+            width: 300px;
+            margin: 10px auto;
+
+            p {
+                font-size: 14px;
+                line-height: 21px;
+                color: rgba(0, 0, 0, 1);
+            }
+
+            .copy-key {
+                border-radius: 8px;
+                padding: 12px;
+                border: 1px solid rgba(217, 217, 217, 1);
+                align-items: center;
+                justify-content: space-between;
+
+                p {
+                    width: 240px;
+                    color: rgba(159, 159, 159, 1);
+                    font-size: 14px;
+                    user-select: none;
+                    word-wrap: break-word;
+                }
+
+                img {
+                    width: 16px;
+                    height: 16px;
+                    cursor: pointer;
+                }
+            }
+
+        }
+    }
+}
