@@ -94,7 +94,22 @@ const restoreWallet = ()=>{
     indexDbData.putData({
         id: md5('secret'),
         secret: md5(psdNewText.value)
-    })
+    }) 
+    // 获取所有的密钥
+    let data = await indexDbData.getData('keyStore');
+    let promises = [];
+    // 更新所有助记词密码
+    for (let key in data['secret']) {
+        // 解密助记词
+        let mnemonic = await Decrypt(data['secret'][key], passKey.value)
+        console.log(mnemonic,'mnemonic');
+        // 助记词加密
+        let ciphertext = await Encrypt(mnemonic, md5(psdNewText.value));
+        console.log(mnemonic02,'mnemonic02');
+        
+        data['secret'][key] = ciphertext;
+    }
+    indexDbData.putData(data);
     
     bus.emit('nextPage','homePage');
 }

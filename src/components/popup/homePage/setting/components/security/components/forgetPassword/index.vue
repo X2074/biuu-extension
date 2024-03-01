@@ -46,8 +46,11 @@ const restoreWallet = async()=>{
     for (let key in data['secret']) {
         // 解密助记词
         let mnemonic = await Decrypt(data['secret'][key], passKey.value)
+        console.log(mnemonic,'mnemonic');
         // 助记词加密
-        let ciphertext = await Encrypt(mnemonic, passKey.value);
+        let ciphertext = await Encrypt(mnemonic, md5(psdNewText.value));
+        console.log(mnemonic02,'mnemonic02');
+        
         data['secret'][key] = ciphertext;
     }
     indexDbData.putData(data);
