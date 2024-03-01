@@ -4,7 +4,6 @@
 import { ref, onMounted, watchEffect, getCurrentInstance } from 'vue';
 import indexDbData from '../../../utils/indexDB.js';
 import bus from '../../../utils/bus.js';
-import { Encrypt, Decrypt } from '../../../utils/index.js';
 import md5 from 'js-md5';
 // 预制网络
 import netWork from '../../../utils/netWork.json'

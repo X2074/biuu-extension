@@ -24,29 +24,3 @@ chrome.windows.onRemoved.addListener(function () {
     console.log('浏览器即将关闭！');
     chrome.storage.local.remove('secret');
 });
-
-
-setInterval(() => {
-    // chrome.notifications.create(
-    //   {
-    //     type: "basic",
-    //     title: "Notifications Title",
-    //     message: "Notifications message to display",
-    //     iconUrl: "../icons/icon.png"
-    //   },
-    //   (notificationId) => {
-    console.log('notificationId-->')
-    //   }
-    // );
-}, 3000)
-
-
-class Person {
-    constructor() { }
-    openPage() {
-        console.log('测试数据0010')
-    }
-    openPage01() {
-        console.log('测试数据13')
-    }
-}

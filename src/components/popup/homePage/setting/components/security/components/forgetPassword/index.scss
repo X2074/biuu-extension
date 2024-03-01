@@ -1,0 +1,106 @@
+.forget-password {
+    position: relative;
+    padding: 0 16px;
+    height: 420px;
+
+
+    button {
+        display: block;
+        width: 330px;
+        height: 48px;
+        border: 0;
+        cursor: pointer;
+        font-size: 14px;
+        border-radius: 48px;
+        color: #000;
+    }
+
+    .input-psd {
+        width: 100%;
+        height: 48px;
+        border: 1px solid rgba(177, 218, 90, 1);
+        border-radius: 8px;
+        padding-left: 12px;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+
+        input {
+            border: 0;
+            font-size: 14px;
+            outline: none;
+            color: #000;
+            width: 80%;
+        }
+
+        img {
+            width: 24px !important;
+            height: 24px !important;
+            margin-right: 15px;
+        }
+
+        span {
+            color: red;
+            position: absolute;
+            bottom: -22px;
+            left: -50%;
+            font-size: 20px;
+            transform: scale(0.5);
+            width: 200%;
+        }
+    }
+
+    .psd-title {
+        font-size: 14px;
+        color: #000;
+        text-align: left;
+    }
+
+    .header {
+        padding: 24px 0;
+
+        img {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+    }
+
+    .forget-title {
+        font-size: 28px;
+        line-height: 30px;
+    }
+
+    .txt {
+        font-size: 14px;
+        line-height: 22px;
+        color: rgba(84, 84, 84, 1);
+    }
+
+    .phrase-input {
+        width: 100% !important;
+        height: 170px !important;
+        background: transparent;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 16px;
+        line-height: 20px;
+        border: 1px solid rgba(219, 219, 219, 1);
+        resize: none
+    }
+
+    .mnemonic-phrase {
+        position: absolute;
+        background-color: rgba(177, 218, 90, 1);
+        bottom: 30px;
+        font-size: 16px;
+        color: #fff;
+        font-weight: 400;
+    }
+
+    div.text-area {
+        height: 170px;
+        padding: 0;
+        border: 0;
+    }
+}

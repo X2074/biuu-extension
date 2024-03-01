@@ -1,11 +1,11 @@
 <template>
-    <div class="prompt-tips pl-15 pr-15 flex" v-if="promptBol">
+    <div class="prompt-tips pl-10 pr-10 flex" v-if="promptBol">
 		<img v-if="promptStatus == 'err'" class="prompt-status" src="@/assets/images/tips/err.png" alt="">
 		<img v-if="promptStatus == 'warn'" class="prompt-status" src="@/assets/images/tips/warn.png" alt="">
 		<img v-if="promptStatus == 'success'" class="prompt-status" src="@/assets/images/tips/success.png" alt="">
 		<img v-if="promptStatus == 'loading'" class="prompt-status loading" src="@/assets/images/tips/loading.png" alt="">
-        <p class="ml-15 mr-15">{{tipsTxt}}</p>
-        <img class="prompt-close" @click.self="promptBol = false" src="@/assets/images/icons/close.png" alt="">
+        <p class="ml-5">{{tipsTxt}}</p>
+        <!-- <img class="prompt-close" @click.self="promptBol = false" src="@/assets/images/icons/close.png" alt=""> -->
     </div>
 </template>
 

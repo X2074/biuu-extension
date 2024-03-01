@@ -8,7 +8,8 @@ import { ref, onMounted, reactive, watch } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
 import privateKey from './components/privateKey/index.vue'
-let settingStep = ref('safe');//设置页面当前展示内容
+import security from './components/security/index.vue'
+let settingStep = ref('options');//设置页面当前展示内容
 let currentWalltAddress = ref(null)//当前钱包信息
 
 let loading = ref(false)
@@ -24,4 +25,8 @@ const toBack = (page)=>{
         settingStep.value = page;
     }
 }
+
+bus.on('settingPage',res=>{
+    settingStep.value = res;
+})
 </script>

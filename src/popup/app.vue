@@ -77,7 +77,7 @@ bus.on('nextPage', (res) => {
 	console.log(res, 'rererere');
 	pageTypes.value = '';
 	let type = res;
-	if(res == 'homePage'){
+	if(res == 'homePage' || !res) {
 		loading.value = true;
 		// indexDbData.getData('currentWalltAddress').then(res => {
 		// 	console.log(res, 'res');

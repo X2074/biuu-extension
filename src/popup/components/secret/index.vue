@@ -5,7 +5,7 @@ import { ref, onMounted, reactive, watch } from 'vue';
 const googleId = ref('fkhnghcgmjcgeniccpjpmlfpgbibmmge')
 import bus from '@/utils/bus';
 import indexDbData from '@/utils/indexDB';
-import { Encrypt, Decrypt } from '@/utils/index.js';
+import { Decrypt } from '@/utils/index.js';
 import md5 from 'js-md5';
 let textPsd = ref('psd')
 let psdText = ref('')

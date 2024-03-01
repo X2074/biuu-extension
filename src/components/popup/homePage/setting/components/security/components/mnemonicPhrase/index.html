@@ -1,0 +1,131 @@
+<div class="mnemonic-phrase" v-loading:[loadingText]="loading">
+    <div class="mnemonic-tip" v-if="processSteps == 'home'">
+        <p class="title mt-40">安全问答</p>
+        <img class="mt-15" src="@/assets/images/logo/icon.png" alt="">
+        <p class="txt mt-30">要查看助记词，您需要答对两个问题</p>
+        <button class="mt-30" @click="processSteps = 'issueOne'">开始</button>
+    </div>
+    <!-- 问题一 -->
+    <div class="issue" v-if="processSteps == 'issueOne'">
+        <div class="issue-page pt-40" v-if="!issueOneOutcome">
+            <p class="title">安全问答</p>
+            <p class="num mt-20">1/2</p>
+            <p class="issue-text">如果您丢失了助记词，Biuu...</p>
+            <div class="issue-footer">
+                <button @click="issueOneOutcome = 'yes'">可以为您找回助记词</button>
+                <button @click="issueOneOutcome = 'no'" class="no-way">无法帮助到您</button>
+            </div>
+        </div>
+        <div class="issue-page pt-40" v-if="issueOneOutcome == 'no'">
+            <img src="@/assets/images/icons/success.png" alt="">
+            <p class="num mt-20">1/2</p>
+            <p class="issue-text">答对了！没人能够帮您找回您的助记词！</p>
+            <p class="issue-method">将它写下来、刻在金属上，或保存在多个秘密位置，这样您就不会丢失它。如果丢失了，它就会永远消失。</p>
+            <div class="issue-footer">
+                <button @click="processSteps = 'issueTwo'">继续 </button>
+            </div>
+        </div>
+        <div class="issue-page pt-40" v-if="issueOneOutcome == 'yes'">
+            <img src="@/assets/images/icons/warn-red.png" alt="">
+            <p class="num mt-20">1/2</p>
+            <p class="issue-text">答错了！没人能够帮您找回您的助记词！</p>
+            <p class="issue-method">一旦遗失助记词，它将永远消失，无论他人如何保证，无人能够帮您找回。</p>
+            <div class="issue-footer">
+                <button @click="issueOneOutcome = ''">重试</button>
+            </div>
+        </div>
+    </div>
+    <!-- 问题二 -->
+    <div class="issue" v-if="processSteps == 'issueTwo'">
+        <div class="issue-page pt-40" v-if="!issueTwoOutcome">
+            <p class="title">安全问答</p>
+            <p class="num mt-20">2/2</p>
+            <p class="issue-text">如果有人（即使是技术人员）查询您的助记词...</p>
+            <div class="issue-footer">
+                <button @click="issueTwoOutcome = 'yes'">他在对您进行诈骗！</button>
+                <button @click="issueTwoOutcome = 'no'" class="no-way">您应该交给他们</button>
+            </div>
+        </div>
+        <div class="issue-page pt-40" v-if="issueTwoOutcome == 'yes'">
+            <img src="@/assets/images/icons/success.png" alt="">
+            <p class="num mt-20">2/2</p>
+            <p class="issue-text">答对了！分享您的助记词绝对不是个好主意！</p>
+            <p class="issue-method">任何声称需要您的助记词的人都在对您进行欺诈。如果您与他们分享助记词，他们就会偷窃您的资产。</p>
+            <div class="issue-footer">
+                <button @click="displayKey">继续 </button>
+            </div>
+        </div>
+        <div class="issue-page pt-40" v-if="issueTwoOutcome == 'no'">
+            <img src="@/assets/images/icons/warn-red.png" alt="">
+            <p class="num mt-20">2/2</p>
+            <p class="issue-text">不！永远不要与任何人分享您的助记词！</p>
+            <p class="issue-method">任何声称需要您的助记词的人都在对您进行欺诈。如果您与他们分享助记词，他们就会偷窃您的资产。</p>
+            <div class="issue-footer">
+                <button class="retry" @click="issueTwoOutcome = ''">重试</button>
+            </div>
+        </div>
+    </div>
+    <!-- 助记词展示页面 -->
+    <div class="mnemonic-input" v-if="processSteps == 'mnemonicPhrase' || processSteps == 'verification'">
+        <p class="title">助记词</p>
+        <div class="content mt-10">
+            <p>
+                <font>助记词（SRP）</font>提供对您的钱包和资金的完整访问权限。
+            </p>
+            <p class="mt-5">Biuu 是<font>非托管钱包</font>，这意味着您是自己的 SRP 的所有者。</p>
+        </div>
+        <div class="prompt flex mt-15">
+            <img class="mr-10 mt-5" src="@/assets/images/icons/warn-red.png" alt="">
+            <p>确保没有人在看您的屏幕。Biuu 支持团队绝对不会要求提供此项目。</p>
+        </div>
+        <div class="content-input mt-15">
+            <p class="mb-5">输入密码继续</p>
+            <input type="password" v-model="passKeyModel" placeholder="请确保没有人在看您的电脑">
+        </div>
+        <div class="mnemonic-footer flex">
+            <button class="close" @click="toBack">取消</button>
+            <button class="confirm" @click="confirmPsd">下一步</button>
+        </div>
+    </div>
+    <!-- 安全认证部分 -->
+    <div class="secondary-verification" v-if=" processSteps == 'verification'">
+        <p class="title pt-25">保护你的助记词安全</p>
+        <p class="content mt-30">您的助记词提供对您的钱包和资金的完整访问权。</p>
+        <p class="content mt-15">您的助记词提供对您的钱包和资金的完整访问权。<font>但网络钓鱼者会</font>
+        </p>
+        <div class="verification-footer flex" :class="verificationClick?'verification-click':''"
+            @mousedown="pressAndHold" @mouseup="pressAndHoldUp">
+            <img class="mr-10" src="@/assets/images/icons/safe-red.png" alt="">
+            <p>按住以显示助记词</p>
+        </div>
+    </div>
+    <!-- 助记词展示部分 -->
+    <div class="mnemonic-show" v-if="processSteps == 'mnemonic'">
+        <div class="prompt flex">
+            <img class="mr-10 mt-5" src="@/assets/images/icons/warn-red.png" alt="">
+            <p>确保没有人在看您的屏幕。Biuu 支持团队绝对不会要求提供此项目。</p>
+        </div>
+        <div class="mnemonic-type mt-15">
+            <button :class="mnemonicStyle == 'txt' ? 'check-style' : ''" @click="mnemonicStyle = 'txt'">文本</button>
+            <button :class="mnemonicStyle == 'qrcode' ? 'check-style' : ''" @click="qrCodeShow">二维码</button>
+        </div>
+        <!-- 文本 -->
+        <div class="mnemonic-txt mt-10">
+            <div class="txt-key" v-if="mnemonicStyle == 'txt'">
+                <ul class="flex">
+                    <li class="flex" v-for="(item,index) in encryption">
+                        <font class="mr-10">{{index+1}}</font>{{item}}
+                    </li>
+                </ul>
+                <div v-if="mnemonicTxt" @click="mnemonicTxt = false" class="verification-hide">
+                    <img class="mb-20" src="@/assets/images/icons/hide.png" alt="">
+                    <p>点击查看助记词<br />请确保没有其他人查看您的屏幕</p>
+                </div>
+            </div>
+            <div class="qrcode-key flex" v-show="mnemonicStyle == 'qrcode'">
+                <div ref="qrCodeDiv"></div>
+            </div>
+        </div>
+    </div>
+    <button v-if="processSteps == 'mnemonic'" @click="toBack">关闭</button>
+</div>

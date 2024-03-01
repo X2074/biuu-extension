@@ -3,7 +3,7 @@
 import { ref, onMounted, defineProps, nextTick } from 'vue';
 import bus from '@/utils/bus.js'; 
 import indexDbData from '@/utils/indexDB';
-import { Encrypt, Decrypt,evmKey } from '@/utils/index.js';
+import { Decrypt,evmKey } from '@/utils/index.js';
 import {createMnemonic,createWallet} from "@/utils/createUser"
 import {editContent} from "@/utils/editContent"
 import QRCode from 'qrcodejs2-fix';

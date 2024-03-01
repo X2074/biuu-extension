@@ -100,5 +100,17 @@
     },
     "src/components/popup/homePage/setting/components/privateKey": {
         "description": "私钥"
+    },
+    "src/components/popup/homePage/setting/components/security": {
+        "description": "安全问答"
+    },
+    "src/components/popup/homePage/setting/components/security/components/privateKey": {
+        "description": "私钥"
+    },
+    "src/components/popup/homePage/setting/components/security/components/mnemonicPhrase": {
+        "description": "助记词"
+    },
+    "src/components/popup/homePage/setting/components/security/components/forgetPassword": {
+        "description": "修改密码"
     }
 }

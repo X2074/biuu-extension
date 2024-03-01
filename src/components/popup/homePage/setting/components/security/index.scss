@@ -1,0 +1,42 @@
+.security-qa {
+    text-align: center;
+
+    .home-options {
+        >img {
+            width: 36px;
+            height: 36px;
+        }
+
+        >p {
+            font-size: 22px;
+            line-height: 30px;
+            height: 30px;
+            text-align: center;
+        }
+
+        .security-options {
+            width: 100%;
+
+            p {
+                width: 264px;
+                height: 48px;
+                line-height: 48px;
+                color: #000;
+                text-align: center;
+                margin: 0 auto 25px;
+                border: 1px solid rgba(177, 218, 90, 1);
+                background: rgba(177, 218, 90, 0.3);
+                border-radius: 30px;
+                transition: all 0.3s linear;
+                cursor: pointer;
+                font-size: 14px;
+
+                &:hover {
+                    transition: all 0.3s linear;
+                    background: rgba(177, 218, 90, 0.5);
+                }
+            }
+        }
+    }
+
+}

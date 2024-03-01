@@ -1,18 +1,22 @@
 <div class="setting" v-loading:[loadingText]="loading">
-    <div class="header flex" v-if="settingStep == 'options'">
-        <img @click="toBack('homePage')" class="back-img" src="@/assets/images/icons/back.png" alt="">
+    <div class="header flex" @click="toBack('homePage')" v-if="settingStep == 'options'">
+        <img class="back-img" src="@/assets/images/icons/back.png" alt="">
         <p>设置</p>
     </div>
-    <div class="header flex" v-if="settingStep == 'privateKey'">
-        <img @click="toBack('options')" class="back-img" src="@/assets/images/icons/back.png" alt="">
+    <div @click="toBack('options')" class="header flex" v-if="settingStep == 'privateKey'">
+        <img class="back-img" src="@/assets/images/icons/back.png" alt="">
         <p>显示私钥</p>
+    </div>
+    <div @click="toBack('options')" class="header flex" v-if="settingStep == 'security'">
+        <img class="back-img" src="@/assets/images/icons/back.png" alt="">
+        <p>钱包安全</p>
     </div>
     <ul class="setting-options" v-if="settingStep == 'options'">
         <li class="flex">
             <img class="mr-10" src="@/assets/images/icons/wallt.png" alt="">
             <p>钱包管理</p>
         </li>
-        <li class="flex">
+        <li class="flex" @click="settingStep = 'security'">
             <img class="mr-10" src="@/assets/images/icons/safe.png" alt="">
             <p>钱包安全</p>
         </li>
@@ -34,5 +38,7 @@
         </li>
     </ul>
     <!-- 显示私钥  -->
-    <privateKey v-if="settingStep == 'privateKey'" :address="currentWalltAddress.address" />
+    <!-- <privateKey v-if="settingStep == 'privateKey'" :address="currentWalltAddress.address" /> -->
+    <!-- 安全问答 -->
+    <security v-if="settingStep == 'security'" />
 </div>

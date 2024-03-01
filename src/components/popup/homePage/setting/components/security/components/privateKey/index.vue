@@ -4,7 +4,6 @@ import { ref, onMounted, defineProps, nextTick } from 'vue';
 import bus from '@/utils/bus.js'; 
 import indexDbData from '@/utils/indexDB';
 import { Decrypt,evmKey } from '@/utils/index.js';
-import {createMnemonic,createWallet} from "@/utils/createUser"
 import {editContent} from "@/utils/editContent"
 import QRCode from 'qrcodejs2-fix';
 import Web3 from 'web3'
@@ -89,20 +88,20 @@ const confirmPsd = async ()=>{
     loading.value = true;
     // 获取当前的助记词
     let data = await indexDbData.getData('keyStore')
-        console.log(data,'data');
+    console.log(data,'data');
     let key = await data.secret[nowAccount.value.address];
-        console.log(key,'key');
-        // 解密助记词
-        let encryption = await Decrypt(key, passKey.value)
-        console.log(encryption,'encryption');
-        
-        evmKey(encryption).then(keys => {
-            console.log(keys, 'keys');
-            loading.value = false;
-            //此处应该判断是evm还是utxo
-            privateKey.value = keys.privateKey;
-            accountOperate.value = "privateKey"
-        })
+    console.log(key,'key');
+    // 解密助记词
+    let encryption = await Decrypt(key, passKey.value)
+    console.log(encryption,'encryption');
+    
+    evmKey(encryption).then(keys => {
+        console.log(keys, 'keys');
+        loading.value = false;
+        //此处应该判断是evm还是utxo
+        privateKey.value = keys.privateKey;
+        accountOperate.value = "privateKey"
+    })
 }
 </script>
 <style lang="scss">

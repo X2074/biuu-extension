@@ -27,7 +27,7 @@
                         <img class="mr-10" src="@/assets/images/icons/unfold.png" alt="">
                         <p>展开视窗</p>
                     </div>
-                    <div class="option flex">
+                    <div class="option flex" @click="moreShow = false;walltAccount = 'setting'">
                         <img class="mr-10" src="@/assets/images/icons/setting.png" alt="">
                         <p>设置</p>
                     </div>
@@ -73,4 +73,4 @@
     </div>
 </div>
 <selectAccount v-if="walltAccount == 'selectAccount'" :pageType="pageType" />
-<setting />
+<setting v-if="walltAccount == 'setting'" />

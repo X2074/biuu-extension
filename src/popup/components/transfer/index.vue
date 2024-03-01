@@ -2,7 +2,7 @@
 <script lang='ts' setup>
 import { ref, onMounted, defineProps, getCurrentInstance } from 'vue';
 import bus from '@/utils/bus.js';
-import { evmKey, Decrypt,Encrypt, evmTransfer } from '@/utils/index.js';
+import { evmKey, Decrypt, evmTransfer } from '@/utils/index.js';
 import indexDbData from '@/utils/indexDB';
 import Web3 from 'web3'
 import EthereumTx from 'ethereumjs-tx';

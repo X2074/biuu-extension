@@ -1,0 +1,57 @@
+<div class="setting-private-key" v-loading:[loadingText]="loading">
+    <div class="jazzicon flex">
+        <jazzicon address="0x4445Bbd1f0942857741EEbA3B36970390E9cb887" :diameter="48" />
+    </div>
+    <div class="user-name" v-if="accountOperate == 'password'">
+        <div class="user-name-edit flex">
+            <p>{{nowAccount?.userName}}</p>
+        </div>
+        <div class="address-copy address-copy-key flex">
+            <p>{{nowAccount?.address.substr(0,4)}}...{{nowAccount?.address.substr(-4)}}</p>
+            <img @click="onCopy(nowAccount.address)" class="ml-15" src="@/assets/images/icons/copy.png" alt="">
+        </div>
+    </div>
+    <!-- 输入密码 -->
+    <div v-if="accountOperate == 'password'" class="private-key">
+        <div class="input-pass-word">
+            <p>请输入您的密码</p>
+            <div class="input-psd flex mt-5">
+                <input :type="psdType == 'show'?'text':'password'" v-model="passKeyModel" placeholder="请确保没有人看您的电脑">
+                <img @click="psdType = 'show'" v-if="psdType == 'hide'" src="@/assets/images/icons/show.png" alt="">
+                <img @click="psdType = 'hide'" v-else src="@/assets/images/icons/hide.png" alt="">
+            </div>
+        </div>
+        <div class="wran-tips">
+            <div class="flex">
+                <img class="mr-10" src="@/assets/images/icons/warn-red.png" alt="">
+                <p>警告：切勿泄漏此私钥</p>
+            </div>
+            <p class="mt-5">任何人拥有您的私钥都可以窃取您账户中持有的任何资产！</p>
+        </div>
+        <div class="footer-btn flex">
+            <p class="close" @click="accountOperate = 'show'">取消</p>
+            <p class="confirm" @click="confirmPsd">确认</p>
+        </div>
+    </div>
+
+    <!-- 获取私钥 -->
+    <div v-if="accountOperate == 'privateKey'" class="private-key">
+        <div class="private-key-content">
+            <p>{{nowAccount?.userName}}的私钥：</p>
+            <div class="copy-key flex">
+                <p class="mb-10">{{privateKey}}</p>
+                <img @click="onCopy(privateKey)" class="ml-15" src="@/assets/images/icons/copy.png" alt="">
+            </div>
+        </div>
+        <div class="wran-tips">
+            <div class="flex">
+                <img class="mr-10" src="@/assets/images/icons/warn-red.png" alt="">
+                <p>警告：切勿泄漏此私钥</p>
+            </div>
+            <p class="mt-5">任何人拥有您的私钥都可以窃取您账户中持有的任何资产！</p>
+        </div>
+        <!-- <div class="footer-btn flex">
+            <p class="confirm confirm-key" @click="confirmPsd">确认</p>
+        </div> -->
+    </div>
+</div>
