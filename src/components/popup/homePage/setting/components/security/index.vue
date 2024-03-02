@@ -5,7 +5,6 @@ import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB';
 import { Decrypt,evmKey } from '@/utils/index.js';
 import {createMnemonic,createWallet} from "@/utils/createUser"
-import {editContent} from "@/utils/editContent"
 import privateKey from "./components/privateKey/index.vue"
 import mnemonicPhrase from "./components/mnemonicPhrase/index.vue"
 import revisePassword from "./components/revisePassword/index.vue"

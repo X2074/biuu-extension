@@ -121,5 +121,8 @@
     },
     "src/components/popup/homePage/setting/components/security/components/revisePassword": {
         "description": "修改密码"
+    },
+    "src/components/popup/homePage/selectAccount/ImportWallt": {
+        "description": "导入钱包"
     }
 }
