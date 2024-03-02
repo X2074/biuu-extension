@@ -10,6 +10,7 @@ let psdText = ref('')
 let passKey = ref('')
 // 修改密码
 // 密码
+let psdOldText = ref('')
 let psdNewText = ref('')
 let psdConText = ref('')
 // 是否显示明文
@@ -23,6 +24,14 @@ onMounted(async()=>{
 })
 // 修改密码
 const restoreWallet = async()=>{
+    if(!psdOldText.value || psdOldText.value.length < 8){
+        bus.emit('promptModalErr','请输入8位数密码')
+        return;
+    }
+    if(md5(psdOldText.value) != passKey.value){
+        bus.emit('promptModalErr','您输入的原密码有误')
+        return;
+    }
     if(!psdNewText.value || psdNewText.value.length < 8){
         bus.emit('promptModalErr','请输入8位数密码')
         return;
@@ -57,6 +66,10 @@ const restoreWallet = async()=>{
     console.log(data,'datadata');
     bus.emit('promptModalSuccess','密码修改成功')
     bus.emit('settingPage','options')
+}
+// 取消，回到安全问答选择页面
+const toBackSecurity = ()=>{
+    bus.emit('securityPage','')
 }
 </script>
 <style lang="scss">

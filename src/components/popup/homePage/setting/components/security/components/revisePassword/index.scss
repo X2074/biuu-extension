@@ -1,8 +1,30 @@
-.forget-password {
+.revise-password {
     position: relative;
     padding: 0 16px;
-    height: 420px;
+    height: 470px;
 
+
+
+    .revise-prompt {
+        border-radius: 8px;
+        background: rgba(255, 72, 160, 0.1);
+        width: 100%;
+        padding: 8px 16px;
+        align-items: flex-start;
+        justify-content: space-between;
+
+        img {
+            width: 16px;
+            height: 16px;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 20px;
+            color: rgba(255, 72, 160, 1);
+            text-align: left;
+        }
+    }
 
     button {
         display: block;
@@ -56,51 +78,24 @@
         text-align: left;
     }
 
-    .header {
-        padding: 24px 0;
-
-        img {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-        }
-    }
-
-    .forget-title {
-        font-size: 28px;
-        line-height: 30px;
-    }
-
     .txt {
         font-size: 14px;
         line-height: 22px;
         color: rgba(84, 84, 84, 1);
     }
 
-    .phrase-input {
-        width: 100% !important;
-        height: 170px !important;
-        background: transparent;
-        border-radius: 8px;
-        padding: 12px;
-        font-size: 16px;
-        line-height: 20px;
-        border: 1px solid rgba(219, 219, 219, 1);
-        resize: none
-    }
-
-    .mnemonic-phrase {
+    .confirm-password {
         position: absolute;
-        background-color: rgba(177, 218, 90, 1);
+        background-color: rgba(177, 218, 90, 0.3);
         bottom: 30px;
         font-size: 16px;
         color: #fff;
         font-weight: 400;
-    }
+        cursor: no-drop;
 
-    div.text-area {
-        height: 170px;
-        padding: 0;
-        border: 0;
+        &.password-confirm {
+            background-color: rgba(177, 218, 90, 1);
+            cursor: pointer;
+        }
     }
 }

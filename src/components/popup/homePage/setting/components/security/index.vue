@@ -8,7 +8,7 @@ import {createMnemonic,createWallet} from "@/utils/createUser"
 import {editContent} from "@/utils/editContent"
 import privateKey from "./components/privateKey/index.vue"
 import mnemonicPhrase from "./components/mnemonicPhrase/index.vue"
-import forgetPassword from "./components/forgetPassword/index.vue"
+import revisePassword from "./components/revisePassword/index.vue"
 import QRCode from 'qrcodejs2-fix';
 import Web3 from 'web3'
 import md5 from 'js-md5';
@@ -69,6 +69,14 @@ const confirmPsd = async ()=>{
             accountOperate.value = "privateKey"
         })
 }
+
+// 取消，回到设置页面
+const toBack = ()=>{
+    bus.emit('settingPage','options')
+}
+bus.on('securityPage',res=>{
+    securityProcess.value = '';
+})
 </script>
 <style lang="scss">
 @import "./index.scss";

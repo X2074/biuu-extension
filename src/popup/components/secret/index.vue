@@ -72,7 +72,7 @@ const matchingWallt = ()=>{
 	})
 }
 // 恢复钱包
-const restoreWallet = ()=>{
+const restoreWallet = async()=>{
     conNewfirmPsd.value = '';
     conConfirmPsd.value = '';
     if(!psdNewText.value || psdNewText.value.length < 8){

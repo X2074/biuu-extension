@@ -1,3 +1,7 @@
+<div @click="toBack" v-if="!securityProcess" class="header flex">
+    <img class="back-img" src="@/assets/images/icons/back.png" alt="">
+    <p>钱包安全</p>
+</div>
 <div class="security-qa">
     <div class="home-options" v-if="!securityProcess">
         <img class="mt-25" src="@/assets/images/icons/security.png" alt="">
@@ -5,7 +9,7 @@
         <div class="security-options">
             <p @click="securityProcess = 'mnemonicPhrase'">显示助记词</p>
             <p @click="securityProcess = 'privateKey'">显示私钥</p>
-            <p @click="securityProcess = 'forgetPassword'">修改密码</p>
+            <p @click="securityProcess = 'revisePassword'">修改密码</p>
         </div>
     </div>
     <!-- 私钥 -->
@@ -13,5 +17,5 @@
     <!-- 助记词 -->
     <mnemonicPhrase v-if="securityProcess == 'mnemonicPhrase'" :address="currentWalltAddress.address" />
     <!-- 修改密码 -->
-    <forgetPassword v-if="securityProcess == 'forgetPassword'" />
+    <revisePassword v-if="securityProcess == 'revisePassword'" />
 </div>

@@ -30,3 +30,31 @@ bus.on('settingPage',res=>{
     settingStep.value = res;
 })
 </script>
+<style lang="scss">
+.setting {
+    .header {
+        align-items: center;
+        position: relative;
+        height: 56px;
+        padding: 0 14px;
+        padding-left: 40px;
+        cursor: pointer;
+
+        img {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            position: absolute;
+            left: 14px;
+            top: 18px;
+            cursor: pointer;
+        }
+
+        p {
+            font-size: 16px;
+            cursor: pointer;
+        }
+    }
+}
+
+</style>

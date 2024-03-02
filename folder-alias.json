@@ -112,5 +112,14 @@
     },
     "src/components/popup/homePage/setting/components/security/components/forgetPassword": {
         "description": "修改密码"
+    },
+    "src/components/popup/homePage/selectAccount/createWallt": {
+        "description": "创建钱包"
+    },
+    "src/components/popup/homePage/setting/components/addressBook": {
+        "description": "地址簿"
+    },
+    "src/components/popup/homePage/setting/components/security/components/revisePassword": {
+        "description": "修改密码"
     }
 }

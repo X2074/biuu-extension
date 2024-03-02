@@ -67,6 +67,7 @@ const UtxoEvmKey = () => {
             address: walltInfo.value.address,
             userName: 'Wallt 01',
             userUrl: '',
+            keystore:walltInfo.value.keystore,
             NoIndex: 1//当前第几个用户
         }
         indexDbData.putData(Object.assign({id:'currentWalltAddress'},content))
@@ -75,6 +76,7 @@ const UtxoEvmKey = () => {
             "unit": "Meer",
             "netName":"Qitmeer Testnet",
             "CHAIN_ID": 8131,
+            keystore:walltInfo.value.keystore,
             "url": "https://testnet-qng.rpc.qitmeer.io",
             "walltInfo": []
         }
@@ -107,6 +109,7 @@ const evmNetwork = () => {
         Object.keys(res.content).forEach((item, index) => {
             res.content[item].walltInfo.push({
                 address: walltInfo.value.address, //当前用户地址
+                keystore:walltInfo.value.keystore,
                 userName: '',
                 userUrl: '',
                 NoIndex: index + 1//当前第几个用户
@@ -140,6 +143,7 @@ const utxoNetwork = () => {
         Object.keys(res.content).forEach((item, index) => {
             res.content[item].walltInfo.push({
                 address: walltInfo.value.utxoAddressTest, //当前用户地址
+                keystore:walltInfo.value.keystore,
                 userName: '',
                 userUrl: '',
                 NoIndex: index + 1//当前第几个用户

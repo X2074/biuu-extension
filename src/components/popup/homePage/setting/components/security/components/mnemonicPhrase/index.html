@@ -1,3 +1,7 @@
+<div @click="toBackSecurity" class="header flex">
+    <img class="back-img" src="@/assets/images/icons/back.png" alt="">
+    <p>显示助记词</p>
+</div>
 <div class="mnemonic-phrase" v-loading:[loadingText]="loading">
     <div class="mnemonic-tip" v-if="processSteps == 'home'">
         <p class="title mt-40">安全问答</p>

@@ -103,6 +103,10 @@ const confirmPsd = async ()=>{
         accountOperate.value = "privateKey"
     })
 }
+// 取消，回到安全问答选择页面
+const toBack = ()=>{
+    bus.emit('securityPage','')
+}
 </script>
 <style lang="scss">
 @import "./index.scss";

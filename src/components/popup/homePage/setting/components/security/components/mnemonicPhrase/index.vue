@@ -108,6 +108,10 @@ const toBack = ()=>{
     bus.emit('settingPage','options')
 }
 
+// 取消，回到安全问答选择页面
+const toBackSecurity = ()=>{
+    bus.emit('securityPage','')
+}
 const qrCodeShow = ()=>{
     mnemonicStyle.value = 'qrcode';
     new QRCode(qrCodeDiv.value, {

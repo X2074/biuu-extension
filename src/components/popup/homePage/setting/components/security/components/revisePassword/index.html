@@ -1,0 +1,31 @@
+<div @click="toBackSecurity" class="header flex">
+    <img class="back-img" src="@/assets/images/icons/back.png" alt="">
+    <p>修改密码</p>
+</div>
+<div class="revise-password">
+    <div class="revise-prompt flex">
+        <img class="mr-10 mt-5" src="@/assets/images/icons/warn-red.png" alt="">
+        <p>为了您的隐私安全，Web3 钱包不会储存您的钱包密码，请务必妥善保管。</p>
+    </div>
+    <p class="psd-title mt-20">原密码</p>
+    <div class="input-psd mt-5 flex">
+        <input v-model="psdOldText" type="password" placeholder="至少8个字符。">
+        <!-- <img v-if="textNewPsd == 'text'" @click="textNewPsd = 'psd'" src="@/assets/images/icons/hide.png" alt="">
+        <img v-if="textNewPsd == 'psd'" @click="textNewPsd = 'text'" src="@/assets/images/icons/show.png" alt=""> -->
+    </div>
+    <p class="psd-title mt-20">新密码</p>
+    <div class="input-psd mt-5 flex">
+        <input v-model="psdNewText" type="password" placeholder="至少8个字符。">
+        <!-- <img v-if="textNewPsd == 'text'" @click="textNewPsd = 'psd'" src="@/assets/images/icons/hide.png" alt="">
+        <img v-if="textNewPsd == 'psd'" @click="textNewPsd = 'text'" src="@/assets/images/icons/show.png" alt=""> -->
+    </div>
+    <p class="psd-title mt-20">确认密码</p>
+    <div class="input-psd mt-5 flex">
+        <input v-model="psdConText" type="password" placeholder="至少8个字符。">
+        <!-- <img v-if="textConPsd == 'text'" @click="textConPsd = 'psd'" src="@/assets/images/icons/hide.png" alt="">
+        <img v-if="textConPsd == 'psd'" @click="textConPsd = 'text'" src="@/assets/images/icons/show.png" alt=""> -->
+    </div>
+
+    <button :class="psdOldText && psdNewText && psdConText && psdNewText == psdConText ? 'password-confirm' : ''"
+        class="confirm-password margin-auto mt-20" @click="restoreWallet">确认</button>
+</div>
