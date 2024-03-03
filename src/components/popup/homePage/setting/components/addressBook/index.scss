@@ -1,0 +1,103 @@
+.address-book {
+    .address-content {
+        padding: 10px 16px;
+
+        .address-header {
+            width: 100%;
+            height: 48px;
+            border-radius: 8px;
+            padding: 12px 16px;
+            border: 1px solid rgba(217, 217, 217, 1);
+            align-items: center;
+
+            img {
+                width: 24px;
+                height: 24px;
+            }
+
+            input {
+                font-size: 16px;
+                line-height: 20px;
+                color: #000;
+                border: 0;
+            }
+        }
+
+        .address-empty {
+            margin-top: 50px;
+            text-align: center;
+
+            img {
+                width: 108px;
+                height: auto;
+            }
+
+            p {
+                font-size: 16px;
+                line-height: 20px;
+                color: rgba(90, 90, 90, 1);
+                text-align: center;
+            }
+        }
+
+        .add-address {
+            width: 330px;
+            height: 48px;
+            border-radius: 30px;
+            background: rgba(177, 218, 90, 1);
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            margin-left: -165px;
+            cursor: pointer;
+
+            img {
+                width: 24px;
+                height: 24px;
+                cursor: pointer;
+            }
+
+            p {
+                font-size: 14px;
+                font-weight: 500;
+                color: #000;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .address-list {
+        ul {
+            height: 320px;
+            margin-left: -16px;
+            margin-right: -16px;
+            overflow-y: auto;
+
+            li {
+                align-items: center;
+                height: 64px;
+                padding: 0 16px;
+                border-bottom: 1px solid rgba(177, 218, 90, 0.3);
+
+                .list-content {
+                    .name {
+                        font-size: 16px;
+                        font-weight: 500;
+                        color: #000;
+                        line-height: 20px;
+                    }
+
+                    .address {
+                        font-size: 14px;
+                        font-weight: 400;
+                        line-height: 16px;
+                        color: rgba(146, 146, 146, 1);
+                    }
+                }
+            }
+        }
+    }
+
+}

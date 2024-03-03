@@ -124,5 +124,14 @@
     },
     "src/components/popup/homePage/selectAccount/ImportWallt": {
         "description": "导入钱包"
+    },
+    "src/components/popup/homePage/setting/components/addressBook/components/addressList": {
+        "description": "地址簿列表、详情"
+    },
+    "src/components/popup/homePage/setting/components/addressBook/components/addressAppend": {
+        "description": "添加地址"
+    },
+    "src/components/popup/homePage/setting/components/addressBook/components/addressDetail": {
+        "description": "地址详情"
     }
 }

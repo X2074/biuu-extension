@@ -1,0 +1,40 @@
+<div @click="toBack" v-if="addressBookPage != 'addressDetail'" class="header flex">
+    <img class="back-img" src="@/assets/images/icons/back.png" alt="">
+    <p>地址簿</p>
+</div>
+<div @click="addressBookPage = 'list'" v-if="addressBookPage == 'addressDetail'" class="header flex">
+    <img class="back-img" src="@/assets/images/icons/back.png" alt="">
+    <p>详细信息</p>
+</div>
+<div class="address-book" v-loading:[loadingText]="loading">
+    <!-- 列表 -->
+    <div class="address-content" v-if="addressBookPage == 'list'">
+        <div class="address-header flex">
+            <img src="@/assets/images/icons/search.png" alt="">
+            <input class="ml-15" v-model="searchAddress" placeholder="搜索联系人、地址" type="text">
+        </div>
+        <div class="address-empty" v-if="!addressList || !addressList.length">
+            <img src="@/assets/images/icons/empty.png" alt="">
+            <p class="mt-25">暂无地址</p>
+        </div>
+        <div class="address-list" v-else>
+            <ul class="mt-15">
+                <li class="flex" v-for="item in addressList" @click="checkAddress(item)">
+                    <jazzicon :address="item.address" :diameter="36" />
+                    <div class="list-content ml-10">
+                        <p class="name">{{item.name}}</p>
+                        <p class="address">{{item.address.substr(0,4)}}...{{item.address.substr(-4)}}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="add-address flex" @click="addressBookPage = 'addressAppend'">
+            <img src="@/assets/images/icons/add.png" alt="">
+            <p class="ml-10">添加地址</p>
+        </div>
+    </div>
+    <!-- 新增 -->
+    <addressAppend v-if="addressBookPage == 'addressAppend'" />
+    <!-- 详情 -->
+    <addressDetail v-if="addressBookPage == 'addressDetail'" :detail="detail" />
+</div>

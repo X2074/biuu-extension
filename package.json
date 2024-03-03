@@ -31,6 +31,7 @@
     "qrcodejs2": "^0.0.2",
     "qrcodejs2-fix": "^0.0.1",
     "tiny-secp256k1": "^1.1.6",
+    "uuid": "^9.0.1",
     "vite-plugin-node-stdlib-browser": "^0.2.1",
     "vue": "^3.3.11",
     "vue3-jazzicon": "^0.1.4",

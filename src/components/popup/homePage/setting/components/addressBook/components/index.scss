@@ -1,0 +1,37 @@
+.address-append {
+    padding: 10px 16px;
+
+    p {
+        font-size: 14px;
+        color: #000;
+        line-height: 20px;
+    }
+
+    input {
+        width: 100%;
+        height: 48px;
+        border-radius: 8px;
+        border: 1px solid rgba(217, 217, 217, 1);
+        padding: 14px 16px;
+        font-size: 16px;
+    }
+
+    button {
+        width: 330px;
+        height: 48px;
+        border-radius: 30px;
+        background: rgba(177, 218, 90, 1);
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        bottom: 25px;
+        left: 50%;
+        margin-left: -165px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #000;
+        text-align: center;
+        cursor: pointer;
+        border: 0;
+    }
+}

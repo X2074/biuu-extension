@@ -6,6 +6,7 @@ import qitmeer from 'qitmeer-js'
 import ethUtil from 'ethereumjs-util'
 import bip39 from 'bip39'
 import eip55 from 'eip55'
+import { v4 as uuidv4 } from 'uuid';
 // 使用最新版本浏览器不支持，只能使用1.x版本替换
 import ecc from 'tiny-secp256k1'
 import { BIP32Factory } from 'bip32'
@@ -64,7 +65,7 @@ export async function createWallet(mnemonic) {
             privateKey: privateKeyHex, //私钥
             publicKey: publicKeyHex, //公钥
             address: address, //钱包地址
-            keystore: address, //钱包的对象名
+            keystore: uuidv4(), //钱包的对象名
             utxoRootPrivateKey: rootPrivateKey, //私钥
             utxoRootPublicKey: rootPublicKey, //公钥
             utxoAddressTest: p2pkhAddressTest, //UTXO测试网地址

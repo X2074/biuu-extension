@@ -1,0 +1,31 @@
+<div class="address-append" v-if="editContent">
+    <p class="mb-15">名称</p>
+    <input v-model="name" placeholder="请输入联系人名称" maxlength="20" type="text">
+    <p class="mt-15 mb-10">地址</p>
+    <input v-model="address" placeholder="请输入联系人地址" maxlength="50" type="text">
+    <button @click="editAddress">确认</button>
+</div>
+
+<div class="address-detail" v-else>
+    <ul class="mt-15" v-if="detail">
+        <li class="flex">
+            <jazzicon :address="detail.address" :diameter="36" />
+            <div class="list-content ml-10">
+                <p class="name">{{detail.name}}</p>
+                <p class="address">{{detail.address.substr(0,4)}}...{{detail.address.substr(-4)}}</p>
+            </div>
+        </li>
+    </ul>
+    <div class="evm-address mt-15" v-if="detail">
+        <p class="mb-15">以太坊公共地址：</p>
+        <div class="address-copy flex">
+            <p>{{detail.address}}</p>
+            <img @click="onCopy" src="@/assets/images/icons/copy.png" alt="">
+        </div>
+    </div>
+    <button @click="editContent = true">编辑</button>
+    <div class="add-address flex" @click="addAddressBook">
+        <img src="@/assets/images/icons/add.png" alt="">
+        <p class="ml-10">添加地址</p>
+    </div>
+</div>

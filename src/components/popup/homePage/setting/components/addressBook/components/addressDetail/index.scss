@@ -1,0 +1,103 @@
+.address-detail {
+    ul {
+        overflow-y: auto;
+
+        li {
+            align-items: center;
+            height: 64px;
+            padding: 0 16px;
+            border-bottom: 1px solid rgba(177, 218, 90, 0.3);
+
+            .list-content {
+                .name {
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: #000;
+                    line-height: 20px;
+                }
+
+                .address {
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 16px;
+                    color: rgba(146, 146, 146, 1);
+                }
+            }
+        }
+    }
+
+    .evm-address {
+        padding: 0 16px;
+
+        >p {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            color: #000;
+        }
+
+        .address-copy {
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 1);
+            padding: 10px 16px;
+
+            p {
+                font-size: 14px;
+                line-height: 20px;
+                color: #000;
+                width: 260px;
+                word-wrap: break-word;
+            }
+
+            img {
+                width: 16px;
+                height: 16px;
+                cursor: pointer;
+            }
+        }
+    }
+
+    button {
+        width: 330px;
+        height: 48px;
+        margin: 15px auto 0;
+        border-radius: 30px;
+        border: 1px solid rgba(177, 218, 90, 1);
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 1);
+        cursor: pointer;
+        display: block;
+    }
+
+    .add-address {
+        width: 330px;
+        height: 48px;
+        border-radius: 30px;
+        background: rgba(177, 218, 90, 1);
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        bottom: 25px;
+        left: 50%;
+        margin-left: -165px;
+        cursor: pointer;
+
+        img {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        p {
+            font-size: 14px;
+            font-weight: 500;
+            color: #000;
+            cursor: pointer;
+        }
+    }
+}

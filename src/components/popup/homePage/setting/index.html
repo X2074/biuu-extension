@@ -20,7 +20,7 @@
             <img class="mr-10" src="@/assets/images/icons/safe.png" alt="">
             <p>钱包安全</p>
         </li>
-        <li class="flex">
+        <li class="flex" @click="settingStep = 'addressBook'">
             <img class="mr-10" src="@/assets/images/icons/contacts.png" alt="">
             <p>地址簿</p>
         </li>
@@ -41,4 +41,6 @@
     <!-- <privateKey v-if="settingStep == 'privateKey'" :address="currentWalltAddress.address" /> -->
     <!-- 安全问答 -->
     <security v-if="settingStep == 'security'" />
+    <!-- 地址簿 -->
+    <addressBook v-if="settingStep == 'addressBook'" />
 </div>

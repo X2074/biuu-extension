@@ -19,7 +19,7 @@
 │   │    ├── loading                              全局loading指令
 │   │    └── popup                                popup组件
 │   │        ├── components  
-│   │        │   ├── prompt                       全局提示弹框         
+│   │        │    ├── prompt                       全局提示弹框         
 │   │        ├── homePage                         主页面中的组件         
 │   │        │    ├── selectAccount               选择钱包管理的页面         
 │   │        │    │     ├── createWallt           创建钱包        
