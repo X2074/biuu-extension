@@ -24,6 +24,18 @@ const props = defineProps(['address'])
 let rpcData = ref(null)
 onMounted(() => {
     initializeInfo()
+    
+    nextTick(()=>{
+        // 第一次创建，后面不再创建
+        new QRCode(qrCodeDiv.value, {
+            text: props.address,
+            width: 200,
+            height: 200,
+            colorDark: "#333333", //二维码颜色
+            colorLight: "#ffffff", //二维码背景色
+            correctLevel: QRCode.CorrectLevel.L//容错率，L/M/H
+        })
+    })
 })
 // 数据初始化 
 const initializeInfo = ()=>{
@@ -32,15 +44,6 @@ const initializeInfo = ()=>{
 		passKey.value = res.secret;
 	}).catch(err => { })
     console.log(props,'qrCodeDiv.value');
-    
-    new QRCode(qrCodeDiv.value, {
-        text: props.address,
-        width: 200,
-        height: 200,
-        colorDark: "#333333", //二维码颜色
-        colorLight: "#ffffff", //二维码背景色
-        correctLevel: QRCode.CorrectLevel.L//容错率，L/M/H
-    })
     // 存为当前展示的钱包数据
     // indexDbData.getData('currentWalltAddress').then(res => {
     //     nowAccount.value = res;
