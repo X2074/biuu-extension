@@ -1,0 +1,16 @@
+<div class="private-phrase">
+    <p class="title">导入私钥</p>
+    <p class="text mt-10">支持所有私钥格式。</p>
+    <div class="evm-utxo">
+        <p>请选择要导入的网络</p>
+        <div class="flex">
+            <p :class="{'check-module':moduleType == 'evm'}" @click="moduleType = 'evm'">EVM</p>
+            <p :class="{'check-module':moduleType == 'utxo'}" @click="moduleType = 'utxo'">UTXO</p>
+        </div>
+    </div>
+    <div class="phrase-input mt-30">
+        <textarea :class="{'input-err':privatePhraseErr}" placeholder="请在此处输入您的私钥。" v-model="privatePhrase"></textarea>
+        <p class="mt-10">{{privatePhraseErr}}</p>
+    </div>
+    <button :class="privatePhrase?'confirm-btn':''" @click="privatePrivateConfirm">确认</button>
+</div>

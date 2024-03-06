@@ -6,6 +6,7 @@ import indexDbData from '@/utils/indexDB';
 import { Encrypt, Decrypt } from '@/utils/index.js';
 import {createMnemonic,createWallet} from "@/utils/createUser"
 import showPrivateKey from '../showPrivateKey/index.vue'
+import importWallet from '../../../components/importWallet/index.vue'
 import deleteWallt from '../deleteWallt/index.vue'
 import Web3 from 'web3'
 import md5 from 'js-md5';
@@ -64,6 +65,10 @@ const getBlances = async (data)=>{
         balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
         accountList.value[i]['balance'] = balance;
     }
+}
+// 导入账户
+const importAccount = ()=>{
+
 }
 // 创建账号
 const createAccount = async ()=>{
@@ -138,7 +143,8 @@ const utxoNetwork = (data) => {
     indexDbData.getData('UTXO').then(res => {
         Object.keys(res.content).forEach((item, index) => {
             res.content[item].walltInfo.push({
-                address: data.utxoAddressTest, //当前用户地址
+                utxoAddressTest: data.utxoAddressTest, //当前用户测试地址
+                address: data.utxoAddressMain, //当前用户地址
                 userName: 'Wallt' + (item.NoIndex + 1 > 10 ? item.NoIndex + 1 : '0' + (item.NoIndex + 1)),
                 userUrl: '',
                 keystore:data['keystore'],
@@ -170,8 +176,9 @@ const checkAccount = ()=>{
         return;
     }
     console.log(dbData,'data[0]');
-    
-    indexDbData.putData(dbData[0]);
+    let currentWallt = dbData[0];
+    currentWallt['id'] = 'currentWalltAddress'
+    indexDbData.putData(currentWallt);
     setTimeout(()=>{
         bus.emit('nextPage','homePage')
     },300)

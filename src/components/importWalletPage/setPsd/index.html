@@ -1,0 +1,24 @@
+<div class="new-mnemonic margin-auto">
+    <p class="title">创建密码</p>
+    <p class="text mt-10">为保护您的隐私，MetaX 不会存储您的钱包信息，请妥善保管您的密码。</p>
+    <div class="set-password mt-40">
+        <div class="new">
+            <p>Password</p>
+            <input class="mt-5" type="password" maxlength="16" v-model="newPsd">
+            <span v-if="newPsdBol">请输入至少 8 位密码</span>
+        </div>
+        <div class="confirm mt-25" v-show="newPsd && newPsd.length >= 8">
+            <p>Confirm</p>
+            <input class="mt-5" type="password" maxlength="16" v-model="confirmPsd">
+            <span v-if="confirmPsdBol">输入的密码不一致</span>
+        </div>
+    </div>
+    <div class="import" :class="newPsd >= 8 && newPsd == confirmPsd ?'confirm':''">
+        <div class="service-tips mb-15 flex">
+            <i :class="readeTip?'check':''" @click="readeTip = !readeTip"></i>
+            <p class="ml-10">点击确认表示同意BIuu的<font>服务条款</font>
+            </p>
+        </div>
+        <button @click="creatKeyStory">Confirm</button>
+    </div>
+</div>

@@ -62,11 +62,11 @@ export async function createWallet(mnemonic) {
         return {
             mnemonicArray: mnemonicArray,
             mnemonic: mnemonic, //助记词
-            privateKey: privateKeyHex, //私钥
+            // privateKey: privateKeyHex, //私钥
             publicKey: publicKeyHex, //公钥
             address: address, //钱包地址
             keystore: uuidv4(), //钱包的对象名
-            utxoRootPrivateKey: rootPrivateKey, //私钥
+            // utxoRootPrivateKey: rootPrivateKey, //私钥
             utxoRootPublicKey: rootPublicKey, //公钥
             utxoAddressTest: p2pkhAddressTest, //UTXO测试网地址
             utxoAddressMain: p2pkhAddressMain, //UTXO正式网地址

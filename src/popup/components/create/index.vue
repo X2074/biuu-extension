@@ -18,7 +18,7 @@ const toCreate = (res) => {
     //     window.close();
     //     console.log('打开新页面')
     //   })
-    bus.emit('nextPage','creasteWalletPage')
+    bus.emit('nextPage',res)
     // if (!googleId.value) return;
     // localStorage.setItem('googleId', googleId.value)
     // window.open('chrome-extension://' + googleId.value + '/components/creasteWalletPage/index.html')

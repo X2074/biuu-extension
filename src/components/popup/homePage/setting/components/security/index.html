@@ -7,7 +7,8 @@
         <img class="mt-25" src="@/assets/images/icons/security.png" alt="">
         <p class="mt-10 mb-30">安全</p>
         <div class="security-options">
-            <p @click="securityProcess = 'mnemonicPhrase'">显示助记词</p>
+            <p v-if="currentWalltAddress && !currentWalltAddress.keyStoreType"
+                @click="securityProcess = 'mnemonicPhrase'">显示助记词</p>
             <p @click="securityProcess = 'privateKey'">显示私钥</p>
             <p @click="securityProcess = 'revisePassword'">修改密码</p>
         </div>

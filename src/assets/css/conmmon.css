@@ -143,3 +143,8 @@ html {
 input,textarea{
 	outline: none;
 }
+
+button{
+    border:0;
+    text-align: center;
+}

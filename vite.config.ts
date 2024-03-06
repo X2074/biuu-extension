@@ -33,6 +33,7 @@ export default defineConfig({
         contentPage: path.resolve(__dirname, 'src/contentPage/index.html'),
         indexPage: path.resolve(__dirname, 'src/components/indexPage/index.html'),
         creasteWalletPage: path.resolve(__dirname, 'src/components/creasteWalletPage/index.html'),
+        importWalletPage: path.resolve(__dirname, 'src/components/importWalletPage/index.html'),
         // content: path.resolve(__dirname, 'src/content/content.js'),
         background: path.resolve(__dirname, 'src/background/service-worker.ts'),
       },

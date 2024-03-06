@@ -1,4 +1,4 @@
-<div class="home-page">
+<div class="home-page" v-loading:[loadingText]="loading">
     <div class="user-type flex">
         <div class="select flex">
             <p>{{walltEnvironment?.netName}}</p>
@@ -19,7 +19,7 @@
                         <img class="mr-10" src="@/assets/images/icons/explorer.png" alt="">
                         <p>View on explorer</p>
                     </div>
-                    <div class="option flex">
+                    <div class="option flex" @click="walltAccount = 'networkSwitching'">
                         <img class="mr-10" src="@/assets/images/icons/netWork.png" alt="">
                         <p>已连接的网络</p>
                     </div>
@@ -74,3 +74,5 @@
 </div>
 <selectAccount v-if="walltAccount == 'selectAccount'" :pageType="pageType" />
 <setting v-if="walltAccount == 'setting'" />
+
+<networkSwitching v-if="walltAccount == 'networkSwitching'" />

@@ -1,0 +1,16 @@
+<div class="network-switching" v-loading:[loadingText]="loading">
+    <div class="header flex" @click="toBack('homePage')" v-if="settingStep == 'options'">
+        <img class="back-img" src="@/assets/images/icons/back.png" alt="">
+        <p>网络切换</p>
+    </div>
+    <div class="model-list flex" v-if="!loading">
+        <ul>
+            <p>EVM</p>
+            <li v-for="item in networkModel['evm'].content" @click="rpcChange(item,'evm')">{{item.netName}}</li>
+        </ul>
+        <ul>
+            <p>UTXO</p>
+            <li v-for="item in networkModel['utxo'].content" @click="rpcChange(item,'utxo')">{{item.netName}}</li>
+        </ul>
+    </div>
+</div>

@@ -6,6 +6,7 @@ import indexDbData from '../../../utils/indexDB.js';
 import bus from '../../../utils/bus.js';
 import { Encrypt, Decrypt } from '../../../utils/index.js';
 import md5 from 'js-md5';
+import { v4 as uuidv4 } from 'uuid';
 // 预制网络
 import netWork from '../../../utils/netWork.json'
 import CryptoJS from 'crypto-js'; //引用AES源码js
@@ -51,9 +52,12 @@ const creatKeyStory = () => {
 const UtxoEvmKey = () => {
     let ciphertext = Encrypt(walltInfo.value.mnemonic, passKey.value);
     console.log(ciphertext, '加密后的数据');
+    let cipher = [];
+    // 此处即是第一次创建，所以直接给数组0
+    cipher[0][uuidv4()] = ciphertext;
     indexDbData.putData({
         id: 'keyStore',
-        secret: ciphertext
+        secret: cipher
     })
     // 存为当前展示的钱包数据
     indexDbData.getData('currentWalltAddress').then(res => {
@@ -61,7 +65,7 @@ const UtxoEvmKey = () => {
         if (!res) {
             indexDbData.putData({
                 id: 'currentWalltAddress',
-                userName: '',
+                userName: 'Wallt 01',
                 userUrl: '',
                 address: walltInfo.value.address,
                 NoIndex: 1
@@ -70,7 +74,7 @@ const UtxoEvmKey = () => {
             indexDbData.putData({
                 id: 'currentWalltAddress',
                 address: walltInfo.value.address,
-                userName: '',
+                userName: 'Wallt' + (!res.NoIndex ? '01' : (res.NoIndex + 1 > 10 ? res.NoIndex + 1 : '0' + (res.NoIndex + 1))),
                 userUrl: '',
                 NoIndex: res.NoIndex + 1//当前第几个用户
             })
@@ -102,7 +106,7 @@ const evmNetwork = () => {
         Object.keys(res.content).forEach((item, index) => {
             res.content[item].walltInfo.push({
                 address: walltInfo.value.address, //当前用户地址
-                userName: '',
+                userName: 'Wallt 01',
                 userUrl: '',
                 NoIndex: index + 1//当前第几个用户
             })
@@ -135,7 +139,7 @@ const utxoNetwork = () => {
         Object.keys(res.content).forEach((item, index) => {
             res.content[item].walltInfo.push({
                 address: walltInfo.value.utxoAddressTest, //当前用户地址
-                userName: '',
+                userName: 'Wallt 01',
                 userUrl: '',
                 NoIndex: index + 1//当前第几个用户
             })

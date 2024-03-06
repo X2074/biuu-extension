@@ -73,12 +73,13 @@ const UtxoEvmKey = () => {
         indexDbData.putData(Object.assign({id:'currentWalltAddress'},content))
         let info = {
             id:'rpc_url',
-            "unit": "Meer",
-            "netName":"Qitmeer Testnet",
-            "CHAIN_ID": 8131,
+            unit: "Meer",
+            netName:"Qitmeer Testnet",
+            CHAIN_ID: 8131,
             keystore:walltInfo.value.keystore,
-            "url": "https://testnet-qng.rpc.qitmeer.io",
-            "walltInfo": []
+            type: 'EVM',
+            url: "https://testnet-qng.rpc.qitmeer.io",
+            walltInfo: []
         }
         info['walltInfo'].push(content);
         indexDbData.putData(info)
@@ -92,13 +93,6 @@ const evmNetwork = () => {
         if (!res || !res.content) {
             res.content['8031'] = netWork.EVM['8031'];
             res.content['97'] = netWork.EVM['97'];
-            indexDbData.putData({
-                id: 'rpc_url',
-                unit: 'BNB',
-                CHAIN_ID: 97,
-                type: 'EVM',
-                url: 'https://data-seed-prebsc-1-s2.binance.org:8545/'
-            })
         }
         let chainId = Object.keys(res.content)
         Object.keys(netWork.EVM).forEach(item => {
@@ -110,7 +104,7 @@ const evmNetwork = () => {
             res.content[item].walltInfo.push({
                 address: walltInfo.value.address, //当前用户地址
                 keystore:walltInfo.value.keystore,
-                userName: '',
+                userName: 'Wallt 01',
                 userUrl: '',
                 NoIndex: index + 1//当前第几个用户
             })
@@ -142,9 +136,10 @@ const utxoNetwork = () => {
         })
         Object.keys(res.content).forEach((item, index) => {
             res.content[item].walltInfo.push({
-                address: walltInfo.value.utxoAddressTest, //当前用户地址
+                utxoAddressTest: walltInfo.value.utxoAddressTest, //当前用户测试地址
+                address: walltInfo.value.utxoAddressMain, //当前用户地址
                 keystore:walltInfo.value.keystore,
-                userName: '',
+                userName: 'Wallt 01',
                 userUrl: '',
                 NoIndex: index + 1//当前第几个用户
             })
@@ -181,9 +176,6 @@ const apendContent = () => {
         }
         mnemonicList.value.push(data)
     }
-}
-const onPage = () => {
-    bus.emit('nextPage', 'createMnemonic')
 }
 </script>
 <style lang='scss'>

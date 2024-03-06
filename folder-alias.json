@@ -133,5 +133,44 @@
     },
     "src/components/popup/homePage/setting/components/addressBook/components/addressDetail": {
         "description": "地址详情"
+    },
+    "filesStructure.md": {
+        "description": "目录结构"
+    },
+    "src/components/importWalletPage": {
+        "description": "导入钱包"
+    },
+    "src/components/importWalletPage/setPsd": {
+        "description": "设置密码"
+    },
+    "src/components/importWalletPage/importPhrase": {
+        "description": "导入助记词"
+    },
+    "src/components/importWalletPage/ImportPrivate": {
+        "description": "导入私钥"
+    },
+    "src/components/popup/homePage/selectAccount/importWallet": {
+        "description": "导入账户"
+    },
+    "src/components/popup/homePage/selectAccount/importWalletPage": {
+        "description": "导入钱包"
+    },
+    "src/components/popup/homePage/selectAccount/importWalletPage/importPhrase": {
+        "description": "导入助记词"
+    },
+    "src/components/popup/homePage/selectAccount/importWalletPage/ImportPrivate": {
+        "description": "导入私钥"
+    },
+    "src/components/popup/components/importWallet": {
+        "description": "导入钱包"
+    },
+    "src/components/popup/homePage/networkSwitching": {
+        "description": "网络切换"
+    },
+    "src/components/popup/components/importWallet/ImportPrivate": {
+        "description": "私钥"
+    },
+    "src/components/popup/components/importWallet/importPhrase": {
+        "description": "助记词"
     }
 }

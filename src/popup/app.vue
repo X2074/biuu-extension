@@ -1,12 +1,13 @@
 <template>
 	<div class="meer-wallt" v-loading:[loadingText]="loading">
-		{{pageTypes}}
-		<!-- 输入密码页面 -->
-		<secret v-if="pageTypes == 'secret'" />
 		<!-- 首次进入 -->
 		<create v-if="pageTypes == 'create'" />
+		<!-- 输入密码页面 -->
+		<secret v-if="pageTypes == 'secret'" />
 		<!-- 创建钱包 -->
-		<creasteWalletPage v-if="pageTypes == 'creasteWalletPage'" />
+		<creasteWalletPage v-if="pageTypes == 'creasteWallet'" />
+		<!-- 导入钱包 -->
+		<importWallet v-if="pageTypes == 'importWallet'" />
 		<!-- 输入密码 -->
 		<loginwallt v-if="pageTypes == 'login'" />
 		<!-- 主页 -->
@@ -29,6 +30,7 @@ import loginwallt from './components/loginwallt/index.vue'
 import create from './components/create/index.vue'
 import secret from './components/secret/index.vue'
 import creasteWalletPage from './components/creasteWalletPage/index.vue'
+import importWallet from '@/components/popup/components/importWallet/index.vue'
 import homePage from './components/homePage/index.vue'
 import headerPage from './components/header/index.vue'
 // import buyPage from './components/buyPage/index.vue'
@@ -100,8 +102,6 @@ bus.on('nextPage', (res) => {
 	}
 });
 const getBlance = (type='homePage') => {
-	console.log(111111111);
-	
 	indexDbData.getData('rpc_url').then(res => {
 		let data = res;
 		// 定义rpc

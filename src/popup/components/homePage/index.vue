@@ -6,6 +6,7 @@ import indexDbData from '@/utils/indexDB';
 import Web3 from 'web3'
 import selectAccount from "@/components/popup/homePage/selectAccount/index/index.vue"
 import setting from "@/components/popup/homePage/setting/index.vue"
+import networkSwitching from "@/components/popup/homePage/networkSwitching/index.vue"
 const transactionHash = ref(0);
 const moreShow = ref(false);
 const props = defineProps(['walltContent'])
@@ -18,19 +19,26 @@ const walltUser = ref('EVM');//选中的用户数据
 const walltEnvironment = ref({})//钱包所在的网络
 const walltAccount = ref('')
 const pageType = ref('');//当前需要展示的页面
+let loading = ref(true)
+let loadingText = ref('加载中...')
 onMounted(() => {
-	indexDbData.getData('rpc_url').then(res => {
-		if(!res) {
-			netWorkChange('EVM')
-		}else{
-			netWorkChange('EVM')
-			walltEnvironment.value = res;
-			// 定义rpc
-			web3.value = new Web3(new Web3.providers.HttpProvider(res.url));
-			getHash()
-		};
-	})
+	initialize()
 })
+// 初始化
+const initialize = async ()=>{
+	let data = await indexDbData.getData('rpc_url')
+	if(!data) {
+		netWorkChange('EVM')
+	}else{
+		// 是否有选中的模式
+		await netWorkChange(data.netType ? data.netType : 'EVM')
+		walltEnvironment.value = data;
+		// 定义rpc
+		web3.value = new Web3(new Web3.providers.HttpProvider(data.url));
+		await getHash()
+		loading.value = false;
+	};
+}
 // 交易hash
 const getHash = () => {
 	walltContent.value = JSON.parse(JSON.stringify(props.walltContent))
@@ -39,7 +47,6 @@ const getHash = () => {
 		let index = walltContent.value.txHash.length - 1;
 		let txHash = walltContent.value.txHash[index];
 		console.log(txHash, 'txHash');
-
 		toWei(txHash)
 	} else {
 		console.log(walltContent.value, 2222);
@@ -78,40 +85,13 @@ const hashDetail = () => {
 	bus.emit('nextPage', 'assetsRecording')
 }
 
-// 网络切换
+// 当前网络数据
 const netWorkChange = (type) => {
 	netWorkType.value = type;
 	indexDbData.getData(type).then(res => {
 		let data = Object.values(res.content);
 		netWorkList.value = data;
 		console.log(netWorkList.value,'netWorkList.value');
-		
-	})
-}
-// 选中的网络
-const rpcChange = async (event) => {
-	let id = event.target.value + '';
-	console.log(id, 'sadasdsad');
-	indexDbData.getData(netWorkType.value).then(res => {
-		let data = res.content[id];
-		data.type = netWorkType.value;
-		// 存储选中的网络数据
-		indexDbData.putData({
-			id: 'rpc_url',
-			content: res.content[id]
-		})
-	})
-	// 当前用户信息
-	let currentWalltAddress = await indexDbData.getData('currentWalltAddress');
-	console.log(currentWalltAddress, 'currentWalltAddress');
-	// evm数据
-	let content = await indexDbData.getData('EVM');
-	content.content[id].walltInfo = [currentWalltAddress]
-	userList.value = content.content[id].walltInfo;
-	// 选中的网络数据添加用户
-	indexDbData.putData({
-		id: 'EVM',
-		content: content.content
 	})
 }
 // 关闭更多相关页面
@@ -123,7 +103,9 @@ bus.on('closeMore', () => {
 })
 // homepage模块里面的返回按钮
 bus.on('homePageBack', (res) => {
+	loading.value = true;
 	walltAccount.value = res || '';
+	initialize()
 })
 </script>
 <style lang="scss">
