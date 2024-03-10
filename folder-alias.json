@@ -172,5 +172,14 @@
     },
     "src/components/popup/components/importWallet/importPhrase": {
         "description": "助记词"
+    },
+    "src/components/popup/homePage/nfts": {
+        "description": "nft"
+    },
+    "src/components/popup/homePage/nfts/importNfts": {
+        "description": "导入nft"
+    },
+    "src/components/popup/homePage/nfts/nftDetail": {
+        "description": "nft详情"
     }
 }

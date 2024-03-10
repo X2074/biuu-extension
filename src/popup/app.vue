@@ -42,7 +42,7 @@ import { getCookie } from '@/utils/index';
 import indexDbData from '@/utils/indexDB';
 import Web3 from 'web3'
 import bus from '@/utils/bus';
-let loading = ref(false)
+let loading = ref(true)
 let loadingText = ref('加载中...')
 const buyModal = ref(false)
 const userAddress = ref(null)
@@ -58,6 +58,7 @@ onMounted(()=>{
 	chrome.runtime.sendMessage({ action: 'getSecret' }, (response) => {
 		// 获取缓存的密码，浏览器关闭，删除缓存数据
 		if(!response.secret){
+			loading.value = false;
 			pageTypes.value = 'secret'
 		}else{
 			getInfo()
@@ -80,7 +81,6 @@ bus.on('nextPage', (res) => {
 	pageTypes.value = '';
 	let type = res;
 	if(res == 'homePage' || !res) {
-		loading.value = true;
 		// indexDbData.getData('currentWalltAddress').then(res => {
 		// 	console.log(res, 'res');
 		// 	if (!res) {

@@ -1,0 +1,15 @@
+<div class="nfts-card">
+    <div class="un-nfts">
+        <div class="import-nft flex" @click="toImport">
+            <img src="@/assets/images/icons/add.png" alt="">
+            <p class="ml-10">导入 NFT</p>
+        </div>
+        <p v-if="!nftsList" class="mt-25">还没有 NFT</p>
+    </div>
+    <div v-if="nftsList && nftsList.length" class="nft-list pt-5 mt-10 flex">
+        <div class="nft-image mb-10 flex" v-for="item in nftsList" @click="toDetail(item,nftsList)">
+            <img class="logo" src="@/assets/images/logo/logo.png" alt="">
+            <img class="nft" :src="item.image" alt="">
+        </div>
+    </div>
+</div>

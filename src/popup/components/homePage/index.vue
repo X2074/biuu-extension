@@ -7,6 +7,10 @@ import Web3 from 'web3'
 import selectAccount from "@/components/popup/homePage/selectAccount/index/index.vue"
 import setting from "@/components/popup/homePage/setting/index.vue"
 import networkSwitching from "@/components/popup/homePage/networkSwitching/index.vue"
+import importNfts from "@/components/popup/homePage/nfts/importNfts/index.vue"
+import nftDetail from "@/components/popup/homePage/nfts/nftDetail/index.vue"
+// 底部card部分
+import nftCard from "@/components/popup/homePage/nfts/nftsCard/index.vue"
 const transactionHash = ref(0);
 const moreShow = ref(false);
 const props = defineProps(['walltContent'])
@@ -21,7 +25,9 @@ const walltAccount = ref('')
 const pageType = ref('');//当前需要展示的页面
 let loading = ref(true)
 let loadingText = ref('加载中...')
-onMounted(() => {
+let tabsOption = ref('nfts');//底部tabs切换
+let nftDetails = ref(null)
+onMounted(() => { 
 	initialize()
 })
 // 初始化
@@ -94,17 +100,16 @@ const netWorkChange = (type) => {
 		console.log(netWorkList.value,'netWorkList.value');
 	})
 }
-// 关闭更多相关页面
-bus.on('modalOperate', (res) => {
-	moreShow.value = false;
-})
 bus.on('closeMore', () => {
 	moreShow.value = false;
 })
 // homepage模块里面的返回按钮
 bus.on('homePageBack', (res) => {
 	loading.value = true;
-	walltAccount.value = res || '';
+	walltAccount.value = res.page || '';
+	if(res.data && res.page == 'nftDetail'){//nft详情需要的数据
+		nftDetails.value = res.data;
+	}
 	initialize()
 })
 </script>
