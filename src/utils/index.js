@@ -165,3 +165,94 @@ function hexToBytes(hex) {
 	}
 	return bytes;
 }
+
+// 判断地址，是否合法
+export async function isAddress(address) {
+	const web3 = new Web3();
+	return web3.utils.isAddress(address);
+}
+// 交易hash的保存
+export async function saveTransaction(data, key) {
+	let hashData = {
+		blockNumber: data.blockNumber,//查询交易时间
+		blockHash: data.blockHash,//区块hash
+		transactionHash: data.transactionHash,//交易hash
+		gasUsed: data.gasUsed,//实际3使用的gas费
+	}
+	hashData = JSON.stringify(hashData);
+	// 获取当前账户
+	let currentWallt = await indexDbData.getData('currentWalltAddress');
+	// 对交易数据进行简单加密
+	// hashData = CryptoJS.AES.encrypt(hashData, currentWallt.keyStore).toString();
+	// 获取是否有hash缓存
+	let transactionData = await indexDbData.getData('transactionHash');
+	// 没有就新增
+	if (!transactionData) {
+		let hashInfo = {
+			id: "transactionHash",
+			content: {}
+		}
+		hashInfo.content[currentWallt.keyStore] = [hashData];
+		indexDbData.putData(hashInfo);
+	} else {
+		// 如果当前账户存在hash了
+		if (transactionData['content'] && transactionData['content'][currentWallt.keyStore]) {
+			transactionData['content'][currentWallt.keyStore] = transactionData['content'][currentWallt.keyStore].push(hashData)
+		} else {//如果没有就直接赋值
+			transactionData['content'][currentWallt.keyStore] = [hashData];
+		}
+		indexDbData.putData(transactionData);
+	}
+	return true;
+}
+// 更新交易hash
+export async function updateTransaction(data, key) {
+	let hashData = {
+		blockNumber: data.blockNumber,//查询交易时间
+		blockHash: data.blockHash,//区块hash
+		transactionHash: data.transactionHash,//交易hash
+		gasUsed: data.gasUsed,//实际3使用的gas费
+	}
+	hashData = JSON.stringify(hashData);
+	// 获取当前账户
+	let currentWallt = await indexDbData.getData('currentWalltAddress');
+	// hash缓存-当前hash
+	let transactionData = await indexDbData.getData('transactionHash');
+	transactionData['content'][currentWallt.keyStore] = transactionData['content'][currentWallt.keyStore].map(item => {
+		if (item.transactionHash == data.transactionHash) {
+			item.status = true;
+		}
+		return item;
+	})
+	indexDbData.putData(transactionData);
+	return true;
+}
+
+// 监听交易状态 - 后期改为组件形式，在vue内部使用
+export async function waitTransactionLogs(data, key) {
+	// 持续监听指定交易
+	const subscription = web3.eth.subscribe('logs', {
+		address: '0x接收者地址', // NFT合约地址
+		topics: [null, '0x' + data.transactionHash.substring(2)] // 通过topics过滤指定交易哈希的日志
+	}, (error, result) => {
+		if (!error) {
+			console.log('Transaction Log: ' + JSON.stringify(result));
+			// 在这里处理交易状态变化的逻辑
+		} else {
+			console.error('Error: ' + error);
+		}
+	});
+
+	// 监听订阅事件
+	subscription.on('data', (log) => {
+		console.log('Log Data:', log.data);
+		console.log('Log Topics:', log.topics);
+	});
+
+	// 取消订阅
+	// subscription.unsubscribe(function(error, success){
+	//     if(success)
+	//         console.log('Successfully unsubscribed!');
+	// });
+
+}

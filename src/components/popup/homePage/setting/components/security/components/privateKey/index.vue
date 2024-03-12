@@ -19,7 +19,7 @@ let userName = ref('');//账户昵称
 let userNameStatus = ref(false);//昵称展示还是编辑
 let qrCodeDiv = ref(null)
 let accountOperate = ref('password')
-const props = defineProps(['address'])
+const props = defineProps(['address','keyStore'])
 let rpcData = ref(null)
 onMounted(() => {
     initializeInfo()
@@ -89,12 +89,19 @@ const confirmPsd = async ()=>{
     // 获取当前的助记词
     let data = await indexDbData.getData('keyStore')
     console.log(data,'data');
-    let key = await data.secret[nowAccount.value.address];
+    let key = await data.secret[nowAccount.value.keyStore];
     console.log(key,'key');
     // 解密助记词
     let encryption = await Decrypt(key, passKey.value)
     console.log(encryption,'encryption');
     
+    // 如果账户是私钥导入的，就直接赋值私钥
+    if(nowAccount.value['keyStoreType'] == 'privateKey'){
+        privateKey.value = encryption;
+        accountOperate.value = "privateKey"
+        loading.value = false;
+        return;
+    }
     evmKey(encryption).then(keys => {
         console.log(keys, 'keys');
         loading.value = false;

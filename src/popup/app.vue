@@ -49,9 +49,6 @@ const userAddress = ref(null)
 const walltContent = ref(null)//账户相关信息
 const pageTypes = ref('')//判断当前应该展示那个页面
 const pagesArray = ref(['create', 'login', 'homePage', 'assetsRecording', 'sendTo', 'swap','secret'])//页面地址数组,数组顺序为正常流程顺序
-const openUrl = () => {
-	// chrome.tabs.create({ url: 'background.html' });
-}
 const psdPage = ref('');//是否进入输入密码页面
 onMounted(()=>{
 	// 发送消息给 background 页面请求数据
@@ -80,6 +77,7 @@ bus.on('nextPage', (res) => {
 	console.log(res, 'rererere');
 	pageTypes.value = '';
 	let type = res;
+	loading.value = true;
 	if(res == 'homePage' || !res) {
 		// indexDbData.getData('currentWalltAddress').then(res => {
 		// 	console.log(res, 'res');
@@ -99,6 +97,7 @@ bus.on('nextPage', (res) => {
 		getInfo()
 	}else{
 		pageTypes.value = res;
+		loading.value = false;
 	}
 });
 const getBlance = (type='homePage') => {
@@ -129,7 +128,9 @@ const getBlance = (type='homePage') => {
 				console.log(err, 'err');
 				loading.value = false;
 			});
-	}).catch(err => { })
+				pageTypes.value = type;
+	}).catch(err => { 
+				pageTypes.value = type;})
 }
 // 获取账户相关信息
 const getInfo = () => {

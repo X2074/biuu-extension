@@ -135,7 +135,6 @@ const evmNetwork = (walltInfo) => {
             
         }else{
             data = res;
-            createRpc()
         }
         let chainId = Object.keys(data.content)
         Object.keys(netWork.EVM).forEach(item => {
@@ -145,6 +144,14 @@ const evmNetwork = (walltInfo) => {
         })
         Object.keys(data.content).forEach(item => {
             let index = data.content[item]['walltInfo'].length;
+            // 如果有同名的钱包地址，直接return；
+            let walltAccount = data.content[item].walltInfo.filter(item=>{
+                return item.address == walltInfo.address;
+            })
+            if(walltAccount && walltAccount.length){
+                bus.emit('promptModalErr','重复的钱包地址')
+                return;
+            };
             data.content[item].walltInfo.push({
                 address: walltInfo.address, //当前用户地址
                 userName: 'Wallt' + (!index ? '01' : (index + 1 > 10 ? index + 1 : '0' + (index + 1))),
@@ -156,6 +163,7 @@ const evmNetwork = (walltInfo) => {
         })
         console.log(data, 1111111);
         indexDbData.putData(data)
+        createRpc()
     })
 }
 const utxoNetwork = (walltInfo) => {
@@ -167,7 +175,6 @@ const utxoNetwork = (walltInfo) => {
             data['id'] = 'UTXO';
         }else{
             data = res;
-            createRpc()
         }
         // 提取数据库存储的网络 chainid
         let chainId = Object.keys(data.content)
@@ -178,6 +185,13 @@ const utxoNetwork = (walltInfo) => {
         })
         Object.keys(data.content).forEach(item => {
             let index = data.content[item]['walltInfo'].length;
+            let walltAccount = data.content[item].walltInfo.filter(item=>{
+                return item.address == walltInfo.address;
+            })
+            if(walltAccount && walltAccount.length){
+                bus.emit('promptModalErr','重复的钱包地址')
+                return;
+            };
             data.content[item].walltInfo.push({
                 utxoAddressTest: walltInfo.utxoAddressTest, //当前用户测试地址
                 address: walltInfo.utxoAddressMain, //当前用户地址
@@ -189,15 +203,17 @@ const utxoNetwork = (walltInfo) => {
             })
         })
         indexDbData.putData(data)
+        createRpc()
     })
 }
 // rpc数据保存
 const createRpc = async ()=>{
     // 获取是evm、utxo钱包
     let data = await indexDbData.getData('rpc_url');
-    let wallt = await indexDbData.getData(data.type);
+    let wallt = await indexDbData.getData(data.netWorkType.toUpperCase());
+    console.log(wallt,'wallt',Object.keys(wallt['content']));
     // 获取当前网络下第一个对象
-    let info = wallt['content'][Object.keys(wallt['content'])[0]];
+    let info = wallt['content'][data['CHAIN_ID']];
     console.log(info,'info');
     
     info['id'] = 'rpc_url';
@@ -206,7 +222,8 @@ const createRpc = async ()=>{
     // 更新rpc
     indexDbData.putData(info);
     // 更新当前钱包数据
-    let currentWallt = info['walltInfo'][0];
+    let index = info['walltInfo'].length;
+    let currentWallt = info['walltInfo'][index - 1];
     currentWallt['id'] = 'currentWalltAddress';
     indexDbData.putData(currentWallt)
 } 

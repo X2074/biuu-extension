@@ -2,14 +2,14 @@
     <div class="content mb-5 flex" v-if="nowAccount">
         <div class="name-num">
             <p>{{nowAccount.userName || nowAccount.NoIndex}}</p>
-            <p class="price">{{nowAccount&&nowAccount.balance?item.balance : 0}} {{accountContent?.unit}}</p>
+            <p class="price">{{nowAccount&&nowAccount.balance?nowAccount.balance : 0}} {{accountContent?.unit}}</p>
         </div>
         <div class="address-check flex mr-40">
             <p>{{nowAccount.address.substr(0,4)}}...{{nowAccount.address.substr(-4)}}</p>
             <img class="mr-15" src="@/assets/images/icons/check-fill.png" alt="">
         </div>
     </div>
-    <div class="confirm-content">
+    <div class="confirm-content" v-if="nowAccount">
         <img src="@/assets/images/icons/warn-red.png" alt="">
         <p class="mb-10 mt-15">确定要删除此钱包吗？</p>
         <div class="wallt-content flex">

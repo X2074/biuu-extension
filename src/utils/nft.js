@@ -2,12 +2,13 @@ import Web3 from 'web3'
 import indexDbData from './indexDB.js';
 import erp721 from './erp721.json';
 import bus from '@/utils/bus';
+import md5 from 'js-md5';
 let web3;
 // 获取web3
 async function getRpc() {
 	let data = await indexDbData.getData('rpc_url');
 	console.log(data, 'dadasdsad');
-	// 定义rpc
+	// 定义rpc;
 	web3 = new Web3(new Web3.providers.HttpProvider(data.url));
 }
 // 区分nft和钱包地址
@@ -94,74 +95,87 @@ export async function getNftBase64(data) {
 	}
 }
 /* nft转移
-fromAddress = '0x...'; // 转移NFT的地址
-toAddress = '0x...'; // 接收NFT的地址
- tokenId = 123; // NFT的ID
+// contractABI = []; // NFT合约ABI
+// contractAddress = '0x合约地址'; // NFT合约地址
+// accountAddress = '0x发送者地址'; // 发送者地址
+// receiverAddress = '0x接收者地址'; // 接收者地址
+// tokenId = 1; // NFT的标识符
 */
-export async function NFTTransfer(nftAddress, fromAddress, toAddress, tokenId) {
+export async function NFTTransfer(data) {
 	await getRpc();
+	console.log(data, 'data');
 	// 转移nft之前需要先将私钥赋值给web3，不然会报错
-	web3.eth.accounts.wallet.add('0efa4ef92b67c0ced2eea5cd38333a5ae80c4d4c94890bd93e2dd7ecaa5ef24b');
+	web3.eth.accounts.wallet.add(data.key);
 	// 获取nft实例
-	const contractAddress = nftAddress; // NFT 合约地址
 	const abi = erp721; // NFT 合约 ABI
-	const contract = new web3.eth.Contract(abi, contractAddress);
-	console.log(fromAddress, 'abi');
-	// nft转移需要支付gas费用
-	const gasLimit = 300000; // 设置gas限制
-	let hash = await contract.methods.safeTransferFrom(fromAddress, toAddress, tokenId).send({
-		from: fromAddress,
-		gas: gasLimit
+	const contract = new web3.eth.Contract(abi, data.contractAddress);
+	console.log(data.accountAddress, 'abi');
+	let hash = await contract.methods.safeTransferFrom(data.accountAddress, data.receiverAddress, data.tokenId * 1).send({
+		from: data.accountAddress,
+		gas: data.gas
 	}); // 发送交易
 	console.log(hash, 'hash');
+	return hash;
 }
 
 // nft的indexDB数据处理
-export async function NFTSaveIndexDB(data) {
+export async function NFTSaveIndexDB(data, wallt) {
 	console.log(data, 'data');
-	// 更新currentWalltAddress
-	let currentContent;
-	try {
-		currentContent = await indexDbData.getData('currentWalltAddress');
-		console.log(currentContent['nfts'], 'data001');
-		if (currentContent['nfts']) {
-			console.log(currentContent, 'data0002');
-			currentContent['nfts'].push(data);
-		} else {
-			console.log(currentContent, 'data0003');
-			currentContent['nfts'] = [data];
+	let nfts = await indexDbData.getData(md5('nfts'));
+	let nftData;
+	// 如果没有保存过nft
+	if (!nfts) {
+		nftData = {
+			id: md5('nfts'),
+			content: {}
 		}
-		console.log(currentContent, 'data0001');
-		indexDbData.putData(currentContent);
-	} catch (error) {
-		return false;
-	}
-	console.log('data01');
-	// 更新currentWalltAddress
-	try {
-		let content = await indexDbData.getData('rpc_url');
-		content['walltInfo'].forEach(item => {
-			if (item.address == currentContent['address']) {
-				item['nfts'] = currentContent['nfts'];
+		nftData['content'][wallt.keyStore] = [data];
+	} else {
+		// 如果当前账户下没有保存nft
+		if (!nfts['content'][wallt.keyStore]) {
+			nfts['content'][wallt.keyStore][0] = data;
+		} else {
+			// 过滤是否有重复的nft
+			let filterNft = nfts['content'][wallt.keyStore].filter(item => {
+				return item.address == data.address && item.tokenId == data.tokenId
+			})
+			if (filterNft && filterNft.length) {
+				bus.emit('promptModalErr', '重复导入的NFT')
+				return false;
 			}
-		});
-		indexDbData.putData(content);
-		console.log('data02');
-		if (content.netWorkType == 'evm') chengeEvmUtxo(content, 'EVM')
-		if (content.netWorkType == 'utxo') chengeEvmUtxo(content, 'UTXO')
-	} catch (error) {
-		return false;
+			nfts['content'][wallt.keyStore].push(data);
+		}
+		nftData = nfts;
 	}
+	indexDbData.putData(nftData);
 	return true;
 }
-// 更新evm\utxo
-async function chengeEvmUtxo(data, type) {
-	console.log(data, type, 'data03');
-	let chinaId = data['CHAIN_ID'];
+
+// 估算gas费
+// const contractABI = []; // NFT合约ABI
+// const contractAddress = '0x合约地址'; // NFT合约地址
+// const accountAddress = '0x发送者地址'; // 发送者地址
+// const receiverAddress = '0x接收者地址'; // 接收者地址
+// const tokenId = 1; // NFT的标识符
+
+export async function computeNftGas(data) {
+	await getRpc();
+	// 获取nft实例
+	const abi = erp721; // NFT 合约 ABI
+	console.log(abi, 'abi');
+	const contract = new web3.eth.Contract(abi, data.contractAddress);
+	console.log(data, 'data');
+	// 估算NFT转移的gas费
+	const transferData = contract.methods.safeTransferFrom(data.accountAddress, data.receiverAddress, data.tokenId * 1).encodeABI();
+	console.log(transferData, 'transferData');
 	try {
-		let content = await indexDbData.getData(type);
-		content['content'][chinaId] = data;
-		indexDbData.putData(content);
+		let gas = await web3.eth.estimateGas({
+			// from: data.accountAddress,
+			to: data.contractAddress,
+			data: transferData,
+			gas: 5000000 // 增加gas限制
+		})
+		return gas;
 	} catch (error) {
 		return false;
 	}

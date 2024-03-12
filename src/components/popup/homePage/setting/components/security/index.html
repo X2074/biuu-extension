@@ -14,9 +14,11 @@
         </div>
     </div>
     <!-- 私钥 -->
-    <privateKey v-if="securityProcess == 'privateKey'" :address="currentWalltAddress.address" />
+    <privateKey v-if="securityProcess == 'privateKey'" :address="currentWalltAddress.address"
+        :keyStore="currentWalltAddress.keyStore" />
     <!-- 助记词 -->
-    <mnemonicPhrase v-if="securityProcess == 'mnemonicPhrase'" :address="currentWalltAddress.address" />
+    <mnemonicPhrase v-if="securityProcess == 'mnemonicPhrase'" :address="currentWalltAddress.address"
+        :keyStore="currentWalltAddress.keyStore" />
     <!-- 修改密码 -->
     <revisePassword v-if="securityProcess == 'revisePassword'" />
 </div>

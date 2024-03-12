@@ -40,35 +40,6 @@ const onCopy = (txt) => {
     bus.emit('promptModalSuccess','复制成功')
 }
 
-// 确认密码
-const confirmPsd = async ()=>{
-    if(!passKeyModel.value){
-        bus.emit('promptModalErr','请输入密码')
-        return;
-    }
-    if(md5(passKeyModel.value) != passKey.value){
-        bus.emit('promptModalErr','您输入的密码有误')
-        return;
-    }
-    loading.value = true;
-    // 获取当前的助记词
-    let data = await indexDbData.getData('keyStore')
-        console.log(data,'data');
-    let key = data.secret[nowAccount.value.address];
-        console.log(key,'key');
-        // 解密助记词
-        let encryption = Decrypt(key, passKey.value)
-        console.log(encryption,'encryption');
-        
-        evmKey(encryption).then(keys => {
-            console.log(keys, 'keys');
-            loading.value = false;
-            //此处应该判断是evm还是utxo
-            privateKey.value = keys.privateKey;
-            accountOperate.value = "privateKey"
-        })
-}
-
 // 取消，回到设置页面
 const toBack = ()=>{
     bus.emit('settingPage','options')

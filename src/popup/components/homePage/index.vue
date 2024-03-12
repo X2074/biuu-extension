@@ -107,10 +107,13 @@ bus.on('closeMore', () => {
 bus.on('homePageBack', (res) => {
 	loading.value = true;
 	walltAccount.value = res.page || '';
+	console.log(res,'跳转nft详情');
+	
 	if(res.data && res.page == 'nftDetail'){//nft详情需要的数据
 		nftDetails.value = res.data;
+	}else{
+		initialize()
 	}
-	initialize()
 })
 </script>
 <style lang="scss">

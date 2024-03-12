@@ -43,7 +43,7 @@ const getNft = async () => {
         return;
     }
     console.log(data,'saveData');
-    let saveData = await NFTSaveIndexDB(data);
+    let saveData = await NFTSaveIndexDB(data,currentWallt.value);
     console.log(saveData,'saveData');
     if(saveData){
         bus.emit('nextPage')

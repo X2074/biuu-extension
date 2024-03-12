@@ -87,4 +87,4 @@
 <!-- 导入nft -->
 <importNfts v-if="walltAccount == 'importNfts'" />
 <!-- nft详情 -->
-<nftDetail :details="nftDetails" />
+<nftDetail v-if="walltAccount == 'nftDetail'" :details="nftDetails" />

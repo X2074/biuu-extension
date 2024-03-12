@@ -56,7 +56,7 @@ bus.on('closeMore', () => {
 })
 const onCopy = () => {
 	navigator.clipboard.writeText(walltContent.value.address);
-	alert('Copy Success!')
+    bus.emit('promptModalSuccess','复制成功')
 }
 const refresh = () => {
 	location.reload()

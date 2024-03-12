@@ -73,7 +73,6 @@ const subscription = web3.eth.subscribe('logs', {
         console.error('Error: ' + error);
     }
 });
-
 // 取消订阅
 // subscription.unsubscribe(function(error, success){
 //     if(success)

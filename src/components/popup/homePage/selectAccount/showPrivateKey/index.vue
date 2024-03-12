@@ -108,12 +108,20 @@ const confirmPsd = async ()=>{
     // 获取当前的助记词
     let data = await indexDbData.getData('keyStore')
         console.log(data,'data');
-    let key = data.secret[nowAccount.value.address];
-        console.log(key,'key');
-        // 解密助记词
-        let encryption = Decrypt(key, passKey.value)
-        console.log(encryption,'encryption');
-        
+    let key = data.secret[nowAccount.value.keyStore];
+    console.log(key,'key');
+    // 解密助记词
+    let encryption = Decrypt(key, passKey.value)
+    // 如果账户是私钥导入的，就直接赋值私钥
+    if(nowAccount.value['keyStoreType'] == 'privateKey'){
+        loading.value = false;
+        privateKey.value = encryption;
+        accountOperate.value = "privateKey"
+        return;
+    }
+    console.log(encryption,'encryption');
+    
+    if(rpcData.value && rpcData.value['netWorkType'] == 'evm'){
         evmKey(encryption).then(keys => {
             console.log(keys, 'keys');
             loading.value = false;
@@ -121,6 +129,15 @@ const confirmPsd = async ()=>{
             privateKey.value = keys.privateKey;
             accountOperate.value = "privateKey"
         })
+    }else{
+        utxoKey(encryption).then(keys => {
+            console.log(keys, 'keys');
+            loading.value = false;
+            //此处应该判断是evm还是utxo
+            privateKey.value = keys.privateKey;
+            accountOperate.value = "privateKey"
+        })
+    }
 }
 </script>
 <style lang="scss">

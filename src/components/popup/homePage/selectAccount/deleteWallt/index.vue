@@ -28,11 +28,9 @@ const initializeInfo = ()=>{
 	}).catch(err => { })
     
     // 存为当前展示的钱包数据
-    // indexDbData.getData('currentWalltAddress').then(res => {
-    //     nowAccount.value = res;
-    //     currentWallt.value = res;
-    //     userName.value = nowAccount.value.userName ? nowAccount.value.userName : nowAccount.value.NoIndex;
-    // })
+    indexDbData.getData('currentWalltAddress').then(res => {
+        currentWallt.value = res;
+    })
 
     indexDbData.getData('rpc_url').then(res => {
         console.log(res,'res');
@@ -98,6 +96,8 @@ const confirmRemove = async ()=>{
     indexDbData.putData(rpc_url);
     
     // 如果当前的就是选中的钱包
+    console.log(currentWallt.value,'currentWallt.value',nowAccount.value);
+    
     if(nowAccount.value.address == currentWallt.value.address){
         console.log(firstWallt,'firstWallt');
         firstWallt['id'] = 'currentWalltAddress';
@@ -117,6 +117,11 @@ const evmNetwork = async () => {
             data = res.content[item].walltInfo.filter(info=>{
                 return info.address != nowAccount.value.address;
             })
+            info = res.content[item].walltInfo.filter(info=>{
+                return info.address == nowAccount.value.address;
+            })
+            deleteStorkey(info)
+            console.log(data,'data');
             res.content[item].walltInfo = data;
         })
         indexDbData.putData(res)
@@ -129,10 +134,22 @@ const utxoNetwork = async () => {
             data = res.content[item].walltInfo.filter(info=>{
                 return info.address != nowAccount.value.address;
             })
+            info = res.content[item].walltInfo.filter(info=>{
+                return info.address == nowAccount.value.address;
+            })
+            deleteStorkey(info)
             res.content[item].walltInfo = data;
         })
         indexDbData.putData(res)
     })
+}
+const deleteStorkey = async (data)=>{
+    // 删除保存的密钥
+    let keyStore = await indexDbData.getData('keyStore');
+    let secret = keyStore['secret'];
+    delete secret[data['keystore']];
+    keyStore['secret'] = secret;
+    indexDbData.putData(keyStore);
 }
 </script>
 <style lang="scss">

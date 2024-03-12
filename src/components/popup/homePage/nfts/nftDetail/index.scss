@@ -87,6 +87,7 @@
                 font-weight: 400;
                 line-height: 21px;
                 color: rgba(146, 146, 146, 1);
+                word-wrap: break-word;
             }
         }
 
@@ -121,7 +122,7 @@
         }
 
         .from-address {
-            div {
+            >div {
                 justify-content: space-between;
 
                 .name {
@@ -136,10 +137,19 @@
                     font-weight: 400;
                     line-height: 21px;
                     color: rgba(146, 146, 146, 1);
-                    width: 160px;
+                    width: 80px;
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: ellipsis;
+                }
+
+                >div {
+                    align-items: center;
+
+                    img {
+                        width: 20px;
+                        height: 20px;
+                    }
                 }
             }
         }
@@ -250,6 +260,7 @@
                 position: absolute;
                 left: 0;
                 border-radius: 12px;
+                background-color: #fff;
                 top: 65px;
                 box-shadow: 0px 0px 10px rgba(132, 132, 132, 0.25);
 
@@ -365,6 +376,42 @@
                 }
 
             }
+        }
+
+
+        .input-pass-word {
+            width: 300px;
+            margin: 5px auto;
+
+            p {
+                font-size: 14px;
+                line-height: 21px;
+                color: rgba(0, 0, 0, 1);
+            }
+
+            .input-psd {
+                width: 300px;
+                height: 45px;
+                padding: 12px;
+                border-radius: 8px;
+                align-items: center;
+                justify-content: space-between;
+                border: 1px solid rgba(217, 217, 217, 1);
+
+                input {
+                    width: 200px;
+                    font-size: 14px;
+                    border: 0;
+                    outline: none;
+                }
+
+                img {
+                    width: 16px;
+                    height: 16px;
+                    cursor: pointer;
+                }
+            }
+
         }
     }
 

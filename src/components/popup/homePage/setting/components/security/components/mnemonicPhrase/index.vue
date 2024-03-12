@@ -13,7 +13,7 @@ let nowAccount = ref(null)
 let passKey = ref('');//密码
 let passKeyModel = ref('')//输入框密码
 let qrCodeDiv = ref(null)
-const props = defineProps(['address'])
+const props = defineProps(['address','keyStore'])
 let rpcData = ref(null)
 //流程步骤：首页，问题1，问题2，助记词密码，助记词显示
 let processSteps = ref('home');
@@ -77,7 +77,7 @@ const confirmPsd = async ()=>{
     // 获取当前的助记词
     let data = await indexDbData.getData('keyStore')
     console.log(data,'data');
-    let key = await data.secret[props.address];
+    let key = await data.secret[props.keyStore];
     console.log(key,'key');
     // 解密助记词
     let mnemonic = await Decrypt(key, passKey.value)

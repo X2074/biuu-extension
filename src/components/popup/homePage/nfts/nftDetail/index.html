@@ -1,26 +1,24 @@
-<div class="detail-nft">
+<div class="detail-nft" v-loading:[loadingText]="loading">
     <div class="header flex" v-if="detailContentStatus == 'detail'" @click="toBack">
         <img class="back-img" src="@/assets/images/icons/back.png" alt="">
-        <p>测试/DimAI Collectible</p>
+        <p>{{nftContent?.name}}</p>
     </div>
-    <div v-if="detailContentStatus == 'trade'" class="header flex" @click="detailContentStatus = 'trade'">
+    <div v-if="detailContentStatus == 'trade'" class="header flex" @click="detailContentStatus = 'detail'">
         <img class="back-img" src="@/assets/images/icons/back.png" alt="">
         <p>发送 NFT</p>
     </div>
     <div v-if="detailContentStatus == 'detail'" class="detail-content pt-10 pb-10 pl-30 pr-30">
         <div class="img-header flex">
             <img class="logo" src="@/assets/images/logo/logo.png" alt="">
-            <img src="@/assets/images/logo/dblogo.png" alt="">
+            <img :src="nftContent.image" alt="">
         </div>
         <div class="name-id mt-25 flex">
-            <p>NFT Name</p>
-            <p>#1090</p>
+            <p>{{nftContent.name}}</p>
+            <p>#{{nftContent.tokenId}}</p>
         </div>
         <div class="description-content mt-15">
             <p class="title">描述：</p>
-            <p class="description mt-15">(This digital collection was created by 0xc 5
-                69a49aab66b101d98a8bb190e9443f7005ac 61
-                on DimAl, collection DimlD: 20230627285 428b32499163e594c567219b622ec4b9d770）</p>
+            <p class="description mt-15">{{nftContent.description}}</p>
         </div>
         <div class="remove-btn mt-25 pb-25 flex">
             <div class="flex" @click="deleteNft">
@@ -31,37 +29,41 @@
         <div class="from-address mt-25">
             <div class="flex">
                 <p class="name">来源：</p>
-                <p class="address">data:image/png;base64...</p>
+                <p class="address">{{nftContent.image}}</p>
             </div>
             <div class="flex mt-15">
                 <p class="name">合约地址：</p>
-                <p class="address">data:image/png;base64...</p>
+                <div class="flex">
+                    <p class="address">{{nftContent.address.substr(0,4)}}...{{nftContent.address.substr(-4)}}</p>
+                    <img @click="onCopy" src="@/assets/images/icons/copy.png" alt="">
+                </div>
             </div>
         </div>
         <div class="exemption-tip mt-15">免责声明：Biuu 从源网址中提取媒体文件。这个网址有时会因铸造 NFT 的市场而改变。</div>
         <button @click="detailContentStatus = 'trade'">发送</button>
     </div>
+    <!-- 展示资产 -->
     <div v-if="detailContentStatus == 'trade'" class="detail-content pt-10 pb-10 pl-30 pr-30">
         <p class="title mt-10">发送资产：</p>
         <div class="nft-asset mt-15" :class="{'selected-check':nftSelect}">
             <!-- 选中的资产--详情数据 -->
             <div class="selected-asset flex">
-                <img src="@/assets/images/logo/logo.png" alt="">
+                <img :src="checkNft.image" alt="">
                 <div class="flex ml-10">
                     <div>
-                        <p>asdasdas</p>
-                        <span>Token ID：1090</span>
+                        <p>{{checkNft.name}}</p>
+                        <span>Token ID：{{checkNft.tokenId}}</span>
                     </div>
-                    <img src="@/assets/images/icons/back.png" alt="">
+                    <img @click="nftSelect = !nftSelect" src="@/assets/images/icons/back.png" alt="">
                 </div>
             </div>
             <div class="nft-list" v-if="nftSelect">
                 <ul class="mt-10 mb-10">
-                    <li class="flex pl-20" v-for="item in 6" @click="checkAddress(item)">
-                        <img src="@/assets/images/logo/logo.png" alt="">
+                    <li class="flex pl-20" v-for="item in nftList" @click="checkAddress(item)">
+                        <img :src="item.image" alt="">
                         <div class="ml-10">
-                            <p>asdasdas</p>
-                            <span>Token ID：1090</span>
+                            <p>{{item.name}}</p>
+                            <span>Token ID：{{item.tokenId}}</span>
                         </div>
                     </li>
                 </ul>
@@ -71,17 +73,32 @@
         <textarea v-model="transferAddress"></textarea>
         <p class="title mt-15 mb-15">预计 GAS 小费 ：</p>
         <p class="gas-num">
-            <font>0.000487</font> MEER
+            <font>{{gasPrice}}</font> MEER
         </p>
         <div class="total-costs mt-10 pt-15 flex">
             <p class="title">共计：</p>
             <p class="gas-num">
-                <font>0.000487</font> MEER
+                <font>{{gasPrice}}</font> MEER
             </p>
         </div>
         <div class="nft-footer flex">
             <button class="close" @click="toBack">取消</button>
-            <button class="confirm" @click="getNft">下一步</button>
+            <button class="confirm" @click="detailContentStatus = 'password'">下一步</button>
+        </div>
+    </div>
+    <!-- 输入密码 -->
+    <div v-if="detailContentStatus == 'password'" class="detail-content pt-40 pb-40 pl-30 pr-30">
+        <div class="input-pass-word">
+            <p>请输入您的密码</p>
+            <div class="input-psd flex mt-25">
+                <input :type="psdType == 'show'?'text':'password'" v-model="passKeyModel" placeholder="请确保没有人看您的电脑">
+                <img @click="psdType = 'show'" v-if="psdType == 'hide'" src="@/assets/images/icons/show.png" alt="">
+                <img @click="psdType = 'hide'" v-else src="@/assets/images/icons/hide.png" alt="">
+            </div>
+        </div>
+        <div class="nft-footer flex">
+            <button class="close" @click="toBack">取消</button>
+            <button class="confirm" @click="confirmPsd">下一步</button>
         </div>
     </div>
 </div>

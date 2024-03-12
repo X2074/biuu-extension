@@ -8,13 +8,16 @@ import indexDbData from '@/utils/indexDB.js';
 import {getNftBase64} from '@/utils/nft.js';
 import nftDetail from "../nftDetail/index.vue"   
 import bus from '@/utils/bus';
+import md5 from 'js-md5';
 let loading = ref(false)
 let loadingText = ref('加载中...')
 let nftsList = ref(null);
 onMounted(async ()=>{
-    let data = await indexDbData.getData('currentWalltAddress');
-    if(data['nfts'] && data['nfts'].length){
-        fetchAllData(data['nfts']).then(res=>{
+	let currentWalltAddress = await indexDbData.getData('currentWalltAddress')
+    let data = await indexDbData.getData(md5('nfts'));
+    let nfts = data['content'][currentWalltAddress['keyStore']]
+    if(nfts && nfts.length){
+        fetchAllData(nfts).then(res=>{
             nftsList.value = res;
         })
     }
@@ -37,12 +40,13 @@ const toImport = ()=>{
 }
 
 const toDetail = (data,list)=>{
+    let info = {
+        detail:JSON.parse(JSON.stringify(data)),
+        list:JSON.parse(JSON.stringify(list))
+    }
     bus.emit('homePageBack',{
         page:'nftDetail',
-        data:{
-            detail:data,
-            list:list
-        }
+        data:info
     })
 }
 </script>
