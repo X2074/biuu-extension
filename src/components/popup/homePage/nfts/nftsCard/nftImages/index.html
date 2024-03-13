@@ -1,0 +1,6 @@
+<div v-if="nftsList && nftsList.length" class="nft-image pt-5 mt-10 flex">
+    <div class="mb-10 flex" v-for="item in nftsList" @click="toDetail(item,nftsList)">
+        <img class="logo" src="@/assets/images/logo/logo.png" alt="">
+        <img class="nft" :src="item.image" alt="">
+    </div>
+</div>

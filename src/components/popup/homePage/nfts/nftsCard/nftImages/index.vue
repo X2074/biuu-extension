@@ -5,39 +5,34 @@
 <script lang='ts' setup>
 import { ref, onMounted, reactive, watch } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
-import {getNftBase64} from '@/utils/nft.js';
-import nftDetail from "../nftDetail/index.vue"   
-import nftImages from "./nftImages/index.vue"   
+import {getNftBase64} from '@/utils/nft.js';  
 import bus from '@/utils/bus';
 import md5 from 'js-md5';
 let loading = ref(false)
 let loadingText = ref('加载中...')
 let nftsList = ref([]);
+const props = defineProps(['nftContent'])
 onMounted(async ()=>{
-	let currentWalltAddress = await indexDbData.getData('currentWalltAddress')
-    let data = await indexDbData.getData(md5('nfts'));
-    if(!data) return;
-    console.log(data,'data');
+	// let currentWalltAddress = await indexDbData.getData('currentWalltAddress')
+    // let data = await indexDbData.getData(md5('nfts'));
+    // if(!data) return;
+    // console.log(data,'data');
     
-    let nfts = data['content'][currentWalltAddress['keyStore']]
-    console.log(nfts);
-    for (let key in nfts) {
-        nftsList.value.push(nfts[key])
-    }
+    // let nfts = data['content'][currentWalltAddress['keyStore']]
+    // console.log(nfts);
+    // for (let key in nfts) {
+    //     nftsList.value.push(nfts[key])
+    // }
         console.log(nftsList.value);
     // if(nftsContent && nftsContent.length){
-    //     fetchAllData(nftsContent).then(res=>{
-    //         // nftsList.value = res;
-    //     })
+        fetchAllData(props['nftContent']).then(res=>{
+            nftsList.value = res;
+        })
     // }
 })
 
 const fetchAllData = async (data)=>{
-    let promises;
-    data.forEach(item=>{
-        let promise = item['collections'].map(info=>getNftBase64(info));
-        promises = [...promises,...promise]
-    })
+    let promises = data.map(item=>getNftBase64(item));
     
     try {
         const results = await Promise.all(promises);

@@ -44,7 +44,7 @@ export async function getNFTContent(currentWallt, nftAddress, tokenId) {
 	console.log(abi, 'abi');
 	const nftContract = new web3.eth.Contract(abi, nftAddress);
 	console.log(nftContract, 'nftContractNFT');
-	let tokenOwner, tokenURI, name;
+	let tokenOwner, tokenURI, collectionName;
 	// 查询信息
 	try {
 		tokenOwner = await nftContract.methods.ownerOf(tokenId).call();
@@ -63,16 +63,16 @@ export async function getNFTContent(currentWallt, nftAddress, tokenId) {
 	}
 	// 查询信息
 	try {
-		name = await nftContract.methods.name().call();
+		collectionName = await nftContract.methods.name().call();
 	} catch (error) {
 		return false;
 	}
 	return {
 		// nftContract: nftContract,
-		tokenOwner: tokenOwner,
+		tokenOwner: tokenOwner,//拥有者账户
 		tokenURI: tokenURI,
-		name: name,
-		address: nftAddress,
+		collectionName: collectionName,//合集名称
+		nftAddress: nftAddress,//合约地址
 		tokenId: tokenId
 	}
 }
@@ -87,7 +87,6 @@ export async function getNftBase64(data) {
 			return false;
 		}
 		let content = await response.json();
-		console.log('Data received:', content);
 		content = Object.assign(data, content)
 		return content;
 	} catch (error) {
@@ -118,32 +117,62 @@ export async function NFTTransfer(data) {
 	return hash;
 }
 
-// nft的indexDB数据处理
+/*
+nft的indexDB数据处理
+层级：
+content{数据集合
+	store{创建钱包时生成的uuis
+		address{相同合约地址的放在一起
+			name:合集名称
+			collections[]合集下面的nft
+		}
+	}
+}
+*/
 export async function NFTSaveIndexDB(data, wallt) {
 	console.log(data, 'data');
+	// 首先获取所有的nfts数据
 	let nfts = await indexDbData.getData(md5('nfts'));
-	let nftData;
+
+	let nftData, nftContent;
 	// 如果没有保存过nft
 	if (!nfts) {
-		nftData = {
+		nftData = {//完整的nfts数据
 			id: md5('nfts'),
 			content: {}
 		}
-		nftData['content'][wallt.keyStore] = [data];
+		/* nfts示例：
+			content:nfts集合
+			keyStore:当前钱包随机数
+			nftAddress：合约地址，同一个合约都放一起
+		*/
+		nftContent = {
+			collectionName: data.collectionName,//合集名称
+			collections: [data]//合集中的nft列表
+		}
+		let dataNft = {};
+		dataNft[data.nftAddress] = nftContent;
+		nftData['content'][wallt.keyStore] = dataNft;
 	} else {
-		// 如果当前账户下没有保存nft
-		if (!nfts['content'][wallt.keyStore]) {
-			nfts['content'][wallt.keyStore][0] = data;
+		// 如果当前账户keyStore或者是当前账户下该合约没有保存nft下没有保存nft
+		if (!nfts['content'][wallt.keyStore] || !nfts['content'][wallt.keyStore][data.nftAddress]) {
+			nftContent = {
+				collectionName: data.collectionName,//合集名称
+				collections: [data]//合集中的nft列表
+			}
+			nfts['content'][wallt.keyStore][data.nftAddress] = nftContent;
 		} else {
-			// 过滤是否有重复的nft
-			let filterNft = nfts['content'][wallt.keyStore].filter(item => {
+			// 查询当前账户，当前传递的合约地址下面的nft，并过滤出当前传递的tokenId相同的nft
+			console.log(nfts['content'][wallt.keyStore], "nfts['content'][wallt.keyStore]");
+			let filterNft = nfts['content'][wallt.keyStore][data.nftAddress]['collections'].filter(item => {
 				return item.address == data.address && item.tokenId == data.tokenId
 			})
+			// 如果有相同tokenId，return；
 			if (filterNft && filterNft.length) {
 				bus.emit('promptModalErr', '重复导入的NFT')
 				return false;
 			}
-			nfts['content'][wallt.keyStore].push(data);
+			nfts['content'][wallt.keyStore][data.nftAddress]['collections'].push(data);
 		}
 		nftData = nfts;
 	}

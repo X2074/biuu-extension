@@ -6,10 +6,15 @@
         </div>
         <p v-if="!nftsList" class="mt-25">还没有 NFT</p>
     </div>
-    <div v-if="nftsList && nftsList.length" class="nft-list pt-5 mt-10 flex">
-        <div class="nft-image mb-10 flex" v-for="item in nftsList" @click="toDetail(item,nftsList)">
-            <img class="logo" src="@/assets/images/logo/logo.png" alt="">
-            <img class="nft" :src="item.image" alt="">
+    <div class="nft-type">
+        <div v-if="nftsList && nftsList.length" class="nft-list pt-5 mt-10">
+            <div class="mb-10" v-for="item in nftsList">
+                <!-- <img class="logo" src="@/assets/images/logo/logo.png" alt="">
+                <img class="nft" :src="item.image" alt=""> -->
+                <p>{{item.collectionName}}</p>
+                <nftImages :nftContent="item.collections
+                    " />
+            </div>
         </div>
     </div>
 </div>

@@ -37,6 +37,7 @@ const getNft = async () => {
         bus.emit('promptModalErr','无效的tokenId，请再试一次。')
         return;
     }
+    loading.value = true;
 	let data = await getNFTContent(currentWallt.value,contractAddress.value, tokenId.value);
     if(!data){
         nftNull.value = true;
@@ -45,6 +46,7 @@ const getNft = async () => {
     console.log(data,'saveData');
     let saveData = await NFTSaveIndexDB(data,currentWallt.value);
     console.log(saveData,'saveData');
+    loading.value = false;
     if(saveData){
         bus.emit('nextPage')
     }else{

@@ -40,6 +40,8 @@ onMounted(async ()=>{
 	}).catch(err => { })
 	currentWallt.value = await indexDbData.getData('currentWalltAddress');
     checkNft.value = nftContent.value;
+    console.log(props,'props');
+    
 })
 // 返回上一页面
 const toBack = ()=>{
@@ -55,44 +57,15 @@ const deleteNft = async()=>{
             return item.tokenURI != nftContent.value['tokenURI']
         })
     }
+    console.log(JSON.parse(JSON.stringify(data)),'data');
     
-    console.log(data,'data');
-    let currentContent = await indexDbData.getData('currentWalltAddress');
-    currentContent['nfts'] = JSON.parse(JSON.stringify(data));
-    console.log(currentContent,'currentContent');
-    indexDbData.putData(currentContent);
-
-    let content = await indexDbData.getData('rpc_url');
-    content['walltInfo'].forEach(item => {
-        if (item.address == currentContent['address']) {
-            item['nfts'] = currentContent['nfts'];
-        }
-    });
-    indexDbData.putData(content);
-	// 更新currentWalltAddress
-	try {
-		console.log('data02');
-		if (content.netWorkType == 'evm') chengeEvmUtxo(content, 'EVM')
-		if (content.netWorkType == 'utxo') chengeEvmUtxo(content, 'UTXO')
-	} catch (error) {
-		return false;
-	}
+	let nfts = await indexDbData.getData(md5('nfts'));
+    nfts['content'][currentWallt.value['keyStore']][nftContent.value['nftAddress']]['collections'] = JSON.parse(JSON.stringify(data));
+    console.log(nfts,'nfts');
+    indexDbData.putData(nfts)
     toBack()
     
 }
-// 更新evm\utxo
-const chengeEvmUtxo = async(data, type)=>{
-	console.log(data, type, 'data03');
-	let chinaId = data['CHAIN_ID'];
-	try {
-		let content = await indexDbData.getData(type);
-		content['content'][chinaId] = data;
-		indexDbData.putData(content);
-	} catch (error) {
-		return false;
-	}
-}
-
 // 选中的nft
 const checkAddress = (res)=>{
     checkNft.value = res;
