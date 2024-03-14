@@ -1,6 +1,6 @@
 <template src='./index.html'></template>
 <script lang='ts' setup>
-import { ref, onMounted, defineProps, nextTick } from 'vue';
+import { ref, onMounted, defineProps, toRaw } from 'vue';
 import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB';
 import Web3 from 'web3'
@@ -31,7 +31,7 @@ onMounted(() => {
 })
 // 交易hash
 const getHash = () => {
-	walltContent.value = JSON.parse(JSON.stringify(props.walltContent))
+	walltContent.value = toRaw(props.walltContent)
 	if(!walltContent.value || !walltContent.value.txHash) return;
 	if (walltContent.value.txHash && walltContent.value.txHash.length > 1) {
 		let index = walltContent.value.txHash.length - 1;

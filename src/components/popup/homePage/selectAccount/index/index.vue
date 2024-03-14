@@ -1,6 +1,6 @@
 <template src='./index.html'></template>
 <script lang='ts' setup>
-import { ref, onMounted, nextTick,defineProps } from 'vue';
+import { ref, onMounted, toRaw,defineProps } from 'vue';
 import bus from '@/utils/bus.js'; 
 import indexDbData from '@/utils/indexDB';
 import { Encrypt, Decrypt } from '@/utils/index.js';
@@ -167,7 +167,7 @@ const checkAccount = ()=>{
         bus.emit('promptModalWarn','当前已是主账号')
         return;
     }
-    let data = JSON.parse(JSON.stringify(accountList.value))
+    let data = toRaw(accountList.value)
     let dbData = data.filter(item=>{
         return item.address == checkAddressText.value;
     })

@@ -3,15 +3,16 @@
 @import './index.scss';
 </style>
 <script lang='ts' setup>
-import { ref, onMounted,defineProps, reactive, watch } from 'vue';
+import { ref, onMounted,defineProps, toRaw, watch } from 'vue';
 import Web3 from 'web3'
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
 import { Decrypt,evmKey,utxoKey,isAddress } from '@/utils/index.js';
-import {getNFTContent,NFTSaveIndexDB,computeNftGas,NFTTransfer} from '@/utils/nft.js';
+import {getNFTContent,computeNftGas,NFTTransfer} from '@/utils/nft.js';
+import {NFTSaveIndexDB,NFTUpdataIndexDB,hashSaveIndexDB,usedToHaveNft} from '@/utils/operateIndexDB.js';
 import md5 from 'js-md5';
 let loading = ref(false)
-let loadingText = ref('加载中...')
+let loadingText = ref('发送中...')
 let detailContentStatus = ref('detail')
 let rawData = ref(null);//原始数据
 let addressList = ref(null);//显示数据
@@ -49,22 +50,8 @@ const toBack = ()=>{
 }
 // 删除nft
 const deleteNft = async()=>{
-    let data;
-    if(!nftList.value || (nftList.value && nftList.value.length==1)){
-        data = [];
-    }else{
-        data = nftList.value.filter(item=>{
-            return item.tokenURI != nftContent.value['tokenURI']
-        })
-    }
-    console.log(JSON.parse(JSON.stringify(data)),'data');
-    
-	let nfts = await indexDbData.getData(md5('nfts'));
-    nfts['content'][currentWallt.value['keyStore']][nftContent.value['nftAddress']]['collections'] = JSON.parse(JSON.stringify(data));
-    console.log(nfts,'nfts');
-    indexDbData.putData(nfts)
-    toBack()
-    
+    await deleteUpdata(currentWallt.value,'delete')
+    await toBack()
 }
 // 选中的nft
 const checkAddress = (res)=>{
@@ -81,7 +68,7 @@ const getAddressList = async ()=>{
     loading.value = false;
 }
 const onCopy = () => {
-	navigator.clipboard.writeText(nftContent.value.address);
+	navigator.clipboard.writeText(nftContent.value.nftAddress);
     bus.emit('promptModalSuccess','复制成功')
 }
 watch(transferAddress,(newV)=>{
@@ -96,7 +83,7 @@ watch(transferAddress,(newV)=>{
             }
             loading.value = true;
             let data = {
-                contractAddress:nftContent.value.address,
+                contractAddress:nftContent.value.nftAddress,
                 accountAddress:currentWallt.value.address,
                 receiverAddress:newV,
                 tokenId:nftContent.value.tokenId
@@ -121,7 +108,7 @@ const getWei = async (balance)=>{
 // 交易nft
 const tradeNft = async (key)=>{
     let data = {
-        contractAddress:nftContent.value.address,
+        contractAddress:nftContent.value.nftAddress,
         accountAddress:currentWallt.value.address,
         receiverAddress:transferAddress.value,
         tokenId:nftContent.value.tokenId,
@@ -131,7 +118,9 @@ const tradeNft = async (key)=>{
     // 获取交易hash
     let hash = await NFTTransfer(data);
     // 交易hash的保存
-    
+    await hashSaveIndexDB(currentWallt.value['keyStore'],'queue',hash)
+    // 删除当前nft并保存该数据到曾经拥有nft模块
+    await deleteUpdata(checkNft.value,'tread');
 }
 
 // 确认密码
@@ -167,5 +156,21 @@ const confirmPsd = async ()=>{
         privateKey.value = keys.privateKey;
         tradeNft(privateKey.value)
     })
+}
+// 删除或者是交易nft
+const deleteUpdata = async(content,type)=>{
+    let data,tradNFT;
+    if(!nftList.value || (nftList.value && nftList.value.length==1)){
+        data = [];
+    }else{
+        data = nftList.value.filter(item=>{
+            return item.tokenURI != content['tokenURI']
+        })
+    }
+    await NFTUpdataIndexDB(currentWallt.value['keyStore'],content['nftAddress'],toRaw(data));
+    if(type == 'tread'){//如果是交易
+        await usedToHaveNft(toRaw(content),currentWallt.value['keyStore'])
+    }
+    return true;
 }
 </script>

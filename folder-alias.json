@@ -181,5 +181,11 @@
     },
     "src/components/popup/homePage/nfts/nftDetail": {
         "description": "nft详情"
+    },
+    "src/utils/index.js": {
+        "description": "公共方法"
+    },
+    "src/utils/operateIndexDB.js": {
+        "description": "增删改查indexDB"
     }
 }

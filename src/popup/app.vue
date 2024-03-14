@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, getCurrentInstance } from 'vue';
+import { ref, onMounted } from 'vue';
 import md5 from 'js-md5';
 // 因为popup的特殊原因，此处只有一个入口，页面切换靠各种类型的判断
 // import homePage from '@/components/homePage.vue'

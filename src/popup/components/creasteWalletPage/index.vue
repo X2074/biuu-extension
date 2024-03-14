@@ -14,7 +14,7 @@
 </div>
 </template>
 <script lang='ts' setup>
-import { ref, onMounted, watchEffect, getCurrentInstance } from 'vue';
+import { ref, onMounted } from 'vue';
 import bus from '@/utils/bus.js';
 import createMnemonic from './createMnemonic/index.vue'
 import verifyMnemonic from './verifyMnemonic/index.vue'

@@ -3,7 +3,7 @@
 @import './index.scss';
 </style>
 <script lang='ts' setup>
-import { ref, onMounted, reactive, watch } from 'vue';
+import { ref, onMounted, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import {getNftBase64} from '@/utils/nft.js';
 import nftDetail from "../nftDetail/index.vue"   
@@ -55,8 +55,8 @@ const toImport = ()=>{
 
 const toDetail = (data,list)=>{
     let info = {
-        detail:JSON.parse(JSON.stringify(data)),
-        list:JSON.parse(JSON.stringify(list))
+        detail:toRaw(data),
+        list:toRaw(list)
     }
     bus.emit('homePageBack',{
         page:'nftDetail',

@@ -1,6 +1,6 @@
 <template src='./index.html'></template>
 <script lang='ts' setup>
-import { ref, onMounted, defineProps, nextTick } from 'vue';
+import { ref, onMounted, defineProps } from 'vue';
 import bus from '@/utils/bus.js'; 
 import indexDbData from '@/utils/indexDB';
 import { Decrypt,evmKey } from '@/utils/index.js';

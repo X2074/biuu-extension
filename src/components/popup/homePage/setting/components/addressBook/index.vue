@@ -1,6 +1,6 @@
 <template src='./index.html'></template>
 <script lang='ts' setup>
-import { ref, onMounted, defineProps,watch, nextTick } from 'vue';
+import { ref, onMounted,watch } from 'vue';
 import bus from '@/utils/bus.js'; 
 import indexDbData from '@/utils/indexDB';
 import addressDetail from "./components/addressDetail/index.vue"

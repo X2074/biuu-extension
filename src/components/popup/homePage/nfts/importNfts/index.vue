@@ -3,10 +3,11 @@
 @import './index.scss';
 </style>
 <script lang='ts' setup>
-import { ref, onMounted, reactive, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
-import {getNFTContent,NFTSaveIndexDB} from '@/utils/nft.js';
+import {getNFTContent} from '@/utils/nft.js';
+import {NFTSaveIndexDB} from '@/utils/operateIndexDB.js';
 let loading = ref(false)
 let loadingText = ref('加载中...')
 let nftContent = ref(null);
@@ -39,7 +40,10 @@ const getNft = async () => {
     }
     loading.value = true;
 	let data = await getNFTContent(currentWallt.value,contractAddress.value, tokenId.value);
+    console.log(data,'datadatadatadatadata');
+    
     if(!data){
+        loading.value = false;
         nftNull.value = true;
         return;
     }

@@ -3,7 +3,7 @@
 @import './index.scss';
 </style>
 <script lang='ts' setup>
-import { ref, onMounted, reactive, watch } from 'vue';
+import { ref, onMounted,toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import {getNftBase64} from '@/utils/nft.js';  
 import bus from '@/utils/bus';
@@ -13,35 +13,16 @@ let loadingText = ref('加载中...')
 let nftsList = ref([]);
 const props = defineProps(['nftContent'])
 onMounted(async ()=>{
-	// let currentWalltAddress = await indexDbData.getData('currentWalltAddress')
-    // let data = await indexDbData.getData(md5('nfts'));
-    // if(!data) return;
-    // console.log(data,'data');
-    
-    // let nfts = data['content'][currentWalltAddress['keyStore']]
-    // console.log(nfts);
-    // for (let key in nfts) {
-    //     nftsList.value.push(nfts[key])
-    // }
-        console.log(nftsList.value);
-    // if(nftsContent && nftsContent.length){
-        fetchAllData(props['nftContent']).then(res=>{
-            nftsList.value = res;
-        })
-    // }
+    fetchAllData(props['nftContent'])
 })
 
 const fetchAllData = async (data)=>{
-    let promises = data.map(item=>getNftBase64(item));
-    
-    try {
-        const results = await Promise.all(promises);
-        console.log('All data received:', results);
-        return results;
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        return null;
-    }
+    data.forEach(item=>{
+        getNftBase64(item).then(res=>{
+            console.log(res,'测试接口数据');
+            nftsList.value.push(res)
+        });
+    });
 }
 
 const toImport = ()=>{
@@ -49,10 +30,12 @@ const toImport = ()=>{
 }
 
 const toDetail = (data,list)=>{
+    
     let info = {
-        detail:JSON.parse(JSON.stringify(data)),
-        list:JSON.parse(JSON.stringify(list))
+        detail:toRaw(data),
+        list:toRaw(list)
     }
+    console.log(info,'详情页数据');
     bus.emit('homePageBack',{
         page:'nftDetail',
         data:info

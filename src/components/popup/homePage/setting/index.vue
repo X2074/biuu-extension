@@ -4,7 +4,7 @@
 @import './index.scss';
 </style>
 <script lang='ts' setup>
-import { ref, onMounted, reactive, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
 // import privateKey from './components/privateKey/index.vue'

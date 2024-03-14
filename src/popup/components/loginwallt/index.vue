@@ -1,6 +1,6 @@
 <template src="./index.html"></template>
 <script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import bus from '@/utils/bus';
 import md5 from 'js-md5';
 import Cookies from 'js-cookie';

@@ -1,6 +1,6 @@
 <template src='./index.html'></template>
 <script lang='ts' setup>
-import { ref, onMounted, watchEffect, getCurrentInstance } from 'vue';
+import { ref, onMounted } from 'vue';
 import bus from '@/utils/bus.js';
 import qitmeer from 'qitmeer-js'
 import ethUtil from 'ethereumjs-util'

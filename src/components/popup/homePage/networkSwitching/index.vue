@@ -4,7 +4,7 @@
 @import './index.scss';
 </style>
 <script lang='ts' setup>
-import { ref, onMounted, reactive, watch } from 'vue';
+import { ref, onMounted,toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
 let settingStep = ref('options');//设置页面当前展示内容
@@ -26,7 +26,7 @@ onMounted(async ()=>{
 // 选中的网络
 const rpcChange = async (event,type) => {
     console.log(event,'event');
-    let dataRpc = JSON.parse(JSON.stringify(event));
+    let dataRpc = toRaw(event);
     console.log(dataRpc,'dataRpc');
     dataRpc['netWorkType'] = type;
     // 存储选中的网络数据
