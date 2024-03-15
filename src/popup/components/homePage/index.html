@@ -73,9 +73,10 @@
     </div>
     <div class="footer-tabs">
         <div class="tabs-list flex">
-            <p class="mr-25">NFTS</p>
+            <p @click="tabsOption = 'nfts'" class="mr-25">NFTS</p>
+            <p @click="tabsOption = 'transactionHistory'">交易记录</p>
         </div>
-        <nftCard v-if="tabsOption == 'nfts'" />
+        <nftCard v-if="walltAccount == 'nfts'" />
     </div>
 </div>
 <!-- 选择账户 -->
@@ -88,3 +89,5 @@
 <importNfts v-if="walltAccount == 'importNfts'" />
 <!-- nft详情 -->
 <nftDetail v-if="walltAccount == 'nftDetail'" :details="nftDetails" />
+<!-- 交易记录 -->
+<transactionHistory v-if="walltAccount == 'transactionHistory'" />

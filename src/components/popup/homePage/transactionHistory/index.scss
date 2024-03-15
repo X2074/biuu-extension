@@ -1,0 +1,147 @@
+.transaction-history {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+
+    .tabs {
+        width: 100%;
+        height: 50px;
+        border-bottom: 1px solid rgba(177, 218, 90, 0.5);
+        align-items: center;
+        justify-content: space-around;
+
+        p {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 20px;
+            color: rgba(90, 90, 90, 1);
+            cursor: pointer;
+
+            &.check-tabs {
+                font-weight: 600;
+                color: #000;
+            }
+        }
+    }
+
+    .transaction-content {
+        .tabs {
+            border: 0;
+
+            p {
+                font-size: 14px;
+                line-height: 50px;
+
+                &.check-tabs {
+                    font-weight: 500;
+                    border-bottom: 1px solid rgba(177, 218, 90, 0.5);
+                }
+            }
+        }
+
+        :deep(.transaction-list) {
+            >div {
+                height: 66px;
+                width: 100%;
+                border-bottom: 0.5px solid rgba(177, 218, 90, 0.3);
+                padding: 13px 16px;
+            }
+
+            div {
+                align-items: center;
+
+                &.jc {
+                    justify-content: space-between;
+                }
+
+                .name {
+                    font-size: 16px;
+                    font-weight: 500;
+                    line-height: 16px;
+                    color: #000;
+                }
+
+                .status {
+                    padding: 2px 8px;
+                    border-radius: 8px;
+                    background: rgba(177, 218, 90, 0.3);
+                    font-size: 12px;
+                    color: rgba(90, 90, 90, 1);
+                }
+
+                .times {
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: rgba(146, 146, 146, 1);
+                }
+
+                .hasten,
+                .close {
+                    font-size: 14px;
+                    font-weight: 400;
+                    cursor: pointer;
+                }
+
+                .hasten {
+                    color: rgba(177, 218, 90, 1);
+                }
+
+                .close {
+                    color: rgba(159, 159, 159, 1);
+                }
+            }
+        }
+    }
+
+
+    .header {
+        align-items: center;
+        position: relative;
+        height: 56px;
+        padding: 0 14px;
+        padding-left: 40px;
+
+        img {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            position: absolute;
+            left: 14px;
+            top: 18px;
+            cursor: pointer;
+        }
+
+        p {
+            font-size: 16px;
+        }
+    }
+
+    .detail-content {
+        padding: 0 30px;
+        justify-content: space-between;
+
+        p,
+        div {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 21px;
+        }
+
+        .price {
+            color: rgba(177, 218, 90, 1);
+        }
+
+        div {
+            align-items: center;
+
+            img {
+                width: 16px;
+                height: 16px;
+                cursor: pointer;
+            }
+        }
+    }
+}

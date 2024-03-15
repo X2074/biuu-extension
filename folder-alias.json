@@ -187,5 +187,14 @@
     },
     "src/utils/operateIndexDB.js": {
         "description": "增删改查indexDB"
+    },
+    "src/components/popup/homePage/transactionHistory": {
+        "description": "交易记录"
+    },
+    "src/components/popup/homePage/transactionHistory/queueTransaction": {
+        "description": "进行中的交易"
+    },
+    "src/components/popup/homePage/transactionHistory/queueFinish": {
+        "description": "处理中\\已完成"
     }
 }

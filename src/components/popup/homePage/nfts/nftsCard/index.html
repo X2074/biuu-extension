@@ -7,13 +7,18 @@
         <p v-if="!nftsList" class="mt-25">还没有 NFT</p>
     </div>
     <div class="nft-type">
+        <div v-if="onceNftList && onceNftList.length" class="nft-list pt-5 mt-10">
+            <div class="mb-10">
+                <p>先前拥有的</p>
+                <nftImages :nftContent="onceNftList" />
+            </div>
+        </div>
         <div v-if="nftsList && nftsList.length" class="nft-list pt-5 mt-10">
             <div class="mb-10" v-for="item in nftsList">
                 <!-- <img class="logo" src="@/assets/images/logo/logo.png" alt="">
                 <img class="nft" :src="item.image" alt=""> -->
                 <p v-if="item.collections && item.collections.length">{{item.collectionName}}</p>
-                <nftImages :nftContent="item.collections
-                    " />
+                <nftImages :nftContent="item.collections" />
             </div>
         </div>
     </div>

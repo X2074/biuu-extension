@@ -9,6 +9,7 @@ import setting from "@/components/popup/homePage/setting/index.vue"
 import networkSwitching from "@/components/popup/homePage/networkSwitching/index.vue"
 import importNfts from "@/components/popup/homePage/nfts/importNfts/index.vue"
 import nftDetail from "@/components/popup/homePage/nfts/nftDetail/index.vue"
+import transactionHistory from "@/components/popup/homePage/transactionHistory/index.vue"
 // 底部card部分
 import nftCard from "@/components/popup/homePage/nfts/nftsCard/index.vue"
 const transactionHash = ref(0);
@@ -21,7 +22,7 @@ const userList = ref([]);//下拉列表的用户数据
 const netWorkType = ref('EVM');//网络类型
 const walltUser = ref('EVM');//选中的用户数据
 const walltEnvironment = ref({})//钱包所在的网络
-const walltAccount = ref('')
+const walltAccount = ref('nfts')
 const pageType = ref('');//当前需要展示的页面
 let loading = ref(true)
 let loadingText = ref('加载中...')

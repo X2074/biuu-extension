@@ -37,10 +37,13 @@
         }
     }
 
-    .nft-list {
-        width: 100%;
+    .nft-type {
         height: 210px;
         overflow: auto;
+    }
+
+    .nft-list {
+        width: 100%;
 
         >div {
             width: 100%;

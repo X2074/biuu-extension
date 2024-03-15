@@ -13,18 +13,20 @@ import md5 from 'js-md5';
 let loading = ref(false)
 let loadingText = ref('加载中...')
 let nftsList = ref([]);
+let onceNftList = ref([]);//先前拥有的nft
 onMounted(async ()=>{
 	let currentWalltAddress = await indexDbData.getData('currentWalltAddress')
     let data = await indexDbData.getData(md5('nfts'));
     if(!data) return;
-    console.log(data,'data');
-    
     let nfts = data['content'][currentWalltAddress['keyStore']]
-    console.log(nfts);
     for (let key in nfts) {
         nftsList.value.push(nfts[key])
     }
-        console.log(nftsList.value);
+    // 曾经拥有的nft
+    let onceNfts = await indexDbData.getData(md5('onceNft'));
+    if(!onceNfts['content'][currentWalltAddress['keyStore']] || !onceNfts['content'][currentWalltAddress['keyStore']].length) return;
+    onceNftList.value = onceNfts['content'][currentWalltAddress['keyStore']];
+    console.log(onceNftList.value,'曾经的数据');
     // if(nftsContent && nftsContent.length){
     //     fetchAllData(nftsContent).then(res=>{
     //         // nftsList.value = res;

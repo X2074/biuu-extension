@@ -1,0 +1,93 @@
+<div class="transaction-history" v-loading:[loadingText]="loading">
+    <div class="tabs flex">
+        <p>tokens</p>
+        <p>收藏品</p>
+        <p class="check-tabs">交易记录</p>
+    </div>
+    <div class="transaction-content" v-if="transactionPage == 'list'">
+        <div class="tabs mb-20 flex">
+            <p @click="transaction='queue'" :class="{'check-tabs':transaction=='queue'}">
+                待处理({{queueTransactions.length}})</p>
+            <p @click="transaction='finish'" :class="{'check-tabs':transaction=='finish'}">
+                已完成({{finishTransactions.length}})</p>
+        </div>
+        <!-- 已完成的 -->
+        <div class="transaction-list" v-if="transaction == 'finish'">
+            <div class="flex jc" v-for="item in finishTransactions" @click="toDetail(item)">
+                <queueFinish :transactionContent="item" />
+            </div>
+        </div>
+        <!-- 处理中的 -->
+        <div class="transaction-list" v-if="transaction == 'queue'">
+            <div class="flex jc" v-for="item in queueTransactions" @click="toDetail(item)">
+                <queueFinish :transactionContent="item" />
+            </div>
+        </div>
+    </div>
+    <div class="transaction-detail" v-if="transactionPage == 'detail'">
+        <div class="header flex" @click="transactionPage = 'list'">
+            <img class="back-img" src="@/assets/images/icons/back.png" alt="">
+            <p>交易详情</p>
+        </div>
+        <div class="detail-content flex mt-15">
+            <p class="name">状态：</p>
+            <div class="price">已确认</div>
+        </div>
+        <div class="detail-content flex mt-25">
+            <p class="name">交易哈希：</p>
+            <div class="info flex">
+                <p>{{detailTransaction?.transactionHash.substr(0,4)}}...{{detailTransaction?.transactionHash.substr(-4)}}
+                </p>
+                <img class="ml-10" @click="onCopy(detailTransaction?.transactionHash,'交易哈希')"
+                    src="@/assets/images/icons/copy.png" alt="">
+            </div>
+        </div>
+        <div class="detail-content flex mt-25">
+            <p class="name">付款地址：</p>
+            <div class="info flex">
+                <p>{{detailTransaction?.from.substr(0,4)}}...{{detailTransaction?.from.substr(-4)}}</p>
+                <img class="ml-10" @click="onCopy(detailTransaction?.from,'付款地址')" src="@/assets/images/icons/copy.png"
+                    alt="">
+            </div>
+        </div>
+        <!-- 转账 -->
+        <div v-if="detailTransaction && detailTransaction.price" class="detail-content flex mt-25">
+            <p class="name">收款地址：</p>
+            <div class="info flex">
+                <p>{{detailTransaction?.to.substr(0,4)}}...{{detailTransaction?.to.substr(-4)}}
+                </p>
+                <img class="ml-10" @click="onCopy(detailTransaction?.to,'收款地址')" src="@/assets/images/icons/copy.png"
+                    alt="">
+            </div>
+        </div>
+        <!-- 转账 -->
+        <div v-if="detailTransaction && detailTransaction.price" class="detail-content flex mt-25">
+            <p class="name">交易数额：</p>
+            <div class="info flex">
+                <p class="price mr-5">369</p>
+                <p>{{rpc_url?.unit.toUpperCase()}}</p>
+            </div>
+        </div>
+        <!-- nft -->
+        <div v-if="detailTransaction && !detailTransaction.price" class="detail-content flex mt-25">
+            <p class="name">NFT合约地址：</p>
+            <div class="info flex">
+                <p>{{detailTransaction?.to.substr(0,4)}}...{{detailTransaction?.to.substr(-4)}}
+                </p>
+                <img class="ml-10" @click="onCopy(detailTransaction?.to,'NFT合约地址')" src="@/assets/images/icons/copy.png"
+                    alt="">
+            </div>
+        </div>
+        <div class="detail-content flex mt-25">
+            <p class="name">GAS 费：</p>
+            <div class="info flex">
+                <p class="price mr-5">{{gasPrice}}</p>
+                <!-- <p>{{rpc_url.unit.toUpperCase()}}</p> -->
+            </div>
+        </div>
+        <div class="detail-content flex mt-25">
+            <p class="name">交易时间：</p>
+            <div>{{dayjs(time).format('YYYY-MM-DD HH:mm') || '--'}}</div>
+        </div>
+    </div>
+</div>

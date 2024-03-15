@@ -125,7 +125,7 @@ export async function hashSaveIndexDB(keyStore, status, data) {
     return true;
 }
 /**
- * 曾经拥有（导入后又转移出去的nft)
+ * 保存曾经拥有（导入后又转移出去的nft)
  */
 export async function usedToHaveNft(data, keyStore) {
     // 首先获取所有的nfts数据

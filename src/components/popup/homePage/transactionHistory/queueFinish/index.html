@@ -1,0 +1,13 @@
+<div v-if="transactionDetail">
+    <div class="flex">
+        <!-- 没有价格就是nft -->
+        <p class="name" v-if="!transactionDetail.price">发送NFT</p>
+        <p class="name" v-else>-{{transactionDetail.price.toLocaleString()}} {{rpc_url.unit.toUpperCase()}}</p>
+        <p class="status ml-10">{{transactionDetail.status == 'finish'?'已确认':'队列中'}}</p>
+    </div>
+    <p class="times mt-5">{{dayjs(transactionDetail['time']).format('YYYY-MM-DD HH:mm')}}</p>
+</div>
+<div class="flex" v-if="transactionDetail && transactionDetail.status != 'finish'">
+    <p class="hasten">加速</p>
+    <p class="close ml-10">取消</p>
+</div>
