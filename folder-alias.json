@@ -196,5 +196,17 @@
     },
     "src/components/popup/homePage/transactionHistory/queueFinish": {
         "description": "处理中\\已完成"
+    },
+    "src/components/popup/homePage/sendTrade": {
+        "description": "转账"
+    },
+    "src/mixins/indexDB.ts": {
+        "description": "indexdb的混入"
+    },
+    "src/components/popup/homePage/addressBook": {
+        "description": "地址簿"
+    },
+    "src/components/popup/homePage/setting/security": {
+        "description": "安全问答"
     }
 }

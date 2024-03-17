@@ -19,7 +19,6 @@ onMounted(async ()=>{
 const fetchAllData = async (data)=>{
     data.forEach(item=>{
         getNftBase64(item).then(res=>{
-            console.log(res,'测试接口数据');
             nftsList.value.push(res)
         });
     });

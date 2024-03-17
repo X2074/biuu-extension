@@ -10,6 +10,7 @@ import networkSwitching from "@/components/popup/homePage/networkSwitching/index
 import importNfts from "@/components/popup/homePage/nfts/importNfts/index.vue"
 import nftDetail from "@/components/popup/homePage/nfts/nftDetail/index.vue"
 import transactionHistory from "@/components/popup/homePage/transactionHistory/index.vue"
+import sendTrade from "@/components/popup/homePage/sendTrade/index.vue"
 // 底部card部分
 import nftCard from "@/components/popup/homePage/nfts/nftsCard/index.vue"
 const transactionHash = ref(0);

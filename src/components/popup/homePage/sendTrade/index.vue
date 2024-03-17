@@ -7,16 +7,18 @@
 import { ref, onMounted } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
-// import privateKey from './components/privateKey/index.vue'
-import security from './components/security/index.vue'
-import addressBook from './components/addressBook/index.vue'
+import addressBook from '../setting/components/addressBook/index.vue'
 let settingStep = ref('options');//设置页面当前展示内容
-let currentWalltAddress = ref(null)//当前钱包信息
+let currentWallt = ref(null)//当前钱包信息
+let rpcData = ref(null)//当前网络信息
 
 let loading = ref(false)
 let loadingText = ref('加载中...')
 indexDbData.getData('currentWalltAddress').then(res => {
-    currentWalltAddress.value = res;
+    currentWallt.value = res;
+})
+indexDbData.getData('rpc_url').then(res => {
+    rpcData.value = res;
 })
 // 返回上一页面
 const toBack = (page)=>{
@@ -26,8 +28,4 @@ const toBack = (page)=>{
         settingStep.value = page;
     }
 }
-
-bus.on('settingPage',res=>{
-    settingStep.value = res;
-})
 </script>

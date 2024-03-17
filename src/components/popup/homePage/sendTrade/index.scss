@@ -1,0 +1,86 @@
+.send-trade {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+
+
+    .trade-address {
+        margin-top: 18px;
+        justify-content: space-between;
+        padding: 0 16px;
+
+        .input-address {
+            position: relative;
+
+            div {
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            p {
+                font-weight: 500;
+                line-height: 18px;
+                color: #000000;
+                font-size: 14px;
+
+                &.price {
+                    color: #b1da5a;
+                }
+
+                &.book {
+                    cursor: pointer;
+                }
+            }
+
+            input {
+                width: 100%;
+                height: 40px;
+                padding: 8px 14px;
+                border-radius: 5px;
+                border: 1px solid rgba(219, 219, 219, 1);
+                font-size: 14px;
+                color: #000;
+            }
+        }
+
+
+        .prompt {
+            border-radius: 8px;
+            background: rgba(255, 72, 160, 0.1);
+            width: 100%;
+            padding: 8px 16px;
+            align-items: flex-start;
+            justify-content: space-between;
+
+            img {
+                width: 16px;
+                height: 16px;
+            }
+
+            p {
+                font-size: 14px;
+                line-height: 20px;
+                color: #000;
+                text-align: left;
+            }
+        }
+    }
+
+
+    button {
+        margin: 60px 16px 0;
+        border-radius: 30px;
+        background: rgba(177, 218, 90, 1);
+        padding: 14px 12px;
+        height: 48px;
+        width: 328px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #000;
+        cursor: pointer;
+    }
+
+}

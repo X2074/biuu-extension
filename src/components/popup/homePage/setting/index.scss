@@ -6,28 +6,6 @@
     bottom: 0;
     background-color: #fff;
 
-    .header {
-        align-items: center;
-        position: relative;
-        height: 56px;
-        padding: 0 14px;
-        padding-left: 40px;
-
-        img {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            position: absolute;
-            left: 14px;
-            top: 18px;
-            cursor: pointer;
-        }
-
-        p {
-            font-size: 16px;
-        }
-    }
-
     .setting-options {
         width: 100%;
 
@@ -44,8 +22,8 @@
             }
 
             img {
-                width: 24px;
-                height: 24px;
+                max-width: 24px;
+                max-height: 24px;
                 cursor: pointer;
             }
 

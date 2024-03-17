@@ -1,0 +1,41 @@
+<div class="send-trade" v-loading:[loadingText]="loading">
+    <div class="header flex" @click="toBack('homePage')" v-if="settingStep == 'options'">
+        <img class="back-img" src="@/assets/images/icons/back.png" alt="">
+        <p>{{rpcData?.unit.toUpperCase()}}转账</p>
+    </div>
+    <!-- <addressBook class="send-book" /> -->
+
+    <div class="trade-address mt-10">
+        <div class="input-address">
+            <p>付款地址：</p>
+            <input class="mt-10" type="password" maxlength="16" v-model="newPsd">
+        </div>
+        <div class="input-address mt-15">
+            <div class="flex">
+                <p>密码：</p>
+                <div class="trade-fun">
+                    <p class="price book">地址簿 ></p>
+                </div>
+            </div>
+            <input class="mt-5" type="password" maxlength="16" v-model="confirmPsd" />
+        </div>
+        <div class="input-address mt-15">
+            <div class="flex">
+                <p>转账数量：</p>
+                <div class="trade-fun flex">
+                    <p>可用：</p>
+                    <p class="price"> 0.00 </p>
+                    <p>{{rpcData?.unit.toUpperCase()}}</p>
+                </div>
+            </div>
+            <input class="mt-5" type="password" maxlength="16" v-model="confirmPsd" />
+        </div>
+        <div class="prompt flex mt-15">
+            <img class="mr-10 mt-5" src="@/assets/images/icons/warn-red.png" alt="">
+            <p>您选择的网络是 {{rpcData?.netName}} （{{rpcData?.netWorkType.toUpperCase()}}）网络，请确保您的转账地址支持 {{rpcData?.netName}}
+                （{{rpcData?.netWorkType.toUpperCase()}}） 网络，如果对方平台不支持找回您的币将会丢失。</p>
+        </div>
+    </div>
+
+    <button @click="detailContentStatus = 'trade'">转账</button>
+</div>
