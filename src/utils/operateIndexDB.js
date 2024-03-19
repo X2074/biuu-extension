@@ -161,3 +161,60 @@ export async function usedToHaveNft(data, keyStore) {
     indexDbData.putData(nftData);
     return true;
 }
+
+// 交易hash的保存
+export async function saveTransaction(data, key) {
+    let hashData = {
+        blockNumber: data.blockNumber,//查询交易时间
+        blockHash: data.blockHash,//区块hash
+        transactionHash: data.transactionHash,//交易hash
+        gasUsed: data.gasUsed,//实际3使用的gas费
+    }
+    hashData = JSON.stringify(hashData);
+    // 获取当前账户
+    let currentWallt = await indexDbData.getData('currentWalltAddress');
+    // 对交易数据进行简单加密
+    // hashData = CryptoJS.AES.encrypt(hashData, currentWallt.keyStore).toString();
+    // 获取是否有hash缓存
+    let transactionData = await indexDbData.getData('transactionHash');
+    // 没有就新增
+    if (!transactionData) {
+        let hashInfo = {
+            id: "transactionHash",
+            content: {}
+        }
+        hashInfo.content[currentWallt.keyStore] = [hashData];
+        indexDbData.putData(hashInfo);
+    } else {
+        // 如果当前账户存在hash了
+        if (transactionData['content'] && transactionData['content'][currentWallt.keyStore]) {
+            transactionData['content'][currentWallt.keyStore] = transactionData['content'][currentWallt.keyStore].push(hashData)
+        } else {//如果没有就直接赋值
+            transactionData['content'][currentWallt.keyStore] = [hashData];
+        }
+        indexDbData.putData(transactionData);
+    }
+    return true;
+}
+// 更新交易hash
+export async function updateTransaction(data, key) {
+    let hashData = {
+        blockNumber: data.blockNumber,//查询交易时间
+        blockHash: data.blockHash,//区块hash
+        transactionHash: data.transactionHash,//交易hash
+        gasUsed: data.gasUsed,//实际3使用的gas费
+    }
+    hashData = JSON.stringify(hashData);
+    // 获取当前账户
+    let currentWallt = await indexDbData.getData('currentWalltAddress');
+    // hash缓存-当前hash
+    let transactionData = await indexDbData.getData('transactionHash');
+    transactionData['content'][currentWallt.keyStore] = transactionData['content'][currentWallt.keyStore].map(item => {
+        if (item.transactionHash == data.transactionHash) {
+            item.status = true;
+        }
+        return item;
+    })
+    indexDbData.putData(transactionData);
+    return true;
+}

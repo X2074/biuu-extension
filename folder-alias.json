@@ -208,5 +208,23 @@
     },
     "src/components/popup/homePage/setting/security": {
         "description": "安全问答"
+    },
+    "demo.ts": {
+        "description": "测试demo"
+    },
+    "src/components/popup/homePage/setting/security/components/mnemonicPhrase": {
+        "description": "显示助记词"
+    },
+    "src/components/popup/homePage/setting/security/components/privateKey": {
+        "description": "显示私钥"
+    },
+    "src/components/popup/homePage/setting/security/components/revisePassword": {
+        "description": "修改密码"
+    },
+    "src/components/popup/homePage/addressBook/components/addressAppend": {
+        "description": "新增"
+    },
+    "src/components/popup/homePage/addressBook/components/addressDetail": {
+        "description": "地址详情"
     }
 }

@@ -1,6 +1,6 @@
 <template src='./index.html'></template>
 <script lang='ts' setup>
-import { ref, onMounted,watch } from 'vue';
+import { ref, onMounted,watch ,toRaw} from 'vue';
 import bus from '@/utils/bus.js'; 
 import indexDbData from '@/utils/indexDB';
 import addressDetail from "./components/addressDetail/index.vue"
@@ -12,7 +12,10 @@ let loading = ref(false)
 let searchAddress = ref('')
 let loadingText = ref('加载中...')
 let detail = ref(null);//详情数据
+let prop = defineProps(['importPage']);
 onMounted(() => {
+    console.log(prop,'prop');
+    
     loading.value = true;
     getAddressList();
 })
@@ -33,8 +36,12 @@ const toBack = ()=>{
 }
 
 const checkAddress = (data)=>{
-    detail.value = data;
-    addressBookPage.value = 'addressDetail';
+    if(prop.importPage && prop.importPage == 'sendTrade'){
+        bus.emit('sendTradeBook',toRaw(data))
+    }else{
+        detail.value = data;
+        addressBookPage.value = 'addressDetail';
+    }
 }
 
 bus.on('addressBook',async (res)=>{

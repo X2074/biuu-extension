@@ -168,8 +168,12 @@ const deleteUpdata = async(content,type)=>{
         })
     }
     await NFTUpdataIndexDB(currentWallt.value['keyStore'],content['nftAddress'],toRaw(data));
+    // 删除image（nft的base64数据）
+    let { image,prompt_id, ...nftContent } = toRaw(content);
+    console.log(image,"image",prompt_id,"prompt_id",nftContent);
+    
     if(type == 'tread'){//如果是交易
-        await usedToHaveNft(toRaw(content),currentWallt.value['keyStore'])
+        await usedToHaveNft(nftContent,currentWallt.value['keyStore'])
     }
     return true;
 }

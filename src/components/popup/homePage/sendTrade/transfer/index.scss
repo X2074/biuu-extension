@@ -1,0 +1,91 @@
+.transfer {
+    padding: 0 16px;
+
+
+    .price-gas {
+        align-items: flex-end;
+
+        .price {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 20px;
+            color: rgba(177, 218, 90, 1);
+        }
+
+        .unit {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            color: #000;
+        }
+    }
+
+    .title {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+    }
+
+    .transfer-information {
+        padding: 10px 16px;
+        border-bottom: 1px dashed rgba(177, 218, 90, 1);
+
+        &.solid {
+            border-bottom: 1px solid rgba(177, 218, 90, 1);
+        }
+
+        textarea {
+            width: 100%;
+            font-size: 14px;
+            line-height: 20px;
+            height: 40px;
+            resize: none;
+            border: 0;
+        }
+    }
+
+    .price-total {
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 16px;
+    }
+
+    .nft-footer {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 20px;
+        justify-content: space-between;
+        align-items: center;
+        width: 300px;
+        box-shadow: none;
+        height: 48px;
+
+        button {
+            font-size: 16px;
+            font-weight: 500;
+            color: #000;
+            line-height: 48px;
+            height: 48px;
+            border-radius: 30px;
+            text-align: center;
+            cursor: pointer;
+
+            &.close {
+                width: 104px;
+                border: 1px solid rgba(177, 218, 90, 1);
+                background-color: #fff;
+            }
+
+            &.confirm {
+                width: 184px;
+                background: rgba(177, 218, 90, 1);
+
+                &.confirm-key {
+                    width: 300px;
+                }
+            }
+
+        }
+    }
+}

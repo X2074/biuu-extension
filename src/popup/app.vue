@@ -38,7 +38,7 @@ import headerPage from './components/header/index.vue'
 import transfer from './components/transfer/index.vue'
 // 全局提示
 import prompt from '@/components/popup/components/prompt/index.vue'
-import { getCookie } from '@/utils/index';
+import { getBlance } from '@/utils/index';
 import indexDbData from '@/utils/indexDB';
 import Web3 from 'web3'
 import bus from '@/utils/bus';
@@ -79,58 +79,26 @@ bus.on('nextPage', (res) => {
 	let type = res;
 	loading.value = true;
 	if(res == 'homePage' || !res) {
-		// indexDbData.getData('currentWalltAddress').then(res => {
-		// 	console.log(res, 'res');
-		// 	if (!res) {
-		// 		pageTypes.value = 'create'
-		// 		loading.value = false;
-		// 		return;
-		// 	}
-		// 	let data = res;
-		// 	if (data && data.address) {
-		// 		userAddress.value = data.address;
-		// 		walltContent.value = data;
-		// 		getBlance(type)
-		// 	}
-		// }).catch(err => { })
-		
 		getInfo()
 	}else{
 		pageTypes.value = res;
 		loading.value = false;
 	}
 });
-const getBlance = (type='homePage') => {
-	indexDbData.getData('rpc_url').then(res => {
-		let data = res;
-		// 定义rpc
-		let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
+const getBlanceInfo = async (type='homePage') => {
+	try {
+		let data = await indexDbData.getData('rpc_url')
 		walltContent.value = data;
 		// 钱包地址
 		walltContent.value.address = userAddress.value;
-		console.log(web3,'web3web3web3');
-		
-		// 获取钱包余额
-		web3.eth.getBalance(userAddress.value)
-			.then(res => {
-				console.log(res,'resres');
-				if (!res) {
-					walltContent.value.balance = 0;
-				} else {
-					let balance = web3.utils.fromWei(res, 'ether');
-					balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
-					walltContent.value.balance = balance;
-				}
-				
-				pageTypes.value = type;
-				// getHexHash(type)
-			}).catch(err => {
-				console.log(err, 'err');
-				loading.value = false;
-			});
-				pageTypes.value = type;
-	}).catch(err => { 
-				pageTypes.value = type;})
+		let blance = await getBlance(data.url,userAddress.value)
+		console.log(blance,'blance');
+		pageTypes.value = type;
+		loading.value = false;
+	} catch (error) {
+		pageTypes.value = type;
+		loading.value = false;
+	}
 }
 // 获取账户相关信息
 const getInfo = () => {
@@ -145,7 +113,7 @@ const getInfo = () => {
 		if (res && res.address) {
 			userAddress.value = res.address;
 			walltContent.value = res;
-			getBlance()
+			getBlanceInfo()
 			// if (getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') && getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') != 'false') {
 			// } else {
 			// 	pageTypes.value = 'login';
@@ -154,7 +122,6 @@ const getInfo = () => {
 			pageTypes.value = 'create'
 			loading.value = false;
 		}
-		loading.value = false;
 	}).catch(err => {
 		loading.value = false;
 	})

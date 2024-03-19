@@ -48,7 +48,9 @@ const getNft = async () => {
         return;
     }
     console.log(data,'saveData');
-    let saveData = await NFTSaveIndexDB(data,currentWallt.value);
+    // 删除image（nft的base64数据）
+    let { image,prompt_id, ...nftContent } = data;
+    let saveData = await NFTSaveIndexDB(nftContent,currentWallt.value);
     console.log(saveData,'saveData');
     loading.value = false;
     if(saveData){

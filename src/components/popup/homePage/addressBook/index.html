@@ -1,15 +1,16 @@
-<div @click="toBack" v-if="addressBookPage != 'addressDetail'" class="header flex">
+<div @click="toBack" v-if="!prop.importPage && addressBookPage != 'addressDetail'" class="header flex">
     <img class="back-img" src="@/assets/images/icons/back.png" alt="">
     <p>地址簿</p>
 </div>
-<div @click="addressBookPage = 'list'" v-if="addressBookPage == 'addressDetail'" class="header flex">
+<div @click="addressBookPage = 'list'" v-if="!prop.importPage && addressBookPage == 'addressDetail'"
+    class="header flex">
     <img class="back-img" src="@/assets/images/icons/back.png" alt="">
     <p>详细信息</p>
 </div>
 <div class="address-book" v-loading:[loadingText]="loading">
     <!-- 列表 -->
     <div class="address-content" v-if="addressBookPage == 'list'">
-        <div class="address-header flex">
+        <div class="address-header flex" v-if="!prop.importPage">
             <img src="@/assets/images/icons/search.png" alt="">
             <input class="ml-15" v-model="searchAddress" placeholder="搜索联系人、地址" type="text">
         </div>
@@ -28,7 +29,7 @@
                 </li>
             </ul>
         </div>
-        <div class="add-address flex" @click="addressBookPage = 'addressAppend'">
+        <div class="add-address flex" v-if="!prop.importPage" @click="addressBookPage = 'addressAppend'">
             <img src="@/assets/images/icons/add.png" alt="">
             <p class="ml-10">添加地址</p>
         </div>
