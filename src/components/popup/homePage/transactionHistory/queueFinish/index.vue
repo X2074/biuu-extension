@@ -10,13 +10,14 @@ const props = defineProps(['transactionContent'])
 let web3 = ref(null)
 let transactionDetail = ref(null)
 let timer = ref(null)
+let rpc_url = ref(null)
 onMounted(async ()=>{
     console.log(props,'交易');
     transactionDetail.value = toRaw(props.transactionContent);
-	let data = await indexDbData.getData('rpc_url');
-	console.log(data, 'dadasdsad');
+	console.log(transactionDetail.value, 'transactionDetail.value');
+	rpc_url.value = await indexDbData.getData('rpc_url');
 	// 定义rpc;
-	web3.value = new Web3(new Web3.providers.HttpProvider(data.url));
+	web3.value = new Web3(new Web3.providers.HttpProvider(rpc_url.value.url));
     await getTime()
     if(transactionDetail.value['status'] == 'queue'){
         await getTransactionStatus()

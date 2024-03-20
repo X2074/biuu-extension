@@ -6,19 +6,19 @@
     </div>
     <div class="transaction-content" v-if="transactionPage == 'list'">
         <div class="tabs mb-20 flex">
-            <p @click="transaction='queue'" :class="{'check-tabs':transaction=='queue'}">
+            <p @click="transactionTabs = 'queue'" :class="{'check-tabs':transactionTabs == 'queue'}">
                 待处理({{queueTransactions.length}})</p>
-            <p @click="transaction='finish'" :class="{'check-tabs':transaction=='finish'}">
+            <p @click="transactionTabs = 'finish'" :class="{'check-tabs':transactionTabs == 'finish'}">
                 已完成({{finishTransactions.length}})</p>
         </div>
         <!-- 已完成的 -->
-        <div class="transaction-list" v-if="transaction == 'finish'">
+        <div class="transaction-list" v-if="transactionTabs == 'finish'">
             <div class="flex jc" v-for="item in finishTransactions" @click="toDetail(item)">
                 <queueFinish :transactionContent="item" />
             </div>
         </div>
         <!-- 处理中的 -->
-        <div class="transaction-list" v-if="transaction == 'queue'">
+        <div class="transaction-list" v-if="transactionTabs == 'queue'">
             <div class="flex jc" v-for="item in queueTransactions" @click="toDetail(item)">
                 <queueFinish :transactionContent="item" />
             </div>

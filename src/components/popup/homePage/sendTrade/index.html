@@ -1,5 +1,5 @@
 <div class="send-trade" v-loading:[loadingText]="loading">
-    <div class="header flex" @click="toBack('homePage')" v-if="settingStep == 'options'">
+    <div class="header flex" @click="toBack('homePage')">
         <img class="back-img" src="@/assets/images/icons/back.png" alt="">
         <p>{{rpcData?.unit.toUpperCase()}}转账</p>
     </div>

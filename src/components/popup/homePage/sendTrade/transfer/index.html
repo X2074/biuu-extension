@@ -2,30 +2,30 @@
     <div class="transfer-information">
         <p class="title">转账数额</p>
         <div class="price-gas mt-15 flex">
-            <p class="price">369.00</p>
+            <p class="price mr-5">{{transferContent?.value}}</p>
             <p class="unit">{{rpcData?.unit.toUpperCase()}}</p>
         </div>
     </div>
     <div class="transfer-information mt-15">
         <p class="title">转账地址</p>
-        <textarea class="mt-15" placeholder="请输入转账地址" v-model="toAddress"></textarea>
+        <textarea class="mt-15" placeholder="请输入转账地址" v-model="transferContent['sendAddress']"></textarea>
     </div>
     <div class="transfer-information solid mt-15">
         <p class="title">预计 GAS费</p>
         <div class="price-gas mt-15 flex">
-            <p class="price">369.00</p>
+            <p class="price">{{gasPrice}}</p>
             <p class="unit">{{rpcData?.unit.toUpperCase()}}</p>
         </div>
     </div>
     <div class="price-total mt-15 flex">
         <p class="title">共计：</p>
         <div class="price-gas flex">
-            <p class="price">369.00</p>
+            <p class="price">{{totalPrice}}</p>
             <p class="unit">{{rpcData?.unit.toUpperCase()}}</p>
         </div>
     </div>
     <div class="nft-footer flex">
         <button class="close" @click="toBack">取消</button>
-        <button class="confirm" @click="getNft">下一步</button>
+        <button class="confirm" @click="nextTransfer">下一步</button>
     </div>
 </div>

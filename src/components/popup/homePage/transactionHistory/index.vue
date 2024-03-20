@@ -20,6 +20,7 @@ let currentWallt = ref(null); //当前钱包信息
 let rpc_url = ref(null); //当前网络
 let rawData = ref(null);
 let transactionPage = ref("list"); //当前展示页面
+let transactionTabs = ref("queue"); //完成的还是处理中
 // 详情页
 let gasPrice = ref(0);
 let time = ref(null);
@@ -42,6 +43,8 @@ const transactionClassify = (data: any[]) => {
     if (item.status == "finish") finishTransactions.value.push(item);
     if (item.status == "queue") queueTransactions.value.push(item);
   });
+  console.log(queueTransactions.value,'queueTransactions.value');
+  
   loading.value = false;
 };
 // 更新交易状态

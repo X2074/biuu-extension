@@ -102,7 +102,8 @@ export async function hashSaveIndexDB(keyStore, status, data) {
         gasUsed: data.gasUsed,
         from: data.from,
         to: data.to,
-        status: status
+        status: status,
+        price: data['price'] ? data['price'] : 0
     }
     // 如果没有保存过hash
     if (!tradeHash) {

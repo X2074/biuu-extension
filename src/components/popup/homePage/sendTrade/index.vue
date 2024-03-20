@@ -11,7 +11,6 @@ import { getBlance, getNonce, getGas, Decrypt, evmKey } from '@/utils/index';
 import addressBook from '../addressBook/index.vue'
 import transfer from './transfer/index.vue'
 import md5 from 'js-md5';
-let settingStep = ref('options');//设置页面当前展示内容
 let currentWallt = ref({
     address:''
 })//当前钱包信息
@@ -60,6 +59,10 @@ const toBack = (page)=>{
 bus.on('sendTradeBook',(data:any)=>{
     console.log(data);
     toAddress.value = data.address;
+    sendTradePage.value = 'home';
+})
+// 返回上一级
+bus.on('sendTradeBack',(data:any)=>{
     sendTradePage.value = 'home';
 })
 // 只能输入数字
@@ -116,13 +119,14 @@ const toTransfer = async ()=>{
     transferContent.value = {
         sendAddress:toAddress.value,// 接收方地址
         value:quantity.value,// 转账 wei
-        nonce:nonce.value,
+        nonce:nonce.value,//nonce
         chainId:rpcUrlData.value['CHAIN_ID'],
         gasLimit:gas.gasLimit,
         gasPrice:gas.gasPrice,
-        key:privateKey.value
+        key:privateKey.value,//私钥
+        url:rpcUrlData.value['url']
     }
     console.log(toRaw(transferContent.value),'transferContent.value');
-    
+    sendTradePage.value = 'transfer';
 }
 </script>

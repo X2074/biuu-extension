@@ -2,7 +2,7 @@ import Web3 from 'web3'
 import CryptoJS from 'crypto-js'
 import bip39 from 'bip39'
 import indexDbData from '@/utils/indexDB.js';
-import { EthereumTx } from 'ethereumjs-tx'
+import EthereumTx from 'ethereumjs-tx'
 import ecc from 'tiny-secp256k1'
 import { BIP32Factory } from 'bip32'
 // 使用最新版本浏览器不支持，只能使用1.x版本替换
@@ -64,27 +64,39 @@ export async function evmKey(mnemonic) {
 }
 // evm转账
 export async function evmTransfer(data) {
-	let web3 = new Web3(new Web3.providers.HttpProvider(data.rpc));
-	let noce = await web3.eth.getTransactionCount(data.address);
+	console.log(data, 'datadatadata');
+	let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
 	let details = {
 		to: data.sendAddress, // 接收方地址                                                             
-		value: web3.utils.toHex(web3.utils.toWei(data.assetNum, 'ether')), // 转账 wei  
-		// gasLimit: web3.utils.toHex(gasLimit.value),
-		// gasPrice: web3.utils.toHex(gasPrice.value),
+		value: web3.utils.toHex(web3.utils.toWei(data.value, 'ether')), // 转账 wei  
 		// meer交易此处需要使用int类型
-		gasLimit: web3.utils.toHex(21000),
-		gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
-		nonce: web3.utils.toHex(noce), //meer交易这个可以不填// 序号ID, 重要， 需要一个账号的交易序号，可以通过web3.eth.getTransactionCount(web3.eth.defaultAccount)获得
+		gasLimit: web3.utils.toHex(data.gasLimit),
+		gasPrice: web3.utils.toHex(data.gasPrice),
+		nonce: web3.utils.toHex(data.nonce), //meer交易这个可以不填// 序号ID, 重要， 需要一个账号的交易序号，可以通过web3.eth.getTransactionCount(web3.eth.defaultAccount)获得
 		chainId: data.chainId
 	}
+	console.log(web3.utils.toHex(5000000000), '44', web3.utils.toHex(web3.utils.toWei('5', 'gwei')));
 	console.log(details, 'details');
-	let privateKey = hexToBytes(data.key);
 	let tx = new EthereumTx(details)
+	console.log(tx, 'tx');
+	let privateKey = Buffer.from(data.key, 'hex');
+	console.log(privateKey, 'privateKey');
 	tx.sign(privateKey)
 	let serializedTx = tx.serialize();
 	let raw = '0x' + serializedTx.toString('hex');
-	let hash = await web3.eth.sendSignedTransaction(raw)
-	return hash;
+	console.log(raw, 'raw');
+	// return web3.eth.sendSignedTransaction(raw);
+	try {
+		let hash = await web3.eth.sendSignedTransaction(raw)
+		console.log(hash, 'hash');
+		return hash;
+	} catch (error) {
+		console.log(error.message, 'error');
+		return {
+			errBol: true,
+			error: error
+		};
+	}
 }
 
 // 判断地址，是否合法
@@ -123,32 +135,16 @@ export async function getGas(url, from, to, value) {// 获取钱包余额
 		gasPrice: gasPrice
 	}
 }
-export async function getGasLimit(url, from, to) {// 获取钱包余额
-	// 定义rpc
-	let web3 = new Web3(new Web3.providers.HttpProvider(url));
-	let transaction = {
-		from: from,
-		to: to,
-		value: web3.utils.toWei('1', 'ether')
-	};
-	let data = await web3.eth.estimateGas(transaction);
-	if (!data) {
-		return 0;
-	} else {
-		console.log(data, 'GasLimit');
-		let balance = web3.utils.fromWei(data, 'ether');
-		balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
-		return balance;
-	}
-}
-
 
 // 查询交易noce
 export async function getNonce(address, url) {
 	let nonce = await indexDbData.getData('nonce');
 	if (nonce) {
-		// return nonce + 1;
+		nonce['content'] = nonce['content'] + 1;
+		indexDbData.putData(nonce);
+		console.log(nonce, 'nonce');
 		return nonce['content'];
+		// return nonce['content'];
 	} else {
 		let web3 = new Web3(new Web3.providers.HttpProvider(url));
 		let data = await web3.eth.getTransactionCount(address, 'latest');
