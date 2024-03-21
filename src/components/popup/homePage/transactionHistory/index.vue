@@ -40,7 +40,7 @@ onMounted(async () => {
 // 对交易数据进行分类
 const transactionClassify = (data: any[]) => {
   data.forEach(item => {
-    if (item.status == "finish") finishTransactions.value.push(item);
+    if ( item.status || item.status == "finish") finishTransactions.value.push(item);
     if (item.status == "queue" || item.status == "dispose") queueTransactions.value.push(item);
   });
   console.log(queueTransactions.value,'queueTransactions.value');
@@ -53,8 +53,8 @@ bus.on("transactionStatusUpdates", (data: any) => {
   // 获取当前账户下面的交易数据
   let transaction = rawData.value["content"][currentWallt.value["keyStore"]];
   rawData.value["content"][currentWallt.value["keyStore"]] = transaction.map(
-    (item: { transactionHash: any; status: any }) => {
-      if (item.transactionHash == data["transactionHash"]) {
+    (item) => {
+      if (item['uuid'] == data['uuid']) {
         item.status = data["status"];
       }
       return toRaw(item);

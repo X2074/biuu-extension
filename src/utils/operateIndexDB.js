@@ -103,7 +103,8 @@ export async function hashSaveIndexDB(keyStore, status, data) {
         from: data.from || '',
         to: data.to || '',
         status: status || '',
-        price: data['value'] ? data['value'] : 0
+        price: data['value'] ? data['value'] : 0,
+        uuid: data.uuid
     }
     // 如果没有保存过hash
     if (!tradeHash) {
@@ -118,7 +119,20 @@ export async function hashSaveIndexDB(keyStore, status, data) {
             tradeHash['content'][keyStore] = [hashContent];
         } else {
             // 查询当前账户，当前传递的合约地址下面的nft，并过滤出当前传递的tokenId相同的nft
-            tradeHash['content'][keyStore].push(hashContent);
+            let index, hashData;
+            // 过滤出相同的uuid，更改其状态
+            hashData = tradeHash['content'][keyStore].filter((item, i) => {
+                if (item.uuid == data.uuid) {
+                    index = i;
+                    return item;
+                }
+            })
+            // 对数据进行更新
+            if (hashData && hashData.length) {
+                tradeHash['content'][keyStore][index] = data;
+            } else {
+                tradeHash['content'][keyStore].push(hashContent);
+            }
         }
         tradData = tradeHash;
     }

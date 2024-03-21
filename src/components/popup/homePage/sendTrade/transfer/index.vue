@@ -9,6 +9,7 @@ import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
 import { evmTransfer } from '@/utils/index';
 import {hashSaveIndexDB} from '@/utils/operateIndexDB.js';
+import { v4 as uuidv4 } from 'uuid';
 import Web3 from 'web3'
 let rpcData = ref(null)//当前网络信息
 let toAddress = ref('');//转账地址
@@ -50,12 +51,14 @@ const toBack = ()=>{
 const nextTransfer = async ()=>{
     loading.value = true;
     // 发送消息给 background 页面请求数据
-    let data = Object.assign({action:'transferEVM',keyStore:currentWallt.value['keyStore']},toRaw(transferContent.value))
+    let data = Object.assign({uuid:uuidv4(),action:'transferEVM',keyStore:currentWallt.value['keyStore']},toRaw(transferContent.value))
 	chrome.runtime.sendMessage(data, (response) => {
 		console.log('Received data from background:', response);
-        // hashSaveIndexDB(currentWallt.value['keyStore'],'queue',data)
-        loading.value = false;
-        bus.emit('nextPage','');
+        hashSaveIndexDB(currentWallt.value['keyStore'],'queue',data)
+        setTimeout(()=>{
+            loading.value = false;
+            bus.emit('nextPage','');
+        },3000)
 	});
     return;
     // 获取交易hash
