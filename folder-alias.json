@@ -226,5 +226,17 @@
     },
     "src/components/popup/homePage/addressBook/components/addressDetail": {
         "description": "地址详情"
+    },
+    "src/background/indexDB.js": {
+        "description": "操作indexDB"
+    },
+    "src/background/resident.js": {
+        "description": "使service常驻"
+    },
+    "src/background/utils.ts": {
+        "description": "公共方法"
+    },
+    "src/background/web3Operate.js": {
+        "description": "web3相关操作"
     }
 }

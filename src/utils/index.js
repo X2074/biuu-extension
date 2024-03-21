@@ -67,11 +67,11 @@ export async function evmTransfer(data) {
 	console.log(data, 'datadatadata');
 	let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
 	let details = {
-		to: data.sendAddress, // 接收方地址                                                             
+		to: data.to, // 接收方地址                                                             
 		value: web3.utils.toHex(web3.utils.toWei(data.value, 'ether')), // 转账 wei  
 		// meer交易此处需要使用int类型
-		gasLimit: web3.utils.toHex(data.gasLimit),
-		gasPrice: web3.utils.toHex(data.gasPrice),
+		gasLimit: web3.utils.toHex(21000),
+		gasPrice: web3.utils.toHex(web3.utils.toWei('5', 'gwei')),
 		nonce: web3.utils.toHex(data.nonce), //meer交易这个可以不填// 序号ID, 重要， 需要一个账号的交易序号，可以通过web3.eth.getTransactionCount(web3.eth.defaultAccount)获得
 		chainId: data.chainId
 	}
@@ -84,7 +84,6 @@ export async function evmTransfer(data) {
 	tx.sign(privateKey)
 	let serializedTx = tx.serialize();
 	let raw = '0x' + serializedTx.toString('hex');
-	console.log(raw, 'raw');
 	// return web3.eth.sendSignedTransaction(raw);
 	try {
 		let hash = await web3.eth.sendSignedTransaction(raw)
@@ -138,22 +137,22 @@ export async function getGas(url, from, to, value) {// 获取钱包余额
 
 // 查询交易noce
 export async function getNonce(address, url) {
-	let nonce = await indexDbData.getData('nonce');
-	if (nonce) {
-		nonce['content'] = nonce['content'] + 1;
-		indexDbData.putData(nonce);
-		console.log(nonce, 'nonce');
-		return nonce['content'];
-		// return nonce['content'];
-	} else {
-		let web3 = new Web3(new Web3.providers.HttpProvider(url));
-		let data = await web3.eth.getTransactionCount(address, 'latest');
-		console.log(data, 'nonce');
-		let nonceData = {
-			id: 'nonce',
-			content: data
-		}
-		indexDbData.putData(nonceData);
-		return data;
-	}
+	// let nonce = await indexDbData.getData('nonce');
+	// if (nonce) {
+	// 	nonce['content'] = nonce['content'] + 1;
+	// 	indexDbData.putData(nonce);
+	// 	console.log(nonce, 'nonce');
+	// 	return nonce['content'];
+	// 	// return nonce['content'];
+	// } else {
+	let web3 = new Web3(new Web3.providers.HttpProvider(url));
+	let data = await web3.eth.getTransactionCount(address, 'latest');
+	// console.log(data, 'nonce');
+	// let nonceData = {
+	// 	id: 'nonce',
+	// 	content: data
+	// }
+	// indexDbData.putData(nonceData);
+	return data;
+	// }
 }

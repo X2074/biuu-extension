@@ -95,8 +95,14 @@ const toTransfer = async ()=>{
     //     bus.emit('promptModalErr','请选择收款地址')
     //     return;
     // }
+    if(blanceSecre.value <= quantity.value){
+        bus.emit('promptModalErr','您的余额不足')
+        return;
+    }
     loading.value = true;
     nonce.value = await getNonce(currentWallt.value['address'],rpcUrlData.value['url']);
+    console.log(blanceSecre.value,'blanceSecre');
+    
     let gas = await getGas(rpcUrlData.value['url'],currentWallt.value['address'],toAddress.value,quantity.value);
     console.log(gas,'gasgasgasgas');
     
@@ -117,7 +123,7 @@ const toTransfer = async ()=>{
     console.log(key,'key');
     loading.value = false;
     transferContent.value = {
-        sendAddress:toAddress.value,// 接收方地址
+        to:toAddress.value,// 接收方地址
         value:quantity.value,// 转账 wei
         nonce:nonce.value,//nonce
         chainId:rpcUrlData.value['CHAIN_ID'],

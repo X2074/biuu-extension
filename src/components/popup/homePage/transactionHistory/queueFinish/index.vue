@@ -19,7 +19,7 @@ onMounted(async ()=>{
 	// 定义rpc;
 	web3.value = new Web3(new Web3.providers.HttpProvider(rpc_url.value.url));
     await getTime()
-    if(transactionDetail.value['status'] == 'queue'){
+    if(transactionDetail.value['status'] == 'dispose'){
         await getTransactionStatus()
     }
 })

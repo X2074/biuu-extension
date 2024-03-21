@@ -118,7 +118,7 @@ const tradeNft = async (key)=>{
     // 获取交易hash
     let hash = await NFTTransfer(data);
     // 交易hash的保存
-    await hashSaveIndexDB(currentWallt.value['keyStore'],'queue',hash)
+    await hashSaveIndexDB(currentWallt.value['keyStore'],'dispose',hash)
     // 删除当前nft并保存该数据到曾经拥有nft模块
     await deleteUpdata(checkNft.value,'tread');
 }

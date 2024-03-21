@@ -49,32 +49,30 @@ const toBack = ()=>{
 // 下一步转账
 const nextTransfer = async ()=>{
     loading.value = true;
+    // 发送消息给 background 页面请求数据
+    let data = Object.assign({action:'transferEVM',keyStore:currentWallt.value['keyStore']},toRaw(transferContent.value))
+	chrome.runtime.sendMessage(data, (response) => {
+		console.log('Received data from background:', response);
+        // hashSaveIndexDB(currentWallt.value['keyStore'],'queue',data)
+        loading.value = false;
+        bus.emit('nextPage','');
+	});
+    return;
     // 获取交易hash
-    // try {
-        let hash = await evmTransfer(toRaw(transferContent.value));
-        console.log(hash,'hash');
-        
-        if(hash.errBol){
-            loading.value = false;
-            bus.emit('promptModalErr',hash.error.message)
-        }else{
-            console.log(hash,"responseText ");
-            bus.emit('promptModalSuccess','转账成功')
-            hash['price'] = transferContent.value['value'];//添加转账数量
-            // 交易hash的保存
-            await hashSaveIndexDB(currentWallt.value['keyStore'],'queue',hash)
-            loading.value = false;  
-            bus.emit('sendTradeBack')
-        }
-    // } catch (error) {
-    //     console.log(error,'error');
-    //     loading.value = false;
-    //     bus.emit('promptModalErr',error.message)
-    // }
+    // let hash = await evmTransfer(toRaw(transferContent.value));
+    // console.log(hash,'hash');
     
-    // if(!hash){
-    //     bus.emit('promptModalErr','交易失败')
-    //     return;
+    // if(hash.errBol){
+    //     loading.value = false;
+    //     bus.emit('promptModalErr',hash.error.message)
+    // }else{
+    //     console.log(hash,"responseText ");
+    //     bus.emit('promptModalSuccess','转账成功')
+    //     hash['price'] = transferContent.value['value'];//添加转账数量
+    //     // 交易hash的保存
+    //     await hashSaveIndexDB(currentWallt.value['keyStore'],'queue',hash)
+    //     loading.value = false;  
+    //     bus.emit('sendTradeBack')
     // }
 }
 </script>

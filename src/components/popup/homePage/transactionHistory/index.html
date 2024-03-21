@@ -6,7 +6,7 @@
     </div>
     <div class="transaction-content" v-if="transactionPage == 'list'">
         <div class="tabs mb-20 flex">
-            <p @click="transactionTabs = 'queue'" :class="{'check-tabs':transactionTabs == 'queue'}">
+            <p @click="transactionTabs = 'dispose'" :class="{'check-tabs':transactionTabs == 'dispose'}">
                 待处理({{queueTransactions.length}})</p>
             <p @click="transactionTabs = 'finish'" :class="{'check-tabs':transactionTabs == 'finish'}">
                 已完成({{finishTransactions.length}})</p>
@@ -18,7 +18,7 @@
             </div>
         </div>
         <!-- 处理中的 -->
-        <div class="transaction-list" v-if="transactionTabs == 'queue'">
+        <div class="transaction-list" v-if="transactionTabs == 'dispose'">
             <div class="flex jc" v-for="item in queueTransactions" @click="toDetail(item)">
                 <queueFinish :transactionContent="item" />
             </div>

@@ -96,14 +96,14 @@ export async function hashSaveIndexDB(keyStore, status, data) {
         status 交易的状态：队列中queue 已确认confirmed
     */
     let hashContent = {
-        blockHash: data.blockHash,
-        blockNumber: data.blockNumber,
-        transactionHash: data.transactionHash,
-        gasUsed: data.gasUsed,
-        from: data.from,
-        to: data.to,
-        status: status,
-        price: data['price'] ? data['price'] : 0
+        blockHash: data.blockHash || '',
+        blockNumber: data.blockNumber || '',
+        transactionHash: data.transactionHash || '',
+        gasUsed: data.gasUsed || '',
+        from: data.from || '',
+        to: data.to || '',
+        status: status || '',
+        price: data['value'] ? data['value'] : 0
     }
     // 如果没有保存过hash
     if (!tradeHash) {
