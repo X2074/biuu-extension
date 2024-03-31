@@ -1,11 +1,18 @@
 import './resident.js';
 import './indexDB.js';
 import web3Operate from './web3Operate.js';
+// import { chromeNotifications } from './utils';
 import './utils';
 import './test';
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message, 'message');
+
+    // setTimeout(() => {
+    //     console.log('是否进入');
+
+    //     chromeNotifications({})
+    // }, 3000)
     // 获取密码，判断是否显示输入密码页面
     if (message.action === 'getSecret') {
         chrome.storage.local.get('secret', function (data) {

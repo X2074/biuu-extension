@@ -25,6 +25,30 @@ web3.eth.getGasPrice().then((gasPrice) => {
     }).on('receipt', function (receipt) {
         console.log('Receipt: ' + receipt);
     }).on('error', console.error);
+
+
+    // 构建取消交易的交易对象
+    const txObject = {
+        from: senderAddress,
+        to: senderAddress, // 接收地址为自己，用于取消交易
+        value: web3.utils.toWei('0.001', 'ether'), // 可以发送任意小额以太币
+        gasPrice: web3.utils.toWei('10', 'gwei'), // 设置gas价格
+        gas: 21000, // gas限制
+        nonce: nonce // 使用待取消交易的nonce
+    };
+
+    // 签名交易
+    web3.eth.accounts.signTransaction(txObject, privateKey)
+        .then(signedTx => {
+            // 发送替代交易
+            web3.eth.sendSignedTransaction(signedTx.rawTransaction)
+                .on('receipt', receipt => {
+                    console.log('交易已发送：' + receipt.transactionHash);
+                });
+        })
+        .catch(error => {
+            console.error('取消交易失败：' + error);
+        });
 });
 // 发送nft
 const Web3 = require('web3');

@@ -15,7 +15,7 @@ content{数据集合
     }
 }
 */
-export async function NFTSaveIndexDB(data, wallt) {
+export async function NFTSaveIndexDB(data, wallt, type) {
     // 首先获取所有的nfts数据
     let nfts = await indexDbData.getData(md5('nfts'));
     let nftData, nftContent;
@@ -32,7 +32,7 @@ export async function NFTSaveIndexDB(data, wallt) {
         */
         nftContent = {
             collectionName: data.collectionName,//合集名称
-            collections: [data]//合集中的nft列表
+            collections: type == 'singleness' ? [data] : data.content//合集中的nft列表
         }
         let dataNft = {};
         dataNft[data.nftAddress] = nftContent;
@@ -42,22 +42,26 @@ export async function NFTSaveIndexDB(data, wallt) {
         if (!nfts['content'][wallt.keyStore] || !nfts['content'][wallt.keyStore][data.nftAddress]) {
             nftContent = {
                 collectionName: data.collectionName,//合集名称
-                collections: [data]//合集中的nft列表
+                collections: type == 'singleness' ? [data] : data.content//合集中的nft列表
             }
             nfts['content'][wallt.keyStore][data.nftAddress] = nftContent;
         } else {
             // 查询当前账户，当前传递的合约地址下面的nft，并过滤出当前传递的tokenId相同的nft
-            console.log(nfts['content'][wallt.keyStore], "nfts['content'][wallt.keyStore]");
-            let filterNft = nfts['content'][wallt.keyStore][data.nftAddress]['collections'].filter(item => {
-                return item.address == data.address && item.tokenId == data.tokenId
-            })
-            // 如果有相同tokenId，return；
-            if (filterNft && filterNft.length) {
-                bus.emit('promptModalErr', '重复导入的NFT')
-                return false;
+            if (type == 'singleness') {
+                let filterNft = nfts['content'][wallt.keyStore][data.nftAddress]['collections'].filter(item => {
+                    return item.address == data.address && item.tokenId == data.tokenId
+                })
+                // 如果有相同tokenId，return；
+                if (filterNft && filterNft.length) {
+                    bus.emit('promptModalErr', '重复导入的NFT')
+                    return false;
+                }
+                nfts['content'][wallt.keyStore][data.nftAddress]['collections'].push(data);
+            } else {
+                nfts['content'][wallt.keyStore][data.nftAddress]['collections'] = data.content;
             }
-            nfts['content'][wallt.keyStore][data.nftAddress]['collections'].push(data);
         }
+        console.log(nfts, 'nftsnfts');
         nftData = nfts;
     }
     indexDbData.putData(nftData);

@@ -16,24 +16,22 @@ export async function evmTransfer(data) {
         // meer交易此处需要使用int类型
         gasLimit: web3.utils.toHex(data.gasLimit),
         gasPrice: web3.utils.toHex(data.gasPrice),
-        nonce: web3.utils.toHex(data.nonce), //meer交易这个可以不填// 序号ID, 重要， 需要一个账号的交易序号，可以通过web3.eth.getTransactionCount(web3.eth.defaultAccount)获得
+        nonce: web3.utils.toHex(data.nonce),
         chainId: data.chainId
     }
-    console.log(web3.utils.toHex(5000000000), '44', web3.utils.toHex(web3.utils.toWei('5', 'gwei')));
-    console.log(details, 'details');
     let tx = new EthereumTx(details)
-    console.log(tx, 'tx');
     let privateKey = Buffer.from(data.key, 'hex');
-    console.log(privateKey, 'privateKey');
     tx.sign(privateKey)
     let serializedTx = tx.serialize();
     let raw = '0x' + serializedTx.toString('hex');
-    console.log(raw, 'raw');
     web3.eth.sendSignedTransaction(raw).then(hash => {
+        indexDbData.getData('nonce').then(res => {
+            res['content'] = res['content'] + 1;
+            indexDbData.putData(res);
+        });
         console.log(hash, 'hash');
         chromeNotifications(hash)
         let info = Object.assign({ uuid: data.uuid, price: data.value }, hash)
-        console.log(info, 'info');
         hashSaveIndexDB(data['keyStore'], 'dispose', info)
     }).catch(error => {
         console.log(error.message, 'error');

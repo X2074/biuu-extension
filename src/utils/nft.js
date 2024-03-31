@@ -7,7 +7,6 @@ let web3;
 // 获取web3
 async function getRpc() {
 	let data = await indexDbData.getData('rpc_url');
-	console.log(data, 'dadasdsad');
 	// 定义rpc;
 	web3 = new Web3(new Web3.providers.HttpProvider(data.url));
 }
@@ -41,9 +40,7 @@ export async function getNFTContent(currentWallt, nftAddress, tokenId) {
 	await getRpc();
 	// 获取nft实例
 	const abi = erp721; // NFT 合约 ABI
-	console.log(abi, 'abi');
 	const nftContract = new web3.eth.Contract(abi, nftAddress);
-	console.log(nftContract, 'nftContractNFT');
 	let tokenOwner, tokenURI, collectionName;
 	// 查询信息
 	try {
@@ -75,6 +72,49 @@ export async function getNFTContent(currentWallt, nftAddress, tokenId) {
 		nftAddress: nftAddress,//合约地址
 		tokenId: tokenId
 	}
+}
+// 获取地址下所有nft信息
+export async function getNFTContentAll(currentWallt, nftAddress) {
+	await getRpc();
+	// 获取nft实例
+	const abi = erp721; // NFT 合约 ABI
+	console.log(abi, 'abi');
+	const nftContract = new web3.eth.Contract(abi, nftAddress);
+	console.log(nftContract, 'nftContractNFT');
+	let tokenIndexs, tokenIds, tokenURI, collectionName;
+	let [promises, promisesUrls] = [[], []];
+	// 查询信息 nft下标
+	try {
+		tokenIndexs = await nftContract.methods.balanceOf(currentWallt.address).call();
+	} catch (error) {
+		return 'unNft';
+	}
+	if (!tokenIndexs) return 'unNft';
+	// 判断tokenOfOwnerByIndex是否可用
+	try {
+		await nftContract.methods.tokenOfOwnerByIndex(currentWallt.address, 0).call()
+	} catch (error) {
+		return 'unNft';
+	}
+	for (let index = 0; index < tokenIndexs; index++) {
+		console.log(index, 'index');
+		const promise1 = nftContract.methods.tokenOfOwnerByIndex(currentWallt.address, index).call()
+		promises.push(promise1);
+	}
+	console.log(promises, 'promisespromises');
+	// 等待所有请求完成
+	const results = await Promise.all(promises);
+	console.log('所有请求已完成，结果:', results);
+	results.forEach(item => {
+		const promises02 = getNFTContent(currentWallt, nftAddress, item * 1);
+		promisesUrls.push(promises02)
+	});
+	const resultsNft = await Promise.all(promisesUrls);
+	console.log('promisesUrls:', resultsNft);
+	return {
+		nftAddress: resultsNft[0]['nftAddress'],
+		content: resultsNft
+	};
 }
 
 // 通过nft的url查询nft信息

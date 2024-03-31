@@ -18,7 +18,6 @@ export function Decrypt(ciphertext, key) {
 	console.log(decryptedPlaintext, 'decryptedPlaintext');
 	return decryptedPlaintext;
 }
-
 //加密方法
 export function Encrypt(mnemonic, key) {
 	return CryptoJS.AES.encrypt(mnemonic, key).toString();
@@ -97,13 +96,11 @@ export async function evmTransfer(data) {
 		};
 	}
 }
-
 // 判断地址，是否合法
 export async function isAddress(address) {
 	const web3 = new Web3();
 	return web3.utils.isAddress(address);
 }
-
 // 获取钱包余额
 export async function getBlance(url, address) {// 获取钱包余额
 	// 定义rpc
@@ -134,25 +131,20 @@ export async function getGas(url, from, to, value) {// 获取钱包余额
 		gasPrice: gasPrice
 	}
 }
-
 // 查询交易noce
 export async function getNonce(address, url) {
-	// let nonce = await indexDbData.getData('nonce');
-	// if (nonce) {
-	// 	nonce['content'] = nonce['content'] + 1;
-	// 	indexDbData.putData(nonce);
-	// 	console.log(nonce, 'nonce');
-	// 	return nonce['content'];
-	// 	// return nonce['content'];
-	// } else {
-	let web3 = new Web3(new Web3.providers.HttpProvider(url));
-	let data = await web3.eth.getTransactionCount(address, 'latest');
-	// console.log(data, 'nonce');
-	// let nonceData = {
-	// 	id: 'nonce',
-	// 	content: data
-	// }
-	// indexDbData.putData(nonceData);
-	return data;
-	// }
+	let nonce = await indexDbData.getData('nonce');
+	if (nonce) {
+		return nonce['content'];
+	} else {
+		let web3 = new Web3(new Web3.providers.HttpProvider(url));
+		let data = await web3.eth.getTransactionCount(address, 'latest');
+		console.log(data, 'nonce');
+		let nonceData = {
+			id: 'nonce',
+			content: data
+		}
+		indexDbData.putData(nonceData);
+		return data;
+	}
 }

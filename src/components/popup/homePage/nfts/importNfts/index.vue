@@ -6,12 +6,12 @@
 import { ref, onMounted } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
-import {getNFTContent} from '@/utils/nft.js';
+import {getNFTContent,getNFTContentAll} from '@/utils/nft.js';
 import {NFTSaveIndexDB} from '@/utils/operateIndexDB.js';
 let loading = ref(false)
 let loadingText = ref('加载中...')
 let nftContent = ref(null);
-let contractAddress = ref('');//合约地址
+let contractAddress = ref('0xe1C389229BfeB7ac4b36bFD54e4aaA806773A83B');//合约地址
 let tokenId = ref('');//tokenId
 let nftNull = ref(false);//nft状态，是否查询到nft
 let currentWallt = ref(null);//当前账户
@@ -31,7 +31,7 @@ const getNft = async () => {
         return;
     }
     if(!tokenId.value){  
-        bus.emit('promptModalErr','请输入正确的tokenId')
+        getNftAll();//如果没有tokenid，就获取所有
         return;
     }
     if(!regex.test(tokenId.value)){  
@@ -50,7 +50,7 @@ const getNft = async () => {
     console.log(data,'saveData');
     // 删除image（nft的base64数据）
     let { image,prompt_id, ...nftContent } = data;
-    let saveData = await NFTSaveIndexDB(nftContent,currentWallt.value);
+    let saveData = await NFTSaveIndexDB(nftContent,currentWallt.value,'singleness');
     console.log(saveData,'saveData');
     loading.value = false;
     if(saveData){
@@ -64,5 +64,36 @@ const getNft = async () => {
 // 返回上一页面
 const toBack = ()=>{
     bus.emit('nextPage','');
+}
+
+// 获取所有nft
+const getNftAll = async ()=>{
+    loadingText.value = '批量导入nft需要1-5分钟，请耐心等待...';
+    loading.value = true;
+	let data = await getNFTContentAll(currentWallt.value,contractAddress.value);
+    if(data == 'unNft'){
+        loading.value = false;
+        loadingText.value = '加载中...';
+        bus.emit('promptModalErr','当前合约下没有nft数据')
+        return;
+    }
+    if(data == 'unFun'){
+        loading.value = false;
+        loadingText.value = '加载中...';
+        bus.emit('promptModalErr','当前合约无法批量导入')
+        return;
+    }
+    loading.value = false;
+    loadingText.value = '加载中...';
+    console.log(data,'datadatadata');
+    let saveData = await NFTSaveIndexDB(data,currentWallt.value,'multiple');
+    console.log(saveData,'saveData');
+    loading.value = false;
+    if(saveData){
+        bus.emit('nextPage')
+    }else{
+        bus.emit('promptModalErr','当前nft数据有误，请再试一次。')
+    }
+    
 }
 </script>

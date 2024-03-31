@@ -10,6 +10,16 @@
  * items (可选): 数组，包含在通知中显示的项目的信息。
  * progress (可选): 整数，指定通知中显示的进度条的百分比值。
  **/
+
+//  type: 'basic',
+//  iconUrl: 'https://th.bing.com/th/id/R.9018c4f47b9796cbea207325cb60e457?rik=TKWy9KALYKcXBg&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f92%2f1692.jpg&ehk=YB59358%2fCaARUufRoOEdKK9gWz%2fCdnQLXvP%2fn8DAPrA%3d&risl=&pid=ImgRaw&r=0',
+//  // appIconMaskUrl: 'https://th.bing.com/th/id/R.9018c4f47b9796cbea207325cb60e457?rik=TKWy9KALYKcXBg&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f92%2f1692.jpg&ehk=YB59358%2fCaARUufRoOEdKK9gWz%2fCdnQLXvP%2fn8DAPrA%3d&risl=&pid=ImgRaw&r=0',
+//  title: '这是标题',
+//  message: '这是消息内容',
+//  contextMessage: '这是上下文消息',
+//  priority: 0,
+//  eventTime: Date.now() + 2000, // 十秒后显示通知
+//  buttons: [{ title: '按钮1' }, { title: '按钮2' }]
 export async function chromeNotifications(data: any) {
     let info: any = {
         type: 'list',
@@ -17,7 +27,7 @@ export async function chromeNotifications(data: any) {
         appIconMaskUrl: 'https://th.bing.com/th/id/R.9018c4f47b9796cbea207325cb60e457?rik=TKWy9KALYKcXBg&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f92%2f1692.jpg&ehk=YB59358%2fCaARUufRoOEdKK9gWz%2fCdnQLXvP%2fn8DAPrA%3d&risl=&pid=ImgRaw&r=0',
         title: '通知主标题',
         message: '通知副标题',
-        contextMessage: '好开心呀，终于会使用谷歌扩展里面的API了！',
+        contextMessage: '第二行的内容contextMessage',
         buttons: [{ title: '按钮1的标题', iconUrl: 'https://th.bing.com/th/id/R.9018c4f47b9796cbea207325cb60e457?rik=TKWy9KALYKcXBg&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f92%2f1692.jpg&ehk=YB59358%2fCaARUufRoOEdKK9gWz%2fCdnQLXvP%2fn8DAPrA%3d&risl=&pid=ImgRaw&r=0' }, { title: '按钮2的标题', iconUrl: 'https://th.bing.com/th/id/R.9018c4f47b9796cbea207325cb60e457?rik=TKWy9KALYKcXBg&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f92%2f1692.jpg&ehk=YB59358%2fCaARUufRoOEdKK9gWz%2fCdnQLXvP%2fn8DAPrA%3d&risl=&pid=ImgRaw&r=0' }],
         items: [{ title: '消息1', message: '今天天气真好！' }, { title: '消息2', message: '明天天气估计也不错！' }],
         eventTime: Date.now() + 2000
