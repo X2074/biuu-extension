@@ -40,8 +40,11 @@ onMounted(async () => {
 // 对交易数据进行分类
 const transactionClassify = (data: any[]) => {
   data.forEach(item => {
-    if ( item.status || item.status == "finish") finishTransactions.value.push(item);
-    if (item.status == "queue" || item.status == "dispose") queueTransactions.value.push(item);
+    if (!item.status || item.status == "queue" || item.status == "dispose"){
+      queueTransactions.value.push(item);
+    }else{
+      finishTransactions.value.push(item)
+    }
   });
   console.log(queueTransactions.value,'queueTransactions.value');
   

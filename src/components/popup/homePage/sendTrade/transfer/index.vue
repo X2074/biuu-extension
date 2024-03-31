@@ -51,7 +51,7 @@ const toBack = ()=>{
 const nextTransfer = async ()=>{
     loading.value = true;
     // 发送消息给 background 页面请求数据
-    let data = Object.assign({uuid:uuidv4(),action:'transferEVM',keyStore:currentWallt.value['keyStore']},toRaw(transferContent.value))
+    let data = Object.assign({uuid:uuidv4(),action:'transferEVM',keyStore:currentWallt.value['keyStore'],accountAddress:currentWallt.value['address']},toRaw(transferContent.value))
 	chrome.runtime.sendMessage(data, (response) => {
 		console.log('Received data from background:', response);
         hashSaveIndexDB(currentWallt.value['keyStore'],'queue',data)

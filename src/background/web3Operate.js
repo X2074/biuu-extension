@@ -7,9 +7,7 @@ import md5 from 'js-md5';
 
 // evm转账
 export async function evmTransfer(data) {
-    console.log(data, 'datadatadata');
     let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
-    console.log(web3, 'web3');
     let details = {
         to: data.to, // 接收方地址                                                             
         value: web3.utils.toHex(web3.utils.toWei(data.value, 'ether')), // 转账 wei  
@@ -32,14 +30,38 @@ export async function evmTransfer(data) {
         console.log(hash, 'hash');
         chromeNotifications(hash)
         let info = Object.assign({ uuid: data.uuid, price: data.value }, hash)
-        hashSaveIndexDB(data['keyStore'], 'dispose', info)
+        hashSaveIndexDB(data['keyStore'], 'dispose', info);
+        closeTransfer(data)
     }).catch(error => {
         console.log(error.message, 'error');
         hashSaveIndexDB(data['keyStore'], 'error', data)
         return;
     })
 }
-
+// 取消交易
+export async function closeTransfer(data) {
+    let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
+    let details = {
+        to: data.to, // 接收方地址                                                             
+        value: web3.utils.toHex(web3.utils.toWei(data.value, 'ether')), // 转账 wei  
+        // meer交易此处需要使用int类型
+        gasLimit: web3.utils.toHex(data.gasLimit),
+        gasPrice: web3.utils.toHex(data.gasPrice * 10),
+        nonce: web3.utils.toHex(data.nonce),
+        chainId: data.chainId
+    }
+    let tx = new EthereumTx(details)
+    let privateKey = Buffer.from(data.key, 'hex');
+    tx.sign(privateKey)
+    let serializedTx = tx.serialize();
+    let raw = '0x' + serializedTx.toString('hex');
+    web3.eth.sendSignedTransaction(raw).then(hash => {
+        console.log(hash, '取消成功');
+    }).catch(error => {
+        console.log(error.message, '取消失败');
+        return;
+    })
+}
 // /**保存交易hash
 //  * @param {*} keyStore uuid
 //  * @param {*} nftAddress nft合约地址

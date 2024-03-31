@@ -113,6 +113,7 @@ const confirmRemove = async ()=>{
 const evmNetwork = async () => {
     indexDbData.getData('EVM').then(res => {
         let data:any;
+        let info:any;
         Object.keys(res.content).forEach((item, index) => {
             data = res.content[item].walltInfo.filter(info=>{
                 return info.address != nowAccount.value.address;
@@ -130,6 +131,7 @@ const evmNetwork = async () => {
 const utxoNetwork = async () => {
     indexDbData.getData('UTXO').then(res => {
         let data:any;
+        let info:any;
         Object.keys(res.content).forEach((item, index) => {
             data = res.content[item].walltInfo.filter(info=>{
                 return info.address != nowAccount.value.address;
