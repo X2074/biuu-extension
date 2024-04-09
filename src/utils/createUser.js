@@ -1,7 +1,7 @@
 
 import indexDbData from './indexDB.js';
 import { Encrypt } from '@/utils/index.js';
-import netWork from '@/utils/netWork.json'
+import { netWork } from '@/utils/defaultNetwork.js'
 import qitmeer from 'qitmeer-js'
 import ethUtil from 'ethereumjs-util'
 import bip39 from 'bip39'

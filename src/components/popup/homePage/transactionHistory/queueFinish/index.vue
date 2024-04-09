@@ -38,9 +38,7 @@ const getTime = ()=>{
 const getTransactionStatus = ()=>{
     if(timer.value)clearTimeout(timer.value)
     web3.value.eth.getTransactionReceipt(transactionDetail.value.transactionHash, (error, receipt) => {
-        // if (!error) {
-            console.log('Transaction status for transaction', receipt);
-        // }
+        console.log('Transaction status for transaction', receipt);
         if(error || !receipt.status){
             timer.value = setTimeout(() => {
                 getTransactionStatus()

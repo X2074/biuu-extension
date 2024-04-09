@@ -108,7 +108,7 @@ bus.on('closeMore', () => {
 // homepage模块里面的返回按钮
 bus.on('homePageBack', (res) => {
 	loading.value = true;
-	walltAccount.value = res.page || '';
+	walltAccount.value = res.page || 'nfts';
 	console.log(res,'跳转nft详情');
 	
 	if(res.data && res.page == 'nftDetail'){//nft详情需要的数据

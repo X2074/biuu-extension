@@ -4,7 +4,7 @@ import { ref, onMounted, watchEffect, getCurrentInstance } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 // import { evmKey, Decrypt, evmTransfer } from '@/utils/index.js';
 // 预制网络
-import netWork from '@/utils/netWork.json'
+import { netWork } from '@/utils/defaultNetwork.js'
 import { getNFTContent, NFTTransfer } from '@/utils/nft.js'
 import Web3 from 'web3'
 const walltEnvironment = ref('mainnet')//钱包所在的环境

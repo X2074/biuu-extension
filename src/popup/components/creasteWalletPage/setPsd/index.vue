@@ -6,7 +6,7 @@ import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus.js';
 import md5 from 'js-md5';
 // 预制网络
-import netWork from '@/utils/netWork.json'
+import { netWork } from '@/utils/defaultNetwork.js'
 import CryptoJS from 'crypto-js'; //引用AES源码js
 let mnemonicList = ref([])//助记词数组
 let newPsd = ref('')//钱包密码

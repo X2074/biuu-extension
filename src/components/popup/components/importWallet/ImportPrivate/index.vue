@@ -11,7 +11,7 @@ import Web3 from 'web3'
 import { Encrypt } from '@/utils/index.js';
 import md5 from 'js-md5';
 // 预制网络
-import netWork from '@/utils/netWork.json'
+import { netWork } from '@/utils/defaultNetwork.js'
 import CryptoJS from 'crypto-js'; //引用AES源码js
 let mnemonicList = ref([]);//助记词数组
 let moduleType = ref('evm');//选中的模块

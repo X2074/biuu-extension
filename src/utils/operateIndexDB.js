@@ -1,8 +1,7 @@
-import Web3 from 'web3'
 import indexDbData from './indexDB.js';
-import erp721 from './erp721.json';
 import bus from '@/utils/bus';
 import md5 from 'js-md5';
+import { roundRobin } from '../background/indexDB.js';
 /*
 nft的indexDB数据处理
 层级：
@@ -83,7 +82,7 @@ export async function NFTUpdataIndexDB(keyStore, nftAddress, data) {
 }
 /**保存交易hash
  * @param {*} keyStore uuid
- * @param {*} nftAddress nft合约地址
+ * @param {*} status hash状态
  * @param {*} data 更新后的nft数据 
   */
 export async function hashSaveIndexDB(keyStore, status, data) {

@@ -50,13 +50,19 @@ const walltContent = ref(null)//账户相关信息
 const pageTypes = ref('')//判断当前应该展示那个页面
 const pagesArray = ref(['create', 'login', 'homePage', 'assetsRecording', 'sendTo', 'swap','secret'])//页面地址数组,数组顺序为正常流程顺序
 const psdPage = ref('');//是否进入输入密码页面
-onMounted(()=>{
+onMounted(async ()=>{
+	// 获取设置的密码
+	let secert = await indexDbData.getData(md5('secret'))
 	// 发送消息给 background 页面请求数据
 	chrome.runtime.sendMessage({ action: 'getSecret' }, (response) => {
 		// 获取缓存的密码，浏览器关闭，删除缓存数据
 		if(!response.secret){
 			loading.value = false;
-			pageTypes.value = 'secret'
+			if(secert && secert.secret){
+				pageTypes.value = 'secret'
+			}else{
+				pageTypes.value = 'create'
+			}
 		}else{
 			getInfo()
 		}

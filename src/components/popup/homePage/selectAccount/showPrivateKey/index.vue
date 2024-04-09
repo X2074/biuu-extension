@@ -107,9 +107,9 @@ const confirmPsd = async ()=>{
     loading.value = true;
     // 获取当前的助记词
     let data = await indexDbData.getData('keyStore')
-        console.log(data,'data');
-    let key = data.secret[nowAccount.value.keyStore];
-    console.log(key,'key');
+        console.log(data.secret,'data',nowAccount.value);
+    let key = data.secret[nowAccount.value.keystore];
+    console.log(key,'key01');
     // 解密助记词
     let encryption = Decrypt(key, passKey.value)
     // 如果账户是私钥导入的，就直接赋值私钥

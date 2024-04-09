@@ -47,7 +47,6 @@ const transactionClassify = (data: any[]) => {
     }
   });
   console.log(queueTransactions.value,'queueTransactions.value');
-  
   loading.value = false;
 };
 // 更新交易状态

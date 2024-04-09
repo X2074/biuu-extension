@@ -1,13 +1,14 @@
-import './resident.js';
-import './indexDB.js';
+import { startHeartbeat } from './resident.js';
+import { roundRobin } from './indexDB.js';
 import web3Operate from './web3Operate.js';
 // import { chromeNotifications } from './utils';
 import './utils';
 import './test';
 
+// 开始轮循hash状态
+roundRobin()
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message, 'message');
-
     // setTimeout(() => {
     //     console.log('是否进入');
 
@@ -28,9 +29,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     // 交易转账
     if (message.action === 'transferEVM') {
-        sendResponse(message);
+        sendResponse();
+        startHeartbeat();//js常驻后台
         console.log(web3Operate, 'web3Operate');
-
         web3Operate.evmTransfer(message)
     }
     if (message.action === 'test') {

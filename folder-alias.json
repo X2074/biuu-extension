@@ -238,5 +238,8 @@
     },
     "src/background/web3Operate.js": {
         "description": "web3相关操作"
+    },
+    "src/components/popup/homePage/tokens": {
+        "description": "网络信息"
     }
 }

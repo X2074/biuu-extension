@@ -10,7 +10,7 @@ import md5 from 'js-md5';
 import bip39 from 'bip39'
 import {createMnemonic,createWallet} from "@/utils/createUser"
 // 预制网络
-import netWork from '@/utils/netWork.json'
+import { netWork } from '@/utils/defaultNetwork.js'
 import CryptoJS from 'crypto-js'; //引用AES源码js
 let mnemonicList = ref([]);//助记词数组
 let newPsd = ref('');//钱包密码

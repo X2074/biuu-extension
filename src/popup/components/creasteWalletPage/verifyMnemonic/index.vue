@@ -7,7 +7,7 @@ import bus from '@/utils/bus.js';
 import { Encrypt, Decrypt } from '@/utils/index.js';
 import md5 from 'js-md5';
 // 预制网络
-import netWork from '@/utils/netWork.json'
+import { netWork } from '@/utils/defaultNetwork.js'
 import CryptoJS from 'crypto-js'; //引用AES源码js
 let mnemonicList = ref([])//助记词数组
 let useCheck = ref('n')//是否阅读条款

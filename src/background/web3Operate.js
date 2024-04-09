@@ -29,9 +29,9 @@ export async function evmTransfer(data) {
         });
         console.log(hash, 'hash');
         chromeNotifications(hash)
-        let info = Object.assign({ uuid: data.uuid, price: data.value }, hash)
+        // 将参数与hash合并，便于后面的取消和加速操作
+        let info = Object.assign(data, hash)
         hashSaveIndexDB(data['keyStore'], 'dispose', info);
-        closeTransfer(data)
     }).catch(error => {
         console.log(error.message, 'error');
         hashSaveIndexDB(data['keyStore'], 'error', data)
@@ -40,6 +40,30 @@ export async function evmTransfer(data) {
 }
 // 取消交易
 export async function closeTransfer(data) {
+    let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
+    let details = {
+        to: data.to, // 接收方地址                                                             
+        value: web3.utils.toHex(0), // 转账 wei  
+        // meer交易此处需要使用int类型
+        gasLimit: web3.utils.toHex(data.gasLimit),
+        gasPrice: web3.utils.toHex(data.gasPrice * 10),
+        nonce: web3.utils.toHex(data.nonce),
+        chainId: data.chainId
+    }
+    let tx = new EthereumTx(details)
+    let privateKey = Buffer.from(data.key, 'hex');
+    tx.sign(privateKey)
+    let serializedTx = tx.serialize();
+    let raw = '0x' + serializedTx.toString('hex');
+    web3.eth.sendSignedTransaction(raw).then(hash => {
+        console.log(hash, '取消成功');
+    }).catch(error => {
+        console.log(error.message, '取消失败');
+        return;
+    })
+}
+// 加速交易
+export async function hastenTransfer(data) {
     let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
     let details = {
         to: data.to, // 接收方地址                                                             
@@ -56,7 +80,7 @@ export async function closeTransfer(data) {
     let serializedTx = tx.serialize();
     let raw = '0x' + serializedTx.toString('hex');
     web3.eth.sendSignedTransaction(raw).then(hash => {
-        console.log(hash, '取消成功');
+        console.log(hash, '加速成功');
     }).catch(error => {
         console.log(error.message, '取消失败');
         return;

@@ -16,7 +16,7 @@ async function runHeartbeat() {
   * 当您在做需要坚持不懈的工作时，请谨慎使用
   *  一旦工作完成,请调用 stopHeartbeat
   */
-async function startHeartbeat() {
+export async function startHeartbeat() {
     console.log('测试数据');
     // 在 Service Worker 启动时运行一次检测信号。
     runHeartbeat().then(() => {
@@ -25,7 +25,7 @@ async function startHeartbeat() {
     });
 }
 
-async function stopHeartbeat() {
+export async function stopHeartbeat() {
     clearInterval(heartbeatInterval);
 }
 /**

@@ -13,7 +13,7 @@
 
 //  type: 'basic',
 //  iconUrl: 'https://th.bing.com/th/id/R.9018c4f47b9796cbea207325cb60e457?rik=TKWy9KALYKcXBg&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f92%2f1692.jpg&ehk=YB59358%2fCaARUufRoOEdKK9gWz%2fCdnQLXvP%2fn8DAPrA%3d&risl=&pid=ImgRaw&r=0',
-//  // appIconMaskUrl: 'https://th.bing.com/th/id/R.9018c4f47b9796cbea207325cb60e457?rik=TKWy9KALYKcXBg&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f92%2f1692.jpg&ehk=YB59358%2fCaARUufRoOEdKK9gWz%2fCdnQLXvP%2fn8DAPrA%3d&risl=&pid=ImgRaw&r=0',
+//  // appIconMaskUrl: 'https://th.bing.com/th/id/R.9018c4f47b9796cbea207325cb60e457?rik=TKWy9KALYKcXBg&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f92%2f1692.jpg&ehk=YB59358%2fCaARUufRoOEdKK9gWz%2fCdnQLXvP%2fn8DAPrA%3d&risl=&pid=ImgRaw&r=0'
 //  title: '这是标题',
 //  message: '这是消息内容',
 //  contextMessage: '这是上下文消息',
