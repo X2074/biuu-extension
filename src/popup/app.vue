@@ -97,7 +97,7 @@ const getBlanceInfo = async (type='homePage') => {
 		walltContent.value = data;
 		// 钱包地址
 		walltContent.value.address = userAddress.value;
-		let blance = await getBlance(data.url,userAddress.value)
+		let blance = await getBlance(data.url,walltContent.value)
 		console.log(blance,'blance');
 		pageTypes.value = type;
 		loading.value = false;

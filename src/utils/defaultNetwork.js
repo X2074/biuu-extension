@@ -20,7 +20,7 @@ export const netWork = {
             "unit": "MEER",
             "netName": "MEER_TESTNET",
             "CHAIN_ID": 8131,
-            "url": "https://testnet-qng.rpc.qitmeer.io",
+            "url": "https://testnet-qng.rpc.qitmeer.io/rpc",
             "walltInfo": []
         }
     }

@@ -7,7 +7,8 @@ import { ref, onMounted,defineProps, toRaw, watch } from 'vue';
 import Web3 from 'web3'
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
-import { Decrypt,evmKey,utxoKey,isAddress } from '@/utils/index.js';
+import { Decrypt } from '@/utils/index.js';
+import {evmKey,isAddress } from '@/utils/EVM/index.js';
 import {getNFTContent,computeNftGas,NFTTransfer} from '@/utils/nft.js';
 import {NFTSaveIndexDB,NFTUpdataIndexDB,hashSaveIndexDB,usedToHaveNft} from '@/utils/operateIndexDB.js';
 import md5 from 'js-md5';

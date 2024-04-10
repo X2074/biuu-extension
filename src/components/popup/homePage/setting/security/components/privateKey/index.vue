@@ -3,7 +3,8 @@
 import { ref, onMounted, defineProps } from 'vue';
 import bus from '@/utils/bus.js'; 
 import indexDbData from '@/utils/indexDB';
-import { Decrypt,evmKey } from '@/utils/index.js';
+import { Decrypt } from '@/utils/index.js';
+import {evmKey } from '@/utils/EVM/index.js';
 import {editContent} from "@/utils/editContent"
 import QRCode from 'qrcodejs2-fix';
 import Web3 from 'web3'

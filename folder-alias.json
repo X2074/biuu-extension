@@ -241,5 +241,8 @@
     },
     "src/components/popup/homePage/tokens": {
         "description": "网络信息"
+    },
+    "src/utils/UTXO/testUtxoTransaction.js": {
+        "description": "utxo交易"
     }
 }

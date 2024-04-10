@@ -2,6 +2,8 @@ import Web3 from 'web3'
 import CryptoJS from 'crypto-js'
 import bip39 from 'bip39'
 import indexDbData from '@/utils/indexDB.js';
+import { getEVMBlance } from '@/utils/EVM/index.js';
+import { getUTXOBalance } from '@/utils/UTXO/meerRpc.js'
 import EthereumTx from 'ethereumjs-tx'
 import ecc from 'tiny-secp256k1'
 import { BIP32Factory } from 'bip32'
@@ -102,17 +104,22 @@ export async function isAddress(address) {
 	return web3.utils.isAddress(address);
 }
 // 获取钱包余额
-export async function getBlance(url, address) {// 获取钱包余额
-	// 定义rpc
-	let web3 = new Web3(new Web3.providers.HttpProvider(url));
-	let data = await web3.eth.getBalance(address);
-	if (!data) {
-		return 0;
+export async function getBlance(url, data) {// 获取钱包余额
+	if (data.netWorkType == 'evm') {
+		return getEVMBalance(url, data.address)
 	} else {
-		let balance = web3.utils.fromWei(data, 'ether');
-		balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
-		return balance;
+		return getUTXOBalance(url, data.address)
 	}
+	// // 定义rpc
+	// let web3 = new Web3(new Web3.providers.HttpProvider(url));
+	// let data = await web3.eth.getBalance(address);
+	// if (!data) {
+	// 	return 0;
+	// } else {
+	// 	let balance = web3.utils.fromWei(data, 'ether');
+	// 	balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
+	// 	return balance;
+	// }
 }
 // 获取gasLimit\gasPrice
 export async function getGas(url, from, to, value) {// 获取钱包余额

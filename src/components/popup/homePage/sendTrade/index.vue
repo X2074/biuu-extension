@@ -7,7 +7,8 @@
 import { ref, onMounted, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
-import { getBlance, getNonce, getGas, Decrypt, evmKey } from '@/utils/index';
+import { Decrypt } from '@/utils/index';
+import {getBlance, getNonce, getGas, evmKey } from '@/utils/EVM/index.js';
 import addressBook from '../addressBook/index.vue'
 import transfer from './transfer/index.vue'
 import md5 from 'js-md5';
