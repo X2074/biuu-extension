@@ -6,6 +6,7 @@ import EthereumTx from 'ethereumjs-tx'
 import ecc from 'tiny-secp256k1'
 import { BIP32Factory } from 'bip32'
 // evm助记词转私钥
+const bip32 = BIP32Factory(ecc)
 export async function evmKey(mnemonic) {
     try {
         //2.将助记词转成seed

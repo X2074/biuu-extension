@@ -41,15 +41,15 @@ const privatePrivateConfirm = async ()=>{
     let keyName = uuidv4();
     await saveKey(keyName)
     // 创建evm
-    // if(moduleType.value == 'evm'){
+    if(moduleType.value == 'evm'){
         await isValidPrivateKey(keyName)
-    // }else{
+    }else{
         await generateUTXOWallet(keyName)
-    // }
-    bus.emit('promptModalSuccess','导入成功')
-    setTimeout(() => {
-        bus.emit('nextPage', 'homePage');
-    }, 500)
+    }
+    // bus.emit('promptModalSuccess','导入成功')
+    // setTimeout(() => {
+    //     bus.emit('nextPage', 'homePage');
+    // }, 500)
 }
 // evm私钥生成钱包
 const isValidPrivateKey = async (keyName)=>{
@@ -75,33 +75,42 @@ const isValidPrivateKey = async (keyName)=>{
 // 通过私钥生成 UTXO 钱包
 const generateUTXOWallet =async (keyName)=>{
     const testNetwork = qitmeer.networks.testnet;
-        const mainNetwork = qitmeer.networks.mainnet;
-        let utxoAddressTest;
-        let utxoAddressMain;
-        try {
-            utxoAddressTest = await qitmeer.ec.fromPrivateKey(Buffer.from(privatePhrase.value, 'hex'),testNetwork.pubKeyHashAddrId);
-        } catch (error) {
-            console.log(error,'error01');
-            
-            privatePhraseErr.value = '无效的输入，请再试一次。';
-            return;
-        }
-        try {
-            utxoAddressMain = await qitmeer.ec.fromPrivateKey(Buffer.from(privatePhrase.value, 'hex'),mainNetwork.pubKeyHashAddrId);
-        } catch (error) {
-            console.log(error,'error02');
-            privatePhraseErr.value = '无效的输入，请再试一次。';
-            return;
-        }
-        if(!utxoAddressTest || !utxoAddressMain) return;
-        let account = {
-            type:"utxo",
-            privateKey: privatePhrase.value,
-            utxoAddressTest: utxoAddressTest, //UTXO测试网地址
-            utxoAddressMain: utxoAddressMain, //UTXO正式网地址
-            keyStore:keyName
-        };
-        utxoNetwork(account)
+    const mainNetwork = qitmeer.networks.mainnet;
+    let utxoAddressTest;
+    let utxoAddressMain;
+    let keyPair;
+    // 生成公钥
+    try {
+        keyPair = await qitmeer.ec.fromPrivateKey(Buffer.from(privatePhrase.value, 'hex'));
+        console.log(keyPair.publicKey.toString('hex'),'publicKey');
+    } catch (error) {
+        privatePhraseErr.value = '无效的输入，请再试一次。';
+        return;
+    }
+    const hash160 = qitmeer.hash.hash160(keyPair.publicKey)
+    // 测试环境地址
+    try {
+        utxoAddressTest = await qitmeer.address.toBase58Check(hash160, testNetwork.pubKeyHashAddrId)
+    } catch (error) {
+        privatePhraseErr.value = '无效的输入，请再试一次。';
+        return;
+    }
+    // 正式环境地址
+    try {
+        utxoAddressMain = await qitmeer.address.toBase58Check(hash160, mainNetwork.pubKeyHashAddrId)
+    } catch (error) {
+        privatePhraseErr.value = '无效的输入，请再试一次。';
+        return;
+    }
+    if(!utxoAddressTest || !utxoAddressMain) return;
+    let account = {
+        netWorkType:"utxo",
+        privateKey: privatePhrase.value,
+        utxoAddressTest: utxoAddressTest, //UTXO测试网地址
+        utxoAddressMain: utxoAddressMain, //UTXO正式网地址
+        keyStore:keyName
+    };
+    utxoNetwork(account)
 }
 const evmNetwork = (walltInfo) => {
     indexDbData.getData('EVM').then(res => {
@@ -162,6 +171,7 @@ const evmNetwork = (walltInfo) => {
             })
         })
         console.log(data, 1111111);
+        data.netWorkType = "evm";
         indexDbData.putData(data)
         createRpc()
     })
@@ -202,6 +212,7 @@ const utxoNetwork = (walltInfo) => {
                 NoIndex: index + 1//当前第几个用户
             })
         })
+        data.netWorkType = "utxo";
         indexDbData.putData(data)
         createRpc()
     })

@@ -13,9 +13,11 @@ let searchAddress = ref('')
 let loadingText = ref('加载中...')
 let detail = ref(null);//详情数据
 let prop = defineProps(['importPage']);
-onMounted(() => {
+let currentWallt = ref(null);//当前用户信息
+onMounted(async() => {
     console.log(prop,'prop');
     
+	currentWallt.value = await indexDbData.getData('currentWalltAddress');
     loading.value = true;
     getAddressList();
 })
@@ -37,6 +39,17 @@ const toBack = ()=>{
 
 const checkAddress = (data)=>{
     if(prop.importPage && prop.importPage == 'sendTrade'){
+        if(currentWallt.value['netWorkType'] == 'evm'){
+            if(data.address.slice(0,2) != '0x'){
+                bus.emit('promptModalErr','请选择EVM地址')
+                return;
+            }
+        }else{
+            if(data.address.slice(0,2) == '0x'){
+                bus.emit('promptModalErr','请选择UTXO地址')
+                return;
+            }
+        }
         bus.emit('sendTradeBook',toRaw(data))
     }else{
         detail.value = data;

@@ -7,7 +7,11 @@
     <div class="trade-address mt-10" v-if="sendTradePage == 'home'">
         <div class="input-address">
             <p>付款地址：</p>
-            <input disabled class="mt-10" maxlength="16" v-model="currentWallt['address']">
+
+            <input v-if="currentWallt && currentWallt['utxoAddressTest']" disabled class="mt-10" maxlength="16"
+                v-model="currentWallt['utxoAddressTest']">
+            <input v-if="currentWallt && !currentWallt['utxoAddressTest']" disabled class="mt-10" maxlength="16"
+                v-model="currentWallt['address']">
         </div>
         <div class="input-address mt-15">
             <div class="flex">

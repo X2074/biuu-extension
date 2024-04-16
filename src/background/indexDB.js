@@ -16,6 +16,7 @@ indexDbData.getData('rpc_url').then(res => {
 export async function roundRobin() {
     currentWallt = await indexDbData.getData("currentWalltAddress");
     let data = await indexDbData.getData(md5("tradeHash"));//获取缓存的hash数据
+    if (!data || !data["content"] || !data["content"][currentWallt["keyStore"]]) return;
     tradeHash = data["content"][currentWallt["keyStore"]];
     // 如果没有交易数据，就停止js常驻
     if (!tradeHash || !tradeHash.length) {

@@ -30,6 +30,8 @@ let loadingText = ref('加载中...')
 let tabsOption = ref('nfts');//底部tabs切换
 let nftDetails = ref(null)
 onMounted(() => { 
+	console.log(props,'propsprops');
+	
 	initialize()
 })
 // 初始化

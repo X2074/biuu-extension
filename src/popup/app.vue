@@ -47,6 +47,7 @@ let loadingText = ref('加载中...')
 const buyModal = ref(false)
 const userAddress = ref(null)
 const walltContent = ref(null)//账户相关信息
+let currentWallt = ref(null)//当前账户
 const pageTypes = ref('')//判断当前应该展示那个页面
 const pagesArray = ref(['create', 'login', 'homePage', 'assetsRecording', 'sendTo', 'swap','secret'])//页面地址数组,数组顺序为正常流程顺序
 const psdPage = ref('');//是否进入输入密码页面
@@ -97,8 +98,9 @@ const getBlanceInfo = async (type='homePage') => {
 		walltContent.value = data;
 		// 钱包地址
 		walltContent.value.address = userAddress.value;
-		let blance = await getBlance(data.url,walltContent.value)
-		console.log(blance,'blance');
+		console.log(currentWallt.value,'currentWallt.value');
+		
+		walltContent.value.blance = await getBlance(data.url,currentWallt.value)
 		pageTypes.value = type;
 		loading.value = false;
 	} catch (error) {
@@ -117,13 +119,9 @@ const getInfo = () => {
 			return;
 		}
 		if (res && res.address) {
-			userAddress.value = res.address;
-			walltContent.value = res;
+			userAddress.value = res.utxoAddressTest || res.address;
+			currentWallt.value = res;
 			getBlanceInfo()
-			// if (getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') && getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') != 'false') {
-			// } else {
-			// 	pageTypes.value = 'login';
-			// }
 		} else {
 			pageTypes.value = 'create'
 			loading.value = false;

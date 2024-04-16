@@ -50,12 +50,10 @@ const creatKeyStory = () => {
 }
 // 助记词加密
 const UtxoEvmKey = () => {
-    console.log(walltInfo.value,'walltInfo.value');
-    
     let ciphertext = Encrypt(walltInfo.value.mnemonic, passKey.value);
     console.log(ciphertext, '加密后的数据');
     let data:any = {};
-    data[walltInfo.value.keystore] = ciphertext;
+    data[walltInfo.value.keyStore] = ciphertext;
     indexDbData.putData({
         id: 'keyStore',
         secret: data
@@ -67,7 +65,7 @@ const UtxoEvmKey = () => {
             address: walltInfo.value.address,
             userName: 'Wallt 01',
             userUrl: '',
-            keystore:walltInfo.value.keystore,
+            keyStore:walltInfo.value.keyStore,
             NoIndex: 1//当前第几个用户
         }
         indexDbData.putData(Object.assign({id:'currentWalltAddress'},content))
@@ -76,7 +74,7 @@ const UtxoEvmKey = () => {
             unit: "Meer",
             netName:"Qitmeer Testnet",
             CHAIN_ID: 8131,
-            keystore:walltInfo.value.keystore,
+            keyStore:walltInfo.value.keyStore,
             type: 'EVM',
             url: "https://testnet-qng.rpc.qitmeer.io",
             walltInfo: []
@@ -103,7 +101,7 @@ const evmNetwork = () => {
         Object.keys(res.content).forEach((item, index) => {
             res.content[item].walltInfo.push({
                 address: walltInfo.value.address, //当前用户地址
-                keystore:walltInfo.value.keystore,
+                keyStore:walltInfo.value.keyStore,
                 userName: 'Wallt 01',
                 userUrl: '',
                 NoIndex: index + 1//当前第几个用户
@@ -138,7 +136,7 @@ const utxoNetwork = () => {
             res.content[item].walltInfo.push({
                 utxoAddressTest: walltInfo.value.utxoAddressTest, //当前用户测试地址
                 address: walltInfo.value.utxoAddressMain, //当前用户地址
-                keystore:walltInfo.value.keystore,
+                keyStore:walltInfo.value.keyStore,
                 userName: 'Wallt 01',
                 userUrl: '',
                 NoIndex: index + 1//当前第几个用户

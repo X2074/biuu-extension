@@ -8,6 +8,7 @@ import { ref, onMounted, defineProps, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
 import {evmTransfer } from '@/utils/EVM/index.js';
+import web3Operate from '@/background/web3Operate.js';
 import {hashSaveIndexDB} from '@/utils/operateIndexDB.js';
 import { v4 as uuidv4 } from 'uuid';
 import Web3 from 'web3'
@@ -30,7 +31,14 @@ onMounted(async ()=>{
 	currentWallt.value = await indexDbData.getData('currentWalltAddress');
     console.log(prop,'prop');
     transferContent.value = prop.transferContent;
-    getWei(transferContent.value['gasPrice'])
+    if(rpcData.value['netWorkType'] == 'evm'){
+        getWei(transferContent.value['gasPrice'])
+    }else{
+        let num = Math.ceil(transferContent.value['value'] / 1024);
+        gasPrice.value = num * 0.0002;
+        totalPrice.value = (transferContent.value['value']*1) + gasPrice.value * 1;
+        loading.value = false;
+    }
 })
 
 
@@ -51,31 +59,23 @@ const toBack = ()=>{
 const nextTransfer = async ()=>{
     loading.value = true;
     // 发送消息给 background 页面请求数据
-    let data = Object.assign({uuid:uuidv4(),action:'transferEVM',keyStore:currentWallt.value['keyStore'],accountAddress:currentWallt.value['address']},toRaw(transferContent.value))
-	chrome.runtime.sendMessage(data, (response) => {
-		console.log('Received data from background:', response);
-        hashSaveIndexDB(currentWallt.value['keyStore'],'queue',data)
-        setTimeout(()=>{
-            loading.value = false;
-            bus.emit('nextPage','');
-        },3000)
-	});
-    return;
-    // 获取交易hash
-    // let hash = await evmTransfer(toRaw(transferContent.value));
-    // console.log(hash,'hash');
+    let data;
+    if(currentWallt.value['netWorkType'] == 'evm'){
+        data = Object.assign({uuid:uuidv4(),action:'transferEVM',keyStore:currentWallt.value['keyStore'],accountAddress:currentWallt.value['address']},toRaw(transferContent.value))
+    }else{
+        data = Object.assign({uuid:uuidv4(),action:'transferUTXO',keyStore:currentWallt.value['keyStore'],accountAddress:currentWallt.value['address']},toRaw(transferContent.value))
+        // 测试
+        web3Operate.utxoTransfer(data)
+    }
+    console.log(data,'utxo的交易数据');
     
-    // if(hash.errBol){
-    //     loading.value = false;
-    //     bus.emit('promptModalErr',hash.error.message)
-    // }else{
-    //     console.log(hash,"responseText ");
-    //     bus.emit('promptModalSuccess','转账成功')
-    //     hash['price'] = transferContent.value['value'];//添加转账数量
-    //     // 交易hash的保存
-    //     await hashSaveIndexDB(currentWallt.value['keyStore'],'queue',hash)
-    //     loading.value = false;  
-    //     bus.emit('sendTradeBack')
-    // }
+	// chrome.runtime.sendMessage(data, (response) => {
+	// 	console.log('Received data from background:', response);
+    //     hashSaveIndexDB(currentWallt.value['keyStore'],'queue',data)
+    //     setTimeout(()=>{
+    //         loading.value = false;
+    //         bus.emit('nextPage','');
+    //     },3000)
+	// });
 }
 </script>

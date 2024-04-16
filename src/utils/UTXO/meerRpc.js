@@ -15,10 +15,10 @@ const rpcUrls = {
  * 封装了调用utxo rpc的方法，utxo层的rpc方法可以通过以下链接查看：https://qitmeer.github.io/docs/en/json-rpc-api/
  * 通过传入的network字段调用对应的rpc
  */
-const rpc = function (network, method, params) {
-    if (!rpcUrls[network]) {
-        throw new Error(`Unsupported network: ${network}`);
-    }
+const rpc = function (url, method, params) {
+    // if (!rpcUrls[network]) {
+    //     throw new Error(`Unsupported network: ${network}`);
+    // }
 
     const data = {
         jsonrpc: '2.0',
@@ -26,30 +26,40 @@ const rpc = function (network, method, params) {
         method: method,
         params: params
     };
-
-    return fetch(rpcUrls[network], {
+    var request = new Request(url, {
         method: 'POST',
-        config,
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        }),
         body: JSON.stringify(data)
     });
+
+    return fetch(request).then(data => {
+        if (!data.ok) {
+            throw Error(data.status);
+        }
+        return data.json();
+    })
 }
 // 获取目标地址的余额
-const getUTXOBalance = async function (network = 'testnet', address) {
+export async function getUTXOBalance(url, address) {
+    console.log(url, address, 'url, address');
     try {
-        const response = await rpc(network, 'getBalance', [address, 0]);
-        return response.data;
+        const response = await rpc(url + '/', 'getBalance', [address, 0]);
+        console.log(response, 'utxo的余额');
+        return response.result / 100000000;
     } catch (error) {
         console.error('Error:', error);
     }
 }
 // 获取utxo（未花费交易对）
-const getUtxos = async function (network = 'testnet', address) {
+export async function getUtxos(address) {
     try {
-        const response = await rpc(network, 'getBalanceInfo', [address, 0])
-        const result = response.data.result;
+        const response = await rpc('testnet', 'getBalanceInfo', [address, 0])
+        const result = response.result;
         return result.utxos
     } catch (error) {
-        console.error('Error:', error, network);
+        console.error('Error:', error);
     }
 }
 // 节点不会直接存储所有地址的utxo数据，想要获取对应地址的余额情况，需要调用addBalance方法让节点关注指定的钱包地址
@@ -63,10 +73,10 @@ const addBalance = async function (network = 'testnet', address) {
     }
 }
 // 获取指定的utxo详细信息
-const getUtxo = async function (network = 'testnet', txid, idx) {
+export async function getUtxo(txid, idx) {
     try {
-        const response = await rpc(network, 'getUtxo', [txid, idx])
-        const result = response.data.result
+        const response = await rpc('testnet', 'getUtxo', [txid, idx])
+        const result = response.result
         return result
     } catch (error) {
         console.error('Error:', error);
@@ -84,22 +94,22 @@ const nodeinfo = async function (network = 'testnet') {
     }
 }
 // 发送utxo交易给节点
-const sendTraction = async function (network = 'testnet', newTransaction) {
+export async function sendTraction(network = 'testnet', newTransaction) {
     try {
         const response = await rpc(network, 'sendRawTransaction', [newTransaction, false])
-        const result = response.data.result
+        const result = response.result
         return result
     } catch (error) {
         console.error('Error:', error);
     }
 }
 
-export default {
-    rpc,
-    getBalance,
-    getUtxos,
-    getUtxo,
-    addBalance,
-    nodeinfo,
-    sendTraction
-}
+// export default {
+//     rpc,
+//     getUTXOBalance,
+//     getUtxos,
+//     getUtxo,
+//     addBalance,
+//     nodeinfo,
+//     sendTraction
+// }

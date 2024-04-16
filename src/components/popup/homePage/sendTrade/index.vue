@@ -8,13 +8,12 @@ import { ref, onMounted, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
 import { Decrypt } from '@/utils/index';
-import {getBlance, getNonce, getGas, evmKey } from '@/utils/EVM/index.js';
+import { getNonce, getGas, evmKey } from '@/utils/EVM/index.js';
+import { getBlance } from '@/utils/index';
 import addressBook from '../addressBook/index.vue'
 import transfer from './transfer/index.vue'
 import md5 from 'js-md5';
-let currentWallt = ref({
-    address:''
-})//当前钱包信息
+let currentWallt = ref(null)//当前钱包信息
 let sendTradePage = ref('home');//当前转账页面显示内容
 let quantity = ref('1');//转账数量
 let confirmPsd = ref('');//密码
@@ -27,9 +26,6 @@ let privateKey = ref(null);//私钥
 let passKey = ref('')
 let loading = ref(false)
 let loadingText = ref('加载中...')
-indexDbData.getData('currentWalltAddress').then(res => {
-    currentWallt.value = res;
-})
 let rpcData = ref(null)//当前网络信息
 indexDbData.getData('rpc_url').then(res => {
     rpcData.value = res;
@@ -39,11 +35,14 @@ indexDbData.getData(md5('secret')).then(res => {
     passKey.value = res.secret;
 }).catch(err => { })
 onMounted(async()=>{
+    currentWallt.value = await indexDbData.getData('currentWalltAddress')
+    console.log(currentWallt.value,'currentWallt.value');
+    
     // 获取钱包余额
     rpcUrlData.value = await indexDbData.getData('rpc_url')
     try {
         // 钱包地址
-        blanceSecre.value = await getBlance(rpcUrlData.value.url,currentWallt.value['address'])
+        blanceSecre.value = await getBlance(rpcUrlData.value.url,currentWallt.value)
         console.log(blanceSecre.value,'转账',sendTradePage.value);
     } catch (error) {
     }
@@ -96,24 +95,20 @@ const toTransfer = async ()=>{
     //     bus.emit('promptModalErr','请选择收款地址')
     //     return;
     // }
-    if(blanceSecre.value <= quantity.value){
-        bus.emit('promptModalErr','您的余额不足')
-        return;
-    }
+    // if(blanceSecre.value <= quantity.value){
+    //     bus.emit('promptModalErr','您的余额不足')
+    //     return;
+    // }
     loading.value = true;
-    nonce.value = await getNonce(currentWallt.value['address'],rpcUrlData.value['url']);
-    console.log(blanceSecre.value,'blanceSecre');
-    
-    let gas = await getGas(rpcUrlData.value['url'],currentWallt.value['address'],toAddress.value,quantity.value);
-    console.log(gas,'gasgasgasgas');
     
     // 获取当前的助记词
     let data = await indexDbData.getData('keyStore')
-    console.log(data,'data');
-    let key = data.secret[currentWallt.value['keyStore']];
+    let key = toRaw(data.secret[currentWallt.value['keyStore']]);
+    console.log(data,currentWallt.value['keyStore'],'转账的key');
+    
     // 如果账户是私钥导入的，就直接赋值私钥
     let encryption = await Decrypt(key, passKey.value)
-    if(currentWallt.value['keyStoreType'] == 'privateKey'){
+    if(currentWallt.value['keyStoreType'] && currentWallt.value['keyStoreType'] == 'privateKey'){
         privateKey.value = encryption;
     }else{
         // 解密助记词
@@ -121,19 +116,32 @@ const toTransfer = async ()=>{
         // 只有evm有nft交易
         privateKey.value = await evmKey(encryption)
     }
-    console.log(key,'key');
-    loading.value = false;
-    transferContent.value = {
-        to:toAddress.value,// 接收方地址
-        value:quantity.value,// 转账 wei
-        nonce:nonce.value,//nonce
-        chainId:rpcUrlData.value['CHAIN_ID'],
-        gasLimit:gas.gasLimit,
-        gasPrice:gas.gasPrice,
-        key:privateKey.value,//私钥
-        url:rpcUrlData.value['url']
+    console.log(encryption,'key');
+    if(rpcUrlData.value['netWorkType'] == 'evm'){
+        nonce.value = await getNonce(currentWallt.value['address'],rpcUrlData.value['url']);
+        console.log(blanceSecre.value,'blanceSecre');
+        let gas = await getGas(rpcUrlData.value['url'],currentWallt.value['address'],toAddress.value,quantity.value);
+        transferContent.value = {
+            to:toAddress.value,// 接收方地址
+            value:quantity.value,// 转账 wei
+            nonce:nonce.value,//nonce
+            chainId:rpcUrlData.value['CHAIN_ID'],
+            gasLimit:gas.gasLimit,
+            gasPrice:gas.gasPrice,
+            key:privateKey.value,//私钥
+            url:rpcUrlData.value['url']
+        }
+    }else{
+        transferContent.value = {
+            to:toAddress.value,// 接收方地址
+            value:quantity.value,// 转账
+            chainId:rpcUrlData.value['CHAIN_ID'],
+            key:privateKey.value,//私钥
+            url:rpcUrlData.value['url']
+        }
     }
-    console.log(toRaw(transferContent.value),'transferContent.value');
+    loading.value = false;
+    console.log(transferContent.value,'transferContent.value');
     sendTradePage.value = 'transfer';
 }
 </script>

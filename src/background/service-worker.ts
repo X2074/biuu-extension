@@ -34,6 +34,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         console.log(web3Operate, 'web3Operate');
         web3Operate.evmTransfer(message)
     }
+    if (message.action === 'transferUTXO') {
+        sendResponse();
+        startHeartbeat();//js常驻后台
+        console.log(web3Operate, 'web3Operate');
+        web3Operate.utxoTransfer(message)
+    }
     if (message.action === 'test') {
         console.log("service-worker接收到content的数据");
         let aaa = { action: 'service', test: 'service-worker传递数据给content' }

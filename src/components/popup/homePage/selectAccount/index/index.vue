@@ -8,6 +8,7 @@ import {createMnemonic,createWallet} from "@/utils/createUser"
 import showPrivateKey from '../showPrivateKey/index.vue'
 import importWallet from '../../../components/importWallet/index.vue'
 import deleteWallt from '../deleteWallt/index.vue'
+import { getBlance } from '@/utils/index';
 import Web3 from 'web3'
 import md5 from 'js-md5';
 let accountList = ref([]);
@@ -41,34 +42,19 @@ const initializeInfo = async()=>{
 		passKey.value = res.secret;
 	}).catch(err => { })
     // 获取当前展示的钱包数据
-    indexDbData.getData('currentWalltAddress').then(res => {
-        nowAccount.value = res;
-    })
-    indexDbData.getData('rpc_url').then(res => {
-        console.log(res,'res');
-        if (res && res.walltInfo) {
-            accountContent.value = res;
-            // 指定钱包单位
-            accountList.value = res.walltInfo.reverse();
-            getBlances(res)
-        }
-    }).catch(err=>{})
+    nowAccount.value = await indexDbData.getData('currentWalltAddress')
+    accountContent.value = await indexDbData.getData('rpc_url')
+            console.log(nowAccount.value,'nowAccount.value');
+    
+    // if (res && res.walltInfo) {
+    //         accountContent.value = res;
+    // 指定钱包单位
+    accountList.value = accountContent.value.walltInfo.reverse();
+    let data = await getBlance(accountContent.value.url,nowAccount.value)
+    console.log(data,'datadatadatadata');
+            
+        // }
     loading.value = false;
-}
-
-const getBlances = async (data)=>{
-    // 定义rpc
-    let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
-    for (let i = 0; i < accountList.value.length; i++) {
-        let balance = await web3.eth.getBalance(accountList.value[i]['address']);
-        balance = web3.utils.fromWei(balance, 'ether');
-        balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
-        accountList.value[i]['balance'] = balance;
-    }
-}
-// 导入账户
-const importAccount = ()=>{
-
 }
 // 创建账号
 const createAccount = async ()=>{

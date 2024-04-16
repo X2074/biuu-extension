@@ -7,6 +7,7 @@ import { Decrypt } from '@/utils/index.js';
 import {evmKey } from '@/utils/EVM/index.js';
 import {editContent} from "@/utils/editContent"
 import QRCode from 'qrcodejs2-fix';
+import { getBlance } from '@/utils/index';
 import Web3 from 'web3'
 import md5 from 'js-md5';
 let loading = ref(true)
@@ -43,20 +44,10 @@ const initializeInfo = ()=>{
             userName.value = nowAccount.value.userName ? nowAccount.value.userName : nowAccount.value.NoIndex;
             // 指定钱包单位
             accountList.value = res.walltInfo.reverse();
-            getBlances(res,data)
+            getBlance(res.url,nowAccount.value)
         }
     }).catch(err=>{})
     userNameStatus.value = false;
-    loading.value = false;
-}
-
-const getBlances = async (data,content)=>{
-    // 定义rpc
-    let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
-    let balance = await web3.eth.getBalance(content['address']);
-    balance = web3.utils.fromWei(balance, 'ether');
-    balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
-    nowAccount.value['balance'] = balance;
     loading.value = false;
 }
 // 修改昵称

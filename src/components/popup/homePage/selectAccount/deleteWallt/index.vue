@@ -4,6 +4,7 @@ import { ref, onMounted, defineProps } from 'vue';
 import bus from '@/utils/bus.js'; 
 import indexDbData from '@/utils/indexDB';
 import {editContent} from "@/utils/editContent"
+import { getBlance } from '@/utils/index';
 import Web3 from 'web3'
 import md5 from 'js-md5';
 let loading = ref(false)
@@ -44,7 +45,7 @@ const initializeInfo = ()=>{
             userName.value = nowAccount.value.userName ? nowAccount.value.userName : nowAccount.value.NoIndex;
             // 指定钱包单位
             accountList.value = res.walltInfo.reverse();
-            getBlances(res,data)
+            getBlance(res.url,nowAccount.value)
         }
     }).catch(err=>{})
     loading.value = false;
@@ -52,15 +53,6 @@ const initializeInfo = ()=>{
 // 取消
 const toBack = ()=>{
     bus.emit('selectAccountPage','list')
-}
-// 获取余额
-const getBlances = async (data,content)=>{
-    // 定义rpc
-    let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
-    let balance = await web3.eth.getBalance(content['address']);
-    balance = web3.utils.fromWei(balance, 'ether');
-    balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
-    nowAccount.value['balance'] = balance;
 }
 
 // 二次确认删除
