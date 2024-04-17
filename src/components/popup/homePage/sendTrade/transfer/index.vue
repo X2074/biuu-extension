@@ -63,7 +63,7 @@ const nextTransfer = async ()=>{
     if(currentWallt.value['netWorkType'] == 'evm'){
         data = Object.assign({uuid:uuidv4(),action:'transferEVM',keyStore:currentWallt.value['keyStore'],accountAddress:currentWallt.value['address']},toRaw(transferContent.value))
     }else{
-        data = Object.assign({uuid:uuidv4(),action:'transferUTXO',keyStore:currentWallt.value['keyStore'],accountAddress:currentWallt.value['address']},toRaw(transferContent.value))
+        data = Object.assign({uuid:uuidv4(),action:'transferUTXO',keyStore:currentWallt.value['keyStore'],accountAddress:currentWallt.value['utxoAddressTest']},toRaw(transferContent.value))
         // 测试
         web3Operate.utxoTransfer(data)
     }

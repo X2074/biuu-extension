@@ -43,9 +43,9 @@ export async function testTxSign() {
     console.log(txb, 'utxoD')
   }
   // 指定转出到特定地址的金额，此处我们从本地转给目标地址0.8MEER（1MEER为100000000个最小单位）
-  txb.addOutput(targetAddress, 70000000);
   // 剩余的金额需要设置转回到自己的账户，不然全部会变成手续费。此处我们原本地址的utxo中有500MEER，转出0.8MEER到指定地址，转回499MEER给自己，那么剩下的0.2MEER就会是手续费。手续费过低时交易无法成立，过高时会给用户带来损失，需要多少手续费也需要计算（当然，对于钱包业务来说，除了给矿工的手续费外，我们也可以在这一步对用户收取一定比例的手续费。对于矿工需要多少手续费，我忘记怎么计算了，这块也可以问下兴辉）
   txb.addOutput(address, 20000000000);
+  txb.addOutput(targetAddress, 70000000);
   console.log("txb:", txb)
   // 使用前面通过私钥生成的密钥对签署交易
   utxos.map((v, i) => {

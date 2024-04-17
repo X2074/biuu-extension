@@ -5,7 +5,7 @@ const config = {
     },
 };
 // utxo的rpc链接，与evm的不一致，单独封装处理过的
-const rpcUrls = {
+export const rpcUrls = {
     mainnet: 'https://qng.rpc.qitmeer.io/rpc/',
     testnet: 'https://testnet-qng.rpc.qitmeer.io/rpc/',
     // 当有新的网络时，在此添加
@@ -53,9 +53,9 @@ export async function getUTXOBalance(url, address) {
     }
 }
 // 获取utxo（未花费交易对）
-export async function getUtxos(address) {
+export async function getUtxos(url, address) {
     try {
-        const response = await rpc('testnet', 'getBalanceInfo', [address, 0])
+        const response = await rpc(url + '/', 'getBalanceInfo', [address, 0])
         const result = response.result;
         return result.utxos
     } catch (error) {
@@ -73,9 +73,9 @@ const addBalance = async function (network = 'testnet', address) {
     }
 }
 // 获取指定的utxo详细信息
-export async function getUtxo(txid, idx) {
+export async function getUtxo(url, txid, idx) {
     try {
-        const response = await rpc('testnet', 'getUtxo', [txid, idx])
+        const response = await rpc(url + '/', 'getUtxo', [txid, idx])
         const result = response.result
         return result
     } catch (error) {
