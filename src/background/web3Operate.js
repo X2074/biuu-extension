@@ -103,11 +103,11 @@ export async function utxoTransfer(data) {
     const utxos = await getUtxos(data.url, data.accountAddress)
     let network;
     // 设置网络 mainnet【主网】, testnet【测试】, privnet【私有】
-    // if (rpcUrls.testnet.includes(data.url)) {
-    network = qitmeer.networks.testnet;
-    // } else {
-    //     network = qitmeer.networks.mainnet;
-    // }
+    if (rpcUrls.testnet.includes(data.url)) {
+        network = qitmeer.networks.testnet;
+    } else {
+        network = qitmeer.networks.mainnet;
+    }
     console.log(network, 'network')
     // 构造交易
     const txb = qitmeer.txsign.newSigner(network);
@@ -124,7 +124,6 @@ export async function utxoTransfer(data) {
     for (let utxo of utxos) {
         txb.addInput(utxo.txid, utxo.idx);
         const utxoD = await getUtxo(data.url, utxo.txid, utxo.idx)
-        console.log(txb, 'utxoD')
     }
     // 指定转出到特定地址的金额，此处我们从本地转给目标地址n MEER（1MEER为100000000个最小单位）
     // 剩余的金额需要设置转回到自己的账户，不然全部会变成手续费。此处我们原本地址的utxo中有500MEER，转出0.8MEER到指定地址，转回499MEER给自己，那么剩下的0.2MEER就会是手续费。手续费过低时交易无法成立，过高时会给用户带来损失，需要多少手续费也需要计算（当然，对于钱包业务来说，除了给矿工的手续费外，我们也可以在这一步对用户收取一定比例的手续费。对于矿工需要多少手续费，我忘记怎么计算了，这块也可以问下兴辉）
@@ -133,8 +132,6 @@ export async function utxoTransfer(data) {
     let num = Math.ceil(data.value / 1024);
     let gas = num * 0.02 * 100000000;
     let remaining = (balance1 * 100000000) - (data.value * 100000000) - gas;
-    // console.log(remaining, 'remaining');
-    // let remaining = (balance1 * 100000000) - (data.value * 100000000) - (0.2 * 100000000)
     txb.addOutput(data.accountAddress, remaining);
     txb.addOutput(data.to, data.value * 100000000);
     console.log(txb, '交易的数据txb');

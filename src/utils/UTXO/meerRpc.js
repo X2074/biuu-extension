@@ -116,13 +116,3 @@ export async function getUtxoHash(url, hash) {
         console.error('Error:', error);
     }
 }
-
-// export default {
-//     rpc,
-//     getUTXOBalance,
-//     getUtxos,
-//     getUtxo,
-//     addBalance,
-//     nodeinfo,
-//     sendTraction
-// }
