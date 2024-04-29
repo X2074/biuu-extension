@@ -4,7 +4,6 @@ import bip39 from 'bip39'
 import indexDbData from '@/utils/indexDB.js';
 import { getEVMBlance } from '@/utils/EVM/index.js';
 import { getUTXOBalance } from '@/utils/UTXO/meerRpc.js'
-import { testTxSign } from '@/utils/UTXO/testUtxoTransaction.js'
 import EthereumTx from 'ethereumjs-tx'
 import ecc from 'tiny-secp256k1'
 import { BIP32Factory } from 'bip32'
@@ -110,7 +109,6 @@ export async function getBlance(url, data) {// 获取钱包余额
 		return getEVMBlance(url, data.address)
 	} else {
 		return getUTXOBalance(url, data.utxoAddressTest || data.address)
-		// testTxSign()
 	}
 	// // 定义rpc
 	// let web3 = new Web3(new Web3.providers.HttpProvider(url));

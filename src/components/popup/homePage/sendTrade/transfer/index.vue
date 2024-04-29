@@ -65,17 +65,18 @@ const nextTransfer = async ()=>{
     }else{
         data = Object.assign({uuid:uuidv4(),action:'transferUTXO',keyStore:currentWallt.value['keyStore'],accountAddress:currentWallt.value['utxoAddressTest']},toRaw(transferContent.value))
         // 测试
-        web3Operate.utxoTransfer(data)
+        // web3Operate.utxoTransfer(data)
+        loading.value = false;
     }
     console.log(data,'utxo的交易数据');
     
-	// chrome.runtime.sendMessage(data, (response) => {
-	// 	console.log('Received data from background:', response);
-    //     hashSaveIndexDB(currentWallt.value['keyStore'],'queue',data)
-    //     setTimeout(()=>{
-    //         loading.value = false;
-    //         bus.emit('nextPage','');
-    //     },3000)
-	// });
+	chrome.runtime.sendMessage(data, (response) => {
+		console.log('Received data from background:', response);
+        hashSaveIndexDB(currentWallt.value['keyStore'],'queue',data)
+        setTimeout(()=>{
+            loading.value = false;
+            bus.emit('nextPage','');
+        },3000)
+	});
 }
 </script>

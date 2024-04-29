@@ -94,9 +94,22 @@ const nodeinfo = async function (network = 'testnet') {
     }
 }
 // 发送utxo交易给节点
-export async function sendTraction(network = 'testnet', newTransaction) {
+export async function sendTraction(url, newTransaction) {
     try {
-        const response = await rpc(network, 'sendRawTransaction', [newTransaction, false])
+        const response = await rpc(url + '/', 'sendRawTransaction', [newTransaction, false])
+        console.log(response, 'response');
+        const result = response.result
+        return result
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// 获取交易hash
+export async function getUtxoHash(url, hash) {
+    try {
+        const response = await rpc(url + '/', 'getBlock', [hash, true, true, false])
+        console.log(response, 'response');
         const result = response.result
         return result
     } catch (error) {
