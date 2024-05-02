@@ -37,7 +37,6 @@ indexDbData.getData(md5('secret')).then(res => {
 onMounted(async()=>{
     currentWallt.value = await indexDbData.getData('currentWalltAddress')
     console.log(currentWallt.value,'currentWallt.value');
-    
     // 获取钱包余额
     rpcUrlData.value = await indexDbData.getData('rpc_url')
     try {
@@ -129,7 +128,8 @@ const toTransfer = async ()=>{
             gasLimit:gas.gasLimit,
             gasPrice:gas.gasPrice,
             key:privateKey.value,//私钥
-            url:rpcUrlData.value['url']
+            url:rpcUrlData.value['url'],
+            blance:blanceSecre.value
         }
     }else{
         transferContent.value = {

@@ -24,7 +24,8 @@ let transferContent = ref(
         value:'0',
         sendAddress:''
     }
-);//转账信息
+);
+//转账信息
 let prop = defineProps(['transferContent']);
 onMounted(async ()=>{
     rpcData.value = await indexDbData.getData('rpc_url');
@@ -58,14 +59,16 @@ const toBack = ()=>{
 // 下一步转账
 const nextTransfer = async ()=>{
     loading.value = true;
+    if(totalPrice.value >= transferContent.value['blance']){
+        bus.emit('promptModalErr','您的余额不足')
+        return;
+    }
     // 发送消息给 background 页面请求数据
     let data;
     if(currentWallt.value['netWorkType'] == 'evm'){
         data = Object.assign({uuid:uuidv4(),action:'transferEVM',keyStore:currentWallt.value['keyStore'],accountAddress:currentWallt.value['address']},toRaw(transferContent.value))
     }else{
         data = Object.assign({uuid:uuidv4(),action:'transferUTXO',keyStore:currentWallt.value['keyStore'],accountAddress:currentWallt.value['utxoAddressTest']},toRaw(transferContent.value))
-        // 测试
-        // web3Operate.utxoTransfer(data)
         loading.value = false;
     }
     console.log(data,'utxo的交易数据');

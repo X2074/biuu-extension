@@ -45,12 +45,13 @@
         <div class="detail-content flex mt-25">
             <p class="name">付款地址：</p>
             <div class="info flex">
-                <p>{{detailTransaction?.from.substr(0,4)}}...{{detailTransaction?.from.substr(-4)}}</p>
-                <img class="ml-10" @click="onCopy(detailTransaction?.from,'付款地址')" src="@/assets/images/icons/copy.png"
-                    alt="">
+                <p>{{detailTransaction?.accountAddress.substr(0,4)}}...{{detailTransaction?.accountAddress.substr(-4)}}
+                </p>
+                <img class="ml-10" @click="onCopy(detailTransaction?.accountAddress,'付款地址')"
+                    src="@/assets/images/icons/copy.png" alt="">
             </div>
         </div>
-        <!-- 转账 -->
+        <!-- 收款地址 -->
         <div v-if="detailTransaction && detailTransaction.price" class="detail-content flex mt-25">
             <p class="name">收款地址：</p>
             <div class="info flex">
@@ -69,7 +70,8 @@
             </div>
         </div>
         <!-- nft -->
-        <div v-if="detailTransaction && !detailTransaction.price" class="detail-content flex mt-25">
+        <div v-if="detailTransaction && detailTransaction.action == 'transferUTXO' && !detailTransaction.price"
+            class="detail-content flex mt-25">
             <p class="name">NFT合约地址：</p>
             <div class="info flex">
                 <p>{{detailTransaction?.to.substr(0,4)}}...{{detailTransaction?.to.substr(-4)}}
@@ -78,11 +80,10 @@
                     alt="">
             </div>
         </div>
-        <div class="detail-content flex mt-25">
+        <div class="detail-content flex mt-25" v-if="detailTransaction['action'] == 'transferEVM'">
             <p class="name">GAS 费：</p>
             <div class="info flex">
                 <p class="price mr-5">{{gasPrice}}</p>
-                <!-- <p>{{rpc_url.unit.toUpperCase()}}</p> -->
             </div>
         </div>
         <div class="detail-content flex mt-25">

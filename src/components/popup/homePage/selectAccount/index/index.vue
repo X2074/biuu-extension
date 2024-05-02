@@ -44,16 +44,18 @@ const initializeInfo = async()=>{
     // 获取当前展示的钱包数据
     nowAccount.value = await indexDbData.getData('currentWalltAddress')
     accountContent.value = await indexDbData.getData('rpc_url')
-            console.log(nowAccount.value,'nowAccount.value');
-    
-    // if (res && res.walltInfo) {
-    //         accountContent.value = res;
-    // 指定钱包单位
-    accountList.value = accountContent.value.walltInfo.reverse();
-    let data = await getBlance(accountContent.value.url,nowAccount.value)
-    console.log(data,'datadatadatadata');
-            
-        // }
+    // 指定钱包单位\
+    let data = accountContent.value.walltInfo.reverse();
+    data.forEach(item=>{
+        item.blance = 0;
+    })
+    accountList.value = data;
+    accountList.value.forEach(item=>{
+        getBlance(accountContent.value.url,item).then(res=>{
+            item.blance = res;
+        })
+    })
+    console.log(data,'data');
     loading.value = false;
 }
 // 创建账号
@@ -171,14 +173,7 @@ const checkAccount = ()=>{
 }
 // 上一页
 const backPage = ()=>{
-    if(prop && prop.pageType && accountType.value == 'showKey'){
-        bus.emit('homePageBack','')
-    }
-    if(accountType.value == 'list'){
-        bus.emit('homePageBack','')
-    }else{
-        accountType.value = 'list'
-    }
+    bus.emit('nextPage','')
 }
 
 bus.on('selectAccountPage',(res)=>{

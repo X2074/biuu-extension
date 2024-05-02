@@ -103,7 +103,7 @@ export async function hashSaveIndexDB(keyStore, status, data) {
         blockNumber: data.blockNumber || '',
         transactionHash: data.transactionHash || '',
         gasUsed: data.gasUsed || '',
-        from: data.from || '',
+        from: data.accountAddress || '',
         to: data.to || '',
         status: status || '',
         price: data['value'] ? data['value'] : 0,

@@ -105,6 +105,7 @@ export async function isAddress(address) {
 }
 // 获取钱包余额
 export async function getBlance(url, data) {// 获取钱包余额
+	console.log(data, 'data');
 	if (data.netWorkType == 'evm') {
 		return getEVMBlance(url, data.address)
 	} else {

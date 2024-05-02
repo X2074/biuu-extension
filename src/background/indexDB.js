@@ -2,6 +2,7 @@
 import indexDbData from '../utils/indexDB.js';
 import { stopHeartbeat } from './resident.js';
 import { hashSaveIndexDB } from '../utils/operateIndexDB.js';
+import { getUtxoHash } from '../utils/UTXO/meerRpc.js'
 import Web3 from 'web3'
 import md5 from 'js-md5';
 let timer = null;
@@ -50,23 +51,39 @@ async function getTransactionStatus() {
     } else {
         stopHeartbeat()
     }
-
 }
 // 轮循hash状态
 async function lunxunData(data) {
     const promises = [];
     for (const transactionDetail of data) {
-        let data = web3.eth.getTransactionReceipt(transactionDetail.transactionHash);
-        promises.push(data)
+        if (transactionDetail.action == 'transferEVM') {
+            let res = web3.eth.getTransactionReceipt(transactionDetail.transactionHash);
+            res.walltType = 'transferEVM';
+            promises.push(res)
+        } else if (transactionDetail.action == 'transferUTXO') {
+            let res = getUtxoHash(transactionDetail['url'], transactionDetail.transactionHash);
+            res.walltType = 'transferUTXO';
+            promises.push(res)
+        }
     }
+    console.log(promises, 'promisespromisespromisespromises');
+    if (!promises || !promises.length) return;
     Promise.all(promises)
         .then(results => {
             // 在所有异步操作都完成后执行的逻辑
             console.log("所有异步操作已完成", results);
             results.forEach(item => {
-                if (item.status) {
-                    item['status'] = 'finish';
-                    hashSaveIndexDB(currentWallt["keyStore"], 'finish', item);
+                if (item.walltType == 'transferEVM') {
+                    if (item.status) {
+                        item['status'] = 'finish';
+                        hashSaveIndexDB(currentWallt["keyStore"], 'finish', item);
+                    }
+                } else {
+                    // utxo的交易，如果存在详情，且存在vout交易双方数据，就是成功的
+                    if (item && item.vout) {
+                        item['status'] = 'finish';
+                        hashSaveIndexDB(currentWallt["keyStore"], 'finish', item);
+                    }
                 }
             });
             getTransactionStatus()

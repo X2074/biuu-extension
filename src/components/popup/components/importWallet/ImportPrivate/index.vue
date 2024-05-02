@@ -60,7 +60,7 @@ const isValidPrivateKey = async (keyName)=>{
         
         if (account && account.address) {
             account['keyStore'] = keyName;
-            account['type'] = "utxo";
+            account['netWorkType'] = "evm";
             evmNetwork(account)
             return true;
         } else {
@@ -112,6 +112,7 @@ const generateUTXOWallet =async (keyName)=>{
     };
     utxoNetwork(account)
 }
+// 907fd84538e3ac1caebdbbd35b00cad93986ee9ae34785e99e62843020c98f72
 const evmNetwork = (walltInfo) => {
     indexDbData.getData('EVM').then(res => {
         console.log(res,'resresres');
@@ -170,9 +171,9 @@ const evmNetwork = (walltInfo) => {
                 NoIndex: index + 1//当前第几个用户
             })
         })
-        console.log(data, 1111111);
         data.netWorkType = "evm";
         indexDbData.putData(data)
+        console.log(data, 1111111);
         createRpc()
     })
 }
@@ -229,13 +230,14 @@ const createRpc = async ()=>{
     
     info['id'] = 'rpc_url';
     info['type'] = data.type;
-    console.log(info,'info02');
+    info['netWorkType'] = data.netWorkType;
     // 更新rpc
     indexDbData.putData(info);
     // 更新当前钱包数据
     let index = info['walltInfo'].length;
     let currentWallt = info['walltInfo'][index - 1];
     currentWallt['id'] = 'currentWalltAddress';
+    currentWallt['netWorkType'] = data.netWorkType;
     indexDbData.putData(currentWallt)
 } 
 

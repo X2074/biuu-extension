@@ -3,7 +3,7 @@ import indexDbData from '../utils/indexDB.js';
 import EthereumTx from 'ethereumjs-tx'
 import { hashSaveIndexDB } from '../utils/operateIndexDB.js';
 import { chromeNotifications } from './utils';
-import { testTxSign } from '@/utils/UTXO/testUtxoTransaction.js'
+import { selectMinUTXOs } from '../utils/UTXO/calculateTxid.js';
 import qitmeer from "qitmeer-js";
 import { getUtxos, getUTXOBalance, getUtxo, sendTraction, rpcUrls } from '../utils/UTXO/meerRpc.js'
 
@@ -101,6 +101,17 @@ export async function utxoTransfer(data) {
     console.log(balance2, 'balance2')
     // 获取发送方地址的未花费交易对信息（为一个数组，暂不确定返回的长度是否有上限，可以通过转入多个小额交易到指定地址进行测试）
     const utxos = await getUtxos(data.url, data.accountAddress)
+    console.log(utxos, 'utxos');
+    // 指定转出到特定地址的金额，此处我们从本地转给目标地址n MEER（1MEER为100000000个最小单位）
+    // 剩余的金额需要设置转回到自己的账户，不然全部会变成手续费。此处我们原本地址的utxo中有500MEER，转出0.8MEER到指定地址，转回499MEER给自己，那么剩下的0.2MEER就会是手续费。手续费过低时交易无法成立，过高时会给用户带来损失，需要多少手续费也需要计算（当然，对于钱包业务来说，除了给矿工的手续费外，我们也可以在这一步对用户收取一定比例的手续费。对于矿工需要多少手续费，我忘记怎么计算了，这块也可以问下兴辉）
+    // 计算余额 总的余额 - 交易的数量 - 手续费 = 剩余的额度
+    // 手续费
+    let num = Math.ceil(data.value / 1024);
+    let gas = num * 0.02 * 100000000;
+    let remaining = (balance1 * 100000000) - (data.value * 100000000) - gas;
+    let allPrice = data.value * 100000000 + remaining;
+    let selectUtxos = await selectMinUTXOs(utxos, allPrice);
+    console.log(selectUtxos.selectedUTXOs, 'selectUtxos');
     let network;
     // 设置网络 mainnet【主网】, testnet【测试】, privnet【私有】
     if (rpcUrls.testnet.includes(data.url)) {
@@ -112,26 +123,15 @@ export async function utxoTransfer(data) {
     // 构造交易
     const txb = qitmeer.txsign.newSigner(network);
     // lockTime 是指交易的锁定时间，它表示交易在区块链上的生效时间。通常情况下，如果您不需要特别设置锁定时间，可以将其设置为 0。
-    const lockTime = parseInt(new Date().getTime() / 1000)
-    console.log(txb, 'txb')
-    txb.setTimestamp(lockTime)
-    // txb.setLockTime(lockTime)
-    // 将未花费交易对添加到输入中，此处示例是我把全部的未花费交易对都传入了，实际上只需要总额加起来足够支付手续费和转出金额就行，因此如何选取合适的utxo交易对是一个问题，可以其他开源的btc钱包中的这部分计算方案（实际钱包处理这块时，应该不需要每次都重新获取未花费交易对，对弈已有的数据本地应该暂存了，然后每次操作完后更新，移除使用的utxo，加入新的utxo）
-    //     本地管理的utxo的详细信息 具体有哪几个未花费的还是要根据当前调用那个获取所有的utxo的方法拿到的列表来确定
-    // 本地存储utxo对应的详细信息是检查一些不必要的重复请求
-    // 相当于可能本地存了 1 2 3 4 5 6六个utxo ，之后比的地方花掉了1和4产生了7，之后再次交易的话 ，先查询到utxos有 2 3 5 6 7，只需要重新查询7的详情即可
-    // 2 3 5 6不需要再去查了
-    for (let utxo of utxos) {
+    const lockTime = parseInt(new Date().getTime() / 1000);
+    txb.setTimestamp(lockTime);
+    // 本次使用的txid
+    let txids = []
+    // 选取合适的utxo
+    for (let utxo of selectUtxos.selectedUTXOs) {
         txb.addInput(utxo.txid, utxo.idx);
-        const utxoD = await getUtxo(data.url, utxo.txid, utxo.idx)
+        txids.push(utxo.txid);
     }
-    // 指定转出到特定地址的金额，此处我们从本地转给目标地址n MEER（1MEER为100000000个最小单位）
-    // 剩余的金额需要设置转回到自己的账户，不然全部会变成手续费。此处我们原本地址的utxo中有500MEER，转出0.8MEER到指定地址，转回499MEER给自己，那么剩下的0.2MEER就会是手续费。手续费过低时交易无法成立，过高时会给用户带来损失，需要多少手续费也需要计算（当然，对于钱包业务来说，除了给矿工的手续费外，我们也可以在这一步对用户收取一定比例的手续费。对于矿工需要多少手续费，我忘记怎么计算了，这块也可以问下兴辉）
-    // 计算余额 总的余额 - 交易的数量 - 手续费 = 剩余的额度
-    // 手续费
-    let num = Math.ceil(data.value / 1024);
-    let gas = num * 0.02 * 100000000;
-    let remaining = (balance1 * 100000000) - (data.value * 100000000) - gas;
     txb.addOutput(data.accountAddress, remaining);
     txb.addOutput(data.to, data.value * 100000000);
     console.log(txb, '交易的数据txb');
@@ -142,14 +142,24 @@ export async function utxoTransfer(data) {
     // 构建交易体
     const newTransaction = txb.build().toBuffer().toString('hex');
     console.log(newTransaction, 'newTransaction')
+
+    let transferTxid = await indexDbData.getData('transferTxid');
+    if (!transferTxid) {
+        let txidList = {
+            id: "transferTxid", content: txids
+        }
+        indexDbData.putData(txidList)
+    } else {
+        transferTxid['content'] = [...transferTxid['content'], ...txids];
+        indexDbData.putData(transferTxid)
+    }
     // 发送交易
     const response = await sendTraction(data.url, newTransaction)
-    let info = Object.assign(data, response)
-    console.log(response, 'response')
-    chromeNotifications(hash)
+    let info = Object.assign(data, { 'transactionHash': response })
+    console.log(info, 'info')
+    chromeNotifications(response);
     hashSaveIndexDB(data['keyStore'], 'dispose', info);
 }
-
 export default {
     evmTransfer,
     utxoTransfer

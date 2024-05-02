@@ -106,11 +106,10 @@ export async function sendTraction(url, newTransaction) {
 }
 
 // 获取交易hash
-export async function getUtxoHash(url, hash) {
+export async function getUtxoHash(url, txid) {
     try {
-        const response = await rpc(url + '/', 'getBlock', [hash, true, true, false])
-        console.log(response, 'response');
-        const result = response.result
+        const response = await rpc(url + '/', 'getRawTransaction', [txid, true])
+        const result = response.result;
         return result
     } catch (error) {
         console.error('Error:', error);

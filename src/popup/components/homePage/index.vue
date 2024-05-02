@@ -30,12 +30,12 @@ let loadingText = ref('加载中...')
 let tabsOption = ref('nfts');//底部tabs切换
 let nftDetails = ref(null)
 onMounted(() => { 
-	console.log(props,'propsprops');
-	
 	initialize()
 })
 // 初始化
 const initialize = async ()=>{
+	console.log('initialize');
+	
 	let data = await indexDbData.getData('rpc_url')
 	if(!data) {
 		netWorkChange('EVM')
@@ -113,7 +113,7 @@ bus.on('homePageBack', (res) => {
 	walltAccount.value = res.page || 'nfts';
 	console.log(res,'跳转nft详情');
 	
-	if(res.data && res.page == 'nftDetail'){//nft详情需要的数据
+	if(res && res.data && res.page == 'nftDetail'){//nft详情需要的数据
 		nftDetails.value = res.data;
 	}else{
 		initialize()

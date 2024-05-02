@@ -5,6 +5,7 @@
 <script lang='ts' setup>
 import { ref, onMounted, toRaw } from "vue";
 import indexDbData from "@/utils/indexDB.js";
+import { getUtxoHash } from '@/utils/UTXO/meerRpc.js'
 import bus from "@/utils/bus";
 import md5 from "js-md5";
 import queueFinish from "./queueFinish/index.vue";
@@ -62,7 +63,6 @@ bus.on("transactionStatusUpdates", (data: any) => {
       return toRaw(item);
     }
   );
-  console.log(data, "需要更新的数据", toRaw(rawData.value));
   indexDbData.putData(toRaw(rawData.value));
   queueTransactions.value = [];
   finishTransactions.value = [];
@@ -72,6 +72,19 @@ bus.on("transactionStatusUpdates", (data: any) => {
 const toDetail = async (data: any) => {
   loading.value = true;
   detailTransaction.value = data;
+  if(data.action == 'transferEVM'){
+    getEvm(data)
+  }else{
+    getUtxo(data)
+  }
+};
+const getUtxo = async (data)=>{
+  let receipt = await getUtxoHash(data['url'],data['transactionHash']);
+  time.value = receipt["timestamp"];
+  transactionPage.value = "detail";
+  loading.value = false;
+}
+const getEvm = async (data)=>{
   await getTransactionStatus(data);
   await getWei(data.gasUsed);
   if (!data["time"]) {
@@ -81,7 +94,7 @@ const toDetail = async (data: any) => {
   }
   transactionPage.value = "detail";
   loading.value = false;
-};
+}
 // 查询交易详情
 const getTransactionStatus = (data: { transactionHash: any }) => {
   web3.value.eth.getTransactionReceipt(
