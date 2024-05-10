@@ -26,6 +26,7 @@ onMounted(async ()=>{
 // 选中的网络
 const rpcChange = async (event,type) => {
     console.log(event,'event');
+    loading.value = true;
     let dataRpc = toRaw(event);
     console.log(dataRpc,'dataRpc');
     dataRpc['netWorkType'] = type;
@@ -37,6 +38,10 @@ const rpcChange = async (event,type) => {
     currentWalltAddress['id'] = 'currentWalltAddress';
     currentWalltAddress['netWorkType'] = type;
     indexDbData.putData(currentWalltAddress);
+    loading.value = false;
+    setTimeout(()=>{
+        bus.emit('nextPage','homePage')
+    },300)
 }
 // 返回上一页面
 const toBack = (page)=>{

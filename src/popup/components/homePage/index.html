@@ -7,7 +7,7 @@
         <p class="flex" @click="walltAccount = 'selectAccount';pageType=''"> 钱包管理
             <img class="ml-5" src="@/assets/images/icons/arrowhead.svg" alt="">
         </p>
-        <div class="more-components">
+        <div v-if="!walltAccount || walltAccount == 'nfts'" class="more-components">
             <img src="@/assets/images/icons/more.png" @click="moreShow = !moreShow;" alt="">
             <div class="more-content" v-if="moreShow" @click.self="moreShow = !moreShow">
                 <div class="options-list">
@@ -41,7 +41,8 @@
     </div>
     <div class="user-info pt-20">
         <div class="user-currency mt-10 flex">
-            <p class="ml-10" v-if="props.walltContent">{{props.walltContent.blance}} {{props.walltContent.unit}}
+            <p class="ml-10" v-if="props.walltContent && props.walltContent.blance">{{props.walltContent.blance || 0}}
+                {{props.walltContent.unit}}
             </p>
             <p class="ml-10" v-else>0 {{props.walltContent.unit}}
             </p>
@@ -62,7 +63,7 @@
             <p class="ml-20 mr-20" @click="toPage('swap')">
                 <img src="../../../assets/images/swap.png" alt="">
             </p> -->
-            <p @click="sendTo">转账</p>
+            <p @click="walltAccount = 'sendTrade'">转账</p>
         </div>
 
     </div>
@@ -73,11 +74,11 @@
     </div>
     <div class="footer-tabs">
         <div class="tabs-list flex">
-            <p @click="tabsOption = 'nfts'" class="mr-25">NFTS</p>
+            <p v-if="walltEnvironment.netWorkType != 'utxo'" @click="tabsOption = 'nfts'" class="mr-25">NFTS</p>
             <p @click="walltAccount = 'sendTrade'" class="mr-25">转账</p>
             <p @click="walltAccount = 'transactionHistory'">交易记录</p>
         </div>
-        <nftCard v-if="walltAccount == 'nfts'" />
+        <nftCard v-if="walltEnvironment.netWorkType != 'utxo' && walltAccount == 'nfts'" />
     </div>
 </div>
 <!-- 选择账户 -->

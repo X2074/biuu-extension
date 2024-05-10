@@ -88,13 +88,13 @@ const evmNetwork = (walltInfo) => {
         if (!res) {
             data['content'] = netWork.EVM;
             data['id'] = 'EVM';
+            data['NoIndex'] = 1;
             let content = {
                 address: walltInfo.address,
                 userName: 'Wallt 01',
                 userUrl: '',
                 keyStoreType:'privateKey',
-                keystore:walltInfo.keystore,
-                NoIndex: 1//当前第几个用户
+                keystore:walltInfo.keystore
             }
             indexDbData.putData(Object.assign({id:'currentWalltAddress'},content))
             let info = {
@@ -120,13 +120,14 @@ const evmNetwork = (walltInfo) => {
             }
         })
         Object.keys(data.content).forEach(item => {
-            let index = data.content[item]['walltInfo'].length;
+            let index = data['NoIndex'];
+            data.content[item]['NoIndex'] = index+1;
             data.content[item].walltInfo.push({
                 address: walltInfo.address, //当前用户地址
                 userName: 'Wallt' + (!index ? '01' : (index + 1 > 10 ? index + 1 : '0' + (index + 1))),
-        keystore:walltInfo['keystore'],
+                keystore:walltInfo['keystore'],
                 userUrl: '',
-                NoIndex: index + 1//当前第几个用户
+                NoIndex:data['NoIndex'],//当前创建的第几个
             })
         })
         console.log(data, 1111111);
@@ -140,8 +141,10 @@ const utxoNetwork = (walltInfo) => {
             // 新增默认utxo网络
             data['content'] = netWork['UTXO']
             data['id'] = 'UTXO';
+            data['NoIndex'] = 1;
         }else{
             data = res;
+            data['NoIndex'] = data['NoIndex'] + 1;
             createRpc()
         }
         // 提取数据库存储的网络 chainid
@@ -152,14 +155,15 @@ const utxoNetwork = (walltInfo) => {
             }
         })
         Object.keys(data.content).forEach(item => {
-            let index = data.content[item]['walltInfo'].length;
+            let index = data['NoIndex'] ;
+            data.content[item]['NoIndex'] = index+1;
             data.content[item].walltInfo.push({
                 utxoAddressTest: walltInfo.utxoAddressTest, //当前用户测试地址
                 address: walltInfo.utxoAddressMain, //当前用户地址
                 userName: 'Wallt' + (!index ? '01' : (index + 1 > 10 ? index + 1 : '0' + (index + 1))),
-        keystore:walltInfo['keystore'],
+                keystore:walltInfo['keystore'],
                 userUrl: '',
-                NoIndex: index + 1//当前第几个用户
+                NoIndex:data['NoIndex'],//当前创建的第几个
             })
         })
         indexDbData.putData(data)

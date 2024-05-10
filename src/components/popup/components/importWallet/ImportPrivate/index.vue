@@ -13,6 +13,8 @@ import md5 from 'js-md5';
 // 预制网络
 import { netWork } from '@/utils/defaultNetwork.js'
 import CryptoJS from 'crypto-js'; //引用AES源码js
+let loading = ref(false)
+let loadingText = ref('加载中...')
 let mnemonicList = ref([]);//助记词数组
 let moduleType = ref('evm');//选中的模块
 let newPsd = ref('');//钱包密码
@@ -40,16 +42,18 @@ const privatePrivateConfirm = async ()=>{
     }
     let keyName = uuidv4();
     await saveKey(keyName)
+    loading.value = true;
     // 创建evm
     if(moduleType.value == 'evm'){
         await isValidPrivateKey(keyName)
     }else{
         await generateUTXOWallet(keyName)
     }
-    // bus.emit('promptModalSuccess','导入成功')
-    // setTimeout(() => {
-    //     bus.emit('nextPage', 'homePage');
-    // }, 500)
+    loading.value = false;
+    bus.emit('promptModalSuccess','导入成功')
+    setTimeout(() => {
+        bus.emit('nextPage', 'homePage');
+    }, 500)
 }
 // evm私钥生成钱包
 const isValidPrivateKey = async (keyName)=>{
@@ -121,13 +125,13 @@ const evmNetwork = (walltInfo) => {
         if (!res) {//如果是第一次创建，rpc和current数据就初始化
             data['content'] = netWork.EVM;
             data['id'] = 'EVM';
+            data['NoIndex'] = 1;
             let content = {
                 address: walltInfo.address,
                 userName: 'Wallt 01',
                 userUrl: '',
                 keyStoreType:'privateKey',
-                keystore:walltInfo.keystore,
-                NoIndex: 1//当前第几个用户
+                keystore:walltInfo.keystore
             }
             indexDbData.putData(Object.assign({id:'currentWalltAddress'},content))
             let info = {
@@ -145,6 +149,7 @@ const evmNetwork = (walltInfo) => {
             
         }else{
             data = res;
+            data['NoIndex'] = data['NoIndex'] + 1;
         }
         let chainId = Object.keys(data.content)
         Object.keys(netWork.EVM).forEach(item => {
@@ -153,7 +158,6 @@ const evmNetwork = (walltInfo) => {
             }
         })
         Object.keys(data.content).forEach(item => {
-            let index = data.content[item]['walltInfo'].length;
             // 如果有同名的钱包地址，直接return；
             let walltAccount = data.content[item].walltInfo.filter(item=>{
                 return item.address == walltInfo.address;
@@ -164,11 +168,11 @@ const evmNetwork = (walltInfo) => {
             };
             data.content[item].walltInfo.push({
                 address: walltInfo.address, //当前用户地址
-                userName: 'Wallt' + (!index ? '01' : (index + 1 > 10 ? index + 1 : '0' + (index + 1))),
+                userName: 'Wallt' + (!data['NoIndex'] ? '01' : (data['NoIndex'] + 1 > 10 ? data['NoIndex'] + 1 : '0' + (data['NoIndex'] + 1))),
                 userUrl: '',
+                NoIndex:data['NoIndex'],//当前创建的第几个
                 keyStoreType:'privateKey',
-                keyStore:walltInfo.keyStore,
-                NoIndex: index + 1//当前第几个用户
+                keyStore:walltInfo.keyStore
             })
         })
         data.netWorkType = "evm";
@@ -184,8 +188,10 @@ const utxoNetwork = (walltInfo) => {
             // 新增默认utxo网络
             data['content'] = netWork['UTXO']
             data['id'] = 'UTXO';
+            data['NoIndex'] = 1;
         }else{
             data = res;
+            data['NoIndex'] = data['NoIndex'] + 1;
         }
         // 提取数据库存储的网络 chainid
         let chainId = Object.keys(data.content)
@@ -195,7 +201,6 @@ const utxoNetwork = (walltInfo) => {
             }
         })
         Object.keys(data.content).forEach(item => {
-            let index = data.content[item]['walltInfo'].length;
             let walltAccount = data.content[item].walltInfo.filter(item=>{
                 return item.address == walltInfo.address;
             })
@@ -206,11 +211,11 @@ const utxoNetwork = (walltInfo) => {
             data.content[item].walltInfo.push({
                 utxoAddressTest: walltInfo.utxoAddressTest, //当前用户测试地址
                 address: walltInfo.utxoAddressMain, //当前用户地址
-                userName: 'Wallt' + (!index ? '01' : (index + 1 > 10 ? index + 1 : '0' + (index + 1))),
+                userName: 'Wallt' + (!data['NoIndex'] ? '01' : (data['NoIndex'] + 1 > 10 ? data['NoIndex'] + 1 : '0' + (data['NoIndex'] + 1))),
                 userUrl: '',
+                NoIndex:data['NoIndex'],//当前创建的第几个
                 keyStoreType:'privateKey',
-                keyStore:walltInfo.keyStore,
-                NoIndex: index + 1//当前第几个用户
+                keyStore:walltInfo.keyStore
             })
         })
         data.netWorkType = "utxo";

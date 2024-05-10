@@ -57,20 +57,14 @@ const createWallet = async () => {
         let address = ethUtil.publicToAddress(key.publicKey, true).toString('hex');
         address = eip55.encode(address.toString('hex'));
         console.log(address, 'address');
-
-        // console.log('私钥(WIF):', privateKeyWIF);
         console.log('私钥 (Hex):', privateKeyHex);
-        // console.log('公钥 (Hex):', publicKeyHex);
-        // console.log({
-        //     mnemonic, privateKeyHex, publicKeyHex, address
-        // });
         return {
             mnemonicArray: mnemonicArray.value,
             mnemonic: mnemonic, //助记词
             privateKey: privateKeyHex, //私钥
             publicKey: publicKeyHex, //公钥
             address: address, //钱包地址
-            keystore: uuidv4(), //钱包的对象名
+            keyStore: uuidv4(), //钱包的对象名
             // utxoRootPrivateKey: rootPrivateKey, //私钥
             // utxoRootPublicKey: rootPublicKey, //公钥
             utxoAddressTest: p2pkhAddressTest, //UTXO测试网地址

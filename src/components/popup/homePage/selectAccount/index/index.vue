@@ -84,13 +84,14 @@ const createAccount = async ()=>{
     })
     
     indexDbData.getData('currentWalltAddress').then(res => {
+        let index = accountContent.value['NoIndex'] + 1;
         let content = {
             id: 'currentWalltAddress',
             address: account['address'],
-            userName: 'Wallt' + (!res.NoIndex ? '01' : (res.NoIndex + 1 > 10 ? res.NoIndex + 1 : '0' + (res.NoIndex + 1))),
+            userName: 'Wallt' + (index > 10 ? index : '0' + index + 1),
             userUrl: '',
             keystore:account['keystore'],
-            NoIndex: res.NoIndex ? (res.NoIndex + 1) : 1//当前第几个用户
+            NoIndex: index//当前第几个用户
         }
         // 存为当前展示的钱包数据
         indexDbData.getData('currentWalltAddress').then(res => {
@@ -98,6 +99,7 @@ const createAccount = async ()=>{
         }).catch(err => {})
         // 存为当前选中的网络中数据
         indexDbData.getData('rpc_url').then(res => {
+            res['NoIndex'] = res['NoIndex'] + 1;
             res.walltInfo.push(content)
             // 保存key
             indexDbData.putData(res)
@@ -114,26 +116,32 @@ const createAccount = async ()=>{
 
 
 const evmNetwork = (data) => {
+    let index = accountContent.value['NoIndex'] + 1;
     indexDbData.getData('EVM').then(res => {
-        Object.keys(res.content).forEach((item, index) => {
+        res['NoIndex'] = index;
+        Object.keys(res.content).forEach((item) => {
+            res.content[item]['NoIndex'] = index;
             res.content[item].walltInfo.push({
                 address: data.address, //当前用户地址
-                userName: 'Wallt' + (item.NoIndex + 1 > 10 ? item.NoIndex + 1 : '0' + (item.NoIndex + 1)),
+                userName: 'Wallt' + (index > 10 ? index + 1 : '0' + index),
                 userUrl: '',
                 keystore:data['keystore'],
-                NoIndex: index + 1//当前第几个用户
+                NoIndex: index//当前第几个用户
             })
         })
         indexDbData.putData(res)
     })
 }
 const utxoNetwork = (data) => {
+    let index = accountContent.value['NoIndex'] + 1;
     indexDbData.getData('UTXO').then(res => {
-        Object.keys(res.content).forEach((item, index) => {
+        res['NoIndex'] = index;
+        Object.keys(res.content).forEach((item) => {
+            res.content[item]['NoIndex'] = index;
             res.content[item].walltInfo.push({
                 utxoAddressTest: data.utxoAddressTest, //当前用户测试地址
                 address: data.utxoAddressMain, //当前用户地址
-                userName: 'Wallt' + (item.NoIndex + 1 > 10 ? item.NoIndex + 1 : '0' + (item.NoIndex + 1)),
+                userName: 'Wallt' + index > 10 ? index : '0' + index,
                 userUrl: '',
                 keystore:data['keystore'],
                 NoIndex: index + 1//当前第几个用户
