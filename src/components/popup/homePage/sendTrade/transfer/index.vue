@@ -65,7 +65,7 @@ const nextTransfer = async ()=>{
     }
     // 发送消息给 background 页面请求数据
     let data;
-    if(currentWallt.value['netWorkType'] == 'evm'){
+    if(rpcData.value['netWorkType'] == 'evm'){
         data = Object.assign({uuid:uuidv4(),action:'transferEVM',keyStore:currentWallt.value['keyStore'],accountAddress:currentWallt.value['address']},toRaw(transferContent.value))
     }else{
         data = Object.assign({uuid:uuidv4(),action:'transferUTXO',keyStore:currentWallt.value['keyStore'],accountAddress:currentWallt.value['utxoAddressTest']},toRaw(transferContent.value))

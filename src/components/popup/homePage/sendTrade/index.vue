@@ -41,7 +41,7 @@ onMounted(async()=>{
     rpcUrlData.value = await indexDbData.getData('rpc_url')
     try {
         // 钱包地址
-        blanceSecre.value = await getBlance(rpcUrlData.value.url,currentWallt.value)
+        blanceSecre.value = await getBlance(rpcUrlData.value.url,Object.assign({netWorkType:rpcUrlData.value.netWorkType},currentWallt.value))
         console.log(blanceSecre.value,'转账',sendTradePage.value);
     } catch (error) {
     }
@@ -70,34 +70,34 @@ const validateNumberInput = ()=>{
 }
 // 跳转转账页面
 const toTransfer = async ()=>{
-    // if(!currentWallt.value['address']){
-    //     bus.emit('promptModalErr','请选择付款地址')
-    //     return;
-    // }
-    // if(!confirmPsd.value){
-    //     bus.emit('promptModalErr','请输入密码')
-    //     return;
-    // }
-    // if(md5(confirmPsd.value) != passKey.value){
-    //     bus.emit('promptModalErr','您输入的密码有误')
-    //     return;
-    // }
-    // if(md5(confirmPsd.value) != passKey.value){
-    //     bus.emit('promptModalErr','您输入的密码有误')
-    //     return;
-    // }
-    // if(!quantity.value || !Number(quantity.value * 1)){
-    //     bus.emit('promptModalErr','请输入正确的转账数量')
-    //     return;
-    // }
-    // if(!toAddress.value){
-    //     bus.emit('promptModalErr','请选择收款地址')
-    //     return;
-    // }
-    // if(blanceSecre.value <= quantity.value){
-    //     bus.emit('promptModalErr','您的余额不足')
-    //     return;
-    // }
+    if(!currentWallt.value['address']){
+        bus.emit('promptModalErr','请选择付款地址')
+        return;
+    }
+    if(!confirmPsd.value){
+        bus.emit('promptModalErr','请输入密码')
+        return;
+    }
+    if(md5(confirmPsd.value) != passKey.value){
+        bus.emit('promptModalErr','您输入的密码有误')
+        return;
+    }
+    if(md5(confirmPsd.value) != passKey.value){
+        bus.emit('promptModalErr','您输入的密码有误')
+        return;
+    }
+    if(!quantity.value || !Number(quantity.value * 1)){
+        bus.emit('promptModalErr','请输入正确的转账数量')
+        return;
+    }
+    if(!toAddress.value){
+        bus.emit('promptModalErr','请选择收款地址')
+        return;
+    }
+    if(blanceSecre.value <= quantity.value){
+        bus.emit('promptModalErr','您的余额不足')
+        return;
+    }
     loading.value = true;
     
     // 获取当前的助记词

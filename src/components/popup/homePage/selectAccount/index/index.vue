@@ -51,7 +51,7 @@ const initializeInfo = async()=>{
     })
     accountList.value = data;
     accountList.value.forEach(item=>{
-        getBlance(accountContent.value.url,item).then(res=>{
+        getBlance(accountContent.value.url,Object.assign({netWorkType:accountContent.value.netWorkType},item)).then(res=>{
             item.blance = res;
         })
     })

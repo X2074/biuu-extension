@@ -14,9 +14,11 @@ let loadingText = ref('加载中...')
 let detail = ref(null);//详情数据
 let prop = defineProps(['importPage']);
 let currentWallt = ref(null);//当前用户信息
+let rpcUrlData = ref(null)
 onMounted(async() => {
     console.log(prop,'prop');
     
+    rpcUrlData.value = await indexDbData.getData('rpc_url')
 	currentWallt.value = await indexDbData.getData('currentWalltAddress');
     loading.value = true;
     getAddressList();
@@ -39,7 +41,7 @@ const toBack = ()=>{
 
 const checkAddress = (data)=>{
     if(prop.importPage && prop.importPage == 'sendTrade'){
-        if(currentWallt.value['netWorkType'] == 'evm'){
+        if(rpcUrlData.value['netWorkType'] == 'evm'){
             if(data.address.slice(0,2) != '0x'){
                 bus.emit('promptModalErr','请选择EVM地址')
                 return;

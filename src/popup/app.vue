@@ -98,7 +98,7 @@ const getBlanceInfo = async (type='homePage') => {
 		walltContent.value = data;
 		// 钱包地址
 		walltContent.value.address = userAddress.value;
-		walltContent.value.blance = await getBlance(data.url,currentWallt.value)
+		walltContent.value.blance = await getBlance(data.url,Object.assign({netWorkType:data.netWorkType},currentWallt.value))
 		console.log(walltContent.value,'walltContent.value');
 		
 		pageTypes.value = type;

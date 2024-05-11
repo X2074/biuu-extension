@@ -35,6 +35,7 @@ onMounted(async () => {
   if (data) {
     rawData.value = data;
     console.log(data["content"], currentWallt.value);
+    if(!data["content"][currentWallt.value["keyStore"]]) return;
     transactionClassify(data["content"][currentWallt.value["keyStore"]]);
   }
 });
