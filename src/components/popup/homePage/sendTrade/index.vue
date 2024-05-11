@@ -30,6 +30,7 @@ let rpcData = ref(null)//当前网络信息
 indexDbData.getData('rpc_url').then(res => {
     rpcData.value = res;
 })
+let utxoTactics = ref('min')
 // 获取设置的密码
 indexDbData.getData(md5('secret')).then(res => {
     passKey.value = res.secret;
@@ -137,7 +138,8 @@ const toTransfer = async ()=>{
             value:quantity.value,// 转账
             chainId:rpcUrlData.value['CHAIN_ID'],
             key:privateKey.value,//私钥
-            url:rpcUrlData.value['url']
+            url:rpcUrlData.value['url'],
+            tactics:utxoTactics.value
         }
     }
     loading.value = false;

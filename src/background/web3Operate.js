@@ -3,7 +3,7 @@ import indexDbData from '../utils/indexDB.js';
 import EthereumTx from 'ethereumjs-tx'
 import { hashSaveIndexDB } from '../utils/operateIndexDB.js';
 import { chromeNotifications } from './utils';
-import { selectMinUTXOs } from '../utils/UTXO/calculateTxid.js';
+import { selectMinUTXOs, selectMaxUTXOs, selectUtxosMinViable, selectUtxosBranchAndBound } from '../utils/UTXO/calculateTxid.js';
 import qitmeer from "qitmeer-js";
 import { getUtxos, getUTXOBalance, getUtxo, sendTraction, rpcUrls } from '../utils/UTXO/meerRpc.js'
 
@@ -110,8 +110,20 @@ export async function utxoTransfer(data) {
     let gas = num * 0.02 * 100000000;
     let remaining = (balance1 * 100000000) - (data.value * 100000000) - gas;
     let allPrice = data.value * 100000000 + remaining;
-    let selectUtxos = await selectMinUTXOs(utxos, allPrice);
-    console.log(selectUtxos.selectedUTXOs, 'selectUtxos');
+    let selectUtxos;
+    if (data.tactics == 'min') {
+        selectUtxos = await selectMinUTXOs(utxos, allPrice);
+    }
+    if (data.tactics == 'max') {
+        selectUtxos = await selectMaxUTXOs(utxos, allPrice);
+    }
+    if (data.tactics == 'minimum') {
+        selectUtxos = await selectUtxosMinViable(utxos, allPrice);
+    }
+    if (data.tactics == 'branch') {
+        selectUtxos = await selectUtxosBranchAndBound(utxos, allPrice);
+    }
+    console.log(selectUtxos, 'selectUtxos');
     let network;
     // 设置网络 mainnet【主网】, testnet【测试】, privnet【私有】
     if (rpcUrls.testnet.includes(data.url)) {

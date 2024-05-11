@@ -32,6 +32,13 @@
             </div>
             <input class="mt-5" maxlength="16" v-model="quantity" @input="validateNumberInput" />
         </div>
+        <div v-if="rpcData?.netWorkType.toUpperCase() == 'UTXO'" class="utxo-tactics">
+            <p :class="{'check':utxoTactics=='min' }" @click="utxoTactics = 'min'">最小先出（First-In-First-Out，FIFO）</p>
+            <p :class="{'check':utxoTactics=='max' }" @click="utxoTactics = 'max'">最大先出（Last-In-First-Out，LIFO）</p>
+            <p :class="{'check':utxoTactics=='minimum' }" @click="utxoTactics = 'minimum'">最小可行金额（Minimum Viable
+                Amount）</p>
+            <p :class="{'check':utxoTactics=='branch' }" @click="utxoTactics = 'branch'">分支限界算法（Branch and Bound）</p>
+        </div>
         <div class="prompt flex mt-15">
             <img class="mr-10 mt-5" src="@/assets/images/icons/warn-red.png" alt="">
             <p>您选择的网络是 {{rpcData?.netName}} （{{rpcData?.netWorkType.toUpperCase()}}）网络，请确保您的转账地址支持 {{rpcData?.netName}}
