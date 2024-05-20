@@ -24,7 +24,7 @@ onMounted(async ()=>{
     }
     // 曾经拥有的nft
     let onceNfts = await indexDbData.getData(md5('onceNft'));
-    if(!onceNfts['content'][currentWalltAddress['keyStore']] || !onceNfts['content'][currentWalltAddress['keyStore']].length) return;
+    if(!onceNfts || !onceNfts['content'][currentWalltAddress['keyStore']] || !onceNfts['content'][currentWalltAddress['keyStore']].length) return;
     onceNftList.value = onceNfts['content'][currentWalltAddress['keyStore']];
     console.log(onceNftList.value,'曾经的数据');
     // if(nftsContent && nftsContent.length){
