@@ -1,0 +1,41 @@
+.add-network {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #fff;
+    min-width: 560px;
+    min-height: 500px;
+    background: #f0f2f5;
+
+    .network-content {
+        padding-left: 50px;
+
+        p {
+            font-size: 14px;
+        }
+
+
+        input {
+            font-size: 16px;
+            line-height: 20px;
+            color: #000;
+            border: 0;
+        }
+
+        button {
+            font-size: 16px;
+            font-weight: 500;
+            color: #000;
+            line-height: 48px;
+            height: 48px;
+            border-radius: 30px;
+            text-align: center;
+            cursor: pointer;
+
+        }
+    }
+}

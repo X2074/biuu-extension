@@ -1,0 +1,21 @@
+<div class="add-network">
+    <div class="header flex" @click="toBack()">
+        <img class="back-img" src="@/assets/images/icons/back.png" alt="">
+        <p>网络切换</p>
+    </div>
+    <!-- 添加网络 -->
+    <div class="network-content">
+        <p>网络名称</p>
+        <input type="text" v-model="networkName">
+        <p>新的 RPC URL</p>
+        <input type="text" v-model="RpcUrl">
+        <p>链 ID</p>
+        <input type="text" v-model="tokenId">
+        <p>货币符号</p>
+        <input type="text" v-model="symbol">
+        <p>区块浏览器 URL（可选）</p>
+        <input type="text" v-model="Blockchain">
+        <br>
+        <button @click="addNetWork">新增网络</button>
+    </div>
+</div>

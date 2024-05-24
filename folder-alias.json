@@ -244,5 +244,8 @@
     },
     "src/utils/UTXO/testUtxoTransaction.js": {
         "description": "utxo交易"
+    },
+    "src/components/indexPage": {
+        "description": "测试新增网络"
     }
 }

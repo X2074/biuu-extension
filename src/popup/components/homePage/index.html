@@ -23,6 +23,10 @@
                         <img class="mr-10" src="@/assets/images/icons/netWork.png" alt="">
                         <p>已连接的网络</p>
                     </div>
+                    <div class="option flex" @click="walltAccount = 'addNetwork'">
+                        <img class="mr-10" src="@/assets/images/icons/netWork.png" alt="">
+                        <p>新增网络</p>
+                    </div>
                     <div class="option flex">
                         <img class="mr-10" src="@/assets/images/icons/unfold.png" alt="">
                         <p>展开视窗</p>
@@ -87,6 +91,8 @@
 <setting v-if="walltAccount == 'setting'" />
 <!-- 网络切换 -->
 <networkSwitching v-if="walltAccount == 'networkSwitching'" />
+<!-- 新增网络 -->
+<addNetwork v-if="walltAccount == 'addNetwork'" />
 <!-- 导入nft -->
 <importNfts v-if="walltAccount == 'importNfts'" />
 <!-- nft详情 -->
