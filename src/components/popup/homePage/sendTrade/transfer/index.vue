@@ -12,6 +12,7 @@ import web3Operate from '@/background/web3Operate.js';
 import {hashSaveIndexDB} from '@/utils/operateIndexDB.js';
 import { v4 as uuidv4 } from 'uuid';
 import Web3 from 'web3'
+import BigNumber from 'bignumber.js';
 let rpcData = ref(null)//当前网络信息
 let toAddress = ref('');//转账地址
 let gasPrice = ref(0)
@@ -37,7 +38,7 @@ onMounted(async ()=>{
     }else{
         let num = Math.ceil(transferContent.value['value'] / 1024);
         gasPrice.value = num * 0.0002;
-        totalPrice.value = (transferContent.value['value']*1) + gasPrice.value * 1;
+        totalPrice.value = parseFloat(new BigNumber(transferContent.value['value']*1).plus(gasPrice.value));
         loading.value = false;
     }
 })

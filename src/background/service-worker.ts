@@ -37,8 +37,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'transferUTXO') {
         sendResponse();
         startHeartbeat();//js常驻后台
-        console.log(web3Operate, 'web3Operate');
-        web3Operate.utxoTransfer(message)
+        if (!message['type']) {
+            console.log(web3Operate, 'web3Operate');
+            web3Operate.utxoTransfer(message)
+        }
+        if (message['type'] && message['type'] == 'transfer') {
+            console.log(web3Operate, 'web3Operate');
+            web3Operate.transferUtxo(message)
+        }
     }
     if (message.action === 'test') {
         console.log("service-worker接收到content的数据");

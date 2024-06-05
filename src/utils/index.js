@@ -26,15 +26,17 @@ export function Encrypt(mnemonic, key) {
 }
 // utxo助记词转私钥
 export async function utxoKey(mnemonic) {
+	console.log(mnemonic, 'mnemonic');
 	try {
-		//2.将助记词转成seed
-		let seed = await bip39.mnemonicToSeed(mnemonic, '');
+		const seed = await bip39.mnemonicToSeed(mnemonic, "")
+		console.log('seed:', seed)
+		console.log("seed:", seed.toString('hex'))
 		// 通过种子生成BIP32主节点
-		let hdWallet = hdkey.fromMasterSeed(Buffer.from(seed, 'hex'));
-		//派生 BIP32 导出的密钥对
-		let key = hdWallet.derivePath("m/44'/60'/0'/0/0").getWallet();
-		const rootPrivateKey = key.privateKey.toString('hex');
-		const rootPublicKey = key.publicKey.toString('hex');
+		const masterNode = bip32.fromSeed(seed);
+		const rootPrivateKey = masterNode.privateKey.toString('hex');
+		const rootPublicKey = masterNode.publicKey.toString('hex');
+		console.log("rootPrivateKey:", rootPrivateKey);
+		console.log("rootPublicKey:", rootPublicKey);
 		return {
 			privateKey: rootPrivateKey, //私钥
 			publicKey: rootPublicKey, //公钥
@@ -49,7 +51,7 @@ export async function evmKey(mnemonic) {
 		//2.将助记词转成seed
 		let seed = await bip39.mnemonicToSeed(mnemonic, '');
 		// 通过种子生成BIP32主节点
-		const hdWallet = bip32.fromSeed(seed);
+		const hdWallet = await bip32.fromSeed(seed);
 		// //4.派生一个子密钥对的BIP32导出路径
 		let key = hdWallet.derivePath("m/44'/60'/0'/0/0");
 		// // 获取子公私钥的十六进制格式

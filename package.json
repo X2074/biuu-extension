@@ -11,6 +11,8 @@
     "watch-json": "node watch.mjs"
   },
   "dependencies": {
+    "big.js": "^6.2.1",
+    "bignumber.js": "^9.1.2",
     "bip32": "^4.0.0",
     "bip38": "^3.1.1",
     "bip39": "^3.1.0",

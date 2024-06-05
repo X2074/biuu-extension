@@ -4,7 +4,7 @@
 @import './index.scss';
 </style>
 <script lang='ts' setup>
-import { ref, onMounted, toRaw } from 'vue';
+import { ref, onMounted, toRaw ,defineProps} from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
 import { Decrypt } from '@/utils/index';
@@ -13,6 +13,7 @@ import { getBlance } from '@/utils/index';
 import addressBook from '../addressBook/index.vue'
 import transfer from './transfer/index.vue'
 import md5 from 'js-md5';
+const props = defineProps(['type'])
 let currentWallt = ref(null)//当前钱包信息
 let sendTradePage = ref('home');//当前转账页面显示内容
 let quantity = ref('1');//转账数量
@@ -91,7 +92,7 @@ const toTransfer = async ()=>{
         bus.emit('promptModalErr','请输入正确的转账数量')
         return;
     }
-    if(!toAddress.value){
+    if(!toAddress.value && !props['type']){
         bus.emit('promptModalErr','请选择收款地址')
         return;
     }
@@ -107,18 +108,23 @@ const toTransfer = async ()=>{
     console.log(data,currentWallt.value['keyStore'],'转账的key');
     
     // 如果账户是私钥导入的，就直接赋值私钥
-    let encryption = await Decrypt(key, passKey.value)
+    let encryption = await Decrypt(key, passKey.value);
+    console.log(encryption,'encryption');
+    
     if(currentWallt.value['keyStoreType'] && currentWallt.value['keyStoreType'] == 'privateKey'){
         privateKey.value = encryption;
+        if(props['type'] && props['type'] == 'transfer'){
+            bus.emit('promptModalErr','该账户不可划转')
+            return;
+        }
     }else{
-        
         if(rpcUrlData.value['netWorkType'] == 'evm'){
             privateKey.value = await evmKey(encryption)
         }else{
             privateKey.value = await utxoKey(encryption)
         }
     }
-    console.log(encryption,'key');
+    console.log(privateKey.value,'privateKey');
     if(rpcUrlData.value['netWorkType'] == 'evm'){
         nonce.value = await getNonce(currentWallt.value['address'],rpcUrlData.value['url']);
         console.log(blanceSecre.value,'blanceSecre');
@@ -145,6 +151,10 @@ const toTransfer = async ()=>{
         }
     }
     loading.value = false;
+    if(props['type'] && props['type'] == 'transfer'){
+        transferContent.value['type'] = 'transfer';
+        transferContent.value['encryption'] = encryption;
+    }
     console.log(transferContent.value,'transferContent.value');
     sendTradePage.value = 'transfer';
 }

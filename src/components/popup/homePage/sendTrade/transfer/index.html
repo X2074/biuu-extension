@@ -6,7 +6,7 @@
             <p class="unit">{{rpcData?.unit.toUpperCase()}}</p>
         </div>
     </div>
-    <div class="transfer-information mt-15">
+    <div v-if="!transferContent['type'] || transferContent['type'] != 'transfer'" class="transfer-information mt-15">
         <p class="title">转账地址</p>
         <textarea class="mt-15" placeholder="请输入转账地址" v-model="transferContent['to']"></textarea>
     </div>

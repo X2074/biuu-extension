@@ -102,5 +102,5 @@
 <transactionHistory v-if="walltAccount == 'transactionHistory'" />
 <!-- 转账 -->
 <sendTrade v-if="walltAccount == 'sendTrade'" />
-<!-- 转账 -->
-<transfer v-if="walltAccount == 'transfer'" />
+<!-- 划转 -->
+<sendTrade v-if="walltAccount == 'transfer'" type="transfer" />

@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 // const axios = require('axios');
 const config = {
     headers: {
@@ -47,7 +48,9 @@ export async function getUTXOBalance(url, address) {
     try {
         const response = await rpc(url, 'getBalance', [address, 0]);
         console.log(response, 'utxo的余额');
-        return response.result / 100000000;
+        let x = new BigNumber(response.result)
+        let y = new BigNumber(100000000)
+        return x.dividedBy(y);
     } catch (error) {
         console.error('Error:', error);
     }
@@ -95,6 +98,7 @@ const nodeinfo = async function (network = 'testnet') {
 }
 // 发送utxo交易给节点
 export async function sendTraction(url, newTransaction) {
+    console.log(url, 'urlurlurl');
     try {
         const response = await rpc(url, 'sendRawTransaction', [newTransaction, false])
         console.log(response, 'response');

@@ -15,7 +15,7 @@
         <div class="input-address mt-15">
             <div class="flex">
                 <p>密码：</p>
-                <div class="trade-fun">
+                <div v-if="!props['type'] || props['type'] != 'transfer'" class="trade-fun">
                     <p class="price book" @click="sendTradePage = 'addressBook'">地址簿 ></p>
                 </div>
             </div>

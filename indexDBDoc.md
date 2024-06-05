@@ -1,6 +1,5 @@
 # indexDB前端数据库文档
 
- 
 # EVM、UTXO：EVM、UTXO网络模块数据
   ## 包含网络，当前网络下的用户列表
   ```
@@ -174,4 +173,32 @@
  	}
 	```
   
-  
+
+# utxoKey： utxo助记词转私钥
+export async function utxoKey(mnemonic) {
+	try {
+		const masterNode = bip32.fromSeed(seed);
+		const rootPrivateKey = masterNode.privateKey.toString('hex');
+		const rootPublicKey = masterNode.publicKey.toString('hex');
+		return {
+			privateKey: rootPrivateKey, //私钥
+			publicKey: rootPublicKey, //公钥
+		}
+	} catch (err) {
+	}
+}
+# evmKey： evm助记词转私钥
+export async function utxoKey(mnemonic) {
+	try {
+		let seed = await bip39.mnemonicToSeed(mnemonic, '');
+		const hdWallet = await bip32.fromSeed(seed);
+		let key = hdWallet.derivePath("m/44'/60'/0'/0/0");
+		const privateKeyHex = key.privateKey.toString('hex');
+		const publicKeyHex = key.publicKey.toString('hex');
+		return {
+			privateKey: privateKeyHex, //私钥
+			publicKey: publicKeyHex, //公钥
+		}
+	} catch (err) {
+	}
+}

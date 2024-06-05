@@ -3,7 +3,7 @@
     <div class="content mb-5 flex" v-if="nowAccount">
         <div class="name-num">
             <p>{{nowAccount.userName || nowAccount.NoIndex}}</p>
-            <p class="price">{{nowAccount&&nowAccount.balance?item.balance : 0}} {{accountContent?.unit}}</p>
+            <p class="price">{{nowAccount&&nowAccount.balance?nowAccount.balance : 0}} {{accountContent?.unit}}</p>
         </div>
         <div class="address-check flex mr-40">
             <p>{{nowAccount.address.substr(0,4)}}...{{nowAccount.address.substr(-4)}}</p>
