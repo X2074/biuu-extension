@@ -162,7 +162,7 @@ export async function utxoTransfer(data) {
     // 构建交易体
     const newTransaction = txb.build().toBuffer().toString('hex');
     console.log(newTransaction, 'newTransaction')
-
+    // 过滤已经交易过的txid
     // let transferTxid = await indexDbData.getData('transferTxid');
     // if (!transferTxid) {
     //     let txidList = {
@@ -181,6 +181,7 @@ export async function utxoTransfer(data) {
         chromeNotifications(response);
         hashSaveIndexDB(data['keyStore'], 'dispose', info);
     } catch (error) {
+        hashSaveIndexDB(data['keyStore'], 'error', data)
         console.log(error, 'error');
     }
 }
@@ -249,6 +250,7 @@ export async function transferUtxo(data) {
         chromeNotifications(response);
         hashSaveIndexDB(data['keyStore'], 'dispose', info);
     } catch (error) {
+        hashSaveIndexDB(data['keyStore'], 'error', data)
         console.log(error, 'error');
     }
 }
