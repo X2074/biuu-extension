@@ -49,7 +49,30 @@ const mnemonicPhraseConfirm = async ()=>{
     }
     // 助记词生成的数据
     let createData = await createWallet(mnemonicPhrase.value);
-    saveKey(createData['keystore'])
+    let evmData = await indexDbData.getData('EVM');
+    let utxoData = await indexDbData.getData('UTXO');
+    let dataWallt;
+    if(evmData){
+        for (const key in evmData['content']) {
+            dataWallt = evmData['content'][key]['walltInfo'].filter(item=>{
+                return item.address == createData.address;
+            })
+        }
+    }
+    if(utxoData){
+        for (const key in utxoData['content']) {
+            dataWallt = utxoData['content'][key]['walltInfo'].filter(item=>{
+                return item.address == createData.address || item.utxoAddressTest == createData.utxoAddressTest;
+            })
+        }
+    }
+    if(dataWallt && dataWallt.length){
+        bus.emit('promptModalErr','重复的钱包地址')
+        return;
+    }
+    console.log(dataWallt,'dataWallt');
+    
+    saveKey(createData['keyStore'])
     evmNetwork(createData);//新增并存储evm网络
     utxoNetwork(createData);//新增并存储evm网络
     bus.emit('promptModalSuccess','导入成功')
@@ -94,7 +117,7 @@ const evmNetwork = (walltInfo) => {
                 userName: 'Wallt 01',
                 userUrl: '',
                 keyStoreType:'privateKey',
-                keystore:walltInfo.keystore
+                keyStore:walltInfo.keyStore
             }
             indexDbData.putData(Object.assign({id:'currentWalltAddress'},content))
             let info = {
@@ -102,8 +125,8 @@ const evmNetwork = (walltInfo) => {
                 unit: "Meer",
                 netName:"Qitmeer Testnet",
                 CHAIN_ID: 8131,
-                keystore:walltInfo.keystore,
-                type: 'EVM',
+                keyStore:walltInfo.keyStore,
+                netWorkType: 'EVM',
                 url: "https://testnet-qng.rpc.qitmeer.io",
                 walltInfo: []
             }
@@ -111,6 +134,7 @@ const evmNetwork = (walltInfo) => {
             indexDbData.putData(info)
         }else{
             data = res;
+            data['NoIndex'] = data['NoIndex'] + 1;
             createRpc()
         }
         let chainId = Object.keys(data.content)
@@ -124,8 +148,8 @@ const evmNetwork = (walltInfo) => {
             data.content[item]['NoIndex'] = index+1;
             data.content[item].walltInfo.push({
                 address: walltInfo.address, //当前用户地址
-                userName: 'Wallt' + (!index ? '01' : (index + 1 > 10 ? index + 1 : '0' + (index + 1))),
-                keystore:walltInfo['keystore'],
+                userName: 'Wallt' + (!index ? '01' : (index > 10 ? index : '0' + index)),
+                keyStore:walltInfo['keyStore'],
                 userUrl: '',
                 NoIndex:data['NoIndex'],//当前创建的第几个
             })
@@ -160,8 +184,8 @@ const utxoNetwork = (walltInfo) => {
             data.content[item].walltInfo.push({
                 utxoAddressTest: walltInfo.utxoAddressTest, //当前用户测试地址
                 address: walltInfo.utxoAddressMain, //当前用户地址
-                userName: 'Wallt' + (!index ? '01' : (index + 1 > 10 ? index + 1 : '0' + (index + 1))),
-                keystore:walltInfo['keystore'],
+                userName: 'Wallt' + (!index ? '01' : (index > 10 ? index : '0' + index)),
+                keyStore:walltInfo['keyStore'],
                 userUrl: '',
                 NoIndex:data['NoIndex'],//当前创建的第几个
             })
@@ -173,19 +197,21 @@ const utxoNetwork = (walltInfo) => {
 const createRpc = async ()=>{
     // 获取是evm、utxo钱包
     let data = await indexDbData.getData('rpc_url');
-    let wallt = await indexDbData.getData(data.type);
+    let wallt = await indexDbData.getData(data.netWorkType.toUpperCase());
     // 获取当前网络下第一个对象
     let info = wallt['content'][Object.keys(wallt['content'])[0]];
     console.log(info,'info');
     
     info['id'] = 'rpc_url';
-    info['type'] = data.type;
+    info['netWorkType'] = data.netWorkType;
     console.log(info,'info02');
     // 更新rpc
     indexDbData.putData(info);
     // 更新当前钱包数据
-    let currentWallt = info['walltInfo'][0];
+    let currentWallt =  info['walltInfo'][0];
     currentWallt['id'] = 'currentWalltAddress';
+    console.log(currentWallt,'currentWallt');
+    
     indexDbData.putData(currentWallt)
 } 
 </script>

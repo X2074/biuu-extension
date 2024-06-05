@@ -4,7 +4,6 @@ import { ref, onMounted } from 'vue';
 import bus from '@/utils/bus.js'; 
 import indexDbData from '@/utils/indexDB';
 import { Decrypt } from '@/utils/index.js';
-import {evmKey } from '@/utils/EVM/index.js';
 import {createMnemonic,createWallet} from "@/utils/createUser"
 import privateKey from "./components/privateKey/index.vue"
 import mnemonicPhrase from "./components/mnemonicPhrase/index.vue"

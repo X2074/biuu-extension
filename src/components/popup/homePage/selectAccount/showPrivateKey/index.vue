@@ -4,7 +4,7 @@ import { ref, onMounted, defineProps, nextTick } from 'vue';
 import bus from '@/utils/bus.js'; 
 import indexDbData from '@/utils/indexDB';
 import { Decrypt } from '@/utils/index.js';
-import {evmKey } from '@/utils/EVM/index.js';
+import {evmKey,utxoKey } from '@/utils/index.js';
 import {createMnemonic,createWallet} from "@/utils/createUser"
 import {editContent} from "@/utils/editContent"
 import QRCode from 'qrcodejs2-fix';
@@ -100,7 +100,7 @@ const confirmPsd = async ()=>{
     // 获取当前的助记词
     let data = await indexDbData.getData('keyStore')
         console.log(data.secret,'data',nowAccount.value);
-    let key = data.secret[nowAccount.value.keystore];
+    let key = data.secret[nowAccount.value.keyStore];
     console.log(key,'key01');
     // 解密助记词
     let encryption = Decrypt(key, passKey.value)

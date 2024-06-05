@@ -4,7 +4,7 @@ import { ref, onMounted, defineProps } from 'vue';
 import bus from '@/utils/bus.js'; 
 import indexDbData from '@/utils/indexDB';
 import { Decrypt } from '@/utils/index.js';
-import {evmKey } from '@/utils/EVM/index.js';
+import {evmKey ,utxoKey} from '@/utils/index.js';
 import {editContent} from "@/utils/editContent"
 import QRCode from 'qrcodejs2-fix';
 import { getBlance } from '@/utils/index';
@@ -94,13 +94,24 @@ const confirmPsd = async ()=>{
         loading.value = false;
         return;
     }
-    evmKey(encryption).then(keys => {
-        console.log(keys, 'keys');
-        loading.value = false;
-        //此处应该判断是evm还是utxo
-        privateKey.value = keys.privateKey;
-        accountOperate.value = "privateKey"
-    })
+    
+    if(rpcData.value && rpcData.value['netWorkType'] == 'evm'){
+        evmKey(encryption).then(keys => {
+            console.log(keys, 'keys');
+            loading.value = false;
+            //此处应该判断是evm还是utxo
+            privateKey.value = keys.privateKey;
+            accountOperate.value = "privateKey"
+        })
+    }else{
+        utxoKey(encryption).then(keys => {
+            console.log(keys, 'keys');
+            loading.value = false;
+            //此处应该判断是evm还是utxo
+            privateKey.value = keys.privateKey;
+            accountOperate.value = "privateKey"
+        })
+    }
 }
 // 取消，回到安全问答选择页面
 const toBack = ()=>{

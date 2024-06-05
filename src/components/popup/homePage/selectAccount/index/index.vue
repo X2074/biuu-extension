@@ -71,7 +71,7 @@ const createAccount = async ()=>{
         let data:any = {};
         console.log(res.secret,'老的key');
         let info:any = {};
-        info[account['keystore']] = ciphertext
+        info[account['keyStore']] = ciphertext
         console.log(info,'新的key');
         
         data = Object.assign(res.secret,info)
@@ -90,7 +90,7 @@ const createAccount = async ()=>{
             address: account['address'],
             userName: 'Wallt' + (index > 10 ? index : '0' + index + 1),
             userUrl: '',
-            keystore:account['keystore'],
+            keyStore:account['keyStore'],
             NoIndex: index//当前第几个用户
         }
         // 存为当前展示的钱包数据
@@ -125,7 +125,7 @@ const evmNetwork = (data) => {
                 address: data.address, //当前用户地址
                 userName: 'Wallt' + (index > 10 ? index + 1 : '0' + index),
                 userUrl: '',
-                keystore:data['keystore'],
+                keyStore:data['keyStore'],
                 NoIndex: index//当前第几个用户
             })
         })
@@ -143,7 +143,7 @@ const utxoNetwork = (data) => {
                 address: data.utxoAddressMain, //当前用户地址
                 userName: 'Wallt' + index > 10 ? index : '0' + index,
                 userUrl: '',
-                keystore:data['keystore'],
+                keyStore:data['keyStore'],
                 NoIndex: index + 1//当前第几个用户
             })
         })

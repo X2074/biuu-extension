@@ -141,7 +141,7 @@ const deleteStorkey = async (data)=>{
     // 删除保存的密钥
     let keyStore = await indexDbData.getData('keyStore');
     let secret = keyStore['secret'];
-    delete secret[data['keystore']];
+    delete secret[data['keyStore']];
     keyStore['secret'] = secret;
     indexDbData.putData(keyStore);
 }

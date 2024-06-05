@@ -8,7 +8,7 @@ import { ref, onMounted, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
 import { Decrypt } from '@/utils/index';
-import { getNonce, getGas, evmKey } from '@/utils/EVM/index.js';
+import { getNonce, getGas, evmKey ,utxoKey} from '@/utils/index.js';
 import { getBlance } from '@/utils/index';
 import addressBook from '../addressBook/index.vue'
 import transfer from './transfer/index.vue'
@@ -111,10 +111,12 @@ const toTransfer = async ()=>{
     if(currentWallt.value['keyStoreType'] && currentWallt.value['keyStoreType'] == 'privateKey'){
         privateKey.value = encryption;
     }else{
-        // 解密助记词
-        console.log(encryption,'encryption');
-        // 只有evm有nft交易
-        privateKey.value = await evmKey(encryption)
+        
+        if(rpcUrlData.value['netWorkType'] == 'evm'){
+            privateKey.value = await evmKey(encryption)
+        }else{
+            privateKey.value = await utxoKey(encryption)
+        }
     }
     console.log(encryption,'key');
     if(rpcUrlData.value['netWorkType'] == 'evm'){
@@ -128,7 +130,7 @@ const toTransfer = async ()=>{
             chainId:rpcUrlData.value['CHAIN_ID'],
             gasLimit:gas.gasLimit,
             gasPrice:gas.gasPrice,
-            key:privateKey.value,//私钥
+            key:privateKey.value['privateKey'],//私钥
             url:rpcUrlData.value['url'],
             blance:blanceSecre.value
         }
@@ -137,7 +139,7 @@ const toTransfer = async ()=>{
             to:toAddress.value,// 接收方地址
             value:quantity.value,// 转账
             chainId:rpcUrlData.value['CHAIN_ID'],
-            key:privateKey.value,//私钥
+            key:privateKey.value['privateKey'],//私钥
             url:rpcUrlData.value['url'],
             tactics:utxoTactics.value
         }

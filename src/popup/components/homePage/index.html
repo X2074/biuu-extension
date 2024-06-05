@@ -80,7 +80,8 @@
         <div class="tabs-list flex">
             <p v-if="walltEnvironment.netWorkType != 'utxo'" @click="tabsOption = 'nfts'" class="mr-25">NFTS</p>
             <p @click="walltAccount = 'sendTrade'" class="mr-25">转账</p>
-            <p @click="walltAccount = 'transactionHistory'">交易记录</p>
+            <p @click="walltAccount = 'transactionHistory'" class="mr-25">交易记录</p>
+            <p @click="walltAccount = 'transfer'">划转</p>
         </div>
         <nftCard v-if="walltEnvironment.netWorkType != 'utxo' && walltAccount == 'nfts'" />
     </div>
@@ -101,3 +102,5 @@
 <transactionHistory v-if="walltAccount == 'transactionHistory'" />
 <!-- 转账 -->
 <sendTrade v-if="walltAccount == 'sendTrade'" />
+<!-- 转账 -->
+<transfer v-if="walltAccount == 'transfer'" />

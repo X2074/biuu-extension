@@ -247,5 +247,8 @@
     },
     "src/components/indexPage": {
         "description": "测试新增网络"
+    },
+    "src/components/popup/homePage/transfer": {
+        "description": "划转"
     }
 }

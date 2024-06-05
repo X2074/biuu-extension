@@ -131,7 +131,7 @@ const evmNetwork = (walltInfo) => {
                 userName: 'Wallt 01',
                 userUrl: '',
                 keyStoreType:'privateKey',
-                keystore:walltInfo.keystore
+                keyStore:walltInfo.keyStore
             }
             indexDbData.putData(Object.assign({id:'currentWalltAddress'},content))
             let info = {
@@ -139,7 +139,7 @@ const evmNetwork = (walltInfo) => {
                 unit: "Meer",
                 netName:"Qitmeer Testnet",
                 CHAIN_ID: 8131,
-                keystore:walltInfo.keystore,
+                keyStore:walltInfo.keyStore,
                 type: 'EVM',
                 url: "https://testnet-qng.rpc.qitmeer.io",
                 walltInfo: []

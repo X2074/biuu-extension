@@ -86,7 +86,6 @@ export async function NFTUpdataIndexDB(keyStore, nftAddress, data) {
  * @param {*} data 更新后的nft数据 
   */
 export async function hashSaveIndexDB(keyStore, status, data) {
-    // 首先获取所有的nfts数据
     let tradeHash = await indexDbData.getData(md5('tradeHash'));
     let tradData;
     /* data示例：

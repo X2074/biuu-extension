@@ -47,7 +47,7 @@ export async function createWallet(mnemonic) {
         const rootPrivateKey = hdWallet.privateKey.toString('hex');
         const rootPublicKey = hdWallet.publicKey.toString('hex');
         console.log('私钥:', rootPrivateKey);
-        console.log('公钥:', rootPublicKey);
+        console.log('公钥001:', rootPublicKey);
 
         let address = ethUtil.publicToAddress(key.publicKey, true).toString('hex');
         address = eip55.encode(address.toString('hex'));
@@ -65,7 +65,7 @@ export async function createWallet(mnemonic) {
             // privateKey: privateKeyHex, //私钥
             publicKey: publicKeyHex, //公钥
             address: address, //钱包地址
-            keystore: uuidv4(), //钱包的对象名
+            keyStore: uuidv4(), //钱包的对象名
             // utxoRootPrivateKey: rootPrivateKey, //私钥
             utxoRootPublicKey: rootPublicKey, //公钥
             utxoAddressTest: p2pkhAddressTest, //UTXO测试网地址
@@ -188,4 +188,11 @@ export async function utxoNetwork(walltInfo) {
         })
         indexDbData.putData(res)
     })
+}
+// pkaddr (公钥地址)
+export async function getPkaddr(publicKey) {
+    console.log(qitmeer, 'qitmeer');
+    // 根据公钥生成 pkaddr
+    // const pkaddr = qitmeerUtil.pubKeyToQitmeerAddr(publicKey);
+    // return;
 }

@@ -36,8 +36,8 @@ export async function utxoKey(mnemonic) {
 		const rootPrivateKey = key.privateKey.toString('hex');
 		const rootPublicKey = key.publicKey.toString('hex');
 		return {
-			utxoRootPrivateKey: rootPrivateKey, //私钥
-			utxoRootPublicKey: rootPublicKey, //公钥
+			privateKey: rootPrivateKey, //私钥
+			publicKey: rootPublicKey, //公钥
 		}
 	} catch (err) {
 		console.log(err, '11111');
