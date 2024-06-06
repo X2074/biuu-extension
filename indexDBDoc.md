@@ -6,6 +6,7 @@
   json code
 	{
 		id:"EVM \ UTXO",//唯一值，用以获取数据
+		NoIndex:'number',//表示曾经存在过多少个账户，默认账户名后面的数字，累加。删除账户不修改避免存在同个数字的情况
 		content:[
 			"网络id":{
 				CHAIN_ID:"网络id",
@@ -172,12 +173,16 @@
 		]
  	}
 	```
-  
-##web3交易、私钥等方法
+	
+	
+	
+	
+#web3交易、私钥等方法
 # utxoKey： utxo助记词转私钥
 	```
 	export async function utxoKey(mnemonic) {
 		try {
+			const seed = await bip39.mnemonicToSeed(mnemonic, "")
 			const masterNode = bip32.fromSeed(seed);
 			const rootPrivateKey = masterNode.privateKey.toString('hex');
 			const rootPublicKey = masterNode.publicKey.toString('hex');
