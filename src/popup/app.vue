@@ -74,13 +74,13 @@ const getInfo = () => {
 			return;
 		}
 		let data = res;
-		if (data && data.address) {
+		if (data) {
 			if (getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') && getCookie('5ebe2294ecd0e0f08eab7690d2a6ee69') != 'false') {
 				pageTypes.value = 'homePage';
 			} else {
-				pageTypes.value = 'login';
+				pageTypes.value = 'homePage';
 			}
-			userAddress.value = data.address;
+			userAddress.value = data.content.address;
 			walltContent.value = data.userName ? res.userName : '';
 			getBlance()
 		} else {

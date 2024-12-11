@@ -54,8 +54,8 @@ const getInfo = () => {
 	// 当前用户信息
 	indexDbData.getData('currentWalltAddress').then(res => {
 		let data = res;
-		if (data && data.address) {
-			userAddress.value = data.address;
+		if (data && data) {
+			userAddress.value = data.content.address;
 			getBlance()
 		} else {
 			loading.value = false;
