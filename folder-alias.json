@@ -250,5 +250,8 @@
     },
     "src/components/popup/homePage/transfer": {
         "description": "划转"
+    },
+    "indexDBDoc.md": {
+        "description": "数据库结构"
     }
 }

@@ -32,9 +32,6 @@ import secret from "./components/secret/index.vue";
 import creasteWalletPage from "./components/creasteWalletPage/index.vue";
 import importWallet from "@/components/popup/components/importWallet/index.vue";
 import homePage from "./components/homePage/index.vue";
-import headerPage from "./components/header/index.vue";
-// import buyPage from './components/buyPage/index.vue'
-// import assetsRecording from './components/assetsRecording/index.vue'
 import transfer from "./components/transfer/index.vue";
 // 全局提示
 import prompt from "@/components/popup/components/prompt/index.vue";
