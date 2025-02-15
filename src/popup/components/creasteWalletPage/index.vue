@@ -1,78 +1,79 @@
 <template>
-    <!-- 生成钱包分两步
+  <!-- 生成钱包分两步
         1、生成助记词
         2、验证助记词
     -->
-<div class="create-wallt">
+  <div class="create-wallt">
     <div class="header flex">
-        <img class="back-img" @click="step = step - 1;" src="@/assets/images/icons/back.png" alt="">
-        <img class="close-img" @click="step = 0" src="@/assets/images/icons/close.png" alt="">
+      <img class="back-img" @click="step = step - 1" src="@/assets/images/icons/back.png" alt="" />
+      <img class="close-img" @click="step = 0" src="@/assets/images/icons/close.png" alt="" />
     </div>
     <setPsd v-if="step == 1" />
     <createMnemonic v-show="step == 2" />
     <verifyMnemonic v-show="step == 3" />
-</div>
+  </div>
 </template>
+<script lang="ts" >
+export default {
+  name: 'creasteWalletPage'
+};
+</script>
 <script lang='ts' setup>
 import { ref, onMounted } from 'vue';
 import bus from '@/utils/bus.js';
-import createMnemonic from './createMnemonic/index.vue'
-import verifyMnemonic from './verifyMnemonic/index.vue'
-import setPsd from './setPsd/index.vue'
+import createMnemonic from './createMnemonic/index.vue';
+import verifyMnemonic from './verifyMnemonic/index.vue';
+import setPsd from './setPsd/index.vue';
 import indexDbData from '@/utils/indexDB.js';
 import md5 from 'js-md5';
-const newPsd = ref('')//钱包密码
-const confirmPsd = ref('')//钱包密码
-const newPsdBol = ref(false)
-const confirmPsdBol = ref(false)
-const walltInfo = ref(null)//钱包相关信息
-const verifyBol = ref(false)
 const step = ref(1);
-onMounted(()=>{
-    // 获取设置的密码
-	indexDbData.getData(md5('secret')).then(res => {
-		step.value = res ? 2 : 1;
-	}).catch(err => { })
-})
-bus.on('nextCreatePage', (res) => {
-    
-    if (res == 'setPsd') step.value = 1;
-    if (res == 'createMnemonic') step.value = 2;
-    if (res == 'verifyMnemonic') step.value = 3;
-    console.log(step.value,'shuju事故局');
-    if (res == 'userContent') {
-        window.location.href = 'userContentPage.html';
-    };
-    // if (res == 'buyPage') {
-    //     window.location.href = 'userContentPage.html';
-    // };
-})
+onMounted(() => {
+  // 获取设置的密码
+  indexDbData
+    .getData(md5('secret'))
+    .then((res: any) => {
+      step.value = res ? 2 : 1;
+    })
+    .catch(() => {});
+});
+bus.on('nextCreatePage', (res: any) => {
+  if (res == 'setPsd') step.value = 1;
+  if (res == 'createMnemonic') step.value = 2;
+  if (res == 'verifyMnemonic') step.value = 3;
+  console.log(step.value, 'shuju事故局');
+  if (res == 'userContent') {
+    window.location.href = 'userContentPage.html';
+  }
+  // if (res == 'buyPage') {
+  //     window.location.href = 'userContentPage.html';
+  // };
+});
 </script>
 <style lang="scss">
-    .create-wallt{
-        width:360px;
-        height:600px;
-        padding:18px 16px;
-        position: relative;
-        .header{
-            align-items: center;
-            justify-content: space-between;
-            img{
-                width:24px;
-                height:24px;
-                cursor: pointer;
-            }
-        }
-        .title {
-            font-size: 28px;
-            font-weight: 600;
-            line-height: 40px;
-            color: #000;
-        }
-
-        .text {
-            font-size: 14px;
-            line-height: 22px;
-        }
+.create-wallt {
+  width: 360px;
+  height: 600px;
+  padding: 18px 16px;
+  position: relative;
+  .header {
+    align-items: center;
+    justify-content: space-between;
+    img {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
     }
+  }
+  .title {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 40px;
+    color: #000;
+  }
+
+  .text {
+    font-size: 14px;
+    line-height: 22px;
+  }
+}
 </style>

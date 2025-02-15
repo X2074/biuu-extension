@@ -146,7 +146,7 @@
     "src/components/importWalletPage/importPhrase": {
         "description": "导入助记词"
     },
-    "src/components/importWalletPage/ImportPrivate": {
+    "src/components/importWalletPage/importPrivate": {
         "description": "导入私钥"
     },
     "src/components/popup/homePage/selectAccount/importWallet": {
@@ -158,7 +158,7 @@
     "src/components/popup/homePage/selectAccount/importWalletPage/importPhrase": {
         "description": "导入助记词"
     },
-    "src/components/popup/homePage/selectAccount/importWalletPage/ImportPrivate": {
+    "src/components/popup/homePage/selectAccount/importWalletPage/importPrivate": {
         "description": "导入私钥"
     },
     "src/components/popup/components/importWallet": {
@@ -167,7 +167,7 @@
     "src/components/popup/homePage/networkSwitching": {
         "description": "网络切换"
     },
-    "src/components/popup/components/importWallet/ImportPrivate": {
+    "src/components/popup/components/importWallet/importPrivate": {
         "description": "私钥"
     },
     "src/components/popup/components/importWallet/importPhrase": {

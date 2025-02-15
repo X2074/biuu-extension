@@ -1,119 +1,125 @@
 
 <template src="./index.html"></template>
+<script lang="ts" >
+export default {
+  name: 'secret'
+};
+</script>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-const googleId = ref('fkhnghcgmjcgeniccpjpmlfpgbibmmge')
-import bus from '@/utils/bus';
-import indexDbData from '@/utils/indexDB';
+import bus from '@/utils/bus.js';
+import indexDbData from '@/utils/indexDB.js';
 import { Decrypt } from '@/utils/index.js';
 import md5 from 'js-md5';
-let textPsd = ref('psd')
-let psdText = ref('')
-let newPsdBol = ref(false)
-let secretStep = ref(1)
-let passKey = ref('')
-let mnemonicPhrase = ref('');//助记词
-let mnemonicPhraseBol = ref('')
-let confirmPsd = ref('')
+import { Encrypt } from '@/utils/index.js';
+let textPsd = ref('psd');
+let psdText = ref('');
+let newPsdBol = ref(false);
+let secretStep = ref(1);
+let passKey = ref('');
+let mnemonicPhrase = ref(''); //助记词
+let mnemonicPhraseBol = ref('');
+let confirmPsd = ref('');
 // 修改密码
 // 密码
-let psdNewText = ref('')
-let psdConText = ref('')
+let psdNewText = ref('');
+let psdConText = ref('');
 // 是否显示明文
-let textNewPsd = ref('psd')
-let textConPsd = ref('psd')
+let textNewPsd = ref('psd');
+let textConPsd = ref('psd');
 // 错误提示
-let conNewfirmPsd = ref('')
-let conConfirmPsd = ref('')
-onMounted(()=>{
-    // 获取设置的密码
-	indexDbData.getData(md5('secret')).then(res => {
-		passKey.value = res.secret;
-	}).catch(err => { })
-})
-const forget = ()=>{
-    secretStep.value = 2;
-}
+let conNewfirmPsd = ref('');
+let conConfirmPsd = ref('');
+onMounted(() => {
+  // 获取设置的密码
+  indexDbData
+    .getData(md5('secret'))
+    .then((res: any) => {
+      passKey.value = res.secret;
+    })
+    .catch(() => {});
+});
+const forget = () => {
+  secretStep.value = 2;
+};
 
-const unlock = ()=>{
-    if (!psdText.value || psdText.value.length < 8) {
-        newPsdBol.value = true;
-        confirmPsd.value = '请输入至少 8 位密码';
-        return;
-    }
-    if(passKey.value != md5(psdText.value)){
-        newPsdBol.value = true;
-        confirmPsd.value = '您输入的密码有误';
-        return;
-    }
-	// 发送消息给 background 页面请求数据
-	chrome.runtime.sendMessage({ action: 'setSecret',text:md5(psdText.value) });
-    bus.emit('nextPage','homePage');
-}
+const unlock = () => {
+  if (!psdText.value || psdText.value.length < 8) {
+    newPsdBol.value = true;
+    confirmPsd.value = '请输入至少 8 位密码';
+    return;
+  }
+  if (passKey.value != md5(psdText.value)) {
+    newPsdBol.value = true;
+    confirmPsd.value = '您输入的密码有误';
+    return;
+  }
+  // 发送消息给 background 页面请求数据
+  chrome.runtime.sendMessage({ action: 'setSecret', text: md5(psdText.value) });
+  bus.emit('nextPage', 'homePage');
+};
 
 // 匹配钱包的助记词
-const matchingWallt = ()=>{
-    if(!mnemonicPhrase.value){
-        mnemonicPhraseBol.value = '请输入助记词';
-        return;
-    };
-	indexDbData.getData('keyStore').then(res => {
-		console.log(res);
-		// 第二个参数为密码，后期改为获取数据库密码或者是用户输入
-		let encryption = Decrypt(res.secret, passKey.value);
-		console.log(encryption,'encryption');
-		if(encryption != mnemonicPhrase.value){
-            mnemonicPhraseBol.value = '助记词不正确';
-            return;
-        }else{
-            mnemonicPhraseBol.value = '';
-            secretStep.value = 4;
-        }
-	})
-}
+const matchingWallt = () => {
+  if (!mnemonicPhrase.value) {
+    mnemonicPhraseBol.value = '请输入助记词';
+    return;
+  }
+  indexDbData.getData('keyStore').then((res: any) => {
+    console.log(res);
+    // 第二个参数为密码，后期改为获取数据库密码或者是用户输入
+    let encryption = Decrypt(res.secret, passKey.value);
+    console.log(encryption, 'encryption');
+    if (encryption != mnemonicPhrase.value) {
+      mnemonicPhraseBol.value = '助记词不正确';
+      return;
+    } else {
+      mnemonicPhraseBol.value = '';
+      secretStep.value = 4;
+    }
+  });
+};
 // 恢复钱包
-const restoreWallet = async()=>{
-    conNewfirmPsd.value = '';
-    conConfirmPsd.value = '';
-    if(!psdNewText.value || psdNewText.value.length < 8){
-        conNewfirmPsd.value = "请输入8位数密码";
-        return;
-    }
-    if(!psdConText.value || psdConText.value.length < 8){
-        conConfirmPsd.value = "请输入8位数密码";
-        return;
-    }
-    if(psdNewText.value != psdConText.value){
-        conConfirmPsd.value = "请再次确认密码";
-        return;
-    }
-	
-	chrome.runtime.sendMessage({ action: 'setSecret',data:md5(psdNewText.value) });
-    
-    // 存储密码
-    indexDbData.putData({
-        id: md5('secret'),
-        secret: md5(psdNewText.value)
-    }) 
-    // 获取所有的密钥
-    let data = await indexDbData.getData('keyStore');
-    let promises = [];
-    // 更新所有助记词密码
-    for (let key in data['secret']) {
-        // 解密助记词
-        let mnemonic = await Decrypt(data['secret'][key], passKey.value)
-        console.log(mnemonic,'mnemonic');
-        // 助记词加密
-        let ciphertext = await Encrypt(mnemonic, md5(psdNewText.value));
-        console.log(mnemonic02,'mnemonic02');
-        
-        data['secret'][key] = ciphertext;
-    }
-    indexDbData.putData(data);
-    
-    bus.emit('nextPage','homePage');
-}
+const restoreWallet = async () => {
+  conNewfirmPsd.value = '';
+  conConfirmPsd.value = '';
+  if (!psdNewText.value || psdNewText.value.length < 8) {
+    conNewfirmPsd.value = '请输入8位数密码';
+    return;
+  }
+  if (!psdConText.value || psdConText.value.length < 8) {
+    conConfirmPsd.value = '请输入8位数密码';
+    return;
+  }
+  if (psdNewText.value != psdConText.value) {
+    conConfirmPsd.value = '请再次确认密码';
+    return;
+  }
+
+  chrome.runtime.sendMessage({ action: 'setSecret', data: md5(psdNewText.value) });
+
+  // 存储密码
+  indexDbData.putData({
+    id: md5('secret'),
+    secret: md5(psdNewText.value)
+  });
+  // 获取所有的密钥
+  let data = await indexDbData.getData('keyStore');
+  // 更新所有助记词密码
+  for (let key in data['secret']) {
+    // 解密助记词
+    let mnemonic = await Decrypt(data['secret'][key], passKey.value);
+    console.log(mnemonic, 'mnemonic');
+    // 助记词加密
+    let ciphertext = await Encrypt(mnemonic, md5(psdNewText.value));
+
+    data['secret'][key] = ciphertext;
+  }
+  indexDbData.putData(data);
+
+  bus.emit('nextPage', 'homePage');
+};
 </script>
 <style lang="scss">
-@import "./index.scss";
+@import './index.scss';
 </style>
