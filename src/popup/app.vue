@@ -30,9 +30,7 @@ import loginwallt from './components/loginwallt/index.vue';
 import create from './components/create/index.vue';
 import secret from './components/secret/index.vue';
 import creasteWalletPage from './components/creasteWalletPage/index.vue';
-
 import importWallet from '@/components/popup/components/importWallet/index.vue';
-
 import homePage from './components/homePage/index.vue';
 import transfer from './components/transfer/index.vue';
 // 全局提示
@@ -42,7 +40,6 @@ import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus.js';
 let loading = ref(true);
 let loadingText = ref('加载中...');
-const buyModal = ref(false);
 const userAddress = ref(null);
 const walltContent: any = ref(null); //账户相关信息
 let currentWallt = ref(null); //当前账户
