@@ -6,94 +6,93 @@
 import { ref, onMounted } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
-import {getNFTContent,getNFTContentAll} from '@/utils/nft.js';
-import {NFTSaveIndexDB} from '@/utils/operateIndexDB.js';
-let loading = ref(false)
-let loadingText = ref('加载中...')
+import { getNFTContent, getNFTContentAll } from '@/utils/nft.js';
+import { NFTSaveIndexDB } from '@/utils/operateIndexDB.js';
+let loading = ref(false);
+let loadingText = ref('加载中...');
 let nftContent = ref(null);
-let contractAddress = ref('0xe1C389229BfeB7ac4b36bFD54e4aaA806773A83B');//合约地址
-let tokenId = ref('');//tokenId
-let nftNull = ref(false);//nft状态，是否查询到nft
-let currentWallt = ref(null);//当前账户
-onMounted(async ()=>{
-    currentWallt.value = await indexDbData.getData('currentWalltAddress');
-})
+let contractAddress = ref('0xe1C389229BfeB7ac4b36bFD54e4aaA806773A83B'); //合约地址
+let tokenId = ref(''); //tokenId
+let nftNull = ref(false); //nft状态，是否查询到nft
+let currentWallt = ref(null); //当前账户
+onMounted(async () => {
+  currentWallt.value = await indexDbData.getData('currentWalltAddress');
+});
 // nft相关
 //0x763482F3FA257C82176D1c6A21e0D5582850D4E3   1
 const getNft = async () => {
-    var regex = /^[a-zA-Z0-9]*$/; // 只允许输入数字和字母
-    if(!contractAddress.value){  
-        bus.emit('promptModalErr','请输入正确的合约地址')
-        return;
-    }
-    if (!regex.test(contractAddress.value)) {
-        bus.emit('promptModalErr','无效的合约地址，请再试一次。')
-        return;
-    }
-    if(!tokenId.value){  
-        getNftAll();//如果没有tokenid，就获取所有
-        return;
-    }
-    if(!regex.test(tokenId.value)){  
-        bus.emit('promptModalErr','无效的tokenId，请再试一次。')
-        return;
-    }
-    loading.value = true;
-	let data = await getNFTContent(currentWallt.value,contractAddress.value, tokenId.value);
-    console.log(data,'datadatadatadatadata');
-    
-    if(!data){
-        loading.value = false;
-        nftNull.value = true;
-        return;
-    }
-    console.log(data,'saveData');
-    // 删除image（nft的base64数据）
-    let { image,prompt_id, ...nftContent } = data;
-    let saveData = await NFTSaveIndexDB(nftContent,currentWallt.value,'singleness');
-    console.log(saveData,'saveData');
+  var regex = /^[a-zA-Z0-9]*$/; // 只允许输入数字和字母
+  if (!contractAddress.value) {
+    bus.emit('promptModalErr', '请输入正确的合约地址');
+    return;
+  }
+  if (!regex.test(contractAddress.value)) {
+    bus.emit('promptModalErr', '无效的合约地址，请再试一次。');
+    return;
+  }
+  if (!tokenId.value) {
+    getNftAll(); //如果没有tokenid，就获取所有
+    return;
+  }
+  if (!regex.test(tokenId.value)) {
+    bus.emit('promptModalErr', '无效的tokenId，请再试一次。');
+    return;
+  }
+  loading.value = true;
+  let data: any = await getNFTContent(currentWallt.value, contractAddress.value, tokenId.value);
+  console.log(data, 'datadatadatadatadata');
+
+  if (!data) {
     loading.value = false;
-    if(saveData){
-        bus.emit('nextPage')
-    }else{
-        bus.emit('promptModalErr','当前nft数据有误，请再试一次。')
-    }
-    console.log(data,'data');
-	// NFTTransfer('0x995ab346Db2AB84990552DA8cC5Bd474E2888c03', '0x243Def9569745c3ae44029526e9449572201B522', '0x533f6FEcE8aF41da6c41de7aF13D289bA92f9fE9', 70)
-}
+    nftNull.value = true;
+    return;
+  }
+  console.log(data, 'saveData');
+  // 删除image（nft的base64数据）
+  let { image, prompt_id, ...nftContent } = data;
+  let saveData = await NFTSaveIndexDB(nftContent, currentWallt.value, 'singleness');
+  console.log(saveData, 'saveData');
+  loading.value = false;
+  if (saveData) {
+    bus.emit('nextPage');
+  } else {
+    bus.emit('promptModalErr', '当前nft数据有误，请再试一次。');
+  }
+  console.log(data, 'data');
+  // NFTTransfer('0x995ab346Db2AB84990552DA8cC5Bd474E2888c03', '0x243Def9569745c3ae44029526e9449572201B522', '0x533f6FEcE8aF41da6c41de7aF13D289bA92f9fE9', 70)
+};
 // 返回上一页面
-const toBack = ()=>{
-    bus.emit('nextPage','');
-}
+const toBack = () => {
+  bus.emit('nextPage', '');
+};
 
 // 获取所有nft
-const getNftAll = async ()=>{
-    loadingText.value = '批量导入nft需要1-5分钟，请耐心等待...';
-    loading.value = true;
-	let data = await getNFTContentAll(currentWallt.value,contractAddress.value);
-    if(data == 'unNft'){
-        loading.value = false;
-        loadingText.value = '加载中...';
-        bus.emit('promptModalErr','当前合约下没有nft数据')
-        return;
-    }
-    if(data == 'unFun'){
-        loading.value = false;
-        loadingText.value = '加载中...';
-        bus.emit('promptModalErr','当前合约无法批量导入')
-        return;
-    }
+const getNftAll = async () => {
+  loadingText.value = '批量导入nft需要1-5分钟，请耐心等待...';
+  loading.value = true;
+  let data = await getNFTContentAll(currentWallt.value, contractAddress.value);
+  if (data == 'unNft') {
     loading.value = false;
     loadingText.value = '加载中...';
-    console.log(data,'datadatadata');
-    let saveData = await NFTSaveIndexDB(data,currentWallt.value,'multiple');
-    console.log(saveData,'saveData');
+    bus.emit('promptModalErr', '当前合约下没有nft数据');
+    return;
+  }
+  if (data == 'unFun') {
     loading.value = false;
-    if(saveData){
-        bus.emit('nextPage')
-    }else{
-        bus.emit('promptModalErr','当前nft数据有误，请再试一次。')
-    }
-    
-}
+    loadingText.value = '加载中...';
+    bus.emit('promptModalErr', '当前合约无法批量导入');
+    return;
+  }
+  loading.value = false;
+  loadingText.value = '加载中...';
+  console.log(data, 'datadatadata');
+  let saveData = await NFTSaveIndexDB(data, currentWallt.value, 'multiple');
+  console.log(saveData, 'saveData');
+  loading.value = false;
+  if (saveData) {
+    bus.emit('nextPage');
+  } else {
+    bus.emit('promptModalErr', '当前nft数据有误，请再试一次。');
+  }
+};
 </script>

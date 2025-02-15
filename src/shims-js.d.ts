@@ -19,3 +19,4 @@ declare module "*/resident.js";
 declare module "qitmeer-js";
 declare module "js-md5";
 declare module "uuid";
+declare module "qrcodejs2-fix";
