@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
     "target": "ES2020",
     "useDefineForClassFields": true,
     "module": "ESNext",
@@ -8,7 +7,7 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "Node",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -26,6 +25,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/background/resident.js", "src/background/service-worker.js"],
+  "include": ["src/**/*.js","src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/background/resident.ts", "src/background/service-worker.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

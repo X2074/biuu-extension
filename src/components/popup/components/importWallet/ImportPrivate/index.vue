@@ -1,7 +1,11 @@
 <template src='./index.html'></template>
+<script lang="ts">
+export default {
+    name: "importPrivate",
+};
+</script>
 <script lang='ts' setup>
-import { ref, onMounted, watchEffect, getCurrentInstance } from "vue";
-// import bitcoin from 'bitcoinjs-lib';
+import { ref } from "vue";
 import qitmeer from "qitmeer-js";
 import indexDbData from "@/utils/indexDB.js";
 import bus from "@/utils/bus.js";
@@ -11,25 +15,20 @@ import { Encrypt } from "@/utils/index.js";
 import md5 from "js-md5";
 // 预制网络
 import { netWork } from "@/utils/defaultNetwork.js";
-import CryptoJS from "crypto-js"; //引用AES源码js
 let loading = ref(false);
-let loadingText = ref("加载中...");
-let mnemonicList = ref([]); //助记词数组
 let moduleType = ref("evm"); //选中的模块
-let newPsd = ref(""); //钱包密码
-let confirmPsd = ref(""); //钱包密码
-let newPsdBol = ref(false);
-let confirmPsdBol = ref(false);
-let privatePhrase = ref(null);
+let privatePhrase: any = ref(null);
 let privatePhraseErr = ref("");
 let passKey = ref(""); //密码
 // 获取设置的密码
 indexDbData
     .getData(md5("secret"))
-    .then((res) => {
+    .then((res: any) => {
         passKey.value = res.secret;
     })
-    .catch((err) => {});
+    .catch((err: any) => {
+        console.log(err);
+    });
 // 确认
 const privatePrivateConfirm = async () => {
     privatePhraseErr.value = "";
@@ -58,10 +57,10 @@ const privatePrivateConfirm = async () => {
     }, 500);
 };
 // evm私钥生成钱包
-const isValidPrivateKey = async (keyName) => {
+const isValidPrivateKey = async (keyName: any) => {
     try {
         const web3 = new Web3();
-        const account = web3.eth.accounts.privateKeyToAccount(
+        const account: any = web3.eth.accounts.privateKeyToAccount(
             privatePhrase.value
         );
         console.log(account, "account");
@@ -81,7 +80,7 @@ const isValidPrivateKey = async (keyName) => {
     }
 };
 // 通过私钥生成 UTXO 钱包
-const generateUTXOWallet = async (keyName) => {
+const generateUTXOWallet = async (keyName: any) => {
     const testNetwork = qitmeer.networks.testnet;
     const mainNetwork = qitmeer.networks.mainnet;
     let utxoAddressTest;
@@ -129,8 +128,8 @@ const generateUTXOWallet = async (keyName) => {
     utxoNetwork(account);
 };
 // 907fd84538e3ac1caebdbbd35b00cad93986ee9ae34785e99e62843020c98f72
-const evmNetwork = (walltInfo) => {
-    indexDbData.getData("EVM").then((res) => {
+const evmNetwork = (walltInfo: any) => {
+    indexDbData.getData("EVM").then((res: any) => {
         console.log(res, "resresres");
         let data: any = {};
         // 提取数据库存储的网络 chainid
@@ -149,7 +148,7 @@ const evmNetwork = (walltInfo) => {
             indexDbData.putData(
                 Object.assign({ id: "currentWalltAddress" }, content)
             );
-            let info = {
+            let info: any = {
                 id: "rpc_url",
                 unit: "Meer",
                 netName: "Qitmeer Testnet",
@@ -169,14 +168,17 @@ const evmNetwork = (walltInfo) => {
         Object.keys(netWork.EVM).forEach((item) => {
             if (!chainId.includes(item)) {
                 //如果数据库没有这个网络
-                data.content[item] = netWork.EVM[item];
+                let netWorkType: any = netWork.EVM;
+                data.content[item] = netWorkType[item];
             }
         });
         Object.keys(data.content).forEach((item) => {
             // 如果有同名的钱包地址，直接return；
-            let walltAccount = data.content[item].walltInfo.filter((item) => {
-                return item.address == walltInfo.address;
-            });
+            let walltAccount = data.content[item].walltInfo.filter(
+                (item: any) => {
+                    return item.address == walltInfo.address;
+                }
+            );
             if (walltAccount && walltAccount.length) {
                 bus.emit("promptModalErr", "重复的钱包地址");
                 return;
@@ -202,8 +204,8 @@ const evmNetwork = (walltInfo) => {
         createRpc();
     });
 };
-const utxoNetwork = (walltInfo) => {
-    indexDbData.getData("UTXO").then((res) => {
+const utxoNetwork = (walltInfo: any) => {
+    indexDbData.getData("UTXO").then((res: any) => {
         let data: any = {};
         if (!res) {
             // 新增默认utxo网络
@@ -219,13 +221,16 @@ const utxoNetwork = (walltInfo) => {
         Object.keys(netWork.UTXO).forEach((item) => {
             if (!chainId.includes(item)) {
                 //如果数据库没有这个网络
-                data.content[item] = netWork.UTXO[item];
+                let netWorkType: any = netWork.EVM;
+                data.content[item] = netWorkType[item];
             }
         });
         Object.keys(data.content).forEach((item) => {
-            let walltAccount = data.content[item].walltInfo.filter((item) => {
-                return item.address == walltInfo.address;
-            });
+            let walltAccount = data.content[item].walltInfo.filter(
+                (item: any) => {
+                    return item.address == walltInfo.address;
+                }
+            );
             if (walltAccount && walltAccount.length) {
                 bus.emit("promptModalErr", "重复的钱包地址");
                 return;
@@ -274,7 +279,7 @@ const createRpc = async () => {
     indexDbData.putData(currentWallt);
 };
 
-const saveKey = async (keyName) => {
+const saveKey = async (keyName: any) => {
     // 私钥加密
     let ciphertext = await Encrypt(privatePhrase.value, passKey.value);
     // 保存加密数据

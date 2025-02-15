@@ -253,5 +253,11 @@
     },
     "indexDBDoc.md": {
         "description": "数据库结构"
+    },
+    "src/shims-js.d.ts": {
+        "description": "js声明文件避免引入js报错"
+    },
+    "reseme.md": {
+        "description": "项目实践计划"
     }
 }

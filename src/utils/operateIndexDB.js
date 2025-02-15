@@ -1,7 +1,6 @@
 import indexDbData from './indexDB.js';
 import bus from '@/utils/bus';
 import md5 from 'js-md5';
-import { roundRobin } from '../background/indexDB.js';
 /*
 nft的indexDB数据处理
 层级：

@@ -35,10 +35,10 @@ import homePage from "./components/homePage/index.vue";
 import transfer from "./components/transfer/index.vue";
 // 全局提示
 import prompt from "@/components/popup/components/prompt/index.vue";
-import { getBlance } from "@/utils/index";
-import indexDbData from "@/utils/indexDB";
+import { getBlance } from "@/utils/index.js";
+import indexDbData from "@/utils/indexDB.js";
 import Web3 from "web3";
-import bus from "@/utils/bus";
+import bus from "@/utils/bus.js";
 let loading = ref(true);
 let loadingText = ref("加载中...");
 const buyModal = ref(false);
