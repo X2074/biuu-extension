@@ -20,3 +20,5 @@ declare module "qitmeer-js";
 declare module "js-md5";
 declare module "uuid";
 declare module "qrcodejs2-fix";
+declare module "tiny-secp256k1";
+declare module "js-cookie";

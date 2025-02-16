@@ -94,14 +94,16 @@ const evmNetwork = () => {
   indexDbData.getData('EVM').then((res: any) => {
     // 提取数据库存储的网络 chainid
     if (!res || !res.content) {
-      res.content['8031'] = netWork.EVM['8031'];
+      let netWorkEvm: any = netWork.EVM;
+      res.content['8031'] = netWorkEvm['8031'];
       res.content['97'] = netWork.EVM['97'];
     }
     let chainId = Object.keys(res.content);
     Object.keys(netWork.EVM).forEach((item) => {
       if (!chainId.includes(item)) {
+        let netWorkEvm: any = netWork.EVM;
         //如果数据库没有这个网络
-        res.content[item] = netWork.EVM[item];
+        res.content[item] = netWorkEvm[item];
       }
     });
     Object.keys(res.content).forEach((item) => {
@@ -138,7 +140,8 @@ const utxoNetwork = () => {
     Object.keys(netWork.UTXO).forEach((item) => {
       if (!chainId.includes(item)) {
         //如果数据库没有这个网络
-        res.content[item] = netWork.UTXO[item];
+        let netWorkUtxo: any = netWork.UTXO;
+        res.content[item] = netWorkUtxo[item];
       }
     });
     Object.keys(res.content).forEach((item) => {

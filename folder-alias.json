@@ -259,5 +259,8 @@
     },
     "reseme.md": {
         "description": "项目实践计划"
+    },
+    "manifest.md": {
+        "description": "manifest.json的注释"
     }
 }

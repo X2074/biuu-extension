@@ -175,7 +175,7 @@ const checkAccount = () => {
     return;
   }
   let data = toRaw(accountList.value);
-  let dbData = data.filter((item) => {
+  let dbData = data.filter((item: any) => {
     return item.address == checkAddressText.value;
   });
   if (!dbData || !dbData.length) {

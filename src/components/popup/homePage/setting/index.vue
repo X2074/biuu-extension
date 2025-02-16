@@ -24,7 +24,7 @@ indexDbData.getData('currentWalltAddress').then((res) => {
   currentWalltAddress.value = res;
 });
 // 返回上一页面
-const toBack = (page) => {
+const toBack = (page: string) => {
   if (page == 'homePage') {
     bus.emit('nextPage', '');
   } else {
@@ -32,7 +32,7 @@ const toBack = (page) => {
   }
 };
 
-bus.on('settingPage', (res) => {
+bus.on('settingPage', (res: any) => {
   settingStep.value = res;
 });
 </script>

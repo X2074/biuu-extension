@@ -1,5 +1,10 @@
 
 <template src='./index.html'></template>
+<script lang="ts" >
+export default {
+  name: 'networkSwitching'
+};
+</script>
 <style scoped lang='scss'>
 @import './index.scss';
 </style>

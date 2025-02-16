@@ -1,4 +1,9 @@
 <template src='./index.html'></template>
+<script lang="ts" >
+export default {
+  name: 'nftCard'
+};
+</script>
 <style scoped lang='scss'>
 @import './index.scss';
 </style>
