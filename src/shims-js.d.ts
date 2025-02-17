@@ -9,6 +9,7 @@ declare module "*/utils/nft.js";
 declare module "*/utils/bus.js";
 declare module "*/utils/index.js";
 declare module "*/utils/createUser.js";
+declare module "*/utils/editContent.js";
 
 // background自定义组件
 declare module "*/resident.js";

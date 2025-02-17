@@ -11,17 +11,15 @@ export default {
 import { ref, onMounted, defineProps, toRaw, watch } from 'vue';
 import Web3 from 'web3';
 import indexDbData from '@/utils/indexDB.js';
-import bus from '@/utils/bus';
+import bus from '@/utils/bus.js';
 import { Decrypt } from '@/utils/index.js';
 import { evmKey, isAddress } from '@/utils/EVM/index.js';
-import { getNFTContent, computeNftGas, NFTTransfer } from '@/utils/nft.js';
-import { NFTSaveIndexDB, NFTUpdataIndexDB, hashSaveIndexDB, usedToHaveNft } from '@/utils/operateIndexDB.js';
+import { computeNftGas, NFTTransfer } from '@/utils/nft.js';
+import { NFTUpdataIndexDB, hashSaveIndexDB, usedToHaveNft } from '@/utils/operateIndexDB.js';
 import md5 from 'js-md5';
 let loading = ref(false);
 let loadingText = ref('发送中...');
 let detailContentStatus = ref('detail');
-let rawData = ref(null); //原始数据
-let addressList = ref(null); //显示数据
 const props = defineProps(['details']);
 let nftSelect = ref(false); //是否显示nft的下拉
 let gasPrice: any = ref(0);
@@ -38,11 +36,11 @@ let checkNft = ref(null);
 nftContent.value = props['details']['detail'];
 nftList.value = props['details']['list'];
 onMounted(async () => {
-  indexDbData.getData('rpc_url').then((res) => {
+  indexDbData.getData('rpc_url').then((res: any) => {
     rpcData.value = res;
   });
   // 获取设置的密码
-  indexDbData.getData(md5('secret')).then((res) => {
+  indexDbData.getData(md5('secret')).then((res: any) => {
     passKey.value = res.secret;
   });
   currentWallt.value = await indexDbData.getData('currentWalltAddress');
@@ -63,22 +61,13 @@ const checkAddress = (res: any) => {
   checkNft.value = res;
   nftSelect.value = false;
 };
-// 获取通讯录列表
-const getAddressList = async () => {
-  let data = await indexDbData.getData('addressBook');
-  if (data) {
-    rawData.value = data.content;
-    addressList.value = data.content;
-  }
-  loading.value = false;
-};
+
 const onCopy = () => {
   navigator.clipboard.writeText(nftContent.value.nftAddress);
   bus.emit('promptModalSuccess', '复制成功');
 };
 watch(transferAddress, (newV) => {
-  isAddress(newV).then((res) => {
-    console.log(res, 'faasfdasf');
+  isAddress(newV).then((res: any) => {
     if (!res) {
       bus.emit('promptModalErr', '钱包地址不合法');
     } else {
@@ -93,7 +82,7 @@ watch(transferAddress, (newV) => {
         receiverAddress: newV,
         tokenId: nftContent.value.tokenId
       };
-      computeNftGas(data).then((res) => {
+      computeNftGas(data).then((res: any) => {
         console.log(res, 'res');
         gasPriceTeade.value = res ? res : 300000;
         getWei(res ? res : 300000);

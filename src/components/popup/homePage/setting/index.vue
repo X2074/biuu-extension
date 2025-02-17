@@ -11,7 +11,7 @@ export default {
 <script lang='ts' setup>
 import { ref, onMounted } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
-import bus from '@/utils/bus';
+import bus from '@/utils/bus.js';
 // import privateKey from './components/privateKey/index.vue'
 import security from './security/index.vue';
 import addressBook from '../addressBook/index.vue';
@@ -20,7 +20,7 @@ let currentWalltAddress = ref(null); //当前钱包信息
 
 let loading = ref(false);
 let loadingText = ref('加载中...');
-indexDbData.getData('currentWalltAddress').then((res) => {
+indexDbData.getData('currentWalltAddress').then((res: any) => {
   currentWalltAddress.value = res;
 });
 // 返回上一页面

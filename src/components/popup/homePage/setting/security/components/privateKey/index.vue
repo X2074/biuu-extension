@@ -7,13 +7,11 @@ export default {
 <script lang='ts' setup>
 import { ref, onMounted, defineProps } from 'vue';
 import bus from '@/utils/bus.js';
-import indexDbData from '@/utils/indexDB';
+import indexDbData from '@/utils/indexDB.js';
 import { Decrypt } from '@/utils/index.js';
 import { evmKey, utxoKey } from '@/utils/index.js';
-import { editContent } from '@/utils/editContent';
-import QRCode from 'qrcodejs2-fix';
-import { getBlance } from '@/utils/index';
-import Web3 from 'web3';
+import { editContent } from '@/utils/editContent.js';
+import { getBlance } from '@/utils/index.js';
 import md5 from 'js-md5';
 let loading = ref(true);
 let loadingText = ref('加载中...');
@@ -24,7 +22,6 @@ let psdType = ref('hide');
 let privateKey = ref(''); //私钥
 let userName = ref(''); //账户昵称
 let userNameStatus = ref(false); //昵称展示还是编辑
-let qrCodeDiv = ref(null);
 let accountOperate = ref('password');
 const props = defineProps(['address', 'keyStore']);
 let rpcData = ref(null);
@@ -36,13 +33,13 @@ const initializeInfo = () => {
   // 获取设置的密码
   indexDbData
     .getData(md5('secret'))
-    .then((res) => {
+    .then((res: any) => {
       passKey.value = res.secret;
     })
-    .catch((err) => {});
+    .catch(() => {});
   indexDbData
     .getData('rpc_url')
-    .then((res) => {
+    .then((res: any) => {
       console.log(res, 'res');
       rpcData.value = res;
       if (res && res.walltInfo) {
@@ -55,21 +52,9 @@ const initializeInfo = () => {
         getBlance(res.url, nowAccount.value);
       }
     })
-    .catch((err) => {});
+    .catch(() => {});
   userNameStatus.value = false;
   loading.value = false;
-};
-// 修改昵称
-const editName = () => {
-  if (!userName.value) return;
-  loading.value = true;
-  editContent('userName', userName.value, nowAccount.value.address)
-    .then((res) => {
-      initializeInfo();
-    })
-    .catch((err) => {
-      loading.value = false;
-    });
 };
 // 复制
 const onCopy = (txt: any) => {

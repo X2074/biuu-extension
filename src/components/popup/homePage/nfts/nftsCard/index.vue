@@ -11,12 +11,10 @@ export default {
 import { ref, onMounted, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import { getNftBase64 } from '@/utils/nft.js';
-import nftDetail from '../nftDetail/index.vue';
 import nftImages from './nftImages/index.vue';
-import bus from '@/utils/bus';
+import bus from '@/utils/bus.js';
 import md5 from 'js-md5';
 let loading = ref(false);
-let loadingText = ref('加载中...');
 let nftsList: any = ref([]);
 let onceNftList = ref([]); //先前拥有的nft
 onMounted(async () => {
@@ -44,35 +42,7 @@ onMounted(async () => {
   // }
 });
 
-const fetchAllData = async (data: any) => {
-  let promises: any;
-  data.forEach((item: any) => {
-    let promise = item['collections'].map((info: string) => getNftBase64(info));
-    promises = [...promises, ...promise];
-  });
-
-  try {
-    const results = await Promise.all(promises);
-    console.log('All data received:', results);
-    return results;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return null;
-  }
-};
-
 const toImport = () => {
   bus.emit('homePageBack', { page: 'importNfts' });
-};
-
-const toDetail = (data: any, list: any) => {
-  let info = {
-    detail: toRaw(data),
-    list: toRaw(list)
-  };
-  bus.emit('homePageBack', {
-    page: 'nftDetail',
-    data: info
-  });
 };
 </script>

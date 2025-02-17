@@ -7,19 +7,16 @@ export default {
 <script lang='ts' setup>
 import { ref, onMounted, defineProps } from 'vue';
 import bus from '@/utils/bus.js';
-import indexDbData from '@/utils/indexDB';
+import indexDbData from '@/utils/indexDB.js';
 import { Decrypt } from '@/utils/index.js';
 import QRCode from 'qrcodejs2-fix';
-import Web3 from 'web3';
 import md5 from 'js-md5';
 let loading = ref(true);
 let loadingText = ref('加载中...');
-let nowAccount = ref(null);
 let passKey = ref(''); //密码
 let passKeyModel = ref(''); //输入框密码
 let qrCodeDiv = ref(null);
 const props = defineProps(['address', 'keyStore']);
-let rpcData = ref(null);
 //流程步骤：首页，问题1，问题2，助记词密码，助记词显示
 let processSteps = ref('home');
 let verificationClick = ref(false); //二次确认按钮长按样式
@@ -33,7 +30,7 @@ let encryption: any = ref(null); //解密后的助记词
 // 获取设置的密码
 indexDbData
   .getData('securityConfirmation')
-  .then((res) => {
+  .then((res: any) => {
     console.log(res, 'res');
     // 如果存在说明已经回答过安全问题，不用走流程，直接展示助记词页面
     if (res) {
@@ -51,17 +48,17 @@ const initializeInfo = () => {
   // 获取设置的密码
   indexDbData
     .getData(md5('secret'))
-    .then((res) => {
+    .then((res: any) => {
       passKey.value = res.secret;
     })
-    .catch((err) => {});
+    .catch(() => {});
   // 获取设置的密码
   indexDbData
     .getData(md5('secret'))
-    .then((res) => {
+    .then((res: any) => {
       passKey.value = res.secret;
     })
-    .catch((err) => {});
+    .catch(() => {});
   loading.value = false;
 };
 // 问题回答完毕，继续下一步

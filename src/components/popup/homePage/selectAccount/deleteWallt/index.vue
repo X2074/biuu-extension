@@ -7,10 +7,8 @@ export default {
 <script lang='ts' setup>
 import { ref, onMounted, defineProps } from 'vue';
 import bus from '@/utils/bus.js';
-import indexDbData from '@/utils/indexDB';
-import { editContent } from '@/utils/editContent';
-import { getBlance } from '@/utils/index';
-import Web3 from 'web3';
+import indexDbData from '@/utils/indexDB.js';
+import { getBlance } from '@/utils/index.js';
 import md5 from 'js-md5';
 let loading = ref(false);
 let loadingText = ref('加载中...');
@@ -31,19 +29,19 @@ const initializeInfo = () => {
   // 获取设置的密码
   indexDbData
     .getData(md5('secret'))
-    .then((res) => {
+    .then((res: any) => {
       passKey.value = res.secret;
     })
-    .catch((err) => {});
+    .catch(() => {});
 
   // 存为当前展示的钱包数据
-  indexDbData.getData('currentWalltAddress').then((res) => {
+  indexDbData.getData('currentWalltAddress').then((res: any) => {
     currentWallt.value = res;
   });
 
   indexDbData
     .getData('rpc_url')
-    .then((res) => {
+    .then((res: any) => {
       console.log(res, 'res');
       rpcData.value = res;
       if (res && res.walltInfo) {
@@ -56,7 +54,7 @@ const initializeInfo = () => {
         getBlance(res.url, nowAccount.value);
       }
     })
-    .catch((err) => {});
+    .catch(() => {});
   loading.value = false;
 };
 // 取消
@@ -111,10 +109,10 @@ const confirmRemove = async () => {
 };
 
 const evmNetwork = async () => {
-  indexDbData.getData('EVM').then((res) => {
+  indexDbData.getData('EVM').then((res: any) => {
     let data: any;
     let info: any;
-    Object.keys(res.content).forEach((item, index) => {
+    Object.keys(res.content).forEach((item) => {
       data = res.content[item].walltInfo.filter((info: any) => {
         return info.address != nowAccount.value.address;
       });
@@ -129,10 +127,10 @@ const evmNetwork = async () => {
   });
 };
 const utxoNetwork = async () => {
-  indexDbData.getData('UTXO').then((res) => {
+  indexDbData.getData('UTXO').then((res: any) => {
     let data: any;
     let info: any;
-    Object.keys(res.content).forEach((item, index) => {
+    Object.keys(res.content).forEach((item) => {
       data = res.content[item].walltInfo.filter((info: any) => {
         return info.address != nowAccount.value.address;
       });

@@ -7,7 +7,7 @@ export default {
 <script lang='ts' setup>
 import { ref, onMounted, watch, toRaw } from 'vue';
 import bus from '@/utils/bus.js';
-import indexDbData from '@/utils/indexDB';
+import indexDbData from '@/utils/indexDB.js';
 import addressDetail from './components/addressDetail/index.vue';
 import addressAppend from './components/addressAppend/index.vue';
 let addressBookPage = ref('list'); //显示什么内容

@@ -7,7 +7,7 @@ export default {
 <script lang='ts' setup>
 import { ref, onMounted, defineProps, nextTick } from 'vue';
 import bus from '@/utils/bus.js';
-import indexDbData from '@/utils/indexDB';
+import indexDbData from '@/utils/indexDB.js';
 let name = ref('');
 let address = ref('');
 onMounted(() => {});

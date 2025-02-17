@@ -9,12 +9,8 @@ export default {
 </style>
 <script lang='ts' setup>
 import { ref, onMounted, toRaw } from 'vue';
-import indexDbData from '@/utils/indexDB.js';
 import { getNftBase64 } from '@/utils/nft.js';
-import bus from '@/utils/bus';
-import md5 from 'js-md5';
-let loading = ref(false);
-let loadingText = ref('加载中...');
+import bus from '@/utils/bus.js';
 let nftsList: any = ref([]);
 const props = defineProps(['nftContent']);
 onMounted(async () => {
@@ -23,14 +19,10 @@ onMounted(async () => {
 
 const fetchAllData = async (data: any) => {
   data.forEach((item: string) => {
-    getNftBase64(item).then((res) => {
+    getNftBase64(item).then((res: any) => {
       nftsList.value.push(res);
     });
   });
-};
-
-const toImport = () => {
-  bus.emit('homePageBack', { page: 'importNfts' });
 };
 
 const toDetail = (data: any, list: any) => {

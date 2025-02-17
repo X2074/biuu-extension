@@ -1,11 +1,11 @@
 <template src='./index.html'></template>
 <script lang='ts' setup>
-import { ref, onMounted, nextTick, toRaw } from 'vue';
+import { ref, onMounted, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus.js';
 const networkWallt: any = ref(null); //网络下面存的钱包数据
 onMounted(() => {
-  indexDbData.getData('rpc_url').then((res) => {
+  indexDbData.getData('rpc_url').then((res: any) => {
     networkWallt.value = res;
   });
 });
@@ -43,7 +43,7 @@ const addNetWork = () => {
     bus.emit('promptModalErr', '请输入货币符号');
     return;
   }
-  indexDbData.getData('EVM').then((res) => {
+  indexDbData.getData('EVM').then((res: any) => {
     let names;
     for (const key in res.content) {
       if (res.content[key]['netName'] == networkName.value) {

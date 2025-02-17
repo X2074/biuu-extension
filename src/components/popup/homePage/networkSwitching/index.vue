@@ -11,10 +11,8 @@ export default {
 <script lang='ts' setup>
 import { ref, onMounted, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
-import bus from '@/utils/bus';
+import bus from '@/utils/bus.js';
 let settingStep = ref('options'); //设置页面当前展示内容
-let currentWalltAddress = ref(null); //当前钱包信息
-
 let loading = ref(true);
 let loadingText = ref('加载中...');
 let networkModel = ref({

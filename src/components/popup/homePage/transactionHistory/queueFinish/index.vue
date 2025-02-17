@@ -8,8 +8,7 @@ export default {
 import { ref, onMounted, defineProps, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import Web3 from 'web3';
-import bus from '@/utils/bus';
-import md5 from 'js-md5';
+import bus from '@/utils/bus.js';
 import dayjs from 'dayjs';
 import { getUtxoHash } from '@/utils/UTXO/meerRpc.js';
 const props = defineProps(['transactionContent']);

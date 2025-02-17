@@ -1,19 +1,18 @@
 <template src='./index.html'></template>
 <script lang="ts" >
 export default {
-  name: 'selectAccount'
+  name: 'showPrivateKey'
 };
 </script>
 <script lang='ts' setup>
 import { ref, onMounted, defineProps, nextTick } from 'vue';
 import bus from '@/utils/bus.js';
-import indexDbData from '@/utils/indexDB';
+import indexDbData from '@/utils/indexDB.js';
 import { Decrypt } from '@/utils/index.js';
 import { evmKey, utxoKey } from '@/utils/index.js';
-import { editContent } from '@/utils/editContent';
+import { editContent } from '@/utils/editContent.js';
 import QRCode from 'qrcodejs2-fix';
-import { getBlance } from '@/utils/index';
-import Web3 from 'web3';
+import { getBlance } from '@/utils/index.js';
 import md5 from 'js-md5';
 let loading = ref(true);
 let loadingText = ref('加载中...');
@@ -48,10 +47,10 @@ const initializeInfo = () => {
   // 获取设置的密码
   indexDbData
     .getData(md5('secret'))
-    .then((res) => {
+    .then((res: any) => {
       passKey.value = res.secret;
     })
-    .catch((err) => {});
+    .catch(() => {});
   console.log(props, 'qrCodeDiv.value');
   // 存为当前展示的钱包数据
   // indexDbData.getData('currentWalltAddress').then(res => {
@@ -60,7 +59,7 @@ const initializeInfo = () => {
   // })
   indexDbData
     .getData('rpc_url')
-    .then((res) => {
+    .then((res: any) => {
       console.log(res, 'res');
       rpcData.value = res;
       if (res && res.walltInfo) {
@@ -73,7 +72,7 @@ const initializeInfo = () => {
         getBlance(res.url, nowAccount.value);
       }
     })
-    .catch((err) => {});
+    .catch(() => {});
   userNameStatus.value = false;
   loading.value = false;
 };
@@ -82,10 +81,10 @@ const editName = () => {
   if (!userName.value) return;
   loading.value = true;
   editContent('userName', userName.value, nowAccount.value.address)
-    .then((res) => {
+    .then((res: any) => {
       initializeInfo();
     })
-    .catch((err) => {
+    .catch(() => {
       loading.value = false;
     });
 };

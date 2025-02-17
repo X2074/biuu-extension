@@ -7,8 +7,8 @@ export default {
 </script>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import bus from '@/utils/bus';
-import indexDbData from '@/utils/indexDB';
+import bus from '@/utils/bus.js';
+import indexDbData from '@/utils/indexDB.js';
 import { Encrypt, Decrypt } from '@/utils/index.js';
 import md5 from 'js-md5';
 let psdText = ref('');
@@ -19,13 +19,13 @@ let psdOldText = ref('');
 let psdNewText = ref('');
 let psdConText = ref('');
 // 是否显示明文
-let textNewPsd = ref('psd');
-let textConPsd = ref('psd');
+/* let textNewPsd = ref('psd');
+let textConPsd = ref('psd'); */
 onMounted(async () => {
   // 获取设置的密码
   indexDbData
     .getData(md5('secret'))
-    .then((res) => {
+    .then((res: any) => {
       passKey.value = res.secret;
     })
     .catch((err: any) => {

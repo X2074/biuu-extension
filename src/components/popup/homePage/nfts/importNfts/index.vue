@@ -10,12 +10,11 @@ export default {
 <script lang='ts' setup>
 import { ref, onMounted } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
-import bus from '@/utils/bus';
+import bus from '@/utils/bus.js';
 import { getNFTContent, getNFTContentAll } from '@/utils/nft.js';
 import { NFTSaveIndexDB } from '@/utils/operateIndexDB.js';
 let loading = ref(false);
 let loadingText = ref('加载中...');
-let nftContent = ref(null);
 let contractAddress = ref('0xe1C389229BfeB7ac4b36bFD54e4aaA806773A83B'); //合约地址
 let tokenId = ref(''); //tokenId
 let nftNull = ref(false); //nft状态，是否查询到nft

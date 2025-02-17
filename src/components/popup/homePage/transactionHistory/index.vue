@@ -11,7 +11,7 @@ export default {
 import { ref, onMounted, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import { getUtxoHash } from '@/utils/UTXO/meerRpc.js';
-import bus from '@/utils/bus';
+import bus from '@/utils/bus.js';
 import md5 from 'js-md5';
 import queueFinish from './queueFinish/index.vue';
 import Web3 from 'web3';

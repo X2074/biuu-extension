@@ -7,14 +7,13 @@ export default {
 <script lang='ts' setup>
 import { ref, onMounted, toRaw, defineProps } from 'vue';
 import bus from '@/utils/bus.js';
-import indexDbData from '@/utils/indexDB';
-import { Encrypt, Decrypt } from '@/utils/index.js';
-import { createMnemonic, createWallet } from '@/utils/createUser';
+import indexDbData from '@/utils/indexDB.js';
+import { Encrypt } from '@/utils/index.js';
+import { createMnemonic, createWallet } from '@/utils/createUser.js';
 import showPrivateKey from '../showPrivateKey/index.vue';
 import importWallet from '../../../components/importWallet/index.vue';
 import deleteWallt from '../deleteWallt/index.vue';
-import { getBlance } from '@/utils/index';
-import Web3 from 'web3';
+import { getBlance } from '@/utils/index.js';
 import md5 from 'js-md5';
 let accountList = ref([]);
 let nowAccount: any = ref(null);
@@ -45,10 +44,10 @@ const initializeInfo = async () => {
   // 获取设置的密码
   indexDbData
     .getData(md5('secret'))
-    .then((res) => {
+    .then((res: any) => {
       passKey.value = res.secret;
     })
-    .catch((err) => {});
+    .catch(() => {});
   // 获取当前展示的钱包数据
   nowAccount.value = await indexDbData.getData('currentWalltAddress');
   accountContent.value = await indexDbData.getData('rpc_url');
@@ -60,7 +59,7 @@ const initializeInfo = async () => {
   accountList.value = data;
   accountList.value.forEach((item: any) => {
     getBlance(accountContent.value.url, Object.assign({ netWorkType: accountContent.value.netWorkType }, item)).then(
-      (res) => {
+      (res: any) => {
         item.blance = res;
       }
     );
@@ -77,7 +76,7 @@ const createAccount = async () => {
   // 助记词加密
   let ciphertext = Encrypt(mnemonic, passKey.value);
   // 保存加密数据
-  indexDbData.getData('keyStore').then((res) => {
+  indexDbData.getData('keyStore').then((res: any) => {
     let data: any = {};
     console.log(res.secret, '老的key');
     let info: any = {};
@@ -93,7 +92,7 @@ const createAccount = async () => {
     });
   });
 
-  indexDbData.getData('currentWalltAddress').then((res) => {
+  indexDbData.getData('currentWalltAddress').then((res: any) => {
     let index = accountContent.value['NoIndex'] + 1;
     let content = {
       id: 'currentWalltAddress',
@@ -106,12 +105,12 @@ const createAccount = async () => {
     // 存为当前展示的钱包数据
     indexDbData
       .getData('currentWalltAddress')
-      .then((res) => {
+      .then((res: any) => {
         indexDbData.putData(content);
       })
-      .catch((err) => {});
+      .catch(() => {});
     // 存为当前选中的网络中数据
-    indexDbData.getData('rpc_url').then((res) => {
+    indexDbData.getData('rpc_url').then((res: any) => {
       res['NoIndex'] = res['NoIndex'] + 1;
       res.walltInfo.push(content);
       // 保存key
@@ -128,7 +127,7 @@ const createAccount = async () => {
 
 const evmNetwork = (data: any) => {
   let index = accountContent.value['NoIndex'] + 1;
-  indexDbData.getData('EVM').then((res) => {
+  indexDbData.getData('EVM').then((res: any) => {
     res['NoIndex'] = index;
     Object.keys(res.content).forEach((item) => {
       res.content[item]['NoIndex'] = index;
@@ -145,7 +144,7 @@ const evmNetwork = (data: any) => {
 };
 const utxoNetwork = (data: any) => {
   let index: any = accountContent.value['NoIndex'] + 1;
-  indexDbData.getData('UTXO').then((res) => {
+  indexDbData.getData('UTXO').then((res: any) => {
     res['NoIndex'] = index;
     Object.keys(res.content).forEach((item) => {
       res.content[item]['NoIndex'] = index;
