@@ -6,7 +6,6 @@ export default {
 };
 </script>
 <script lang="ts" setup>
-// const googleId = ref('fkhnghcgmjcgeniccpjpmlfpgbibmmge')
 import bus from '@/utils/bus.js';
 const toCreate = (res: any) => {
   bus.emit('nextPage', res);

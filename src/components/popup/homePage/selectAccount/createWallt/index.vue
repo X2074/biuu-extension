@@ -17,7 +17,7 @@ onMounted(() => {
     if (!res) {
       netWorkChange('EVM');
     } else {
-      netWorkChange(res.type ? res.type : 'EVM');
+      netWorkChange(res.netWorkType ? res.netWorkType : 'EVM');
       let data = res.content;
       walltEnvironment.value = data.unit;
       // 定义rpc

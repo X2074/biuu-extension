@@ -130,14 +130,14 @@ const toTransfer = async () => {
       return;
     }
   } else {
-    if (rpcUrlData.value['netWorkType'] == 'evm') {
+    if (rpcUrlData.value['netWorkType'].toLowerCase() == 'evm') {
       privateKey.value = await evmKey(encryption);
     } else {
       privateKey.value = await utxoKey(encryption);
     }
   }
   console.log(privateKey.value, 'privateKey');
-  if (rpcUrlData.value['netWorkType'] == 'evm') {
+  if (rpcUrlData.value['netWorkType'].toLowerCase() == 'evm') {
     nonce.value = await getNonce(currentWallt.value['address'], rpcUrlData.value['url']);
     console.log(blanceSecre.value, 'blanceSecre');
     let gas = await getGas(rpcUrlData.value['url'], currentWallt.value['address'], toAddress.value, quantity.value);

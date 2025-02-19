@@ -91,7 +91,7 @@ const confirmPsd = async () => {
     return;
   }
 
-  if (rpcData.value && rpcData.value['netWorkType'] == 'evm') {
+  if (rpcData.value && rpcData.value['netWorkType'].toLowerCase() == 'evm') {
     evmKey(encryption).then((keys: any) => {
       console.log(keys, 'keys');
       loading.value = false;

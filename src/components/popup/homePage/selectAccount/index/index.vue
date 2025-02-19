@@ -14,7 +14,9 @@ import showPrivateKey from '../showPrivateKey/index.vue';
 import importWallet from '../../../components/importWallet/index.vue';
 import deleteWallt from '../deleteWallt/index.vue';
 import { getBlance } from '@/utils/index.js';
+import { addBalance } from '@/utils/UTXO/meerRpc.js';
 import md5 from 'js-md5';
+import { rpcConfig, defaultAccount, defaultUTXOAccount } from '@/config/configuration';
 let accountList = ref([]);
 let nowAccount: any = ref(null);
 let accountContent: any = ref(null);
@@ -58,13 +60,13 @@ const initializeInfo = async () => {
   });
   accountList.value = data;
   accountList.value.forEach((item: any) => {
+    console.log('accountContent', Object.assign({ netWorkType: accountContent.value.netWorkType }, item));
     getBlance(accountContent.value.url, Object.assign({ netWorkType: accountContent.value.netWorkType }, item)).then(
       (res: any) => {
         item.blance = res;
       }
     );
   });
-  console.log(data, 'data');
   loading.value = false;
 };
 // 创建账号
@@ -91,73 +93,86 @@ const createAccount = async () => {
       secret: data
     });
   });
-
-  indexDbData.getData('currentWalltAddress').then((res: any) => {
-    let index = accountContent.value['NoIndex'] + 1;
-    let content = {
-      id: 'currentWalltAddress',
-      address: account['address'],
-      userName: 'Wallt' + (index > 10 ? index : '0' + index + 1),
-      userUrl: '',
-      keyStore: account['keyStore'],
-      NoIndex: index //当前第几个用户
-    };
-    // 存为当前展示的钱包数据
-    indexDbData
-      .getData('currentWalltAddress')
-      .then((res: any) => {
-        indexDbData.putData(content);
-      })
-      .catch(() => {});
-    // 存为当前选中的网络中数据
-    indexDbData.getData('rpc_url').then((res: any) => {
-      res['NoIndex'] = res['NoIndex'] + 1;
-      res.walltInfo.push(content);
-      // 保存key
-      indexDbData.putData(res);
-    });
-    evmNetwork(account); //新增并存储evm网络
-    utxoNetwork(account); //新增并存储evm网络
+  evmNetwork(account); //新增并存储evm网络
+  try {
+    await utxoNetwork(account); //新增并存储evm网络
     setTimeout(() => {
       initializeInfo();
       loading.value = false;
     }, 500);
-  });
+  } catch (error) {}
+  // });
 };
 
 const evmNetwork = (data: any) => {
-  let index = accountContent.value['NoIndex'] + 1;
+  let index = Number(accountContent.value['NoIndex']) + 1;
+  let content: any = defaultAccount;
+  content['address'] = data.address;
+  content['keyStore'] = data.keyStore;
+  content['userName'] = 'Wallt' + (index > 10 ? index + 1 : '0' + index);
+  content['netWork'] = 'EVM';
+  content['NoIndex'] = index;
   indexDbData.getData('EVM').then((res: any) => {
     res['NoIndex'] = index;
     Object.keys(res.content).forEach((item) => {
       res.content[item]['NoIndex'] = index;
-      res.content[item].walltInfo.push({
-        address: data.address, //当前用户地址
-        userName: 'Wallt' + (index > 10 ? index + 1 : '0' + index),
-        userUrl: '',
-        keyStore: data['keyStore'],
-        NoIndex: index //当前第几个用户
-      });
+      res.content[item].walltInfo.push(content);
     });
     indexDbData.putData(res);
   });
+  appendRecCurrent(content);
 };
-const utxoNetwork = (data: any) => {
-  let index: any = accountContent.value['NoIndex'] + 1;
+const utxoNetwork = async (data: any) => {
+  let rpcData: any = await indexDbData.getData('rpc_url');
+  // 创建完utxo账户后需要新增节点方法，让节点对该地址进行关注
+  await addBalance(rpcData['url'], data['utxoAddressTest']);
+  let index = Number(accountContent.value['NoIndex']) + 1;
+  // 给新增的utxo账号赋值
+  let utxoAccount: any = defaultUTXOAccount;
+  utxoAccount['utxoAddressTest'] = data.utxoAddressTest;
+  utxoAccount['address'] = data.utxoAddressMain;
+  utxoAccount['keyStore'] = data.keyStore;
+  utxoAccount['NoIndex'] = index;
+  utxoAccount['userName'] = 'Wallt' + (index > 10 ? '' : '0') + index;
   indexDbData.getData('UTXO').then((res: any) => {
     res['NoIndex'] = index;
     Object.keys(res.content).forEach((item) => {
       res.content[item]['NoIndex'] = index;
-      res.content[item].walltInfo.push({
-        utxoAddressTest: data.utxoAddressTest, //当前用户测试地址
-        address: data.utxoAddressMain, //当前用户地址
-        userName: 'Wallt' + (index > 10 ? '' : '0') + index,
-        userUrl: '',
-        keyStore: data['keyStore'],
-        NoIndex: index + 1 //当前第几个用户
-      });
+      res.content[item].walltInfo.push(utxoAccount);
     });
     indexDbData.putData(res);
+  });
+  appendRecCurrent(utxoAccount);
+};
+// 添加数据到当前选中和rec网络
+const appendRecCurrent = (content: any) => {
+  indexDbData.getData('rpc_url').then((res: any) => {
+    // 只有新增的网络和rec网络一致才添加
+    if (res.netWorkType.toLowerCase() == content.netWorkType.toLowerCase()) {
+      res['NoIndex'] = res['NoIndex'] + 1;
+      res.walltInfo.push(content);
+      // 保存key
+      indexDbData.putData(res);
+      indexDbData.getData('currentWalltAddress').then((res: any) => {
+        // 存为当前选中的网络中数据
+        let contentRecCurrent = content;
+        contentRecCurrent['id'] = 'currentWalltAddress';
+        indexDbData.putData(contentRecCurrent);
+      });
+    }
+    // if (res.netWorkType.toLowerCase() == 'evm') {
+    //   res['NoIndex'] = res['NoIndex'] + 1;
+    //   res.walltInfo.push(content);
+    //   // 保存key
+    //   indexDbData.putData(res);
+
+    //   indexDbData.getData('currentWalltAddress').then((res: any) => {
+    //     // 存为当前选中的网络中数据
+    //     let contentRecCurrent = content;
+    //     contentRecCurrent['id'] = 'currentWalltAddress';
+    //     indexDbData.putData(contentRecCurrent);
+    //   });
+    // }
   });
 };
 
@@ -185,6 +200,7 @@ const checkAccount = () => {
   let currentWallt: any = dbData[0];
   currentWallt['id'] = 'currentWalltAddress';
   indexDbData.putData(currentWallt);
+
   setTimeout(() => {
     bus.emit('nextPage', 'homePage');
   }, 300);
@@ -195,8 +211,6 @@ const backPage = () => {
 };
 
 bus.on('selectAccountPage', (res: any) => {
-  console.log(res, 'resresresres');
-
   if (res == 'list') {
     loading.value = true;
     accountType.value = 'list';

@@ -15,6 +15,7 @@ import { Encrypt } from '@/utils/index.js';
 import md5 from 'js-md5';
 // 预制网络
 import { netWork } from '@/utils/defaultNetwork.js';
+import { rpcConfig, defaultAccount, defaultUTXOAccount } from '@/config/configuration';
 
 let loading: any = ref(false);
 let moduleType = ref('evm'); //选中的模块
@@ -46,7 +47,7 @@ const privatePrivateConfirm = async () => {
   await saveKey(keyName);
   loading.value = true;
   // 创建evm
-  if (moduleType.value == 'evm') {
+  if (moduleType.value.toLowerCase() == 'evm') {
     await isValidPrivateKey(keyName);
   } else {
     await generateUTXOWallet(keyName);
@@ -129,24 +130,16 @@ const evmNetwork = (walltInfo: any) => {
       data['content'] = netWork.EVM;
       data['id'] = 'EVM';
       data['NoIndex'] = 1;
-      let content = {
-        address: walltInfo.address,
-        userName: 'Wallt 01',
-        userUrl: '',
-        keyStoreType: 'privateKey',
-        keyStore: walltInfo.keyStore
-      };
+
+      let content: any = defaultAccount;
+      content['address'] = walltInfo.address;
+      content['keyStore'] = walltInfo.keyStore;
+      content['userName'] = 'Wallt 01';
+      content['netWork'] = 'EVM';
+      content['keyStoreType'] = 'privateKey';
       indexDbData.putData(Object.assign({ id: 'currentWalltAddress' }, content));
-      let info: any = {
-        id: 'rpc_url',
-        unit: 'Meer',
-        netName: 'Qitmeer Testnet',
-        CHAIN_ID: 8131,
-        keyStore: walltInfo.keyStore,
-        type: 'EVM',
-        url: 'https://testnet-qng.rpc.qitmeer.io',
-        walltInfo: []
-      };
+      let info: any = rpcConfig['evmTest'];
+      info['NoIndex'] = 1;
       info['walltInfo'].push(content);
       indexDbData.putData(info);
     } else {
@@ -170,16 +163,14 @@ const evmNetwork = (walltInfo: any) => {
         bus.emit('promptModalErr', '重复的钱包地址');
         return;
       }
-      data.content[item].walltInfo.push({
-        address: walltInfo.address, //当前用户地址
-        userName:
-          'Wallt' +
-          (!data['NoIndex'] ? '01' : data['NoIndex'] + 1 > 10 ? data['NoIndex'] + 1 : '0' + (data['NoIndex'] + 1)),
-        userUrl: '',
-        NoIndex: data['NoIndex'], //当前创建的第几个
-        keyStoreType: 'privateKey',
-        keyStore: walltInfo.keyStore
-      });
+      let account: any = defaultAccount;
+      account['address'] = walltInfo.address;
+      account['userName'] =
+        'Wallt' +
+        (!data['NoIndex'] ? '01' : data['NoIndex'] + 1 > 10 ? data['NoIndex'] + 1 : '0' + (data['NoIndex'] + 1));
+      account['keyStore'] = walltInfo['keyStore'];
+      account['NoIndex'] = data['NoIndex'];
+      data.content[item].walltInfo.push(account);
     });
     data.netWorkType = 'evm';
     indexDbData.putData(data);
@@ -216,17 +207,16 @@ const utxoNetwork = (walltInfo: any) => {
         bus.emit('promptModalErr', '重复的钱包地址');
         return;
       }
-      data.content[item].walltInfo.push({
-        utxoAddressTest: walltInfo.utxoAddressTest, //当前用户测试地址
-        address: walltInfo.utxoAddressMain, //当前用户地址
-        userName:
-          'Wallt' +
-          (!data['NoIndex'] ? '01' : data['NoIndex'] + 1 > 10 ? data['NoIndex'] + 1 : '0' + (data['NoIndex'] + 1)),
-        userUrl: '',
-        NoIndex: data['NoIndex'], //当前创建的第几个
-        keyStoreType: 'privateKey',
-        keyStore: walltInfo.keyStore
-      });
+      // 给新增的utxo账号赋值
+      let utxoAccount: any = defaultUTXOAccount;
+      utxoAccount['utxoAddressTest'] = walltInfo.utxoAddressTest;
+      utxoAccount['address'] = walltInfo.utxoAddressMain;
+      utxoAccount['keyStore'] = walltInfo.keyStore;
+      utxoAccount['NoIndex'] = data['NoIndex'];
+      utxoAccount['userName'] =
+        'Wallt' +
+        (!data['NoIndex'] ? '01' : data['NoIndex'] + 1 > 10 ? data['NoIndex'] + 1 : '0' + (data['NoIndex'] + 1));
+      data.content[item].walltInfo.push(utxoAccount);
     });
     data.netWorkType = 'utxo';
     indexDbData.putData(data);

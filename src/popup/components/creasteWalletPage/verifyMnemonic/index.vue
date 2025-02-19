@@ -12,6 +12,7 @@ import { Encrypt } from '@/utils/index.js';
 import md5 from 'js-md5';
 // 预制网络
 import { netWork } from '@/utils/defaultNetwork.js';
+import { rpcConfig, defaultAccount, defaultUTXOAccount } from '@/config/configuration';
 let mnemonicList: any = ref([]); //助记词数组
 let walltInfo: any = ref(null); //钱包相关信息
 let verifyBol = ref(false);
@@ -62,33 +63,25 @@ const UtxoEvmKey = () => {
     id: 'keyStore',
     secret: data
   });
-  // 存为当前展示的钱包数据
-  // indexDbData.getData('currentWalltAddress').then(res => {
-  //     console.log(!res, 'dasdsad');
-  let content = {
-    address: walltInfo.value.address,
-    userName: 'Wallt 01',
-    userUrl: '',
-    keyStore: walltInfo.value.keyStore,
-    NoIndex: 1 //当前第几个用户
-  };
+  // let content = {
+  //   address: walltInfo.value.address,
+  //   userName: 'Wallt 01',
+  //   userUrl: '',
+  //   keyStore: walltInfo.value.keyStore,
+  //   NoIndex: 1 //当前第几个用户
+  // };
+  let content: any = defaultAccount;
+  content['address'] = walltInfo.address;
+  content['keyStore'] = walltInfo.keyStore;
+  content['userName'] = 'Wallt 01';
+  content['netWork'] = 'EVM';
   indexDbData.putData(Object.assign({ id: 'currentWalltAddress' }, content));
-  let info: any = {
-    id: 'rpc_url',
-    unit: 'Meer',
-    netName: 'Qitmeer Testnet',
-    CHAIN_ID: 8131,
-    keyStore: walltInfo.value.keyStore,
-    netWorkType: 'EVM',
-    NoIndex: 1, //当前第几个用户
-    url: 'https://testnet-qng.rpc.qitmeer.io',
-    walltInfo: []
-  };
+  let info: any = rpcConfig['evmTest'];
+  info['NoIndex'] = 1;
   info['walltInfo'].push(content);
   indexDbData.putData(info);
-  // }).catch(err => {})
-  evmNetwork(); //新增并存储evm网络
-  utxoNetwork(); //新增并存储evm网络
+  evmNetwork(); //新增并存储网络
+  utxoNetwork(); //新增并存储网络
 };
 const evmNetwork = () => {
   indexDbData.getData('EVM').then((res: any) => {
@@ -108,13 +101,11 @@ const evmNetwork = () => {
     });
     Object.keys(res.content).forEach((item) => {
       res.content[item]['NoIndex'] = 1;
-      res.content[item].walltInfo.push({
-        address: walltInfo.value.address, //当前用户地址
-        keyStore: walltInfo.value.keyStore,
-        userName: 'Wallt 01',
-        userUrl: '',
-        NoIndex: 1 //当前第几个用户
-      });
+      let walltAccount: any = defaultAccount;
+      walltAccount['address'] = walltInfo.value.address;
+      walltAccount['keyStore'] = walltInfo.value.keyStore;
+      walltAccount['netWork'] = 'EVM';
+      res.content[item].walltInfo.push(walltAccount);
     });
     res['NoIndex'] = 1;
     indexDbData.putData(res);
@@ -125,14 +116,7 @@ const utxoNetwork = () => {
     if (!res || !res.content) {
       // 新增默认utxo网络
       res.content = {
-        8131: {
-          id: 'rpc_url',
-          unit: 'MEER',
-          CHAIN_ID: 8131,
-          NoIndex: 1, //当前第几个用户
-          url: 'https://testnet-qng.rpc.qitmeer.io',
-          walltInfo: []
-        }
+        8131: rpcConfig['uxtoTest']
       };
     }
     // 提取数据库存储的网络 chainid
@@ -146,14 +130,12 @@ const utxoNetwork = () => {
     });
     Object.keys(res.content).forEach((item) => {
       res.content[item]['NoIndex'] = 1;
-      res.content[item].walltInfo.push({
-        utxoAddressTest: walltInfo.value.utxoAddressTest, //当前用户测试地址
-        address: walltInfo.value.utxoAddressMain, //当前用户地址
-        keyStore: walltInfo.value.keyStore,
-        userName: 'Wallt 01',
-        userUrl: '',
-        NoIndex: 1 //当前第几个用户
-      });
+      // 给新增的utxo账号赋值
+      let utxoAccount: any = defaultUTXOAccount;
+      utxoAccount['utxoAddressTest'] = walltInfo.value.utxoAddressTest;
+      utxoAccount['address'] = walltInfo.value.utxoAddressMain;
+      utxoAccount['keyStore'] = walltInfo.value.keyStore;
+      res.content[item].walltInfo.push(utxoAccount);
     });
     indexDbData.putData(res);
   });

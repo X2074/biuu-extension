@@ -15,7 +15,7 @@ const rpcUrls = {
  * 封装了调用utxo rpc的方法，utxo层的rpc方法可以通过以下链接查看：https://qitmeer.github.io/docs/en/json-rpc-api/
  * 通过传入的network字段调用对应的rpc
  */
-const rpc = function(network, method, params) {
+const rpc = function (network, method, params) {
     if (!rpcUrls[network]) {
         throw new Error(`Unsupported network: ${network}`);
     }
@@ -49,9 +49,9 @@ const getUtxos = async function (network = 'testnet', address) {
     }
 }
 // 节点不会直接存储所有地址的utxo数据，想要获取对应地址的余额情况，需要调用addBalance方法让节点关注指定的钱包地址
-const addBalance = async function (network = 'testnet', address){
+const addBalance = async function (network = 'testnet', address) {
     try {
-        const response = await rpc(network, 'addBalance',[address])
+        const response = await rpc(network, 'addBalance', [address])
         return response.data
     } catch (error) {
         console.error('Error:', error);
@@ -60,7 +60,7 @@ const addBalance = async function (network = 'testnet', address){
 // 获取指定的utxo详细信息
 const getUtxo = async function (network = 'testnet', txid, idx) {
     try {
-        const response = await rpc(network, 'getUtxo',[txid,idx])
+        const response = await rpc(network, 'getUtxo', [txid, idx])
         const result = response.data.result
         return result
     } catch (error) {
@@ -68,9 +68,9 @@ const getUtxo = async function (network = 'testnet', txid, idx) {
     }
 }
 // 查看节点信息
-const nodeinfo = async function ( network = 'testnet'){
+const nodeinfo = async function (network = 'testnet') {
     try {
-        const response = await rpc(network, 'getNodeInfo',[])
+        const response = await rpc(network, 'getNodeInfo', [])
         const result = response.data
         return result
     } catch (error) {
@@ -78,9 +78,9 @@ const nodeinfo = async function ( network = 'testnet'){
     }
 }
 // 发送utxo交易给节点
-const sendTraction = async function (network = 'testnet', newTransaction){
+const sendTraction = async function (network = 'testnet', newTransaction) {
     try {
-        const response = await rpc(network, 'sendRawTransaction',[newTransaction,false])
+        const response = await rpc(network, 'sendRawTransaction', [newTransaction, false])
         const result = response.data
         return result
     } catch (error) {
@@ -88,9 +88,9 @@ const sendTraction = async function (network = 'testnet', newTransaction){
     }
 }
 // 查看交易信息
-const getTransaction = async function (network = 'testnet', txid){
+const getTransaction = async function (network = 'testnet', txid) {
     try {
-        const response = await rpc(network, 'getRawTransaction',[txid, true])
+        const response = await rpc(network, 'getRawTransaction', [txid, true])
         const result = response.data.result
         return result
     } catch (error) {

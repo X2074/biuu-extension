@@ -48,9 +48,13 @@ export async function getUTXOBalance(url, address) {
     try {
         const response = await rpc(url, 'getBalance', [address, 0]);
         console.log(response, 'utxo的余额');
-        let x = new BigNumber(response.result)
-        let y = new BigNumber(100000000)
-        return x.dividedBy(y);
+        if (response.result) {
+            let x = new BigNumber(response.result)
+            let y = new BigNumber(100000000)
+            return x.dividedBy(y);
+        } else {
+            return 0
+        }
     } catch (error) {
         console.error('Error:', error);
     }
@@ -66,9 +70,9 @@ export async function getUtxos(url, address) {
     }
 }
 // 节点不会直接存储所有地址的utxo数据，想要获取对应地址的余额情况，需要调用addBalance方法让节点关注指定的钱包地址
-const addBalance = async function (network = 'testnet', address) {
+export async function addBalance(url, address) {
     try {
-        const response = await rpc(network, 'addBalance', [address])
+        const response = await rpc(url, 'addBalance', [address])
         console.log(response.data)
         return response.data
     } catch (error) {

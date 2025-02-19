@@ -11,8 +11,8 @@ import bus from '@/utils/bus.js';
 import md5 from 'js-md5';
 let newPsd = ref(''); //钱包密码
 let confirmPsd = ref(''); //钱包密码
-let newPsdBol = ref(false);
-let confirmPsdBol = ref(false);
+let newPsdBol = ref(false); //钱包错误校验
+let confirmPsdBol = ref(false); //二次确认校验
 let readeTip = ref(false); //是否阅读
 
 // 生成keystory文件
@@ -33,7 +33,9 @@ const creatKeyStory = () => {
     return;
   }
   console.log(readeTip.value);
-  if (!readeTip.value) return;
+  if (!readeTip.value) {
+    return;
+  }
   console.log(md5('secret'), md5(newPsd.value));
 
   // 存储密码

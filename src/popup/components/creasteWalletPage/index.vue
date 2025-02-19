@@ -5,11 +5,14 @@
     -->
   <div class="create-wallt">
     <div class="header flex">
-      <img class="back-img" @click="step = step - 1" src="@/assets/images/icons/back.png" alt="" />
+      <img class="back-img" v-if="step" @click="step = step - 1" src="@/assets/images/icons/back.png" alt="" />
       <img class="close-img" @click="step = 0" src="@/assets/images/icons/close.png" alt="" />
     </div>
+    <!-- 设置密码 -->
     <setPsd v-if="step == 1" />
+    <!-- 创建助记词 -->
     <createMnemonic v-show="step == 2" />
+    <!-- 再次确认助记词 -->
     <verifyMnemonic v-show="step == 3" />
   </div>
 </template>

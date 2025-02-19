@@ -4,7 +4,7 @@
     <div class="evm-utxo">
         <p>请选择要导入的网络</p>
         <div class="flex">
-            <p :class="{'check-module':moduleType == 'evm'}" @click="moduleType = 'evm'">EVM</p>
+            <p :class="{'check-module':moduleType.toLowerCase() == 'evm'}" @click="moduleType = 'evm'">EVM</p>
             <p :class="{'check-module':moduleType == 'utxo'}" @click="moduleType = 'utxo'">UTXO</p>
         </div>
     </div>

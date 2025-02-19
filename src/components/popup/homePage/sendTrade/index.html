@@ -42,7 +42,7 @@
         <div class="prompt flex mt-15">
             <img class="mr-10 mt-5" src="@/assets/images/icons/warn-red.png" alt="">
             <p>您选择的网络是 {{rpcData?.netName}} （{{rpcData?.netWorkType.toUpperCase()}}）网络，请确保您的转账地址支持 {{rpcData?.netName}}
-                （{{rpcData?.netWorkType.toUpperCase()}}） 网络，如果对方平台不支持找回您的币将会丢失。</p>
+                （{{rpcData?.netWorkType.toUpperCase()}}） 网络，如果对方平台不支持找回，您的币将会丢失。</p>
         </div>
 
         <button @click="toTransfer">转账</button>

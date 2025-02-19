@@ -26,7 +26,7 @@ let userNameStatus = ref(false); //昵称展示还是编辑
 let qrCodeDiv = ref(null);
 let accountOperate = ref('show');
 const props = defineProps(['address']);
-let rpcData = ref(null);
+let rpcData: any = ref(null);
 onMounted(() => {
   initializeInfo();
 
@@ -69,7 +69,7 @@ const initializeInfo = () => {
         console.log(data, 'data');
         nowAccount.value = data[0];
         userName.value = nowAccount.value.userName ? nowAccount.value.userName : nowAccount.value.NoIndex;
-        getBlance(res.url, nowAccount.value);
+        getBlance(res.url, Object.assign({ netWorkType: res.netWorkType }, nowAccount.value));
       }
     })
     .catch(() => {});
@@ -122,7 +122,7 @@ const confirmPsd = async () => {
   }
   console.log(encryption, 'encryption');
 
-  if (rpcData.value && rpcData.value['netWorkType'] == 'evm') {
+  if (rpcData.value && rpcData.value['netWorkType'].toLowerCase() == 'evm') {
     evmKey(encryption).then((keys: any) => {
       console.log(keys, 'keys');
       loading.value = false;

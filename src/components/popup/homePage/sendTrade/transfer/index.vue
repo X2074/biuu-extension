@@ -36,7 +36,7 @@ onMounted(async () => {
   currentWallt.value = await indexDbData.getData('currentWalltAddress');
   console.log(prop, 'prop');
   transferContent.value = prop.transferContent;
-  if (rpcData.value['netWorkType'] == 'evm') {
+  if (rpcData.value['netWorkType'].toLowerCase() == 'evm') {
     getWei(transferContent.value['gasPrice']);
   } else {
     let num: any = Math.ceil(transferContent.value['value'] / 1024);
@@ -70,7 +70,7 @@ const nextTransfer = async () => {
   }
   // 发送消息给 background 页面请求数据
   let data: any;
-  if (rpcData.value['netWorkType'] == 'evm') {
+  if (rpcData.value['netWorkType'].toLowerCase() == 'evm') {
     data = Object.assign(
       {
         uuid: uuidv4(),

@@ -45,7 +45,7 @@ const toBack = () => {
 
 const checkAddress = (data: any) => {
   if (prop.importPage && prop.importPage == 'sendTrade') {
-    if (rpcUrlData.value['netWorkType'] == 'evm') {
+    if (rpcUrlData.value['netWorkType'].toLowerCase() == 'evm') {
       if (data.address.slice(0, 2) != '0x') {
         bus.emit('promptModalErr', '请选择EVM地址');
         return;
