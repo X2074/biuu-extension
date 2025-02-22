@@ -32,7 +32,7 @@
     ],
     "web_accessible_resources": [
         {
-            "resources": ["popup/*", "content/content.js", "contentPage/*", "assets/*", "js/*"],
+            "resources": ["popup/*", "content/content.js", "contentPage/*", "assets/*", "js/*", "injected/*"],
             "matches": ["<all_urls>"]
         }
     ]

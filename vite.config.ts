@@ -15,7 +15,8 @@ export default defineConfig({
       targets: [
         { src: 'manifest.json', dest: 'dist' },
         { src: 'src/content/content.js', dest: 'dist/content' },
-        { src: "src/icons/**", dest: 'dist/icons' }
+        { src: "src/icons/**", dest: 'dist/icons' },
+        { src: "src/injected/**", dest: 'dist/injected' }
       ]
     }),
     // 使用Node标准库浏览器化插件

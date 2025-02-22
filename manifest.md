@@ -43,7 +43,8 @@
     // 可访问的网页资源配置
     "web_accessible_resources": [
         {
-            "resources": ["popup/*", "content/content.js", "contentPage/*", "assets/*", "js/*"],
+            "resources": ["popup/*", "content/content.js", "contentPage/*", //允许访问我们的注入脚本
+            "assets/*", "js/*"],
             "matches": ["<all_urls>"]
         }
     ]
