@@ -10,6 +10,8 @@ declare module "*/utils/bus.js";
 declare module "*/utils/index.js";
 declare module "*/utils/createUser.js";
 declare module "*/utils/editContent.js";
+declare module "*/components/loading/directive.js";
+declare module "*/router/index.js";
 
 // background自定义组件
 declare module "*/resident.js";
@@ -23,3 +25,4 @@ declare module "uuid";
 declare module "qrcodejs2-fix";
 declare module "tiny-secp256k1";
 declare module "js-cookie";
+declare module "vue3-jazzicon/src/components";

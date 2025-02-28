@@ -262,5 +262,8 @@
     },
     "manifest.md": {
         "description": "manifest.json的注释"
+    },
+    "src/popup/app.demo.vue": {
+        "description": "备份"
     }
 }

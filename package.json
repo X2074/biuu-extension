@@ -35,6 +35,7 @@
     "uuid": "^9.0.1",
     "vite-plugin-node-stdlib-browser": "^0.2.1",
     "vue": "^3.3.11",
+    "vue-router": "^4.5.0",
     "vue3-jazzicon": "^0.1.4",
     "web3": "^1.10.2"
   },

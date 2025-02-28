@@ -1,32 +1,27 @@
 <template>
   <div class="meer-wallt" v-loading:[loadingText]="loading">
     <!-- 首次进入 -->
-    <!-- <create v-if="pageTypes == 'create'" /> -->
+    <create v-if="pageTypes == 'create'" />
     <!-- 输入密码页面 -->
-    <!-- <secret v-if="pageTypes == 'secret'" /> -->
+    <secret v-if="pageTypes == 'secret'" />
     <!-- 创建钱包 -->
-    <!-- <creasteWalletPage v-if="pageTypes == 'creasteWallet'" /> -->
+    <creasteWalletPage v-if="pageTypes == 'creasteWallet'" />
     <!-- 导入钱包 -->
-    <!-- <importWallet v-if="pageTypes == 'importWallet'" /> -->
+    <importWallet v-if="pageTypes == 'importWallet'" />
     <!-- 输入密码 -->
-    <!-- <loginwallt v-if="pageTypes == 'login'" /> -->
+    <loginwallt v-if="pageTypes == 'login'" />
     <!-- 主页 -->
-    <!-- <homePage :walltContent="walltContent" v-if="pageTypes == 'homePage'" /> -->
+    <homePage :walltContent="walltContent" v-if="pageTypes == 'homePage'" />
     <!-- 转账页面 -->
-    <!-- <transfer v-if="pageTypes == 'sendTo'" :walltContent="walltContent" /> -->
-    <router-view></router-view>
+    <transfer v-if="pageTypes == 'sendTo'" :walltContent="walltContent" />
   </div>
 
   <!-- 全局自动关闭提示 -->
   <prompt></prompt>
 </template>
-<script lang="ts" >
-export default {
-  name: 'App'
-};
-</script>
+
 <script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import md5 from 'js-md5';
 // 因为popup的特殊原因，此处只有一个入口，页面切换靠各种类型的判断
 // import homePage from '@/components/homePage.vue'
@@ -43,14 +38,12 @@ import prompt from '@/components/popup/components/prompt/index.vue';
 import { getBlance } from '@/utils/index.js';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus.js';
-import { useRouter } from 'vue-router';
 let loading = ref(true);
 let loadingText = ref('加载中...');
 const userAddress = ref(null);
 const walltContent: any = ref(null); //账户相关信息
 let currentWallt = ref(null); //当前账户
 const pageTypes = ref(''); //判断当前应该展示那个页面
-let router = useRouter();
 onMounted(async () => {
   // 获取设置的密码
   let secert = await indexDbData.getData(md5('secret'));
@@ -68,14 +61,6 @@ onMounted(async () => {
       getInfo();
     }
   });
-});
-// 监听数据变化，跳转相应页面
-watch(pageTypes, (newV) => {
-  if (newV == 'sendTo') {
-    router.push('/transfer');
-  } else {
-    router.push('/' + newV);
-  }
 });
 
 bus.on('nextPage', (res: any) => {
@@ -135,6 +120,20 @@ const getInfo = () => {
       loading.value = false;
     });
 };
+// const getHexHash = (type='homePage') => {
+// 	indexDbData.getData('txHash').then(res => {
+// 		if (res) {
+// 			// 转账记录
+// 			walltContent.value.txHash = res.txHashList;
+// 		}
+// 		loading.value = false;
+// 		// 测试
+// 		setTimeout(() => {
+// 			loading.value = false;
+// 			pageTypes.value = type;
+// 		}, 500)
+// 	}).catch(err => { })
+// }
 </script>
 
 <style lang="less">
