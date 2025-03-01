@@ -8,7 +8,7 @@
         <p>发送 NFT</p>
     </div>
     <div v-if="detailContentStatus == 'detail'" class="detail-content pt-10 pb-10 pl-30 pr-30">
-        <div class="img-header flex">
+        <div class="img-header flex" v-if="nftContent && nftContent.image">
             <img class="logo" src="@/assets/images/logo/logo.png" alt="">
             <img :src="nftContent.image" alt="">
         </div>

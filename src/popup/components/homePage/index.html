@@ -4,7 +4,7 @@
             <p>{{walltEnvironment?.netName}}</p>
             <img class="ml-5" src="@/assets/images/icons/arrowhead-g.svg" alt="">
         </div>
-        <p class="flex" @click="walltAccount = 'selectAccount';pageType=''"> 钱包管理
+        <p class="flex" @click="toRouterPage('selectAccount')"> 钱包管理
             <img class="ml-5" src="@/assets/images/icons/arrowhead.svg" alt="">
         </p>
         <div v-if="!walltAccount || walltAccount == 'nfts'" class="more-components">
@@ -45,19 +45,20 @@
     </div>
     <div class="user-info pt-20">
         <div class="user-currency mt-10 flex">
-            <p class="ml-10" v-if="props.walltContent && props.walltContent.blance">{{props.walltContent.blance || 0}}
-                {{props.walltContent.unit}}
+            <p class="ml-10" v-if="walltContent && walltContent.blance">{{walltContent.blance
+                || 0}}
+                {{walltContent.unit}}
             </p>
-            <p class="ml-10" v-else>0 {{props.walltContent.unit}}
+            <p class="ml-10" v-else>0
             </p>
         </div>
-        <div class="info-name" v-if="props.walltContent">
+        <div class="info-name" v-if="walltContent">
             <div class="user-address flex">
                 <p class="mr-5">
-                    {{props.walltContent.address.substr(0,6)}}...{{props.walltContent.address.substr(-4)}}</p>
+                    {{walltContent.address.substr(0,6)}}...{{walltContent.address.substr(-4)}}</p>
                 <img @click="onCopy" src="@/assets/images/icons/copy.png" alt="">
             </div>
-            <!-- <p>{{props.walltContent&&props.walltContent.userName?props.walltContent.userName:'Account 1'}}</p> -->
+            <!-- <p>{{walltContent&&walltContent.userName?walltContent.userName:'Account 1'}}</p> -->
 
         </div>
         <div class="uesr-btn mt-25 flex">
@@ -87,20 +88,20 @@
     </div>
 </div>
 <!-- 选择账户 -->
-<selectAccount v-if="walltAccount == 'selectAccount'" :pageType="pageType" />
+<!-- <selectAccount v-if="walltAccount == 'selectAccount'" :pageType="pageType" /> -->
 <!-- 设置 -->
-<setting v-if="walltAccount == 'setting'" />
+<!-- <setting v-if="walltAccount == 'setting'" /> -->
 <!-- 网络切换 -->
-<networkSwitching v-if="walltAccount == 'networkSwitching'" />
+<!-- <networkSwitching v-if="walltAccount == 'networkSwitching'" /> -->
 <!-- 新增网络 -->
-<addNetwork v-if="walltAccount == 'addNetwork'" />
+<!-- <addNetwork v-if="walltAccount == 'addNetwork'" /> -->
 <!-- 导入nft -->
-<importNfts v-if="walltAccount == 'importNfts'" />
+<!-- <importNfts v-if="walltAccount == 'importNfts'" /> -->
 <!-- nft详情 -->
 <nftDetail v-if="walltAccount == 'nftDetail'" :details="nftDetails" />
 <!-- 交易记录 -->
-<transactionHistory v-if="walltAccount == 'transactionHistory'" />
+<!-- <transactionHistory v-if="walltAccount == 'transactionHistory'" /> -->
 <!-- 转账 -->
-<sendTrade v-if="walltAccount == 'sendTrade'" />
+<!-- <sendTrade v-if="walltAccount == 'sendTrade'" /> -->
 <!-- 划转 -->
-<sendTrade v-if="walltAccount == 'transfer'" type="transfer" />
+<!-- <sendTrade v-if="walltAccount == 'transfer'" type="transfer" /> -->

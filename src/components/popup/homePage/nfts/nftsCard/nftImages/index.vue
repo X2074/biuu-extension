@@ -11,6 +11,9 @@ export default {
 import { ref, onMounted, toRaw } from 'vue';
 import { getNftBase64 } from '@/utils/nft.js';
 import bus from '@/utils/bus.js';
+import store from '@/store';
+import { useRouter } from 'vue-router';
+let router = useRouter();
 let nftsList: any = ref([]);
 const props = defineProps(['nftContent']);
 onMounted(async () => {
@@ -30,10 +33,12 @@ const toDetail = (data: any, list: any) => {
     detail: toRaw(data),
     list: toRaw(list)
   };
-  console.log(info, '详情页数据');
-  bus.emit('homePageBack', {
-    page: 'nftDetail',
-    data: info
-  });
+  // console.log(info, '详情页数据');
+  // bus.emit('homePageBack', {
+  //   page: 'nftDetail',
+  //   data: info
+  // });
+  store.commit('setNftDetail', info);
+  router.push('/nftDetail');
 };
 </script>

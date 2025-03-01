@@ -17,6 +17,9 @@ import { getBlance } from '@/utils/index.js';
 import { addBalance } from '@/utils/UTXO/meerRpc.js';
 import md5 from 'js-md5';
 import { rpcConfig, defaultAccount, defaultUTXOAccount } from '@/config/configuration';
+import { useRouter, useRoute } from 'vue-router';
+let router = useRouter();
+const route = useRoute();
 let accountList = ref([]);
 let nowAccount: any = ref(null);
 let accountContent: any = ref(null);
@@ -28,14 +31,16 @@ let accountType = ref(''); //当前展示钱包那一套流程
 let loading = ref(false);
 let loadingText = ref('加载中...');
 
-let prop = defineProps(['pageType']);
+// let prop = defineProps(['pageType']);
+let pageType: any = ref('');
 onMounted(async () => {
+  pageType.value = route.params.pageType || '';
   loading.value = true;
   await initializeInfo();
-  if (prop && prop.pageType) {
+  if (pageType.value) {
     indexDbData.getData('currentWalltAddress').then((res) => {
       checkAddressText.value = res.address;
-      accountType.value = prop.pageType;
+      accountType.value = pageType.value;
     });
   } else {
     accountType.value = 'list';
@@ -110,7 +115,7 @@ const evmNetwork = (data: any) => {
   content['address'] = data.address;
   content['keyStore'] = data.keyStore;
   content['userName'] = 'Wallt' + (index > 10 ? index + 1 : '0' + index);
-  content['netWork'] = 'EVM';
+  content['netWorkType'] = 'EVM';
   content['NoIndex'] = index;
   indexDbData.getData('EVM').then((res: any) => {
     res['NoIndex'] = index;
@@ -133,6 +138,7 @@ const utxoNetwork = async (data: any) => {
   utxoAccount['address'] = data.utxoAddressMain;
   utxoAccount['keyStore'] = data.keyStore;
   utxoAccount['NoIndex'] = index;
+  utxoAccount['netWorkType'] = 'UTXO';
   utxoAccount['userName'] = 'Wallt' + (index > 10 ? '' : '0') + index;
   indexDbData.getData('UTXO').then((res: any) => {
     res['NoIndex'] = index;
@@ -146,7 +152,11 @@ const utxoNetwork = async (data: any) => {
 };
 // 添加数据到当前选中和rec网络
 const appendRecCurrent = (content: any) => {
+  console.log(content, 'content');
+
   indexDbData.getData('rpc_url').then((res: any) => {
+    console.log(res, 'rpc_url', res.netWorkType.toLowerCase());
+
     // 只有新增的网络和rec网络一致才添加
     if (res.netWorkType.toLowerCase() == content.netWorkType.toLowerCase()) {
       res['NoIndex'] = res['NoIndex'] + 1;
@@ -160,19 +170,6 @@ const appendRecCurrent = (content: any) => {
         indexDbData.putData(contentRecCurrent);
       });
     }
-    // if (res.netWorkType.toLowerCase() == 'evm') {
-    //   res['NoIndex'] = res['NoIndex'] + 1;
-    //   res.walltInfo.push(content);
-    //   // 保存key
-    //   indexDbData.putData(res);
-
-    //   indexDbData.getData('currentWalltAddress').then((res: any) => {
-    //     // 存为当前选中的网络中数据
-    //     let contentRecCurrent = content;
-    //     contentRecCurrent['id'] = 'currentWalltAddress';
-    //     indexDbData.putData(contentRecCurrent);
-    //   });
-    // }
   });
 };
 
@@ -202,12 +199,14 @@ const checkAccount = () => {
   indexDbData.putData(currentWallt);
 
   setTimeout(() => {
-    bus.emit('nextPage', 'homePage');
+    // bus.emit('nextPage', 'homePage');
+    router.push('/homePage');
   }, 300);
 };
 // 上一页
 const backPage = () => {
-  bus.emit('nextPage', '');
+  // bus.emit('nextPage', '');
+  router.push('/homePage');
 };
 
 bus.on('selectAccountPage', (res: any) => {

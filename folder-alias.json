@@ -265,5 +265,8 @@
     },
     "src/popup/app.demo.vue": {
         "description": "备份"
+    },
+    "src/components/popup/homePage": {
+        "description": "首页为入口的页面"
     }
 }

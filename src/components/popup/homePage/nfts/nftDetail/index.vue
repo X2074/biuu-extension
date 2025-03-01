@@ -17,6 +17,7 @@ import { evmKey, isAddress } from '@/utils/EVM/index.js';
 import { computeNftGas, NFTTransfer } from '@/utils/nft.js';
 import { NFTUpdataIndexDB, hashSaveIndexDB, usedToHaveNft } from '@/utils/operateIndexDB.js';
 import md5 from 'js-md5';
+import store from '@/store';
 let loading = ref(false);
 let loadingText = ref('发送中...');
 let detailContentStatus = ref('detail');
@@ -33,9 +34,13 @@ let transferAddress = ref('0x533f6FEcE8aF41da6c41de7aF13D289bA92f9fE9');
 let nftContent: any = ref(null); //nft详情数据
 let nftList: any = ref(null); //nft列表
 let checkNft = ref(null);
-nftContent.value = props['details']['detail'];
-nftList.value = props['details']['list'];
+// nftContent.value = props['details']['detail'];
+// nftList.value = props['details']['list'];
 onMounted(async () => {
+  let nftDetail: any = store.state.nftDetail;
+  nftContent.value = nftDetail['detail'];
+  nftList.value = nftDetail['list'];
+
   indexDbData.getData('rpc_url').then((res: any) => {
     rpcData.value = res;
   });

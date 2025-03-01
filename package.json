@@ -37,6 +37,7 @@
     "vue": "^3.3.11",
     "vue-router": "^4.5.0",
     "vue3-jazzicon": "^0.1.4",
+    "vuex": "^4.1.0",
     "web3": "^1.10.2"
   },
   "devDependencies": {

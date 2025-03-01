@@ -12,7 +12,7 @@ const routes = [
   {
     path: '/',
     name: '',
-    redirect: '/homePage',
+    redirect: '/create',
   },
   {
     path: '/homePage',
@@ -48,7 +48,61 @@ const routes = [
     path: '/transfer',
     name: 'transfer',
     component: transfer
-  }
+  },
+  // 钱包切换
+  {
+    path: '/selectAccount/:pageType?',
+    name: 'selectAccount',
+    component: () => import("@/components/popup/homePage/selectAccount/index/index.vue"),
+  },
+  // 设置
+  {
+    path: '/setting',
+    name: 'setting',
+    component: () => import("@/components/popup/homePage/setting/index.vue"),
+  },
+  // 网络切换
+  {
+    path: '/networkSwitching',
+    name: 'networkSwitching',
+    component: () => import("@/components/popup/homePage/networkSwitching/index.vue"),
+  },
+  // 新增网络
+  {
+    path: '/addNetwork',
+    name: 'addNetwork',
+    component: () => import("@/components/popup/homePage/addNetwork/index.vue"),
+  },
+  // 导入nft
+  {
+    path: '/importNfts',
+    name: 'importNfts',
+    component: () => import("@/components/popup/homePage/nfts/importNfts/index.vue"),
+  },
+  // nft详情
+  {
+    path: '/nftDetail',
+    name: 'nftDetail',
+    component: () => import("@/components/popup/homePage/nfts/nftDetail/index.vue"),
+  },
+  // 交易记录
+  {
+    path: '/transactionHistory',
+    name: 'transactionHistory',
+    component: () => import("@/components/popup/homePage/transactionHistory/index.vue"),
+  },
+  // 转账
+  {
+    path: '/sendTrade',
+    name: 'sendTrade',
+    component: () => import("@/components/popup/homePage/sendTrade/index.vue"),
+  },
+  // 划转
+  {
+    path: '/transfer/:type?',
+    name: 'transfer',
+    component: () => import("@/components/popup/homePage/sendTrade/index.vue"),
+  },
 
 ]
 
