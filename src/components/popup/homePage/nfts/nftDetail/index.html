@@ -13,7 +13,7 @@
             <img :src="nftContent.image" alt="">
         </div>
         <div class="name-id mt-25 flex">
-            <p>{{nftContent.name}}</p>
+            <p>{{nftContent.name || ''}}</p>
             <p>#{{nftContent.tokenId}}</p>
         </div>
         <div class="description-content mt-15">

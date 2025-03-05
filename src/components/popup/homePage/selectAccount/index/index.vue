@@ -65,7 +65,7 @@ const initializeInfo = async () => {
   });
   accountList.value = data;
   accountList.value.forEach((item: any) => {
-    console.log('accountContent', Object.assign({ netWorkType: accountContent.value.netWorkType }, item));
+    console.log('accountContent', item.status);
     getBlance(accountContent.value.url, Object.assign({ netWorkType: accountContent.value.netWorkType }, item)).then(
       (res: any) => {
         item.blance = res;
@@ -77,6 +77,43 @@ const initializeInfo = async () => {
 // 创建账号
 const createAccount = async () => {
   loading.value = true;
+  // 筛选是否有删除标记的账号
+  let rpc_url = await indexDbData.getData('rpc_url');
+  let netWorkType = rpc_url['netWorkType'];
+  let data = rpc_url.walltInfo.filter((item: any) => {
+    return item.status == 'delete';
+  });
+  console.log(data, 'datadatadatadata');
+
+  if (!data && !data.length) {
+    createWalletAccount();
+  } else {
+    rpc_url.walltInfo.forEach((item: any) => {
+      if (item.address == data[0]['address']) {
+        item.status = '';
+      }
+    });
+    console.log(rpc_url, 'rpc_urlrpc_url');
+    indexDbData.putData(rpc_url);
+    // 其他网络的同名账户状态也要改变
+    indexDbData.getData(netWorkType.toUpperCase()).then((res: any) => {
+      Object.keys(res.content).forEach((item) => {
+        res.content[item]['walltInfo'].forEach((info: any) => {
+          if (info.address === data[0]['address']) {
+            info.status = '';
+          }
+        });
+      });
+      indexDbData.putData(res);
+      loading.value = false;
+    });
+    bus.emit('promptModalSuccess', '账户创建成功');
+    router.push('/homePage');
+  }
+};
+
+// 新增账号
+const createWalletAccount = async () => {
   let mnemonic = await createMnemonic();
   let account: any = await createWallet(mnemonic);
   console.log(account, 'account');
@@ -106,7 +143,6 @@ const createAccount = async () => {
       loading.value = false;
     }, 500);
   } catch (error) {}
-  // });
 };
 
 const evmNetwork = (data: any) => {
@@ -205,8 +241,7 @@ const checkAccount = () => {
 };
 // 上一页
 const backPage = () => {
-  // bus.emit('nextPage', '');
-  router.push('/homePage');
+  router.go(-1);
 };
 
 bus.on('selectAccountPage', (res: any) => {

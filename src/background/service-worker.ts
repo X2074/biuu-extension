@@ -1,12 +1,12 @@
 import { startHeartbeat } from './resident.js';
-// import { roundRobin } from './indexDB.js';""
+import { roundRobin } from './indexDB.js'; ""
 import web3Operate from './web3Operate.js';
 import { chromeNotifications } from './utils';
 import './utils';
 import './test';
 
 // 开始轮循hash状态
-// roundRobin()
+roundRobin()
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message, '测试数据00002');
     setTimeout(() => {
@@ -14,7 +14,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }, 3000)
     // 获取密码，判断是否显示输入密码页面
     if (message.action === 'getSecret') {
-        chrome.storage.local.get('secret', function (data) {
+        chrome.storage.local.get('secret', function (data: any) {
             console.log(data, 'datadatadata');
             sendResponse(data);
         });
@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'transferEVM') {
         sendResponse();
         startHeartbeat();//js常驻后台
-        console.log(web3Operate, 'web3Operate');
+        console.log(message, 'web3Operate');
         web3Operate.evmTransfer(message)
     }
     if (message.action === 'transferUTXO') {

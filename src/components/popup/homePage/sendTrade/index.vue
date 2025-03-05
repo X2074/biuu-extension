@@ -117,14 +117,14 @@ const toTransfer = async () => {
   // 获取当前的助记词
   let data = await indexDbData.getData('keyStore');
   let key = toRaw(data.secret[currentWallt.value['keyStore']]);
-  console.log(data, currentWallt.value['keyStore'], '转账的key');
+  console.log(data, currentWallt.value, '转账的key');
 
   // 如果账户是私钥导入的，就直接赋值私钥
   let encryption = await Decrypt(key, passKey.value);
   console.log(encryption, 'encryption');
 
   if (currentWallt.value['keyStoreType'] && currentWallt.value['keyStoreType'] == 'privateKey') {
-    privateKey.value = encryption;
+    privateKey.value = { privateKey: encryption };
     if (props['type'] && props['type'] == 'transfer') {
       bus.emit('promptModalErr', '该账户不可划转');
       return;

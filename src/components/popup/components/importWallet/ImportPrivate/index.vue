@@ -68,6 +68,7 @@ const isValidPrivateKey = async (keyName: any) => {
     if (account && account.address) {
       account['keyStore'] = keyName;
       account['netWorkType'] = 'evm';
+      account['keyStoreType'] = 'privateKey';
       evmNetwork(account);
       return true;
     } else {
@@ -112,6 +113,7 @@ const generateUTXOWallet = async (keyName: any) => {
   if (!utxoAddressTest || !utxoAddressMain) return;
   let account = {
     netWorkType: 'utxo',
+    keyStoreType: 'privateKey',
     privateKey: privatePhrase.value,
     utxoAddressTest: utxoAddressTest, //UTXO测试网地址
     utxoAddressMain: utxoAddressMain, //UTXO正式网地址
@@ -165,6 +167,8 @@ const evmNetwork = (walltInfo: any) => {
       }
       let account: any = defaultAccount;
       account['address'] = walltInfo.address;
+      // 标记为私钥导入
+      account['keyStoreType'] = 'privateKey';
       account['userName'] =
         'Wallt' +
         (!data['NoIndex'] ? '01' : data['NoIndex'] + 1 > 10 ? data['NoIndex'] + 1 : '0' + (data['NoIndex'] + 1));

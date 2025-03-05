@@ -73,53 +73,80 @@ const confirmRemove = async () => {
     bus.emit('promptModalErr', '您输入的密码有误');
     return;
   }
-  // 删除加密数据
-  let keyStore = await indexDbData.getData('keyStore');
-  let objName = nowAccount.value.address;
-  const { [objName]: deletedItem, ...rest } = keyStore.secret;
-  // 保存key
-  indexDbData.putData({
-    id: 'keyStore',
-    secret: rest
-  });
-  let firstWallt: any = {};
+
   // 删除选中的网络中数据
   let rpc_url = await indexDbData.getData('rpc_url');
-  let data = rpc_url.walltInfo.filter((item: any) => {
-    return item.address != nowAccount.value.address;
+  let data = rpc_url.walltInfo.map((item: any) => {
+    if (item.address == nowAccount.value.address) {
+      item.status = 'delete';
+    }
+    return item;
   });
   rpc_url.walltInfo = data;
+  let firstWallt: any = {};
   firstWallt = data[0];
   firstWallt['keyStore'] = firstWallt['address'];
   // 保存key
   indexDbData.putData(rpc_url);
 
-  // 如果当前的就是选中的钱包
-  console.log(currentWallt.value, 'currentWallt.value', nowAccount.value);
-
-  if (nowAccount.value.address == currentWallt.value.address) {
-    console.log(firstWallt, 'firstWallt');
-    firstWallt['id'] = 'currentWalltAddress';
-    console.log(firstWallt, 'firstWallt002');
-    indexDbData.putData(firstWallt);
-  }
   await evmNetwork(); //删除存储evm网络
   await utxoNetwork(); //删除并存储evm网络
   bus.emit('selectAccountPage', 'list');
+  return;
+  // 下面为老旧删除功能，为完全删除数据
+  // 删除加密数据
+  // let keyStore = await indexDbData.getData('keyStore');
+  // let objName = nowAccount.value.address;
+  // const { [objName]: deletedItem, ...rest } = keyStore.secret;
+  // // 保存key
+  // indexDbData.putData({
+  //   id: 'keyStore',
+  //   secret: rest
+  // });
+  // let firstWallt: any = {};
+  // // 删除选中的网络中数据
+  // let rpc_url = await indexDbData.getData('rpc_url');
+  // let data = rpc_url.walltInfo.filter((item: any) => {
+  //   return item.address != nowAccount.value.address;
+  // });
+  // rpc_url.walltInfo = data;
+  // firstWallt = data[0];
+  // firstWallt['keyStore'] = firstWallt['address'];
+  // // 保存key
+  // indexDbData.putData(rpc_url);
+
+  // // 如果当前的就是选中的钱包
+  // console.log(currentWallt.value, 'currentWallt.value', nowAccount.value);
+
+  // if (nowAccount.value.address == currentWallt.value.address) {
+  //   console.log(firstWallt, 'firstWallt');
+  //   firstWallt['id'] = 'currentWalltAddress';
+  //   console.log(firstWallt, 'firstWallt002');
+  //   indexDbData.putData(firstWallt);
+  // }
+  // await evmNetwork(); //删除存储evm网络
+  // await utxoNetwork(); //删除并存储evm网络
+  // bus.emit('selectAccountPage', 'list');
 };
 
 const evmNetwork = async () => {
   indexDbData.getData('EVM').then((res: any) => {
     let data: any;
-    let info: any;
+    // let info: any;
     Object.keys(res.content).forEach((item) => {
-      data = res.content[item].walltInfo.filter((info: any) => {
-        return info.address != nowAccount.value.address;
+      data = res.content[item].walltInfo.map((info: any) => {
+        if (info.address == nowAccount.value.address) {
+          info.status = 'delete';
+        }
+        return info;
       });
-      info = res.content[item].walltInfo.filter((info: any) => {
-        return info.address == nowAccount.value.address;
-      });
-      deleteStorkey(info);
+      // info = res.content[item].walltInfo.map((info: any) => {
+      //   if(info.address == nowAccount.value.address){
+      //     info.status = 'delete';
+      //   }
+      //   return info
+      // });
+      // deleteStorkey(info);
       console.log(data, 'data');
       res.content[item].walltInfo = data;
     });
@@ -129,15 +156,18 @@ const evmNetwork = async () => {
 const utxoNetwork = async () => {
   indexDbData.getData('UTXO').then((res: any) => {
     let data: any;
-    let info: any;
+    // let info: any;
     Object.keys(res.content).forEach((item) => {
       data = res.content[item].walltInfo.filter((info: any) => {
-        return info.address != nowAccount.value.address;
+        if (info.address == nowAccount.value.address) {
+          info.status = 'delete';
+        }
+        return info;
       });
-      info = res.content[item].walltInfo.filter((info: any) => {
-        return info.address == nowAccount.value.address;
-      });
-      deleteStorkey(info);
+      // info = res.content[item].walltInfo.filter((info: any) => {
+      //   return info.address == nowAccount.value.address;
+      // });
+      // deleteStorkey(info);
       res.content[item].walltInfo = data;
     });
     indexDbData.putData(res);

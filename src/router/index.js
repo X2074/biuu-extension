@@ -1,10 +1,17 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+// 首页
 import homePage from '../popup/components/homePage/index.vue'
+// 登录
 import loginwallt from '../popup/components/loginwallt/index.vue'
+// 创建
 import create from '../popup/components/create/index.vue'
+// 密钥
 import secret from '../popup/components/secret/index.vue'
+// 创建钱包
 import creasteWalletPage from '../popup/components/creasteWalletPage/index.vue'
+// 导入
 import importWallet from '@/components/popup/components/importWallet/index.vue'
+// 转账
 import transfer from '../popup/components/transfer/index.vue'
 
 const routes = [

@@ -68,13 +68,12 @@ const toWei = (data: any) => {
     transactionHash.value = web3.value.utils.fromWei(res.value, 'ether');
   });
 };
-/* const toPage = (res:any) => {
+/* const toNetwork = (res:any) => {
 	bus.emit('openModal', res)
 } */
 const sendTo = () => {
   bus.emit('nextPage', 'sendTo');
 };
-
 // 网络切换
 const netWorkChange = (type: any) => {
   netWorkType.value = type;

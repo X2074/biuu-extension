@@ -9,22 +9,12 @@ import { ref, onMounted, defineProps, toRaw, watch } from 'vue';
 import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB.js';
 import Web3 from 'web3';
-import selectAccount from '@/components/popup/homePage/selectAccount/index/index.vue';
-import setting from '@/components/popup/homePage/setting/index.vue';
-import networkSwitching from '@/components/popup/homePage/networkSwitching/index.vue';
-import importNfts from '@/components/popup/homePage/nfts/importNfts/index.vue';
-import nftDetail from '@/components/popup/homePage/nfts/nftDetail/index.vue';
-import transactionHistory from '@/components/popup/homePage/transactionHistory/index.vue';
-import sendTrade from '@/components/popup/homePage/sendTrade/index.vue';
-// import transfer from "@/components/popup/homePage/transfer/index.vue"
-// 底部card部分
 import nftCard from '@/components/popup/homePage/nfts/nftsCard/index.vue';
 import { getBlance } from '@/utils/index.js';
 import { useRouter } from 'vue-router';
 let router = useRouter();
 const transactionHash = ref(0);
 const moreShow = ref(false);
-// const props = defineProps(['walltContent']);
 const web3 = ref();
 let walltContent: any = ref(null);
 const netWorkList: any = ref([]); //下拉列表的网络数据
@@ -161,7 +151,10 @@ bus.on('homePageBack', (res: any) => {
     initialize();
   }
 });
-
+const toNetwork = () => {
+  router.push('/networkSwitching');
+};
+// 页面切换
 const toRouterPage = (url: string) => {
   router.push('/' + url);
 };

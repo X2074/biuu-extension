@@ -33,11 +33,6 @@ const toDetail = (data: any, list: any) => {
     detail: toRaw(data),
     list: toRaw(list)
   };
-  // console.log(info, '详情页数据');
-  // bus.emit('homePageBack', {
-  //   page: 'nftDetail',
-  //   data: info
-  // });
   store.commit('setNftDetail', info);
   router.push('/nftDetail');
 };

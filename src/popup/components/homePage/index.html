@@ -74,7 +74,7 @@
     </div>
     <div class="footer mt-20">
         <div class="refresh mt-10 flex">
-            <p @click="refresh">刷新</p>
+            <p @click="refresh">刷新{{walltAccount}}</p>
         </div>
     </div>
     <div class="footer-tabs">
@@ -84,24 +84,6 @@
             <p @click="walltAccount = 'transactionHistory'" class="mr-25">交易记录</p>
             <p @click="walltAccount = 'transfer'">划转</p>
         </div>
-        <nftCard v-if="walltEnvironment.netWorkType != 'utxo' && walltAccount == 'nfts'" />
+        <nftCard v-if="walltEnvironment.netWorkType != 'utxo'" />
     </div>
 </div>
-<!-- 选择账户 -->
-<!-- <selectAccount v-if="walltAccount == 'selectAccount'" :pageType="pageType" /> -->
-<!-- 设置 -->
-<!-- <setting v-if="walltAccount == 'setting'" /> -->
-<!-- 网络切换 -->
-<!-- <networkSwitching v-if="walltAccount == 'networkSwitching'" /> -->
-<!-- 新增网络 -->
-<!-- <addNetwork v-if="walltAccount == 'addNetwork'" /> -->
-<!-- 导入nft -->
-<!-- <importNfts v-if="walltAccount == 'importNfts'" /> -->
-<!-- nft详情 -->
-<nftDetail v-if="walltAccount == 'nftDetail'" :details="nftDetails" />
-<!-- 交易记录 -->
-<!-- <transactionHistory v-if="walltAccount == 'transactionHistory'" /> -->
-<!-- 转账 -->
-<!-- <sendTrade v-if="walltAccount == 'sendTrade'" /> -->
-<!-- 划转 -->
-<!-- <sendTrade v-if="walltAccount == 'transfer'" type="transfer" /> -->

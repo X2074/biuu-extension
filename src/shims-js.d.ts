@@ -17,6 +17,7 @@ declare module "*/router/index.js";
 declare module "*/resident.js";
 declare module "*/web3Operate.js";
 declare module "*/resident.js";
+declare module "*/indexDB.js";
 
 // npm包
 declare module "qitmeer-js";

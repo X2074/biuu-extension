@@ -76,7 +76,8 @@ const nextTransfer = async () => {
         uuid: uuidv4(),
         action: 'transferEVM',
         keyStore: currentWallt.value['keyStore'],
-        accountAddress: currentWallt.value['address']
+        accountAddress: currentWallt.value['address'],
+        gasUsed: transferContent.value['gasPrice']
       },
       toRaw(transferContent.value)
     );
@@ -86,14 +87,14 @@ const nextTransfer = async () => {
         uuid: uuidv4(),
         action: 'transferUTXO',
         keyStore: currentWallt.value['keyStore'],
-        accountAddress: currentWallt.value['utxoAddressTest']
+        accountAddress: currentWallt.value['utxoAddressTest'],
+        gasUsed: transferContent.value['gasPrice']
       },
       toRaw(transferContent.value)
     );
     loading.value = false;
   }
   console.log(data, 'utxo的交易数据');
-
   chrome.runtime.sendMessage(data, (response: any) => {
     console.log('Received data from background:', response);
     hashSaveIndexDB(currentWallt.value['keyStore'], 'queue', data);

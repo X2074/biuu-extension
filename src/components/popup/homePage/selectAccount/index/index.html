@@ -6,17 +6,21 @@
     <!-- 账户的展示与操作 -->
     <div class="account-content pt-10 pb-10">
         <!-- 账户展示 -->
-        <div v-if="accountType == 'list'" class="content flex" v-for="item in accountList" @click="checkAddress(item)">
-            <div class="name-num">
-                <p>{{item.userName || item.NoIndex}}</p>
-                <p class="price">{{item&&item.blance?item.blance : 0}} {{accountContent.unit}}</p>
-            </div>
-            <div class="address-check flex mr-40">
-                <p v-if="item.utxoAddressTest">
-                    {{item.utxoAddressTest.substr(0,4)}}...{{item.utxoAddressTest.substr(-4)}}</p>
-                <p v-else>{{item.address.substr(0,4)}}...{{item.address.substr(-4)}}</p>
-                <img v-if="nowAccount && nowAccount.address == item.address" class="mr-15"
-                    src="@/assets/images/icons/check-fill.png" alt="">
+        <div v-if="accountType == 'list'" class="content" v-for="item in accountList" @click="checkAddress(item)">
+
+            <!-- 如果是标记为删除，不显示 -->
+            <div v-if="item.status != 'delete'" class="flex">
+                <div class="name-num">
+                    <p>{{item.userName || item.NoIndex}}</p>
+                    <p class="price">{{item&&item.blance?item.blance : 0}} {{accountContent.unit}}</p>
+                </div>
+                <div class="address-check flex mr-40">
+                    <p v-if="item.utxoAddressTest">
+                        {{item.utxoAddressTest.substr(0,4)}}...{{item.utxoAddressTest.substr(-4)}}</p>
+                    <p v-else>{{item.address.substr(0,4)}}...{{item.address.substr(-4)}}</p>
+                    <img v-if="nowAccount && nowAccount.address == item.address" class="mr-15"
+                        src="@/assets/images/icons/check-fill.png" alt="">
+                </div>
             </div>
         </div>
         <!-- 私钥展示 -->
