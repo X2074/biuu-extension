@@ -15,13 +15,15 @@ import BigNumber from 'bignumber.js';
 // evm转账
 export async function evmTransfer(data) {
     let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
+    console.log(data, "测试地址");
+
     let details = {
         to: data.to, // 接收方地址                                                             
         value: web3.utils.toHex(web3.utils.toWei(data.value, 'ether')), // 转账 wei  
         // meer交易此处需要使用int类型
         gasLimit: web3.utils.toHex(data.gasLimit),
         gasPrice: web3.utils.toHex(data.gasPrice),
-        nonce: web3.utils.toHex(data.nonce),
+        nonce: await web3.eth.getTransactionCount(data.accountAddress),
         chainId: data.chainId
     }
     let tx = new EthereumTx(details)
@@ -54,7 +56,7 @@ export async function closeTransfer(data) {
         // meer交易此处需要使用int类型
         gasLimit: web3.utils.toHex(data.gasLimit),
         gasPrice: web3.utils.toHex(data.gasPrice * 10),
-        nonce: web3.utils.toHex(data.nonce),
+        nonce: await web3.eth.getTransactionCount(data.accountAddress),
         chainId: data.chainId
     }
     let tx = new EthereumTx(details)
@@ -78,7 +80,7 @@ export async function hastenTransfer(data) {
         // meer交易此处需要使用int类型
         gasLimit: web3.utils.toHex(data.gasLimit),
         gasPrice: web3.utils.toHex(data.gasPrice * 10),
-        nonce: web3.utils.toHex(data.nonce),
+        nonce: await web3.eth.getTransactionCount(data.accountAddress),
         chainId: data.chainId
     }
     let tx = new EthereumTx(details)

@@ -75,7 +75,7 @@ export async function evmTransfer(data) {
 		// meer交易此处需要使用int类型
 		gasLimit: web3.utils.toHex(21000),
 		gasPrice: web3.utils.toHex(web3.utils.toWei('5', 'gwei')),
-		nonce: web3.utils.toHex(data.nonce), //meer交易这个可以不填// 序号ID, 重要， 需要一个账号的交易序号，可以通过web3.eth.getTransactionCount(web3.eth.defaultAccount)获得
+		nonce: await web3.eth.getTransactionCount(data.accountAddress), //meer交易这个可以不填// 序号ID, 重要， 需要一个账号的交易序号，可以通过web3.eth.getTransactionCount(web3.eth.defaultAccount)获得
 		chainId: data.chainId
 	}
 	console.log(web3.utils.toHex(5000000000), '44', web3.utils.toHex(web3.utils.toWei('5', 'gwei')));
@@ -108,7 +108,8 @@ export async function isAddress(address) {
 // 获取钱包余额
 export async function getBlance(url, data) {// 获取钱包余额
 	console.log(data, 'getBlance');
-	if (data.netWorkType.toLowerCase() == 'evm') {
+	let netWork = data.netWorkType || data.netWork;
+	if (netWork.toLowerCase() == 'evm') {
 		return getEVMBlance(url, data.address)
 	} else {
 		return getUTXOBalance(url, data.utxoAddressTest || data.address)

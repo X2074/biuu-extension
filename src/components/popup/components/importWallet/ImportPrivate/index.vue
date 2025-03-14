@@ -137,7 +137,7 @@ const evmNetwork = (walltInfo: any) => {
       content['address'] = walltInfo.address;
       content['keyStore'] = walltInfo.keyStore;
       content['userName'] = 'Wallt 01';
-      content['netWork'] = 'EVM';
+      content['netWorkType'] = 'EVM';
       content['keyStoreType'] = 'privateKey';
       indexDbData.putData(Object.assign({ id: 'currentWalltAddress' }, content));
       let info: any = rpcConfig['evmTest'];

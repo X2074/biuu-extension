@@ -35,7 +35,7 @@ export async function evmTransfer(data) {
         // meer交易此处需要使用int类型
         gasLimit: web3.utils.toHex(data.gasLimit),
         gasPrice: web3.utils.toHex(data.gasPrice),
-        nonce: await web3.eth.getTransactionCount('0x4445Bbd1f0942857741EEbA3B36970390E9cb887'),
+        nonce: await web3.eth.getTransactionCount(data.accountAddress),
         chainId: data.chainId
     }
     let tx = new EthereumTx(details)

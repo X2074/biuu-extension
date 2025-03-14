@@ -85,7 +85,7 @@ const createAccount = async () => {
   });
   console.log(data, 'datadatadatadata');
 
-  if (!data && !data.length) {
+  if (!data || !data.length) {
     createWalletAccount();
   } else {
     rpc_url.walltInfo.forEach((item: any) => {

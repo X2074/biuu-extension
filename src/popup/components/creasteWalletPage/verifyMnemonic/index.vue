@@ -74,7 +74,7 @@ const UtxoEvmKey = () => {
   content['address'] = walltInfo.address;
   content['keyStore'] = walltInfo.keyStore;
   content['userName'] = 'Wallt 01';
-  content['netWork'] = 'EVM';
+  content['netWorkType'] = 'EVM';
   indexDbData.putData(Object.assign({ id: 'currentWalltAddress' }, content));
   let info: any = rpcConfig['evmTest'];
   info['NoIndex'] = 1;
@@ -104,7 +104,7 @@ const evmNetwork = () => {
       let walltAccount: any = defaultAccount;
       walltAccount['address'] = walltInfo.value.address;
       walltAccount['keyStore'] = walltInfo.value.keyStore;
-      walltAccount['netWork'] = 'EVM';
+      walltAccount['netWorkType'] = 'EVM';
       res.content[item].walltInfo.push(walltAccount);
     });
     res['NoIndex'] = 1;

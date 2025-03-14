@@ -16,6 +16,8 @@ import md5 from 'js-md5';
 import queueFinish from './queueFinish/index.vue';
 import Web3 from 'web3';
 import dayjs from 'dayjs';
+import { useRouter } from 'vue-router';
+let router = useRouter();
 let loading = ref(false);
 let loadingText = ref('加载中...');
 let finishTransactions: any = ref([]); //成功的交易
@@ -76,6 +78,8 @@ bus.on('transactionStatusUpdates', (data: any) => {
 const toDetail = async (data: any) => {
   loading.value = true;
   detailTransaction.value = data;
+  console.log(detailTransaction.value, 'datadatadata');
+
   if (data.action == 'transferEVM') {
     getEvm(data);
   } else {
@@ -133,4 +137,10 @@ const getWei = async (balance: string) => {
 //   let title = name + "复制成功";
 //   bus.emit("promptModalSuccess", title);
 // };
+
+const toBack = (res: any) => {
+  // pageType.value = 'showKey';
+  // walltAccount.value = 'selectAccount';
+  router.push('/homePage');
+};
 </script>

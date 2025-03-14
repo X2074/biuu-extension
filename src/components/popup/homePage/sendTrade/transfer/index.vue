@@ -12,8 +12,6 @@ export default {
 import { ref, onMounted, defineProps, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
-import { evmTransfer } from '@/utils/EVM/index.js';
-import web3Operate from '@/background/web3Operate.js';
 import { hashSaveIndexDB } from '@/utils/operateIndexDB.js';
 import { v4 as uuidv4 } from 'uuid';
 import Web3 from 'web3';

@@ -13,7 +13,7 @@ import indexDbData from '@/utils/indexDB.js';
 import Web3 from 'web3';
 import md5 from 'js-md5';
 const props = defineProps(['walltContent']);
-const sendAddress = ref('0x4445Bbd1f0942857741EEbA3B36970390E9cb887');
+const sendAddress = ref('');
 const sendBol = ref(false);
 const numberStep = ref(1);
 const assetNum = ref(0);
