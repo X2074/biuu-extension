@@ -1,15 +1,16 @@
 import { startHeartbeat } from './resident.js';
 import { roundRobin } from './indexDB.js'; ""
 import web3Operate from './web3Operate.js';
-import { chromeNotifications } from './utils';
+// import { chromeNotifications } from './utils';
 import './utils';
 import './test';
 
 // 开始轮循hash状态
 roundRobin()
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
     console.log(message, '测试数据00002');
     setTimeout(() => {
+        // 浏览器右下角弹框
         // chromeNotifications({})
     }, 3000)
     // 获取密码，判断是否显示输入密码页面

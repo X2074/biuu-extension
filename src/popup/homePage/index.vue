@@ -9,7 +9,7 @@ import { ref, onMounted, defineProps, toRaw, watch } from 'vue';
 import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB.js';
 import Web3 from 'web3';
-import nftCard from '@/components/popup/homePage/nfts/nftsCard/index.vue';
+import nftCard from '@/components/nftsCard/index.vue';
 import { getBlance } from '@/utils/index.js';
 import { useRouter } from 'vue-router';
 let router = useRouter();

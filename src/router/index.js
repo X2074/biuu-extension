@@ -1,18 +1,18 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 // 首页
-import homePage from '../popup/components/homePage/index.vue'
+import homePage from '../popup/homePage/index.vue'
 // 登录
-import loginwallt from '../popup/components/loginwallt/index.vue'
+import loginwallt from '../popup/loginwallt/index.vue'
 // 创建
-import create from '../popup/components/create/index.vue'
+import create from '../popup/create/index.vue'
 // 密钥
-import secret from '../popup/components/secret/index.vue'
+import secret from '../popup/secret/index.vue'
 // 创建钱包
-import creasteWalletPage from '../popup/components/creasteWalletPage/index.vue'
+import creasteWalletPage from '../popup/creasteWalletPage/index.vue'
 // 导入
-import importWallet from '@/components/popup/components/importWallet/index.vue'
+import importWallet from '../popup/importWallet/index.vue'
 // 转账
-import transfer from '../popup/components/transfer/index.vue'
+import transfer from '../popup/transfer/index.vue'
 
 const routes = [
   { path: '/:pathMath(.*)', redirect: '/homePage' },
@@ -60,55 +60,55 @@ const routes = [
   {
     path: '/selectAccount/:pageType?',
     name: 'selectAccount',
-    component: () => import("@/components/popup/homePage/selectAccount/index/index.vue"),
+    component: () => import("../popup/selectAccount/index/index.vue"),
   },
   // 设置
   {
     path: '/setting',
     name: 'setting',
-    component: () => import("@/components/popup/homePage/setting/index.vue"),
+    component: () => import("../popup/setting/index.vue"),
   },
   // 网络切换
   {
     path: '/networkSwitching',
     name: 'networkSwitching',
-    component: () => import("@/components/popup/homePage/networkSwitching/index.vue"),
+    component: () => import("../popup/networkSwitching/index.vue"),
   },
   // 新增网络
   {
     path: '/addNetwork',
     name: 'addNetwork',
-    component: () => import("@/components/popup/homePage/addNetwork/index.vue"),
+    component: () => import("../popup/addNetwork/index.vue"),
   },
   // 导入nft
   {
     path: '/importNfts',
     name: 'importNfts',
-    component: () => import("@/components/popup/homePage/nfts/importNfts/index.vue"),
+    component: () => import("../popup/nfts/importNfts/index.vue"),
   },
   // nft详情
   {
     path: '/nftDetail',
     name: 'nftDetail',
-    component: () => import("@/components/popup/homePage/nfts/nftDetail/index.vue"),
+    component: () => import("../popup/nfts/nftDetail/index.vue"),
   },
   // 交易记录
   {
     path: '/transactionHistory',
     name: 'transactionHistory',
-    component: () => import("@/components/popup/homePage/transactionHistory/index.vue"),
+    component: () => import("../popup/transactionHistory/index.vue"),
   },
   // 转账
   {
     path: '/sendTrade',
     name: 'sendTrade',
-    component: () => import("@/components/popup/homePage/sendTrade/index.vue"),
+    component: () => import("../popup/sendTrade/index.vue"),
   },
   // 划转
   {
     path: '/transfer/:type?',
     name: 'transfer',
-    component: () => import("@/components/popup/homePage/sendTrade/index.vue"),
+    component: () => import("../popup/sendTrade/index.vue"),
   },
 
 ]

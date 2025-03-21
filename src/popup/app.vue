@@ -39,7 +39,7 @@ import importWallet from '@/components/popup/components/importWallet/index.vue';
 import homePage from './components/homePage/index.vue';
 import transfer from './components/transfer/index.vue';
 // 全局提示
-import prompt from '@/components/popup/components/prompt/index.vue';
+import prompt from '@/components/prompt/index.vue';
 import { getBlance } from '@/utils/index.js';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus.js';

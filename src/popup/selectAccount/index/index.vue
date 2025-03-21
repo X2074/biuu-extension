@@ -11,7 +11,6 @@ import indexDbData from '@/utils/indexDB.js';
 import { Encrypt } from '@/utils/index.js';
 import { createMnemonic, createWallet } from '@/utils/createUser.js';
 import showPrivateKey from '../showPrivateKey/index.vue';
-import importWallet from '../../../components/importWallet/index.vue';
 import deleteWallt from '../deleteWallt/index.vue';
 import { getBlance } from '@/utils/index.js';
 import { addBalance } from '@/utils/UTXO/meerRpc.js';
@@ -251,6 +250,9 @@ bus.on('selectAccountPage', (res: any) => {
     initializeInfo();
   }
 });
+const toCreate = (res: any) => {
+  router.push('/' + res);
+};
 </script>
 <style lang="scss">
 @import './index.scss';

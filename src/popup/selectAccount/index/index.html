@@ -33,7 +33,7 @@
     </div>
     <div class="footer-btn" v-if="accountType != 'import'">
         <p @click="createAccount">添加账号</p>
-        <p @click="accountType = 'import'" class="flex">
+        <p @click="toCreate('importWallet')" class="flex">
             <img class="mr-10" src="@/assets/images/icons/import.png" alt="">
             导入账户
         </p>

@@ -15,7 +15,7 @@ import bus from '@/utils/bus';
 import { Decrypt } from '@/utils/index';
 import { getNonce, getGas, evmKey, utxoKey } from '@/utils/index.js';
 import { getBlance } from '@/utils/index';
-import addressBook from '../addressBook/index.vue';
+import addressBook from '@/components/addressBook/index.vue';
 import transfer from './transfer/index.vue';
 import md5 from 'js-md5';
 const props = defineProps(['type']);

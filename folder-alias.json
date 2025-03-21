@@ -8,44 +8,35 @@
     "src/popup/components/homePage": {
         "description": "首页"
     },
-    "src/popup/components/loginwallt": {
+    "src/popup/loginwallt": {
         "description": "登录"
     },
     "src/popup/components/transfer": {
         "description": "转账"
     },
-    "src/components/creasteWalletPage": {
+    "src/popup/creasteWalletPage": {
         "description": "创建钱包"
     },
-    "src/components/creasteWalletPage/createMnemonic": {
+    "src/popup/creasteWalletPage/createMnemonic": {
         "description": "创建钱包"
     },
-    "src/components/creasteWalletPage/verifyMnemonic": {
+    "src/popup/creasteWalletPage/verifyMnemonic": {
         "description": "导入钱包助记词"
     },
-    "src/components/creasteWalletPage/setPsd": {
+    "src/popup/creasteWalletPage/setPsd": {
         "description": "设置密码"
     },
     "src/popup/components/creasteWalletPage": {
         "description": "创建钱包"
     },
-    "src/popup/components/secret": {
+    "src/popup/secret": {
         "description": "输入密码页面"
     },
     "src/utils/createUser.js": {
         "description": "创建钱包\\导入钱包"
     },
-    "src/components/popup/homePage/createWallt": {
+    "src/popup/homePage/createWallt": {
         "description": "创建钱包"
-    },
-    "src/components/popup/homePage/ImportWallt": {
-        "description": "导入钱包"
-    },
-    "src/components/popup/homePage/selectAccount": {
-        "description": "选择账户"
-    },
-    "src/components/popup/homePage/manageAccount": {
-        "description": "管理账户"
     },
     "src/components/popup": {
         "description": "popup页面的功能组件"
@@ -53,22 +44,10 @@
     "src/components/loading": {
         "description": "全局loading指令"
     },
-    "src/components/popup/homePage/selectAccount/accountOperate": {
-        "description": "查看私钥"
-    },
-    "src/utils/editContent.js": {
-        "description": "信息修改"
-    },
-    "src/components/popup/homePage/selectAccount/showPrivateKey": {
-        "description": "展示私钥"
-    },
-    "src/components/popup/homePage/selectAccount/deleteWallt": {
-        "description": "删除钱包"
-    },
-    "src/components/popup/components/prompt": {
+    "src/components/prompt": {
         "description": "提示弹框"
     },
-    "src/components/popup/homePage/selectAccount/index": {
+    "src/popup/selectAccount/index": {
         "description": "添加账号主页面"
     },
     "src/popup/components/creasteWalletPage/createMnemonic": {
@@ -80,106 +59,67 @@
     "src/popup/components/creasteWalletPage/verifyMnemonic": {
         "description": "二次确认生成"
     },
-    "src/popup/components/setting": {
+    "src/popup/setting": {
         "description": "设置"
     },
-    "src/components/popup/homePage/setting": {
-        "description": "设置"
-    },
-    "src/components/popup/homePage/setting/components/safe": {
+    "src/popup/setting/safe": {
         "description": "安全问答"
     },
-    "src/components/popup/homePage/setting/components/contacts": {
+    "src/popup/setting/contacts": {
         "description": "地址簿"
     },
-    "src/components/popup/homePage/showPrivateKey": {
+    "src/popup/selectAccount/showPrivateKey": {
         "description": "显示私钥"
     },
-    "src/components/popup/homePage/setting/components/showPrivateKey": {
+    "src/popup/setting/showPrivateKey": {
         "description": "显示私钥"
     },
-    "src/components/popup/homePage/setting/components/privateKey": {
+    "src/popup/setting/privateKey": {
         "description": "私钥"
     },
-    "src/components/popup/homePage/setting/components/security": {
+    "src/popup/setting/security": {
         "description": "安全问答"
     },
-    "src/components/popup/homePage/setting/components/security/components/privateKey": {
-        "description": "私钥"
-    },
-    "src/components/popup/homePage/setting/components/security/components/mnemonicPhrase": {
-        "description": "助记词"
-    },
-    "src/components/popup/homePage/setting/components/security/components/forgetPassword": {
+    "src/popup/setting/security/components/forgetPassword": {
         "description": "修改密码"
     },
-    "src/components/popup/homePage/selectAccount/createWallt": {
+    "src/popup/selectAccount/createWallt": {
         "description": "创建钱包"
     },
-    "src/components/popup/homePage/setting/components/addressBook": {
+    "src/components/addressBook": {
         "description": "地址簿"
     },
-    "src/components/popup/homePage/setting/components/security/components/revisePassword": {
-        "description": "修改密码"
-    },
-    "src/components/popup/homePage/selectAccount/ImportWallt": {
+    "src/popup/selectAccount/ImportWallt": {
         "description": "导入钱包"
     },
-    "src/components/popup/homePage/setting/components/addressBook/components/addressList": {
+    "src/components/addressBook/components/addressList": {
         "description": "地址簿列表、详情"
     },
-    "src/components/popup/homePage/setting/components/addressBook/components/addressAppend": {
+    "src/components/addressBook/components/addressAppend": {
         "description": "添加地址"
     },
-    "src/components/popup/homePage/setting/components/addressBook/components/addressDetail": {
+    "src/components/addressBook/components/addressDetail": {
         "description": "地址详情"
     },
     "filesStructure.md": {
         "description": "目录结构"
     },
-    "src/components/importWalletPage": {
-        "description": "导入钱包"
-    },
-    "src/components/importWalletPage/setPsd": {
-        "description": "设置密码"
-    },
-    "src/components/importWalletPage/importPhrase": {
-        "description": "导入助记词"
-    },
-    "src/components/importWalletPage/importPrivate": {
-        "description": "导入私钥"
-    },
-    "src/components/popup/homePage/selectAccount/importWallet": {
-        "description": "导入账户"
-    },
-    "src/components/popup/homePage/selectAccount/importWalletPage": {
-        "description": "导入钱包"
-    },
-    "src/components/popup/homePage/selectAccount/importWalletPage/importPhrase": {
-        "description": "导入助记词"
-    },
-    "src/components/popup/homePage/selectAccount/importWalletPage/importPrivate": {
-        "description": "导入私钥"
-    },
-    "src/components/popup/components/importWallet": {
-        "description": "导入钱包"
-    },
-    "src/components/popup/homePage/networkSwitching": {
+    "src/popup/networkSwitching": {
         "description": "网络切换"
     },
-    "src/components/popup/components/importWallet/importPrivate": {
+    "src/popup/importWallet/importPrivate": {
         "description": "私钥"
     },
-    "src/components/popup/components/importWallet/importPhrase": {
+    "src/popup/importWallet/importPhrase": {
         "description": "助记词"
     },
-    "src/components/popup/homePage/nfts": {
+    "src/popup/nfts": {
         "description": "nft"
     },
-    "src/components/popup/homePage/nfts/importNfts": {
+    "src/popup/nfts/importNfts": {
         "description": "导入nft"
     },
-    "src/components/popup/homePage/nfts/nftDetail": {
+    "src/popup/nfts/nftDetail": {
         "description": "nft详情"
     },
     "src/utils/index.js": {
@@ -188,43 +128,40 @@
     "src/utils/operateIndexDB.js": {
         "description": "增删改查indexDB"
     },
-    "src/components/popup/homePage/transactionHistory": {
+    "src/popup/transactionHistory": {
         "description": "交易记录"
     },
-    "src/components/popup/homePage/transactionHistory/queueTransaction": {
+    "src/popup/transactionHistory/queueTransaction": {
         "description": "进行中的交易"
     },
-    "src/components/popup/homePage/transactionHistory/queueFinish": {
+    "src/popup/transactionHistory/queueFinish": {
         "description": "处理中\\已完成"
     },
-    "src/components/popup/homePage/sendTrade": {
+    "src/popup/sendTrade": {
         "description": "转账"
     },
     "src/mixins/indexDB.ts": {
         "description": "indexdb的混入"
     },
-    "src/components/popup/homePage/addressBook": {
+    "src/popup/addressBook": {
         "description": "地址簿"
-    },
-    "src/components/popup/homePage/setting/security": {
-        "description": "安全问答"
     },
     "demo.ts": {
         "description": "测试demo"
     },
-    "src/components/popup/homePage/setting/security/components/mnemonicPhrase": {
+    "src/popup/setting/security/components/mnemonicPhrase": {
         "description": "显示助记词"
     },
-    "src/components/popup/homePage/setting/security/components/privateKey": {
+    "src/popup/setting/security/components/privateKey": {
         "description": "显示私钥"
     },
-    "src/components/popup/homePage/setting/security/components/revisePassword": {
+    "src/popup/setting/security/components/revisePassword": {
         "description": "修改密码"
     },
-    "src/components/popup/homePage/addressBook/components/addressAppend": {
+    "src/popup/addressBook/components/addressAppend": {
         "description": "新增"
     },
-    "src/components/popup/homePage/addressBook/components/addressDetail": {
+    "src/popup/addressBook/components/addressDetail": {
         "description": "地址详情"
     },
     "src/background/indexDB.js": {
@@ -239,7 +176,7 @@
     "src/background/web3Operate.js": {
         "description": "web3相关操作"
     },
-    "src/components/popup/homePage/tokens": {
+    "src/popup/tokens": {
         "description": "网络信息"
     },
     "src/utils/UTXO/testUtxoTransaction.js": {
@@ -248,7 +185,7 @@
     "src/components/indexPage": {
         "description": "测试新增网络"
     },
-    "src/components/popup/homePage/transfer": {
+    "src/popup/transfer": {
         "description": "划转"
     },
     "indexDBDoc.md": {
@@ -266,7 +203,25 @@
     "src/popup/app.demo.vue": {
         "description": "备份"
     },
-    "src/components/popup/homePage": {
+    "src/popup": {
         "description": "首页为入口的页面"
+    },
+    "src/popup/addNetwork": {
+        "description": "新增网络"
+    },
+    "src/popup/create": {
+        "description": "初始化首页"
+    },
+    "src/popup/homePage": {
+        "description": "常驻首页"
+    },
+    "src/popup/importWallet": {
+        "description": "导入钱包功能"
+    },
+    "src/popup/selectAccount": {
+        "description": "账号列表"
+    },
+    "src/components/nftsCard": {
+        "description": "首页的nft模块"
     }
 }

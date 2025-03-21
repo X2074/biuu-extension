@@ -14,7 +14,7 @@ import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus.js';
 // import privateKey from './components/privateKey/index.vue'
 import security from './security/index.vue';
-import addressBook from '../addressBook/index.vue';
+import addressBook from '@/components/addressBook/index.vue';
 let settingStep = ref('options'); //设置页面当前展示内容
 let currentWalltAddress = ref(null); //当前钱包信息
 
