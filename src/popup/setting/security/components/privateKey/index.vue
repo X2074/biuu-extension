@@ -8,10 +8,8 @@ export default {
 import { ref, onMounted, defineProps } from 'vue';
 import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB.js';
-import { Decrypt } from '@/utils/index.js';
-import { evmKey, utxoKey } from '@/utils/index.js';
+import { Decrypt, getGas, evmKey, utxoKey, getBlance } from '@/utils/index';
 import { editContent } from '@/utils/editContent.js';
-import { getBlance } from '@/utils/index.js';
 import md5 from 'js-md5';
 let loading = ref(true);
 let loadingText = ref('加载中...');
@@ -24,7 +22,7 @@ let userName = ref(''); //账户昵称
 let userNameStatus = ref(false); //昵称展示还是编辑
 let accountOperate = ref('password');
 const props = defineProps(['address', 'keyStore']);
-let rpcData = ref(null);
+let rpcData: any = ref(null);
 onMounted(() => {
   initializeInfo();
 });

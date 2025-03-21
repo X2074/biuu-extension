@@ -11,7 +11,7 @@ import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus.js';
 import { v4 as uuidv4 } from 'uuid';
 import Web3 from 'web3';
-import { Encrypt } from '@/utils/index.js';
+import { Encrypt } from '@/utils/index';
 import md5 from 'js-md5';
 // 预制网络
 import { netWork } from '@/utils/defaultNetwork.js';

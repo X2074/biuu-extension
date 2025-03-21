@@ -8,11 +8,9 @@ export default {
 import { ref, onMounted, defineProps, nextTick } from 'vue';
 import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB.js';
-import { Decrypt } from '@/utils/index.js';
-import { evmKey, utxoKey } from '@/utils/index.js';
+import { Decrypt, evmKey, utxoKey, getBlance } from '@/utils/index';
 import { editContent } from '@/utils/editContent.js';
 import QRCode from 'qrcodejs2-fix';
-import { getBlance } from '@/utils/index.js';
 import md5 from 'js-md5';
 let loading = ref(true);
 let loadingText = ref('加载中...');
@@ -81,7 +79,7 @@ const editName = () => {
   if (!userName.value) return;
   loading.value = true;
   editContent('userName', userName.value, nowAccount.value.address)
-    .then((res: any) => {
+    .then(() => {
       initializeInfo();
     })
     .catch(() => {

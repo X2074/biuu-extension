@@ -21,6 +21,8 @@
 //  eventTime: Date.now() + 2000, // 十秒后显示通知
 //  buttons: [{ title: '按钮1' }, { title: '按钮2' }]
 export async function chromeNotifications(data: any) {
+    console.log(data, "传递的实际数据");
+    // 下面是测试数据
     let info: any = {
         type: 'list',
         iconUrl: 'https://th.bing.com/th/id/R.9018c4f47b9796cbea207325cb60e457?rik=TKWy9KALYKcXBg&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f92%2f1692.jpg&ehk=YB59358%2fCaARUufRoOEdKK9gWz%2fCdnQLXvP%2fn8DAPrA%3d&risl=&pid=ImgRaw&r=0',

@@ -1,20 +1,19 @@
 import Web3 from 'web3'
-import CryptoJS from 'crypto-js'
 import bip39 from 'bip39'
-import indexDbData from '@/utils/indexDB.js';
 import EthereumTx from 'ethereumjs-tx'
 import ecc from 'tiny-secp256k1'
+// import { chromeNotifications } from '../index';
 import { BIP32Factory } from 'bip32'
 // evm助记词转私钥
 const bip32 = BIP32Factory(ecc)
-export async function evmKey(mnemonic) {
+export async function evmKey(mnemonic: any) {
     try {
         //2.将助记词转成seed
         let seed = await bip39.mnemonicToSeed(mnemonic, '');
         // 通过种子生成BIP32主节点
         const hdWallet = bip32.fromSeed(seed);
         // //4.派生一个子密钥对的BIP32导出路径
-        let key = hdWallet.derivePath("m/44'/60'/0'/0/0");
+        let key: any = hdWallet.derivePath("m/44'/60'/0'/0/0");
         // // 获取子公私钥的十六进制格式
         const privateKeyHex = key.privateKey.toString('hex');
         const publicKeyHex = key.publicKey.toString('hex');
@@ -27,7 +26,7 @@ export async function evmKey(mnemonic) {
     }
 }
 // evm转账
-export async function evmTransfer(data) {
+export async function evmTransfer(data: any) {
     let web3 = new Web3(new Web3.providers.HttpProvider(data.url));
     let details = {
         to: data.to, // 接收方地址                                                             
@@ -44,12 +43,12 @@ export async function evmTransfer(data) {
     let serializedTx = tx.serialize();
     let raw = '0x' + serializedTx.toString('hex');
     web3.eth.sendSignedTransaction(raw).then(hash => {
-        indexDbData.getData('nonce').then(res => {
-            res['content'] = res['content'] + 1;
-            indexDbData.putData(res);
-        });
+        // indexDbData.getData('nonce').then(res => {
+        //     res['content'] = res['content'] + 1;
+        //     indexDbData.putData(res);
+        // });
         console.log(hash, 'hash');
-        chromeNotifications(hash)
+        // chromeNotifications(hash)
         // 将参数与hash合并，便于后面的取消和加速操作
         let info = Object.assign(data, hash)
         // hashSaveIndexDB(data['keyStore'], 'dispose', info);
@@ -60,12 +59,12 @@ export async function evmTransfer(data) {
     })
 }
 // 判断地址，是否合法
-export async function isAddress(address) {
+export async function isAddress(address: any) {
     const web3 = new Web3();
     return web3.utils.isAddress(address);
 }
 // 获取钱包余额
-export async function getEVMBlance(url, address) {// 获取钱包余额
+export async function getEVMBlance(url: any, address: any) {// 获取钱包余额
     // 定义rpc
     let web3 = new Web3(new Web3.providers.HttpProvider(url));
     let data = await web3.eth.getBalance(address);
@@ -78,7 +77,7 @@ export async function getEVMBlance(url, address) {// 获取钱包余额
     }
 }
 // 获取gasLimit\gasPrice
-export async function getGas(url, from, to, value) {// 获取钱包余额
+export async function getGas(url: any, from: any, to: any, value: any) {// 获取钱包余额
     // 定义rpc
     let web3 = new Web3(new Web3.providers.HttpProvider(url));
     let transaction = {
@@ -92,22 +91,5 @@ export async function getGas(url, from, to, value) {// 获取钱包余额
     return {
         gasLimit: gasLimit,
         gasPrice: gasPrice
-    }
-}
-// 查询交易noce
-export async function getNonce(address, url) {
-    let nonce = await indexDbData.getData('nonce');
-    if (nonce) {
-        return nonce['content'];
-    } else {
-        let web3 = new Web3(new Web3.providers.HttpProvider(url));
-        let data = await web3.eth.getTransactionCount(address, 'latest');
-        console.log(data, 'nonce');
-        let nonceData = {
-            id: 'nonce',
-            content: data
-        }
-        indexDbData.putData(nonceData);
-        return data;
     }
 }

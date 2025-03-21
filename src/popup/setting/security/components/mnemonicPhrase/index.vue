@@ -8,7 +8,7 @@ export default {
 import { ref, onMounted, defineProps } from 'vue';
 import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB.js';
-import { Decrypt } from '@/utils/index.js';
+import { Decrypt } from '@/utils/index';
 import QRCode from 'qrcodejs2-fix';
 import md5 from 'js-md5';
 let loading = ref(true);

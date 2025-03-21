@@ -31,16 +31,16 @@ import md5 from 'js-md5';
 // 因为popup的特殊原因，此处只有一个入口，页面切换靠各种类型的判断
 // import homePage from '@/components/homePage.vue'
 // 已有账号，重新进入需要登录
-import loginwallt from './components/loginwallt/index.vue';
-import create from './components/create/index.vue';
-import secret from './components/secret/index.vue';
-import creasteWalletPage from './components/creasteWalletPage/index.vue';
-import importWallet from '@/components/popup/components/importWallet/index.vue';
-import homePage from './components/homePage/index.vue';
-import transfer from './components/transfer/index.vue';
+//import loginwallt from './components/loginwallt/index.vue';
+// import create from './components/create/index.vue';
+// import secret from './components/secret/index.vue';
+// import creasteWalletPage from './components/creasteWalletPage/index.vue';
+// import importWallet from '@/components/popup/components/importWallet/index.vue';
+// import homePage from './components/homePage/index.vue';
+// import transfer from './components/transfer/index.vue';
 // 全局提示
 import prompt from '@/components/prompt/index.vue';
-import { getBlance } from '@/utils/index.js';
+import { getBlance } from '@/utils/index';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus.js';
 import { useRouter } from 'vue-router';
@@ -55,7 +55,8 @@ onMounted(async () => {
   // 获取设置的密码
   let secert = await indexDbData.getData(md5('secret'));
   // 发送消息给 background 页面请求数据
-  chrome.runtime.sendMessage({ action: 'getSecret' }, (response: any) => {
+  let data: any = { action: 'getSecret' };
+  chrome.runtime.sendMessage(data, (response: any) => {
     // 获取缓存的密码，浏览器关闭，删除缓存数据
     if (!response.secret) {
       loading.value = false;

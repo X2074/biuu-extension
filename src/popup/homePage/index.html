@@ -11,7 +11,7 @@
             <img src="@/assets/images/icons/more.png" @click="moreShow = !moreShow;" alt="">
             <div class="more-content" v-if="moreShow" @click.self="moreShow = !moreShow">
                 <div class="options-list">
-                    <div class="option flex" @click="toPage('detail')">
+                    <div class="option flex" @click="toPage">
                         <img class="mr-10" src="@/assets/images/icons/detail.png" alt="">
                         <p>账户详情</p>
                     </div>

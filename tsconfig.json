@@ -1,30 +1,39 @@
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "module": "ESNext",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "skipLibCheck": true,
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "target": "ES2020",
+        "useDefineForClassFields": true,
+        "module": "ESNext",
+        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "skipLibCheck": true,
 
-    /* Bundler mode */
-    "moduleResolution": "Node",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "preserve",
+        /* Bundler mode */
+        "moduleResolution": "Node",
+        "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "preserve",
 
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "typeRoots": ["./node_modules/@types", "./types"],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
-  },
-  "include": ["src/**/*.js","src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/background/resident.ts", "src/background/service-worker.js"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "typeRoots": ["./node_modules/@types", "./types"],
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"]
+        }
+    },
+    "include": [
+        "src/**/*.js",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.vue",
+        "src/background/resident.ts",
+        "src/background/service-worker.js",
+        "src/utils/index.jts"
+    ],
+    "references": [{ "path": "./tsconfig.node.json" }]
 }

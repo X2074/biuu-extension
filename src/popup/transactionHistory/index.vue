@@ -138,7 +138,7 @@ const getWei = async (balance: string) => {
 //   bus.emit("promptModalSuccess", title);
 // };
 
-const toBack = (res: any) => {
+const toBack = () => {
   // pageType.value = 'showKey';
   // walltAccount.value = 'selectAccount';
   router.push('/homePage');

@@ -9,9 +9,8 @@ export default {
 import { ref, onMounted } from 'vue';
 import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB.js';
-import { Decrypt } from '@/utils/index.js';
 import md5 from 'js-md5';
-import { Encrypt } from '@/utils/index.js';
+import { Encrypt, Decrypt } from '@/utils/index';
 let textPsd = ref('psd');
 let psdText = ref('');
 let newPsdBol = ref(false);

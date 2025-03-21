@@ -9,7 +9,7 @@ export default {
 import { ref, onMounted } from 'vue';
 import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB.js';
-import { Encrypt, Decrypt } from '@/utils/index.js';
+import { Encrypt, Decrypt } from '@/utils/index';
 import md5 from 'js-md5';
 let psdText = ref('');
 let passKey = ref('');

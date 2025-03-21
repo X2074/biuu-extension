@@ -1,12 +1,12 @@
 <div class="send-trade" v-loading:[loadingText]="loading">
-    <div class="header flex" @click="toBack('homePage')">
+    <div class="header flex" @click="toBack">
         <img class="back-img" src="@/assets/images/icons/back.png" alt="">
         <p>{{rpcData?.unit.toUpperCase()}}转账</p>
     </div>
 
     <div class="trade-address mt-10" v-if="sendTradePage == 'home'">
         <div class="input-address">
-            <p>付款地址：</p>
+            <p>付款地址000：</p>
             <input v-if="currentWallt && currentWallt['utxoAddressTest']" disabled class="mt-10" maxlength="16"
                 v-model="currentWallt['utxoAddressTest']">
             <input v-if="currentWallt && !currentWallt['utxoAddressTest']" disabled class="mt-10" maxlength="16"

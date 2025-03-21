@@ -2,7 +2,7 @@
 
 // 监听来自content script的消息
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log(request, "requestrequestrequest");
+  console.log(request, "request", sender, 'sender', sendResponse, "sendResponse");
 
   if (!request.method) {
     // sendResponse({ error: { message: 'Method is required' } });

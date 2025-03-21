@@ -32,10 +32,10 @@ export async function evmTransfer(data) {
     let serializedTx = tx.serialize();
     let raw = '0x' + serializedTx.toString('hex');
     web3.eth.sendSignedTransaction(raw).then(hash => {
-        indexDbData.getData('nonce').then(res => {
-            res['content'] = res['content'] + 1;
-            indexDbData.putData(res);
-        });
+        // indexDbData.getData('nonce').then(res => {
+        //     res['content'] = res['content'] + 1;
+        //     indexDbData.putData(res);
+        // });
         console.log(hash, 'hash');
         chromeNotifications(hash)
         // 将参数与hash合并，便于后面的取消和加速操作

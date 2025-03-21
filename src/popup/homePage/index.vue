@@ -10,7 +10,7 @@ import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB.js';
 import Web3 from 'web3';
 import nftCard from '@/components/nftsCard/index.vue';
-import { getBlance } from '@/utils/index.js';
+import { getBlance } from '@/utils/index';
 import { useRouter } from 'vue-router';
 let router = useRouter();
 const transactionHash = ref(0);
@@ -52,7 +52,7 @@ const getInfo = () => {
       loading.value = false;
     });
 };
-const getBlanceInfo = async (type = 'homePage') => {
+const getBlanceInfo = async () => {
   try {
     let data = await indexDbData.getData('rpc_url');
     walltContent.value = data;
@@ -117,9 +117,7 @@ const toWei = (data: any) => {
     transactionHash.value = web3.value.utils.fromWei(res.value, 'ether');
   });
 };
-const toPage = (res: any) => {
-  console.log(8888888888);
-
+const toPage = () => {
   moreShow.value = !moreShow.value;
   // pageType.value = 'showKey';
   // walltAccount.value = 'selectAccount';

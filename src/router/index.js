@@ -12,7 +12,7 @@ import creasteWalletPage from '../popup/creasteWalletPage/index.vue'
 // 导入
 import importWallet from '../popup/importWallet/index.vue'
 // 转账
-import transfer from '../popup/transfer/index.vue'
+// import transfer from '../popup/transfer/index.vue'
 
 const routes = [
   { path: '/:pathMath(.*)', redirect: '/homePage' },
@@ -51,11 +51,11 @@ const routes = [
     name: 'login',
     component: loginwallt
   },
-  {
-    path: '/transfer',
-    name: 'transfer',
-    component: transfer
-  },
+  // {
+  //   path: '/transfer',
+  //   name: 'transfer',
+  //   component: transfer
+  // },
   // 钱包切换
   {
     path: '/selectAccount/:pageType?',
@@ -103,13 +103,7 @@ const routes = [
     path: '/sendTrade',
     name: 'sendTrade',
     component: () => import("../popup/sendTrade/index.vue"),
-  },
-  // 划转
-  {
-    path: '/transfer/:type?',
-    name: 'transfer',
-    component: () => import("../popup/sendTrade/index.vue"),
-  },
+  }
 
 ]
 

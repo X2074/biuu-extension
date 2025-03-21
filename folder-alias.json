@@ -186,7 +186,7 @@
         "description": "测试新增网络"
     },
     "src/popup/transfer": {
-        "description": "划转"
+        "description": "划转（暂未使用该页面，备份）"
     },
     "indexDBDoc.md": {
         "description": "数据库结构"
@@ -223,5 +223,8 @@
     },
     "src/components/nftsCard": {
         "description": "首页的nft模块"
+    },
+    "src/contentPage": {
+        "description": "c测试多文件入口"
     }
 }

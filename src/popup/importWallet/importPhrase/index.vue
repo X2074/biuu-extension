@@ -8,7 +8,7 @@ export default {
 import { ref } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus.js';
-import { Encrypt } from '@/utils/index.js';
+import { Encrypt } from '@/utils/index';
 import md5 from 'js-md5';
 import * as bip39 from 'bip39';
 import { createWallet } from '@/utils/createUser.js';

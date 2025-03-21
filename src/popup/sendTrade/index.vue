@@ -12,9 +12,7 @@ export default {
 import { ref, onMounted, toRaw, defineProps } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
-import { Decrypt } from '@/utils/index';
-import { getNonce, getGas, evmKey, utxoKey } from '@/utils/index.js';
-import { getBlance } from '@/utils/index';
+import { Decrypt, getGas, evmKey, utxoKey, getBlance } from '@/utils/index';
 import addressBook from '@/components/addressBook/index.vue';
 import transfer from './transfer/index.vue';
 import md5 from 'js-md5';
@@ -33,14 +31,14 @@ let passKey = ref('');
 let loading = ref(false);
 let loadingText = ref('加载中...');
 let rpcData = ref(null); //当前网络信息
-indexDbData.getData('rpc_url').then((res) => {
+indexDbData.getData('rpc_url').then((res: any) => {
   rpcData.value = res;
 });
 let utxoTactics = ref('min');
 // 获取设置的密码
 indexDbData
   .getData(md5('secret'))
-  .then((res) => {
+  .then((res: any) => {
     passKey.value = res.secret;
   })
   .catch((err: any) => {
@@ -61,7 +59,7 @@ onMounted(async () => {
   } catch (error) {}
 });
 // 返回上一页面
-const toBack = (page: number) => {
+const toBack = () => {
   if (sendTradePage.value == 'home') {
     bus.emit('nextPage', '');
   } else {
@@ -138,13 +136,13 @@ const toTransfer = async () => {
   }
   console.log(privateKey.value, 'privateKey');
   if (rpcUrlData.value['netWorkType'].toLowerCase() == 'evm') {
-    nonce.value = await getNonce(currentWallt.value['address'], rpcUrlData.value['url']);
+    // nonce.value = await getNonce(currentWallt.value['address'], rpcUrlData.value['url']);
     console.log(blanceSecre.value, 'blanceSecre');
     let gas = await getGas(rpcUrlData.value['url'], currentWallt.value['address'], toAddress.value, quantity.value);
     transferContent.value = {
       to: toAddress.value, // 接收方地址
       value: quantity.value, // 转账 wei
-      nonce: nonce.value, //nonce
+      // nonce: nonce.value, //nonce
       chainId: rpcUrlData.value['CHAIN_ID'],
       gasLimit: gas.gasLimit,
       gasPrice: gas.gasPrice,

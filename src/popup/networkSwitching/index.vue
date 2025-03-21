@@ -53,7 +53,7 @@ const rpcChange = async (event: any, type: string) => {
   }, 300);
 };
 // 返回上一页面
-const toBack = (page: string) => {
+const toBack = () => {
   bus.emit('nextPage', '');
 };
 </script>

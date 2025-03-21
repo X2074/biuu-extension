@@ -8,11 +8,10 @@ export default {
 import { ref, onMounted, toRaw, defineProps } from 'vue';
 import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB.js';
-import { Encrypt } from '@/utils/index.js';
 import { createMnemonic, createWallet } from '@/utils/createUser.js';
 import showPrivateKey from '../showPrivateKey/index.vue';
 import deleteWallt from '../deleteWallt/index.vue';
-import { getBlance } from '@/utils/index.js';
+import { getBlance, Encrypt } from '@/utils/index';
 import { addBalance } from '@/utils/UTXO/meerRpc.js';
 import md5 from 'js-md5';
 import { rpcConfig, defaultAccount, defaultUTXOAccount } from '@/config/configuration';
@@ -37,7 +36,7 @@ onMounted(async () => {
   loading.value = true;
   await initializeInfo();
   if (pageType.value) {
-    indexDbData.getData('currentWalltAddress').then((res) => {
+    indexDbData.getData('currentWalltAddress').then((res: any) => {
       checkAddressText.value = res.address;
       accountType.value = pageType.value;
     });
@@ -198,7 +197,7 @@ const appendRecCurrent = (content: any) => {
       res.walltInfo.push(content);
       // 保存key
       indexDbData.putData(res);
-      indexDbData.getData('currentWalltAddress').then((res: any) => {
+      indexDbData.getData('currentWalltAddress').then(() => {
         // 存为当前选中的网络中数据
         let contentRecCurrent = content;
         contentRecCurrent['id'] = 'currentWalltAddress';

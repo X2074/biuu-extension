@@ -41,6 +41,8 @@
     "web3": "^1.10.2"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "@types/ethereumjs-tx": "^1.0.1",
     "@types/node": "^20.11.6",
     "@vitejs/plugin-vue": "^4.5.2",
     "@vue/cli-plugin-babel": "~4.5.0",

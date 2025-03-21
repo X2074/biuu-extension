@@ -8,7 +8,7 @@ import './test';
 // 开始轮循hash状态
 roundRobin()
 chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
-    console.log(message, '测试数据00002');
+    console.log(message, '测试数据00002', sender, "sender");
     setTimeout(() => {
         // 浏览器右下角弹框
         // chromeNotifications({})

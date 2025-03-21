@@ -41,7 +41,7 @@
 │   │   │           ├── privateKey                  展示私钥   
 │   │   ├──  secret                                 关闭浏览器后进入，输入密码页面
 │   │   ├── homePage                                popup主页面
-│   │   ├── transfer                                转账
+│   │   ├── transfer                                转账（备份）
 │   │   ├── index.html
 │   │   ├── main.ts
 │   ├── utils                                      公共js方法
@@ -52,7 +52,4 @@
 │   │   ├── index.js                               cookie、加密解密、转账、助记词转私钥等 
 │   │   ├── indexDB.js                             indexDB方法 
 │   │   ├── nft.js                                 nft相关操作（获取、转移的dome） 
-├── tsconfig.json
-├── tsconfig.node.json
-├── vite.config.ts
 └── watch.mjs
