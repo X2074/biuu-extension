@@ -20,7 +20,7 @@
   <!-- 全局自动关闭提示 -->
   <prompt></prompt>
 </template>
-<script lang="ts" >
+<script lang="ts">
 export default {
   name: 'App'
 };
@@ -44,6 +44,9 @@ import { getBlance } from '@/utils/index';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus.js';
 import { useRouter } from 'vue-router';
+import { useSyncProviders } from '@/store/useSyncProviders.ts';
+const providers = useSyncProviders()
+console.log(providers, 'providers')
 let loading = ref(true);
 let loadingText = ref('加载中...');
 const userAddress = ref(null);
