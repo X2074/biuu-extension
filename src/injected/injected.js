@@ -18,6 +18,36 @@
 
     // 将Person类暴露到全局作用域
     window.Person = Person;
+
+
+
+    let provider;
+    console.log(7887885455);
+
+    window.ethereum = provider;
+
+    function announceProvider() {
+        const info = {
+            uuid: "350670db-19fa-4704-a166-e52e178b59d2",
+            name: "Example Wallet",
+            icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'/>",
+            rdns: "com.example.wallet"
+        };
+        window.dispatchEvent(
+            new CustomEvent("eip6963:announceProvider", {
+                detail: Object.freeze({ info, provider }),
+            })
+        );
+    }
+
+    window.addEventListener(
+        "eip6963:requestProvider",
+        (event) => {
+            announceProvider();
+        }
+    );
+
+    announceProvider();
 })();
 // 可以通过 window.qitmeer 来与您的钱包进行交互
 class QitmeerWalletProvider {
