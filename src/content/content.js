@@ -23,3 +23,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 const script = document.createElement('script')
 script.src = chrome.runtime.getURL('injected/injected.js')
   ; (document.head || document.documentElement).appendChild(script)
+
+
+  
+// 页面加载时注入我们的内容脚本
+// script.src = chrome.runtime.getURL('injected/EIP6963.ts')
+//   ; (document.head || document.documentElement).appendChild(script)
