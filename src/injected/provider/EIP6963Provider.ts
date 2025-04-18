@@ -15,6 +15,7 @@ export class EIP6963ProviderImpl implements EIP6963Provider {
     isConnected: boolean = false;
 
     async request({ method, params }: { method: string; params?: any[] }): Promise<any> {
+        console.log('EIP6963ProviderImpl.request', method, params);
         switch (method) {
             case 'eth_requestAccounts':
                 return this.requestAccounts();
