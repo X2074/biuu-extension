@@ -226,5 +226,11 @@
     },
     "src/contentPage": {
         "description": "c测试多文件入口"
+    },
+    "src/injected/EIP6963.js": {
+        "description": "原始备份文件"
+    },
+    "src/injected/injected.js": {
+        "description": "原始备份文件"
     }
 }

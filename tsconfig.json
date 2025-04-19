@@ -34,6 +34,7 @@
         "src/**/*.vue",
         "src/background/resident.ts",
         "src/background/service-worker.js",
+        "src/injected/indexInjected.js",
         "src/utils/index.jts"
     ],
     "references": [{ "path": "./tsconfig.node.json" }]

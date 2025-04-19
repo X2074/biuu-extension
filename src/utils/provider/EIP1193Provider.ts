@@ -42,6 +42,8 @@ export const store = {
     }
 
     function onDisconnect(event: CustomEvent<{ code: number; message: string }>) {
+      console.log(event);
+      
       currentProvider = null;
       callback();
     }

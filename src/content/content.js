@@ -21,7 +21,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 // 页面加载时注入我们的内容脚本
 const script = document.createElement('script')
-script.src = chrome.runtime.getURL('injected/injected.js')
+script.src = chrome.runtime.getURL('injected/indexInjected.js')
   ; (document.head || document.documentElement).appendChild(script)
 
 
