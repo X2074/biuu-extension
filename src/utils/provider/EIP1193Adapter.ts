@@ -1,5 +1,5 @@
 import { EthereumProvider, EthereumProviderEventMap } from '@/types/eip1193';
-import { store } from './EIP1193Provider';
+// import { store } from './EIP1193Provider';
 
 export class EIP1193Adapter implements EthereumProvider {
   private eventListeners: Map<string, Set<(data: any) => void>> = new Map();

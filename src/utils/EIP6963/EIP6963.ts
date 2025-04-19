@@ -1,5 +1,6 @@
 // EIP6963.ts
-
+// 导入 EIP1193 相关的组件
+import { eip1193Provider, cleanupEIP1193 } from '..//provider/EIP1193Provider';
 // 定义事件名称类型
 type EIP6963EventName = 'eip6963:announceProvider' | 'eip6963:requestProvider';
 
@@ -14,7 +15,7 @@ interface EIP6963ProviderInfo {
 // 定义 provider detail 接口
 interface ProviderDetail {
     info: EIP6963ProviderInfo;
-    provider: any; // 可以根据实际需求进一步定义 provider 的类型
+    provider: typeof eip1193Provider; // 使用 EIP1193 provider 类型
 }
 
 // 定义事件名称常量
@@ -34,11 +35,13 @@ export const EIP6963ProviderInfo: EIP6963ProviderInfo = {
 // 定义 provider detail
 export const providerDetail: ProviderDetail = { 
     info: EIP6963ProviderInfo,
-    provider: null
+    provider: eip1193Provider
 };
 
 // 宣布提供商函数
 export function announceProviderInject() {
+console.log(providerDetail,'providerDetail');
+
     function announceProvider() {
         window.dispatchEvent(
             new CustomEvent("eip6963:announceProvider", {
@@ -47,14 +50,40 @@ export function announceProviderInject() {
         );
     }
 
-    window.addEventListener(
-        "eip6963:requestProvider",
-        (event) => {
-            console.log(event);
+    // 使用 async/await 处理异步请求
+    const handleProviderRequest = async (event: Event) => {
+        console.log('EIP6963 request received:', event);
+        
+        try {
+            // 使用 EIP1193 provider 连接
+            const accounts = await providerDetail.provider.request({ 
+                method: 'eth_requestAccounts',
+                params: []
+            });
+            console.log('Connected with accounts:', accounts);
             
+            // 发送账户变化事件
+            window.dispatchEvent(new CustomEvent("eip1193:accountsChanged", {
+                detail: accounts
+            }));
+            
+            // 发送链变化事件
+            window.dispatchEvent(new CustomEvent("eip1193:chainChanged", {
+                detail: providerDetail.provider.chainId
+            }));
+            
+            // 重新宣布
             announceProvider();
+        } catch (error:any) {
+            console.error('Connection failed:', error);
+            // 发送断开连接事件
+            window.dispatchEvent(new CustomEvent("eip1193:disconnect", {
+                detail: { code: 1000, message: error.message }
+            }));
         }
-    );
+    };
+    // 添加事件监听器
+    window.addEventListener("eip6963:requestProvider", handleProviderRequest);
 
     announceProvider();
 }
