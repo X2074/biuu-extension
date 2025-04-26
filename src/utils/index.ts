@@ -5,7 +5,8 @@ import { getEVMBlance } from '@/utils/EVM/index.js';
 import { getUTXOBalance } from '@/utils/UTXO/meerRpc.js'
 import ecc from 'tiny-secp256k1'
 import { BIP32Factory } from 'bip32'
-// 使用最新版本浏览器不支持，只能使用1.x版本替换
+import browser from 'webextension-polyfill';
+import {AllowedQueryParamPageType} from "./types"// 使用最新版本浏览器不支持，只能使用1.x版本替换
 const bip32 = BIP32Factory(ecc)
 
 //解密方法
@@ -104,3 +105,22 @@ export async function getGas(url: any, from: any, to: any, value: any) {// 获�
 		gasPrice: gasPrice
 	}
 }
+
+
+
+export async function showExtensionPopup(
+	url: AllowedQueryParamPageType
+  ): Promise<browser.Windows.Window> {
+	const { left = 0, top, width = 1920 } = await browser.windows.getCurrent();
+	const popupWidth = 384;
+	const popupHeight = 628;
+	return browser.windows.create({
+	  url: `${browser.runtime.getURL('popup/index.html')}#${url}`,
+	  type: 'popup',
+	  left: left + width - popupWidth,
+	  top,
+	  width: popupWidth,
+	  height: popupHeight,
+	  focused: true,
+	});
+  }

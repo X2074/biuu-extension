@@ -42,7 +42,7 @@ export default defineConfig({
       input: {
         popup: path.resolve(__dirname, 'src/popup/index.html'),
         indexPage: path.resolve(__dirname, 'src/components/indexPage/index.html'),
-        // content: path.resolve(__dirname, 'src/content/content.js'),
+        content: path.resolve(__dirname, 'src/content/content.ts'),
         background: path.resolve(__dirname, 'src/background/service-worker.ts'),
         injected: path.resolve(__dirname, 'src/injected/indexInjected.ts'),
       },

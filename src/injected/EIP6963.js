@@ -73,5 +73,12 @@ export function announceProviderInject() {
         }
     );
 
+    // indexInjected.ts
+window.addEventListener('message', (event) => {
+    // 验证消息来源
+    console.log(event,"注入脚本数据");
+    
+});
+
     announceProvider();
 }

@@ -55,6 +55,11 @@ CopyInsert
 typescript
 CopyInsert
 if (provider.isMetaMask) {
+
+
+
+
+  
   // MetaMask specific code
 } else if (provider.isCoinbaseWallet) {
   // Coinbase Wallet specific code
