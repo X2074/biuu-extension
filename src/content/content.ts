@@ -1,46 +1,47 @@
+import { EXTERNAL_PORT_NAME } from '../utils/provider/constants'
 // 在 content script 中使用
 // 存储端口连接
 let providerPort: chrome.runtime.Port | null = null;
 // 创建新的端口连接
 function createProviderPort() {
   try {
-      providerPort = chrome.runtime.connect({ name: 'biuu-external' });
-      console.log('Port created:', providerPort);
-      
-      // 设置消息监听器
-      providerPort.onMessage.addListener((data) => {
-          console.log(`%c content: background >>> inpage: ${JSON.stringify(data)}`, 'background: #222; color: #bada55');
-          
-          // 将响应返回给 DApp-background
-          window.postMessage({
-              ...data,
-              target: 'biuu-window-provider'
-          }, window.location.origin);
-      });
-      
-      // 处理端口断开
-      providerPort.onDisconnect.addListener(() => {
-          console.log('Provider port disconnected');
-          providerPort = null;
-          // 尝试重新连接
-          setTimeout(() => {
-              try {
-                  createProviderPort();
-              } catch (error) {
-                  console.error('Failed to reconnect:', error);
-              }
-          }, 1000);
-      });
-  } catch (error) {
-      console.error('Failed to create port:', error);
+    providerPort = chrome.runtime.connect(EXTERNAL_PORT_NAME);
+    console.log('Port created:', providerPort);
+
+    // 设置消息监听器
+    providerPort.onMessage.addListener((data) => {
+      console.log(`%c content: background >>> inpage: ${JSON.stringify(data)}`, 'background: #222; color: #bada55');
+
+      // 将响应返回给 DApp-background
+      window.postMessage({
+        ...data,
+        target: 'biuu-window-provider'
+      }, window.location.origin);
+    });
+
+    // 处理端口断开
+    providerPort.onDisconnect.addListener(() => {
+      console.log('Provider port disconnected');
+      providerPort = null;
       // 尝试重新连接
       setTimeout(() => {
-          try {
-              createProviderPort();
-          } catch (error) {
-              console.error('Failed to reconnect:', error);
-          }
+        try {
+          createProviderPort();
+        } catch (error) {
+          console.error('Failed to reconnect:', error);
+        }
       }, 1000);
+    });
+  } catch (error) {
+    console.error('Failed to create port:', error);
+    // 尝试重新连接
+    setTimeout(() => {
+      try {
+        createProviderPort();
+      } catch (error) {
+        console.error('Failed to reconnect:', error);
+      }
+    }, 1000);
   }
 }
 // 初始化 provider bridge
@@ -53,8 +54,9 @@ window.addEventListener('message', function (e) {
 
   // 将通信信息暴露给background页面，将消息过滤，获取属于自己的消息数据
   if (e.data == 'page') {
-    chrome.runtime.sendMessage({ action: 'test', test: "content传递数据给service-worker" }, (response) => {
-      if (response.action === 'service') {
+    chrome.runtime.sendMessage({ action: 'test', test: "content传递数据给service-worker" }, (response:{ action?: string } | undefined) => {
+      console.log(response)
+      if (response?.action === 'service') {
         console.log("content接收到service-worker的数据");
         window.postMessage({ test: "我是主窗口，我接收到消息了" });
       }
@@ -68,19 +70,20 @@ window.addEventListener('message', function (e) {
   if (!e.data?.target) return;
 
   if (e.data.target === 'biuu-provider-bridge') {
-      // 如果没有连接，创建新的连接
-      if (!providerPort) {
-          createProviderPort();
-      }
+    // 如果没有连接，创建新的连接
+    if (!providerPort) {
+      createProviderPort();
+    }
 
-      // 发送消息到 background
-      if (providerPort) {
-          providerPort.postMessage(e.data);
-      }
+    // 发送消息到 background
+    if (providerPort) {
+      providerPort.postMessage(e.data);
+    }
   }
 }, true);
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse:any) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
+  console.log(sender, 'sender')
   if (message.action === 'service') {
     console.log("content接收到service-worker的数据");
     window.postMessage({ test: "我是主窗口，我接收到消息了" });

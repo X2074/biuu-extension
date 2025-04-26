@@ -2,7 +2,7 @@ import { EXTERNAL_PORT_NAME, PROVIDER_BRIDGE_TARGET,WINDOW_PROVIDER_TARGET,AA_EX
 // 负责在 DApp 页面和扩展的 Background Script 之间建立通信桥梁
 export function connectProviderBridge(): void {
     // 建立与 Background Script 的连接
-    const port = chrome.runtime.connect({name:EXTERNAL_PORT_NAME});
+    const port = chrome.runtime.connect(EXTERNAL_PORT_NAME);
     console.log(port,"portportportport");
     
     const windowOriginAtLoadTime = window.location.origin;
