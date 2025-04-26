@@ -1,16 +1,16 @@
-import { EXTERNAL_PORT_NAME } from '../utils/provider/constants'
+
 // 在 content script 中使用
 // 存储端口连接
 let providerPort: chrome.runtime.Port | null = null;
 // 创建新的端口连接
 function createProviderPort() {
   try {
-    providerPort = chrome.runtime.connect(EXTERNAL_PORT_NAME);
+    providerPort = chrome.runtime.connect({name:'biuu-external'});
     console.log('Port created:', providerPort);
 
     // 设置消息监听器
     providerPort.onMessage.addListener((data) => {
-      console.log(`%c content: background >>> inpage: ${JSON.stringify(data)}`, 'background: #222; color: #bada55');
+      console.log('Message from background:', data);
 
       // 将响应返回给 DApp-background
       window.postMessage({
@@ -47,14 +47,40 @@ function createProviderPort() {
 // 初始化 provider bridge
 function connectProviderBridge() {
   createProviderPort();
+  // 监听 DApp 消息
+  window.addEventListener('message', async (e) => {
+    console.log('Message from DApp:', e.data);
+    
+    // 验证消息来源
+    if (e.origin !== window.location.origin) return;
+    if (e.source !== window) return;
+    if (!e.data?.target) return;
+
+    if (e.data.target === 'biuu-provider-bridge') {
+        if (!providerPort) {
+            createProviderPort();
+        }
+
+        if (providerPort) {
+            // 将消息转发给 background
+            providerPort.postMessage({
+                type: 'provider_request',
+                request: {
+                    method: e.data.method,
+                    params: e.data.params
+                }
+            });
+        }
+    }
+}, true);
 }
 // 监听 DApp 消息
 window.addEventListener('message', function (e) {
-  console.log(e, "eeeeeee");
+  console.log('Message from DApp:', e.data);
 
   // 将通信信息暴露给background页面，将消息过滤，获取属于自己的消息数据
   if (e.data == 'page') {
-    chrome.runtime.sendMessage({ action: 'test', test: "content传递数据给service-worker" }, (response:{ action?: string } | undefined) => {
+    chrome.runtime.sendMessage({ action: 'test', test: "content传递数据给service-worker" }, {},(response:any) => {
       console.log(response)
       if (response?.action === 'service') {
         console.log("content接收到service-worker的数据");
@@ -83,7 +109,7 @@ window.addEventListener('message', function (e) {
 }, true);
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
-  console.log(sender, 'sender')
+  console.log(sender, 'content页面')
   if (message.action === 'service') {
     console.log("content接收到service-worker的数据");
     window.postMessage({ test: "我是主窗口，我接收到消息了" });
@@ -99,5 +125,4 @@ connectProviderBridge();
 const script = document.createElement('script')
 script.src = chrome.runtime.getURL('injected/indexInjected.js')
   ; (document.head || document.documentElement).appendChild(script)
-
 

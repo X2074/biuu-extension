@@ -10,7 +10,7 @@ import { ref, onMounted } from 'vue';
 import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB.js';
 import md5 from 'js-md5';
-import { Encrypt, Decrypt } from '@/utils/index';
+import { Encrypt, Decrypt,showExtensionPopup } from '@/utils/index';
 let textPsd = ref('psd');
 let psdText = ref('');
 let newPsdBol = ref(false);
@@ -42,7 +42,7 @@ const forget = () => {
   secretStep.value = 2;
 };
 
-const unlock = () => {
+const unlock = async () => {
   if (!psdText.value || psdText.value.length < 8) {
     newPsdBol.value = true;
     confirmPsd.value = '请输入至少 8 位密码';
@@ -118,6 +118,61 @@ const restoreWallet = async () => {
 
   bus.emit('nextPage', 'homePage');
 };
+
+
+// async function toDapp() {
+//     try {
+//         // 获取当前激活的标签页
+//         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        
+//         if (!tab?.id) {
+//             throw new Error('No active tab found');
+//         }
+
+//         // 发送消息到 content script
+//         const response = await chrome.tabs.sendMessage(tab.id, {
+//             action: 'accounts_selected',
+//             data: {
+//                 accounts: ['0x1234567890abcdef'], // 实际使用时应替换为真实的账户地址
+//                 selectedAccount: "0x1234567890abcdef" // 选择的账户
+//             }
+//         });
+
+//     } catch (error) {
+//         console.error('Failed to communicate with content script:', error);
+//         throw error;
+//     }
+// }
+
+async function toDapp() {
+  try {
+        // 创建到后台的端口连接
+        const port = chrome.runtime.connect({ name: 'biuu-external' });
+        
+        // 发送消息到DApp
+        port.postMessage({
+          action: 'send_to_dapp',
+          data: {
+            accounts: ['0x1234567890abcdef'],
+            selectedAccount: '0x1234567890abcdef',
+            message: 'Hello from popup window'
+          }
+        });
+        
+        // 添加消息监听器
+        port.onMessage.addListener((response) => {
+          console.log('Response from content script:', response);
+        });
+        
+        // 添加断开连接的监听器
+        port.onDisconnect.addListener(() => {
+          console.log('Port disconnected');
+        });
+        
+      } catch (error) {
+        console.error('Failed to send message:', error);
+      }
+}
 </script>
 <style lang="scss">
 @import './index.scss';

@@ -8,8 +8,6 @@ declare global {
     }
 }
 import { announceProviderInject } from '../utils/EIP6963/EIP6963';
-// import { connectProviderBridge } from '../utils/provider/index';
-// import {announceProviderInject} from "./EIP6963"
 // 首先定义 Person 类的类型
 type PersonType = {
     openPage(): void;

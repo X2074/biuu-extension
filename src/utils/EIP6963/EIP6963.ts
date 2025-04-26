@@ -1,6 +1,6 @@
 // EIP6963.ts
 // 导入 EIP1193 相关的组件
-import { eip1193Provider, cleanupEIP1193 } from '..//provider/EIP1193Provider';
+import { eip1193Provider } from '../provider/EIP1193Provider';
 // 定义事件名称类型
 type EIP6963EventName = 'eip6963:announceProvider' | 'eip6963:requestProvider';
 

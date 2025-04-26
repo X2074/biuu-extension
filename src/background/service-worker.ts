@@ -77,16 +77,25 @@ chrome.runtime.onConnect.addListener((port) => {
         // 设置消息监听器
         port.onMessage.addListener(async (message) => {
             console.log('Received message:', message);
-            
             try {
                 // 处理不同的请求类型
-                // if (message.type === 'provider_request') {
+                if (message.request) {
                     const response = await handleProviderRequest(message.request);
                     port.postMessage({
                         type: 'accounts_response',
                         accounts: response
                     });
-                // }
+                }else{
+                    // 转发消息到所有标签页，实现popup到dapp的通信
+                    sendMessageToAllTabs({
+                        action: 'accounts_selected',
+                        data: {
+                            accounts: message.data.accounts,
+                            selectedAccount: message.data.selectedAccount,
+                            message: message.data.message
+                        }
+                    }); 
+                }
             } catch (error:any) {
                 console.error('Error handling message:', error);
                 port.postMessage({
@@ -106,6 +115,8 @@ chrome.runtime.onConnect.addListener((port) => {
 
 // 处理 provider 请求
 async function handleProviderRequest(request: any) {
+    console.log(request,"requestrequestrequestrequestrequestrequest");
+    
     switch (request.method) {
         case 'eth_requestAccounts':
             // 处理账户请求
@@ -129,4 +140,18 @@ async function requestAccounts(params: any[]) {
 async function getChainId() {
     console.log('getChainId');
     return '0x1'; // 以太坊主网
+}
+
+
+// 发送消息到所有标签页的函数
+function sendMessageToAllTabs(message: any) {
+    chrome.tabs.query({}, (tabs) => {
+        tabs.forEach(tab => {
+            chrome.tabs.sendMessage(tab.id, message, (response) => {
+                if (chrome.runtime.lastError) {
+                    console.error('Failed to send message to tab:', chrome.runtime.lastError);
+                }
+            });
+        });
+    });
 }

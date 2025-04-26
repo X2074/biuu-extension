@@ -1,3 +1,24 @@
+export interface EthereumProvider {
+    request(args: { method: string; params?: any[] }): Promise<any>;
+    on(eventName: string, listener: (...args: any[]) => void): void;
+    removeListener(eventName: string, listener: (...args: any[]) => void): void;
+    accountsChanged(eventName: string[], listener: (...args: any[]) => void): void;
+    chainChanged(eventName: string, listener: (...args: any[]) => void): void;
+    accounts: string[];
+    chainId: string;
+    isBIUU:boolean;
+    isUnlocked:boolean;
+    selectedAccount:any;
+    isAAExtension:any;
+    disconnect: () => void;
+    providerInfo: {
+        label: string;
+        injectedNamespace: string;
+        identityFlag: string;
+        checkIdentity: (provider: EthereumProvider) => boolean;
+    };
+}
+
 export type WalletProvider = {
     providerInfo?: {
       label: string;

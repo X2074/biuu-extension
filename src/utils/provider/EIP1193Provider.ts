@@ -1,5 +1,5 @@
 // EIP1193Provider.ts
-
+import { WalletProvider } from "./types"
 // 首先定义 EIP-1193 Provider 的类型
 export interface EthereumProvider {
   request(args: { method: string; params?: any[] }): Promise<any>;
@@ -9,19 +9,59 @@ export interface EthereumProvider {
   accountsChanged: (accounts: string[]) => void;
   chainChanged: (chainId: string) => void;
   disconnect: () => void;
+  providerInfo: {
+    label: string;
+    injectedNamespace: string;
+    identityFlag: string;
+    checkIdentity: (provider: WalletProvider) => boolean;
+  };
 }
+// Provider 信息配置，用于判断钱包的身份标识
+export const providerInfo = {
+	label: 'BIUU',
+	injectedNamespace: 'BIUU-Chrome-Extension',
+	identityFlag: 'isBIUU',
+	checkIdentity: (provider: WalletProvider) =>
+	  !!provider && !!provider.isAAExtension,
+  } as const;
 
 // 创建 EIP-1193 兼容的 provider
 export const createEIP1193Provider = (): EthereumProvider => {
   const provider: EthereumProvider = {
     accounts: [],
     chainId: '0x1',
+	providerInfo,
     request: async (args: { method: string; params?: any[] }) => {
       const { method, params } = args;
       try {
         switch (method) {
           case 'eth_requestAccounts':
-            return ['0x1234567890123456789012345678901234567890'];
+			return new Promise((resolve, reject) => {
+				// 发送请求到 content script
+				window.postMessage({
+					target: 'biuu-provider-bridge',
+					request: {
+						method: 'eth_requestAccounts',
+						params
+					}
+				}, '*');
+
+				// 监听响应
+				const listener = (event: MessageEvent) => {
+					console.log(event,"eventeventeventevent55554");
+					
+					if (event.data.target === 'biuu-window-provider') {
+						window.removeEventListener('message', listener);
+						if (event.data.type === 'accounts_response') {
+							resolve(event.data.accounts);
+						} else {
+							reject(new Error('Request failed'));
+						}
+					}
+				};
+
+				window.addEventListener('message', listener);
+			});
           case 'eth_chainId':
             return provider.chainId;
           default:
