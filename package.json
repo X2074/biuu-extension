@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "watch-build": "vite --watch build",
+    "watch-build": "vue-tsc && vite --watch build",
     "watch-json": "node watch.mjs"
   },
   "dependencies": {

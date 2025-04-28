@@ -146,16 +146,23 @@ const restoreWallet = async () => {
 
 async function toDapp() {
   try {
+    // 获取当前激活的标签页
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+//         if (!tab?.id) {
+//             throw new Error('No active tab found');
+//         }
         // 创建到后台的端口连接
-        const port = chrome.runtime.connect({ name: 'biuu-external' });
         
+        let data:any = {name:'biuu-external'};
+        const port = chrome.runtime.connect(data);
         // 发送消息到DApp
         port.postMessage({
           action: 'send_to_dapp',
           data: {
             accounts: ['0x1234567890abcdef'],
             selectedAccount: '0x1234567890abcdef',
-            message: 'Hello from popup window'
+            message: 'Hello from popup window',
+            tab:tab
           }
         });
         

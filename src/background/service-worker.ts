@@ -92,7 +92,8 @@ chrome.runtime.onConnect.addListener((port) => {
                         data: {
                             accounts: message.data.accounts,
                             selectedAccount: message.data.selectedAccount,
-                            message: message.data.message
+                            message: message.data.message,
+                            tabId:message.data.tab.id
                         }
                     }); 
                 }
@@ -146,10 +147,14 @@ async function getChainId() {
 // 发送消息到所有标签页的函数
 function sendMessageToAllTabs(message: any) {
     chrome.tabs.query({}, (tabs) => {
-        tabs.forEach(tab => {
-            chrome.tabs.sendMessage(tab.id, message, (response) => {
-                if (chrome.runtime.lastError) {
-                    console.error('Failed to send message to tab:', chrome.runtime.lastError);
+        tabs.forEach((tab:any) => {
+            console.log(tab.id,"tabtabtabtabtabtabtab",message.data.tabId);
+            chrome.tabs.sendMessage(tab.id, message, {},(response) => {
+                console.log(response,'response');
+                
+                let chromeInfo:any = chrome.runtime;
+                if (chromeInfo.lastError) {
+                    console.error('Failed to send message to tab:', chromeInfo.lastError);
                 }
             });
         });

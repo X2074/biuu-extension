@@ -4,8 +4,9 @@
 let providerPort: chrome.runtime.Port | null = null;
 // 创建新的端口连接
 function createProviderPort() {
+  let data:any = {name:'biuu-external'};
   try {
-    providerPort = chrome.runtime.connect({name:'biuu-external'});
+    providerPort = chrome.runtime.connect(data);
     console.log('Port created:', providerPort);
 
     // 设置消息监听器
