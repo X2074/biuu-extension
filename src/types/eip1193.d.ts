@@ -1,9 +1,14 @@
 export interface EthereumProvider {
-  request(args: { method: string; params?: any[] }): Promise<any>;
-  on(event: string, callback: (data: any) => void): void;
-  removeListener(event: string, callback: (data: any) => void): void;
   chainId: string;
   accounts: string[];
+  providerInfo: {
+      label: string;
+      injectedNamespace: string;
+      identityFlag: string;
+      checkIdentity: (provider: EthereumProvider) => boolean;
+      name: string;
+      version: string;
+  };
 }
 
 export interface EthereumProviderEventMap {

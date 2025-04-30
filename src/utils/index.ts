@@ -108,19 +108,70 @@ export async function getGas(url: any, from: any, to: any, value: any) {// 获�
 
 
 
+// 存储弹出窗口的ID
+let popupWindowId: number | null = null;
+
 export async function showExtensionPopup(
-	url: AllowedQueryParamPageType
-  ): Promise<browser.Windows.Window> {
-	const { left = 0, top, width = 1920 } = await browser.windows.getCurrent();
-	const popupWidth = 384;
-	const popupHeight = 628;
-	return browser.windows.create({
-	  url: `${browser.runtime.getURL('popup/index.html')}#${url}`,
-	  type: 'popup',
-	  left: left + width - popupWidth,
-	  top,
-	  width: popupWidth,
-	  height: popupHeight,
-	  focused: true,
-	});
-  }
+    url: AllowedQueryParamPageType
+): Promise<browser.Windows.Window> {
+	console.log(popupWindowId,"popupWindowId");
+	let window:any;
+    try {
+        // 首先尝试获取已存在的弹出窗口
+        if (popupWindowId) {
+            try {
+                const window = await browser.windows.get(popupWindowId);
+                if (window) {
+                    // 修复后的代码
+				 // 如果窗口存在，直接更新URL并聚焦
+				 const popupUrl = new URL(browser.runtime.getURL('popup/index.html'));
+				 popupUrl.hash = url;
+				 const urlString = popupUrl.toString();  // 将 URL 转换为字符串
+				 
+				 // 查询指定窗口中的标签页
+				 const tabs = await browser.tabs.query({ windowId: popupWindowId });
+				 if (tabs && tabs.length > 0) {
+					 // 更新第一个标签页的 URL
+					 await browser.tabs.update(tabs[0].id || 0, { url: urlString });
+				 }
+                }
+            } catch (error) {
+                console.log('Previous popup window not found:', error);
+            }
+			// 保存窗口ID
+			popupWindowId = popupWindowId;
+        }else{
+
+			// 获取当前窗口的位置
+			const { left = 0, top, width = 1920 } = await browser.windows.getCurrent();
+			const popupWidth = 384;
+			const popupHeight = 628;
+	
+			// 创建新的弹出窗口
+			window = await browser.windows.create({
+				url: `${browser.runtime.getURL('popup/index.html')}#${url}`,
+				type: 'popup',
+				left: left + width - popupWidth,
+				top,
+				width: popupWidth,
+				height: popupHeight,
+				focused: true
+			});
+
+			// 保存窗口ID
+			popupWindowId = window.id || null;
+		}
+
+		// 监听窗口关闭事件
+		browser.windows.onRemoved.addListener((windowId) => {
+			if (windowId === popupWindowId) {
+				popupWindowId = null;
+			}
+		});
+
+		return window;
+    } catch (error) {
+        console.error('Failed to show extension popup:', error);
+        throw error;
+    }
+}

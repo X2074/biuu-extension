@@ -1,8 +1,9 @@
 // EIP1193Provider.ts
-import { WalletProvider } from "./types"
+import { WalletProvider } from "../../utils/types"
 // 首先定义 EIP-1193 Provider 的类型
 export interface EthereumProvider {
   request(args: { method: string; params?: any[] }): Promise<any>;
+  on(eventName: string, listener: (...args: any[]) => void): void;
   disconnect(): void;
   accounts: string[];
   chainId: string;
@@ -18,50 +19,50 @@ export interface EthereumProvider {
 }
 // Provider 信息配置，用于判断钱包的身份标识
 export const providerInfo = {
-	label: 'BIUU',
-	injectedNamespace: 'BIUU-Chrome-Extension',
-	identityFlag: 'isBIUU',
-	checkIdentity: (provider: WalletProvider) =>
-	  !!provider && !!provider.isAAExtension,
-  } as const;
+  label: 'BIUU',
+  injectedNamespace: 'BIUU-Chrome-Extension',
+  identityFlag: 'isBIUU',
+  checkIdentity: (provider: WalletProvider) =>
+    !!provider && !!provider.isAAExtension,
+} as const;
 
 // 创建 EIP-1193 兼容的 provider
 export const createEIP1193Provider = (): EthereumProvider => {
   const provider: EthereumProvider = {
     accounts: [],
     chainId: '0x1',
-	providerInfo,
+    providerInfo,
     request: async (args: { method: string; params?: any[] }) => {
       const { method, params } = args;
       try {
         switch (method) {
           case 'eth_requestAccounts':
-			return new Promise((resolve, reject) => {
-				// 发送请求到 content script
-				window.postMessage({
-					target: 'biuu-provider-bridge',
-					request: {
-						method: 'eth_requestAccounts',
-						params
-					}
-				}, '*');
+            return new Promise((resolve, reject) => {
+              // 发送请求到 content script
+              window.postMessage({
+                target: 'biuu-provider-bridge',
+                request: {
+                  method: 'eth_requestAccounts',
+                  params
+                }
+              }, '*');
 
-				// 监听响应
-				const listener = (event: MessageEvent) => {
-					console.log(event,"eventeventeventevent55554");
-					
-					if (event.data.target === 'biuu-window-provider') {
-						window.removeEventListener('message', listener);
-						if (event.data.type === 'accounts_response') {
-							resolve(event.data.accounts);
-						} else {
-							reject(new Error('Request failed'));
-						}
-					}
-				};
+              // 监听响应
+              const listener = (event: MessageEvent) => {
+                console.log(event, "eventeventeventevent55554");
 
-				window.addEventListener('message', listener);
-			});
+                if (event.data.target === 'biuu-window-provider') {
+                  window.removeEventListener('message', listener);
+                  if (event.data.type === 'accounts_response') {
+                    resolve(event.data.accounts);
+                  } else {
+                    reject(new Error('Request failed'));
+                  }
+                }
+              };
+
+              window.addEventListener('message', listener);
+            });
           case 'eth_chainId':
             return provider.chainId;
           default:
@@ -70,6 +71,36 @@ export const createEIP1193Provider = (): EthereumProvider => {
       } catch (error) {
         console.error('Request failed:', error);
         throw error;
+      }
+    },
+    
+    on: (eventName: string, listener: (...args: any[]) => void) => {
+      // 创建事件监听器
+      const eventListeners:any = {
+          accountsChanged: new Set<(...args: any[]) => void>(),
+          chainChanged: new Set<(...args: any[]) => void>(),
+          disconnect: new Set<(...args: any[]) => void>(),
+          message: new Set<(...args: any[]) => void>()
+      };
+      console.log(eventName,"eventNameeventNameeventName");
+      
+      
+      if (eventListeners[eventName]) {
+          eventListeners[eventName].add(listener);
+          
+          // 创建消息监听器
+          const messageListener = (event: MessageEvent) => {
+              if (event.data.type === `eip1193:${eventName}`) {
+                  listener(event.data.detail);
+              }
+          };
+          
+          window.addEventListener('message', messageListener);
+          
+          return () => {
+              eventListeners[eventName].delete(listener);
+              window.removeEventListener('message', messageListener);
+          };
       }
     },
     disconnect: () => {
@@ -92,7 +123,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
       window.dispatchEvent(new CustomEvent("eip1193:chainChanged", {
         detail: chainId
       }));
-    }
+    },
   };
 
   return provider;

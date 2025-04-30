@@ -148,9 +148,6 @@ async function toDapp() {
   try {
     // 获取当前激活的标签页
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-//         if (!tab?.id) {
-//             throw new Error('No active tab found');
-//         }
         // 创建到后台的端口连接
         
         let data:any = {name:'biuu-external'};

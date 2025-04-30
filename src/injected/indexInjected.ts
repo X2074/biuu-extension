@@ -8,6 +8,7 @@ declare global {
     }
 }
 import { announceProviderInject } from '../utils/EIP6963/EIP6963';
+import { windowProvider } from '../utils/provider/window-provider';
 // 首先定义 Person 类的类型
 type PersonType = {
     openPage(): void;
@@ -49,5 +50,9 @@ const personInstance =  Person.getInstance();
 (window as any).personInstance = personInstance;
 
 announceProviderInject()
+windowProvider()
+
+
+
 
 // connectProviderBridge()
