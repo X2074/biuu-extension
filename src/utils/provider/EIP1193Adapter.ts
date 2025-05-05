@@ -29,7 +29,7 @@ export class EIP1193Adapter implements EthereumProvider {
         this._providerInfo = {
             chainId: providerInfo.chainId || '0x1',
             accounts: providerInfo.accounts || [],
-            request: providerInfo.request || ((args) => Promise.reject(new Error('Request not implemented'))),
+            request: providerInfo.request || (() => Promise.reject(new Error('Request not implemented'))),
             label: providerInfo.label,
             injectedNamespace: providerInfo.injectedNamespace,
             identityFlag: providerInfo.identityFlag,
@@ -76,20 +76,24 @@ export class EIP1193Adapter implements EthereumProvider {
                 
                 // 发送消息到 background 请求用户授权
                 return new Promise((resolve, reject) => {
-                    chrome.runtime.sendMessage(
-                        {
-                            action: 'request_permissions',
-                            permissions: permissions
-                        },
-                        (response) => {
-                            if (chrome.runtime.lastError) {
-                                reject(new Error(chrome.runtime.lastError.message));
-                                return;
-                            }
-                            resolve(response);
-                        }
-                    );
-                });
+                    if (typeof chrome !== 'undefined' && chrome.runtime) {
+                        chrome.runtime.sendMessage(
+                            {
+                                action: 'request_permissions',
+                                permissions: permissions
+                            },
+                              (response) => {
+                               if (chrome?.runtime?.lastError) {
+                                    reject(new Error(chrome?.runtime?.lastError.message));
+                                    return;
+                                } 
+                                resolve(response);
+                            }  
+                        );
+                    }else {
+                        reject(new Error('Chrome runtime is not available'));
+                    }
+                })as Promise<any>;
             }
             
             if (args.method === 'wallet_getDappInfo') {
@@ -97,7 +101,7 @@ export class EIP1193Adapter implements EthereumProvider {
                 return {
                     title: window.document.title,
                     url: window.location.href,
-                    favicon: window.document.querySelector('link[rel="icon"]')?.href
+                    // favicon: window.document.querySelector('link[rel="icon"]')?.href
                 };
             }
             

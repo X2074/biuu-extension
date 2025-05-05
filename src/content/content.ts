@@ -43,7 +43,7 @@ function createProviderPort() {
 }
 
 chrome.runtime.onConnect.addListener((port) => {
-  console.log('我听到了全局的消息');
+  console.log('我听到了全局的消息'+port);
   
 })
 // 监听 DApp 消息
@@ -81,7 +81,7 @@ window.addEventListener('message', function (e) {
 }, true);
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
-  console.log(message, 'content页面')
+  console.log(message,sender, 'content页面')
   if (message.action === 'service') {
     console.log("content接收到service-worker的数据");
     window.postMessage({ test: "我是主窗口，我接收到消息了" });

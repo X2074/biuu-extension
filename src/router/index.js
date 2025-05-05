@@ -103,6 +103,12 @@ const routes = [
     path: '/sendTrade',
     name: 'sendTrade',
     component: () => import("../popup/sendTrade/index.vue"),
+  },
+  //连接
+  {
+    path: '/connect',
+    name: 'connect',
+    component: () => import("../popup/connect/index.vue"),
   }
 
 ]

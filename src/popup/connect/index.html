@@ -1,0 +1,29 @@
+<div class="connect-page">
+  <div class="connect-top">
+    <img src="@/assets/images/logo/logo.png" alt="" class="logo">
+    <h2>dimai.ai</h2>
+    <p>此网站想要：<a href="">了解更多</a></p>
+  </div>
+  <div class="connect-mid">
+    <span>账号信息</span>
+    <div class="account-lists">
+      <div class="account-item" v-for="i in 3" :key="i">
+        <div class="account-left">
+          <img src="@/assets/images/user.png" alt="">
+          <div>
+            <label for="">账户2</label>
+            <span>0x67e...3435E</span>
+          </div>
+        </div>
+        <div class="account-right">
+          <label for="">$0.00 USD</label>
+          <span>0 MEER</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="connect-bottom">
+    <span class="btn-cancel">取消</span>
+    <span class="btn-connect">连接</span>
+  </div>
+</div>
