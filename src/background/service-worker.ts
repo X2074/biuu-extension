@@ -1,21 +1,16 @@
 import { startHeartbeat } from './resident.js';
 import { roundRobin } from './indexDB.js'; ""
 import web3Operate from './web3Operate.js';
-// import { chromeNotifications } from './utils';
 import { EXTERNAL_PORT_NAME } from '../utils/provider/constants.js'
 import { showExtensionPopup } from '../utils/index.js'
 import indexDbData from '../utils/indexDB';
+import browser from 'webextension-polyfill';
 import './utils';
 import './test';
 
 // 开始轮循hash状态
 roundRobin()
 chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
-    console.log(message, '测试数据00002', sender, "sender");
-    setTimeout(() => {
-        // 浏览器右下角弹框
-        // chromeNotifications({})
-    }, 3000)
     // 获取密码，判断是否显示输入密码页面
     if (message.action === 'getSecret') {
         chrome.storage.local.get('secret', function (data: any) {
@@ -54,6 +49,33 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
         sendResponse(aaa);
         return true; // 保持消息通道打开，以便异步发送响应
     }
+    // 处理权限请求
+    if (message.action === 'authorization_response') {
+        indexDbData.getData('authorization').then(async (data: any) => {
+            if (message.approved) {
+                data.state = 'approved'
+            }else{
+                data.state = 'deny'
+            }
+            indexDbData.putData(data)
+        })
+        // // 显示权限请求弹窗
+        // chrome.windows.create({
+        //     url: chrome.runtime.getURL('popup/permissions.html'),
+        //     type: 'popup',
+        //     width: 400,
+        //     height: 300
+        // }, (window) => {
+        //     // 将权限请求信息传递给弹窗
+        //     chrome.tabs.sendMessage(window.tabs[0].id, {
+        //         action: 'set_permissions_request',
+        //         permissions: message.permissions
+        //     });
+        // });
+        
+        // // 等待用户响应
+        // return true; // 表示需要异步处理
+    }
 })
 
 // 在此处执行浏览器关闭时的操作
@@ -81,7 +103,7 @@ chrome.runtime.onConnect.addListener((port) => {
                 if (message.request) {
                     const response = await handleProviderRequest(message.request);
                     port.postMessage({
-                        type: 'accounts_response',
+                        type: message.request.method,
                         accounts: response
                     });
                 }else{
@@ -115,16 +137,16 @@ chrome.runtime.onConnect.addListener((port) => {
 
 // 处理 provider 请求
 async function handleProviderRequest(request: any) {
-    console.log(request,"requestrequestrequestrequestrequestrequest");
-    
     switch (request.method) {
+        // 因为 DApp 在初始化时会自动调用 eth_requestAccounts 来检查是否已连接钱包，所以这里需要处理一下
         case 'eth_requestAccounts':
-            if (request.params) {
+            // 检查是否是初始化请求
+            if (request.params && request.params.length === 0) {
                 let wallt = await indexDbData.getData('rpc_url');
                 // 处理账户请求
-                return wallt.CHAIN_ID;
+                return wallt.address;
             }else{
-                return await requestAccounts(request);
+                return await requestAccountsWallt(request);
             }
         case 'eth_chainId':
             return await getChainId();
@@ -163,4 +185,87 @@ function sendMessageToAllTabs(message: any) {
             });
         });
     });
+}
+
+
+// 处理账户请求
+async function requestAccountsWallt(params: any) {
+    console.log(params,"params");
+    
+    // 获取当前活动标签页
+    const tab:any = await chrome.tabs.query({ active: true, currentWindow: true });
+    console.log(tab,"获取当前活动页");
+    
+    if (!tab[0]) {
+        throw new Error('No active tab found');
+    }
+
+    // 获取标签页的 URL
+    const currentUrl = new URL(tab[0].url).origin;
+
+    const currentWalltAddress = await indexDbData.getData('currentWalltAddress') || {};
+    const rpc_url = await indexDbData.getData('rpc_url') || {};
+   // 检查是否已有授权
+   const authorizedSites = await indexDbData.getData('authorized_sites') || {};
+   if (authorizedSites && authorizedSites[currentUrl]) {
+        // 已授权，直接返回账户
+        const accounts = await indexDbData.getData('currentWalltAddress');
+        return accounts.address;
+    }else{
+
+        // 缓存当前dapp的页面数据
+        let dappPermission = {
+            id:'authorization',
+            key: 'string',
+            origin: params.windowInfo[2],
+            faviconUrl: params.windowInfo[1],
+            chainID: rpc_url.CHAIN_ID,
+            title: params.windowInfo[0],
+            state: null,
+            blance: currentWalltAddress.blance,
+            unit: rpc_url.unit,
+            userName: currentWalltAddress.userName,
+            accountAddress: currentWalltAddress.address
+        }
+        console.log(dappPermission,"dappPermission");
+        indexDbData.putData(dappPermission)
+        // 创建授权弹窗
+        const popup:any = await showExtensionPopup('/connect')
+        console.log(popup,'popup');
+        // // 等待用户响应
+        // const listener = (request: any, sender: any, sendResponse: any) => {
+        //     if (request.type === 'permissionResponse') {
+        //       if (request.granted) {
+        //         // 保存权限
+        //         const chainId = permission.chainID;
+        //         const address = permission.accountAddress;
+        //         const origin = permission.origin;
+                
+        //         if (!permissions.value.evm[chainId]) {
+        //           permissions.value.evm[chainId] = {};
+        //         }
+        //         if (!permissions.value.evm[chainId][address]) {
+        //           permissions.value.evm[chainId][address] = {};
+        //         }
+        //         permissions.value.evm[chainId][address][origin] = {
+        //           ...permission,
+        //           state: 'allow'
+        //         };
+        //       }
+        //       resolve();
+        //     }
+        //   };
+          browser.runtime.onMessage.addListener((request: any) => {
+            console.log(request,'request');
+            
+          });
+  
+        
+        // 将请求信息传递给弹窗
+        // await chrome.tabs.sendMessage(popup.tabs[0].id, {
+        //     action: 'set_authorization_request',
+        //     url: currentUrl
+        // });
+
+    }
 }

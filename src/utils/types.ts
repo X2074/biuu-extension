@@ -43,7 +43,7 @@ export type WalletProvider = {
 
 export const AllowedQueryParamPage = {
 signTransaction: '/secret',//交易签名请求
-dappPermission: '/secret',//DApp 权限请求
+dappPermission: '/connect',//DApp 权限请求
 signData: '/secret',//数据签名请求
 personalSignData: '/secret',//个人签名请求
 

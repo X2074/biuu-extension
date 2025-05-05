@@ -53,7 +53,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
 
                 if (event.data.target === 'biuu-window-provider') {
                   window.removeEventListener('message', listener);
-                  if (event.data.type === 'accounts_response') {
+                  if (event.data.type === 'eth_requestAccounts') {
                     resolve(event.data.accounts);
                   } else {
                     reject(new Error('Request failed'));

@@ -1,7 +1,7 @@
 <div class="connect-page">
   <div class="connect-top">
-    <img src="@/assets/images/logo/logo.png" alt="" class="logo">
-    <h2>dimai.ai</h2>
+    <img :src="authorization?authorization.faviconUrl:'@/assets/images/logo/logo.png'" alt="" class="logo">
+    <h2>{{authorization?.title}}</h2>
     <p>此网站想要：<a href="">了解更多</a></p>
   </div>
   <div class="connect-mid">
@@ -11,19 +11,19 @@
         <div class="account-left">
           <img src="@/assets/images/user.png" alt="">
           <div>
-            <label for="">账户2</label>
-            <span>0x67e...3435E</span>
+            <label for="">{{authorization.userName || '--'}}</label>
+            <span>{{authorization.accountAddress || '--'}}</span>
           </div>
         </div>
         <div class="account-right">
           <label for="">$0.00 USD</label>
-          <span>0 MEER</span>
+          <span>{{authorization.blance || 0}} {{authorization.unit || '--'}}</span>
         </div>
       </div>
     </div>
   </div>
   <div class="connect-bottom">
-    <span class="btn-cancel">取消</span>
-    <span class="btn-connect">连接</span>
+    <span class="btn-cancel" @click="reject">取消</span>
+    <span class="btn-connect" @click="approve">连接</span>
   </div>
 </div>
