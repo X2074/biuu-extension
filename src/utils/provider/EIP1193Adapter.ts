@@ -29,7 +29,7 @@ export class EIP1193Adapter implements EthereumProvider {
         this._providerInfo = {
             chainId: providerInfo.chainId || '0x1',
             accounts: providerInfo.accounts || [],
-            request: providerInfo.request || (() => Promise.reject(new Error('Request not implemented'))),
+            request: providerInfo.request || ((args) => Promise.reject(new Error('Request not implemented'))),
             label: providerInfo.label,
             injectedNamespace: providerInfo.injectedNamespace,
             identityFlag: providerInfo.identityFlag,
@@ -70,6 +70,37 @@ export class EIP1193Adapter implements EthereumProvider {
 
     async request(args: { method: string; params?: any[] }): Promise<any> {
         try {
+            if (args.method === 'wallet_requestPermissions') {
+                // 处理权限请求
+                const permissions = args.params?.[0]?.[0] || {};
+                
+                // 发送消息到 background 请求用户授权
+                return new Promise((resolve, reject) => {
+                    chrome.runtime.sendMessage(
+                        {
+                            action: 'request_permissions',
+                            permissions: permissions
+                        },
+                        (response) => {
+                            if (chrome.runtime.lastError) {
+                                reject(new Error(chrome.runtime.lastError.message));
+                                return;
+                            }
+                            resolve(response);
+                        }
+                    );
+                });
+            }
+            
+            if (args.method === 'wallet_getDappInfo') {
+                // 返回当前 DApp 信息
+                return {
+                    title: window.document.title,
+                    url: window.location.href,
+                    favicon: window.document.querySelector('link[rel="icon"]')?.href
+                };
+            }
+            
             return await this._providerInfo.request(args);
         } catch (error) {
             throw this.formatError(error);

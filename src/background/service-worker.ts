@@ -4,6 +4,7 @@ import web3Operate from './web3Operate.js';
 // import { chromeNotifications } from './utils';
 import { EXTERNAL_PORT_NAME } from '../utils/provider/constants.js'
 import { showExtensionPopup } from '../utils/index.js'
+import indexDbData from '../utils/indexDB';
 import './utils';
 import './test';
 
@@ -69,14 +70,12 @@ chrome.runtime.onConnect.addListener((port) => {
     console.log('New connection:', port.name);
     // 验证连接名称
     if (port.name === EXTERNAL_PORT_NAME) {
-        console.log('Valid connection established');
-        
         // 存储连接
         portConnections.set(port.name, port);
-        
+        console.log('Valid connection established',portConnections);
         // 设置消息监听器
         port.onMessage.addListener(async (message) => {
-            console.log('Received message:', message);
+            console.log('Received message:', message.request);
             try {
                 // 处理不同的请求类型
                 if (message.request) {
@@ -120,8 +119,13 @@ async function handleProviderRequest(request: any) {
     
     switch (request.method) {
         case 'eth_requestAccounts':
-            // 处理账户请求
-            return await requestAccounts(request.params);
+            if (request.params) {
+                let wallt = await indexDbData.getData('rpc_url');
+                // 处理账户请求
+                return wallt.CHAIN_ID;
+            }else{
+                return await requestAccounts(request);
+            }
         case 'eth_chainId':
             return await getChainId();
         default:

@@ -10,7 +10,7 @@ import { ref, onMounted } from 'vue';
 import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB.js';
 import md5 from 'js-md5';
-import { Encrypt, Decrypt,showExtensionPopup } from '@/utils/index';
+import { Encrypt, Decrypt } from '@/utils/index';
 let textPsd = ref('psd');
 let psdText = ref('');
 let newPsdBol = ref(false);
@@ -176,6 +176,41 @@ async function toDapp() {
       } catch (error) {
         console.error('Failed to send message:', error);
       }
+}
+
+const testClick = async () => {
+  try {
+    // 获取当前激活的标签页
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    let data:any = { name: 'biuu-external' }
+    
+    // 创建到后台的端口连接
+    const port = chrome.runtime.connect(data);
+    
+    // 发送 chainChanged 事件到 DApp
+    port.postMessage({
+      action: 'send_to_dapp',
+      data: {
+        type: 'eip1193:chainChanged',  
+        detail: '0x2',  
+        target: 'biuu-window-provider',  
+        tab: tab
+      }
+    });
+
+    // 添加消息监听器
+    port.onMessage.addListener((response) => {
+      console.log('Chain change response:', response);
+    });
+
+    // 添加断开连接的监听器
+    port.onDisconnect.addListener(() => {
+      console.log('Port disconnected');
+    });
+
+  } catch (error) {
+    console.error('Failed to send chain change event:', error);
+  }
 }
 </script>
 <style lang="scss">

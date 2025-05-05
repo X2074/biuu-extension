@@ -5,21 +5,17 @@ let providerPort: chrome.runtime.Port | null = null;
 // 创建新的端口连接
 function createProviderPort() {
   let data:any = {name:'biuu-external'};
-  try { 
+  try {
     providerPort = chrome.runtime.connect(data);
     console.log('Port created:', providerPort);
-
     // 设置消息监听器
     providerPort.onMessage.addListener((data) => {
-      console.log('Message from background:', data);
-
       // 将响应返回给 DApp-background
       window.postMessage({
         ...data,
         target: 'biuu-window-provider'
       }, window.location.origin);
     });
-
     // 处理端口断开
     providerPort.onDisconnect.addListener(() => {
       console.log('Provider port disconnected');
@@ -28,53 +24,28 @@ function createProviderPort() {
       setTimeout(() => {
         try {
           createProviderPort();
-        } catch (error:any) {
+        } catch (error) {
           console.error('Failed to reconnect:', error);
         }
       }, 1000);
     });
-  } catch (error :any) {
+  } catch (error) {
     console.error('Failed to create port:', error);
     // 尝试重新连接
     setTimeout(() => {
       try {
         createProviderPort();
-      } catch (error:any) {
+      } catch (error) {
         console.error('Failed to reconnect:', error);
       }
     }, 1000);
   }
 }
-// 初始化 provider bridge
-function connectProviderBridge() {
-  createProviderPort();
-  // 监听 DApp 消息
-  window.addEventListener('message', async (e) => {
-    console.log('Message from DApp:', e.data);
-    
-    // 验证消息来源
-    if (e.origin !== window.location.origin) return;
-    if (e.source !== window) return;
-    if (!e.data?.target) return;
 
-    if (e.data.target === 'biuu-provider-bridge') {
-        if (!providerPort) {
-            createProviderPort();
-        }
-
-        if (providerPort) {
-            // 将消息转发给 background
-            providerPort.postMessage({
-                type: 'provider_request',
-                request: {
-                    method: e.data.method,
-                    params: e.data.params
-                }
-            });
-        }
-    }
-}, true);
-}
+chrome.runtime.onConnect.addListener((port) => {
+  console.log('我听到了全局的消息');
+  
+})
 // 监听 DApp 消息
 window.addEventListener('message', function (e) {
   console.log('Message from DApp:', e.data);
@@ -110,17 +81,22 @@ window.addEventListener('message', function (e) {
 }, true);
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
-  console.log(sender, 'content页面')
+  console.log(message, 'content页面')
   if (message.action === 'service') {
     console.log("content接收到service-worker的数据");
     window.postMessage({ test: "我是主窗口，我接收到消息了" });
     // 调用 sendResponse 并返回 true 表示异步处理
     sendResponse({ response: "content script 已处理消息" });
     return true; // 返回 true 表示需要异步处理
-  }
+  }else if (message.action === 'eip1193_event') {
+      window.postMessage({
+        ...message.data,
+        target: 'biuu-window-provider'
+      }, window.location.origin);
+    }
 })
 // 初始化
-connectProviderBridge();
+// connectProviderBridge();
 
 // 页面加载时注入我们的内容脚本
 const script = document.createElement('script')
