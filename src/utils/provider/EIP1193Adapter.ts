@@ -29,7 +29,7 @@ export class EIP1193Adapter implements EthereumProvider {
         this._providerInfo = {
             chainId: providerInfo.chainId || '0x1',
             accounts: providerInfo.accounts || [],
-            request: providerInfo.request || ((args) => Promise.reject(new Error('Request not implemented'))),
+            request: providerInfo.request || (() => Promise.reject(new Error('Request not implemented'))),
             label: providerInfo.label,
             injectedNamespace: providerInfo.injectedNamespace,
             identityFlag: providerInfo.identityFlag,

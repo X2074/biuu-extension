@@ -5,7 +5,7 @@ let providerPort: chrome.runtime.Port | null = null;
 // 创建新的端口连接
 function createProviderPort() {
   let data:any = {name:'biuu-external'};
-  try {
+  try { 
     providerPort = chrome.runtime.connect(data);
     console.log('Port created:', providerPort);
 
@@ -28,18 +28,18 @@ function createProviderPort() {
       setTimeout(() => {
         try {
           createProviderPort();
-        } catch (error) {
+        } catch (error:any) {
           console.error('Failed to reconnect:', error);
         }
       }, 1000);
     });
-  } catch (error) {
+  } catch (error :any) {
     console.error('Failed to create port:', error);
     // 尝试重新连接
     setTimeout(() => {
       try {
         createProviderPort();
-      } catch (error) {
+      } catch (error:any) {
         console.error('Failed to reconnect:', error);
       }
     }, 1000);

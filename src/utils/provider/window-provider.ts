@@ -1,21 +1,21 @@
 
 import { EIP1193Adapter } from './EIP1193Adapter';
-
+import { EthereumProvider } from '@/types/eip1193';
 // 存储端口连接
 let providerPort: chrome.runtime.Port | null = null;
-let provider: EthereumProvider | null = null;
+let provider: any;//EthereumProvider | null = null;
 export function windowProvider() {
   // 创建 provider 实例
   provider = new EIP1193Adapter({
     chainId: '0x1',
     accounts: [],
-    request: async (args) => {
+    request: async (args:any) => {
       // 这里需要实现实际的请求处理逻辑
       // 通过providerPort与background通信
       if (providerPort) {
-        const response = await new Promise((resolve, reject) => {
-          providerPort.postMessage(args);
-          providerPort.onMessage.addListener((data) => {
+        const response = await new Promise((resolve) => {
+          providerPort?.postMessage(args);
+          providerPort?.onMessage.addListener((data) => {
             if (data.id === args.id) {
               resolve(data.result);
             }
