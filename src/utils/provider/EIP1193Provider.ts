@@ -1,5 +1,6 @@
 // EIP1193Provider.ts
 import { WalletProvider } from "../../utils/types"
+import indexDbData from "../../utils/indexDB.js"
 // 首先定义 EIP-1193 Provider 的类型
 export interface EthereumProvider {
   request(args: { method: string; params?: any[] }): Promise<any>;
@@ -37,34 +38,13 @@ export const createEIP1193Provider = (): EthereumProvider => {
       try {
         switch (method) {
           case 'eth_requestAccounts':
-            return new Promise((resolve, reject) => {
-              // 发送请求到 content script
-              window.postMessage({
-                target: 'biuu-provider-bridge',
-                request: {
-                  method: 'eth_requestAccounts',
-                  params
-                }
-              }, '*');
-
-              // 监听响应
-              const listener = (event: MessageEvent) => {
-                console.log(event, "eventeventeventevent55554");
-
-                if (event.data.target === 'biuu-window-provider') {
-                  window.removeEventListener('message', listener);
-                  if (event.data.type === 'eth_requestAccounts') {
-                    resolve(event.data.accounts);
-                  } else {
-                    reject(new Error('Request failed'));
-                  }
-                }
-              };
-
-              window.addEventListener('message', listener);
-            });
+            return requestContentScript(method,params);
           case 'eth_chainId':
             return provider.chainId;
+			case 'wallet_getPermissions':
+            return await getPermissions();
+          case 'wallet_requestPermissions':
+            return await requestContentScript(method,params);
           default:
             throw new Error(`Method not supported: ${method}`);
         }
@@ -125,9 +105,53 @@ export const createEIP1193Provider = (): EthereumProvider => {
       }));
     },
   };
-
   return provider;
 };
+const requestContentScript = (method,params)=>{
+	return new Promise((resolve, reject) => {
+		// 发送请求到 content script
+		window.postMessage({
+			target: 'biuu-provider-bridge',
+			request: {
+			  method,
+			  params
+			}
+		  }, '*');
+	
+		  // 监听响应
+		  const listener = (event: MessageEvent) => {
+			console.log(event,"event465465");
+			if (event.data.target === 'biuu-window-provider') {
+			  window.removeEventListener('message', listener);
+			  if (event.data.type === method) {
+				resolve(event.data.accounts);
+			  } else {
+				reject(new Error('Request failed'));
+			  }
+			}
+		  };
+	
+		  window.addEventListener('message', listener);      
+	});
+}
+  // EIP-2255 权限相关方法
+  const getPermissions = async (): Promise<any[]> => {
+
+  }
+
+  const requestPermissions = async (permissions: any): Promise<any[]> => {
+		// 生成一个唯一的请求ID
+		const requestId = Date.now().toString();
+		// 发送请求到 content script
+		window.postMessage({
+		target: 'biuu-provider-bridge',
+		request: {
+			method: 'wallet_requestPermissions',
+			params
+		}
+		}, '*');
+  };
+
 
 // 事件处理函数
 export const setupEIP1193Events = (provider: EthereumProvider) => {
