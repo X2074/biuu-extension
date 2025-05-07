@@ -134,23 +134,6 @@ const requestContentScript = (method,params)=>{
 		  window.addEventListener('message', listener);      
 	});
 }
-  // EIP-2255 权限相关方法
-  const getPermissions = async (): Promise<any[]> => {
-
-  }
-
-  const requestPermissions = async (permissions: any): Promise<any[]> => {
-		// 生成一个唯一的请求ID
-		const requestId = Date.now().toString();
-		// 发送请求到 content script
-		window.postMessage({
-		target: 'biuu-provider-bridge',
-		request: {
-			method: 'wallet_requestPermissions',
-			params
-		}
-		}, '*');
-  };
 
 
 // 事件处理函数

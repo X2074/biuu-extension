@@ -232,5 +232,8 @@
     },
     "src/injected/injected.js": {
         "description": "原始备份文件"
+    },
+    "src/utils/request.ts": {
+        "description": "钱包扩展的request方法"
     }
 }
