@@ -15,6 +15,7 @@ onMounted(async()=>{
 const reject = ()=>{
     let data: any = { action: 'authorization_response', approved: false };
     chrome.runtime.sendMessage(data, (response: any) => {
+        console.log(response,"response");
         window.close();
     });
 
@@ -22,6 +23,7 @@ const reject = ()=>{
 const approve = ()=>{
     let data: any = { action: 'authorization_response', approved: true };
     chrome.runtime.sendMessage(data, (response: any) => {
+        console.log(response,"response");
         window.close();
     });
 }

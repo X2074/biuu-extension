@@ -107,7 +107,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
   };
   return provider;
 };
-const requestContentScript = (method,params)=>{
+const requestContentScript = (method:any,params:any)=>{
 	return new Promise((resolve, reject) => {
 		// 发送请求到 content script
 		window.postMessage({
@@ -134,6 +134,11 @@ const requestContentScript = (method,params)=>{
 		  window.addEventListener('message', listener);      
 	});
 }
+
+const getPermissions = ()=>{
+  return indexDbData.getData('authorized_sites')
+}
+
 
 
 // 事件处理函数

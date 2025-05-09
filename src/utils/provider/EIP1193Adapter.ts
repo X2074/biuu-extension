@@ -82,13 +82,15 @@ export class EIP1193Adapter implements EthereumProvider {
                                 action: 'request_permissions',
                                 permissions: permissions
                             },
-                              (response) => {
-                               if (chrome?.runtime?.lastError) {
-                                    reject(new Error(chrome?.runtime?.lastError.message));
+                            {},
+                              (response:any) => {
+                                let responseData:any = chrome;
+                                if (responseData?.runtime?.lastError) {
+                                    reject(new Error(responseData.runtime.lastError.message));
                                     return;
                                 } 
                                 resolve(response);
-                            }  
+                            }
                         );
                     }else {
                         reject(new Error('Chrome runtime is not available'));
@@ -105,7 +107,7 @@ export class EIP1193Adapter implements EthereumProvider {
                 };
             }
             
-            return await this._providerInfo.request(args);
+            // return await this._providerInfo.request(args);
         } catch (error) {
             throw this.formatError(error);
         }
