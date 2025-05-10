@@ -1,6 +1,6 @@
 // EIP1193Provider.ts
 import { WalletProvider } from "../../utils/types"
-import indexDbData from "../../utils/indexDB.js"
+// import indexDbData from "../../utils/indexDB.js"
 // 首先定义 EIP-1193 Provider 的类型
 export interface EthereumProvider {
   request(args: { method: string; params?: any[] }): Promise<any>;
@@ -136,7 +136,7 @@ const requestContentScript = (method:any,params:any)=>{
 }
 
 const getPermissions = ()=>{
-  return indexDbData.getData('authorized_sites')
+//   return indexDbData.getData('authorized_sites')
 }
 
 

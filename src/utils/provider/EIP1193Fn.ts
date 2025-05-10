@@ -24,17 +24,13 @@ export async function requestPermissions(message: any) {
     // 等待用户响应
     return new Promise((resolve, reject) => {
         const listener:any = async (request:any, sender:any, sendResponse:any) => {
-            console.log(sender,"sender",sendResponse,'sendResponse');
             if (request.action === 'authorization_response') {
                 if (request.approved) {
                     // 保存权限信息
                     const authorizedSites = await indexDbData.getData('authorized_sites') || {};
                     const currentUrl = new URL(window.location.href).origin;
                     authorizedSites[currentUrl] = true;
-                    await indexDbData.putData({
-                        id: 'authorized_sites',
-                        content: authorizedSites
-                    });
+                    await indexDbData.putData(authorizedSites);
 
                     // 返回授权成功的响应
                     resolve({

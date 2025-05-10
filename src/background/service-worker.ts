@@ -4,14 +4,14 @@ import web3Operate from './web3Operate.js';
 import { EXTERNAL_PORT_NAME } from '../utils/provider/constants.js'
 import { showExtensionPopup } from '../utils/index.js'
 import indexDbData from '../utils/indexDB';
-import {requestPermissions,requestAccountsWallt} from '../utils/request';
 import browser from 'webextension-polyfill';
+import {requestPermissions,requestAccountsWallt} from '../utils/request';
+import './utils';
+import './test';
 
 // 开始轮循hash状态
 roundRobin()
 chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
-    console.log(sender,"sender");
-    
     // 获取密码，判断是否显示输入密码页面
     if (message.action === 'getSecret') {
         chrome.storage.local.get('secret', function (data: any) {
@@ -52,14 +52,30 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
     }
     // 处理权限请求
     if (message.action === 'authorization_response') {
-        indexDbData.getData('authorized_sites').then(async (data: any) => {
+        indexDbData.getData('authorization').then(async (data: any) => {
             if (message.approved) {
                 data.state = 'approved'
-            }else{
+            } else {
                 data.state = 'deny'
             }
             indexDbData.putData(data)
         })
+        // // 显示权限请求弹窗
+        // chrome.windows.create({
+        //     url: chrome.runtime.getURL('popup/permissions.html'),
+        //     type: 'popup',
+        //     width: 400,
+        //     height: 300
+        // }, (window) => {
+        //     // 将权限请求信息传递给弹窗
+        //     chrome.tabs.sendMessage(window.tabs[0].id, {
+        //         action: 'set_permissions_request',
+        //         permissions: message.permissions
+        //     });
+        // });
+
+        // // 等待用户响应
+        // return true; // 表示需要异步处理
     }
 })
 
@@ -79,7 +95,7 @@ chrome.runtime.onConnect.addListener((port) => {
     if (port.name === EXTERNAL_PORT_NAME) {
         // 存储连接
         portConnections.set(port.name, port);
-        console.log('Valid connection established',portConnections);
+        console.log('Valid connection established', portConnections);
         // 设置消息监听器
         port.onMessage.addListener(async (message) => {
             console.log('Received message:', message.request);
@@ -91,7 +107,7 @@ chrome.runtime.onConnect.addListener((port) => {
                         type: message.request.method,
                         accounts: response
                     });
-                }else{
+                } else {
                     // 转发消息到所有标签页，实现popup到dapp的通信
                     sendMessageToAllTabs({
                         action: 'accounts_selected',
@@ -99,11 +115,11 @@ chrome.runtime.onConnect.addListener((port) => {
                             accounts: message.data.accounts,
                             selectedAccount: message.data.selectedAccount,
                             message: message.data.message,
-                            tabId:message.data.tab.id
+                            tabId: message.data.tab.id
                         }
-                    }); 
+                    });
                 }
-            } catch (error:any) {
+            } catch (error: any) {
                 console.error('Error handling message:', error);
                 port.postMessage({
                     type: 'error',
@@ -122,11 +138,19 @@ chrome.runtime.onConnect.addListener((port) => {
 
 // 处理 provider 请求
 async function handleProviderRequest(request: any) {
-    console.log(request,"request+");
-    
+    console.log(request, "request+");
+
     switch (request.method) {
+        // 因为 DApp 在初始化时会自动调用 eth_requestAccounts 来检查是否已连接钱包，所以这里需要处理一下
         case 'eth_requestAccounts':
-            return await requestAccountsWallt(request);
+            // 检查是否是初始化请求
+            // if (request.params && request.params.length === 0) {
+            let wallt = await indexDbData.getData('currentWalltAddress');
+            // 处理账户请求
+            return [wallt.address];
+        // }else{
+        //     return await requestAccountsWallt(request);
+        // }
         case 'wallet_requestPermissions':
             return await requestPermissions(request);
         case 'eth_chainId':
@@ -135,6 +159,15 @@ async function handleProviderRequest(request: any) {
             throw new Error(`Method not supported: ${request.method}`);
     }
 }
+
+// 获取账户
+async function requestAccounts(params: any[]) {
+    console.log('requestAccounts', params);
+    showExtensionPopup('/secret')
+    // 这里实现账户请求逻辑
+    // return ['0x1234567890123456789012345678901234567890'];
+}
+
 // 获取 chainId
 async function getChainId() {
     console.log('getChainId');
@@ -145,12 +178,12 @@ async function getChainId() {
 // 发送消息到所有标签页的函数
 function sendMessageToAllTabs(message: any) {
     chrome.tabs.query({}, (tabs) => {
-        tabs.forEach((tab:any) => {
-            console.log(tab.id,"tabtabtabtabtabtabtab",message.data.tabId);
-            chrome.tabs.sendMessage(tab.id, message, {},(response) => {
-                console.log(response,'response');
-                
-                let chromeInfo:any = chrome.runtime;
+        tabs.forEach((tab: any) => {
+            console.log(tab.id, "tabtabtabtabtabtabtab", message.data.tabId);
+            chrome.tabs.sendMessage(tab.id, message, {}, (response) => {
+                console.log(response, 'response');
+
+                let chromeInfo: any = chrome.runtime;
                 if (chromeInfo.lastError) {
                     console.error('Failed to send message to tab:', chromeInfo.lastError);
                 }
@@ -158,4 +191,3 @@ function sendMessageToAllTabs(message: any) {
         });
     });
 }
-
