@@ -1,0 +1,15 @@
+<div class="sign-message">
+  <h2>签名请求</h2>
+  <div class="origin">
+    <span>来自:</span>
+    <span>{{ origin }}</span>
+  </div>
+  <div class="origin">
+    <span>消息内容:</span>
+    <span>{{ message }}</span>
+  </div>
+  <div class="actions">
+    <button @click="reject" class="reject">拒绝</button>
+    <button @click="sign" class="sign">确认签名</button>
+  </div>
+</div>

@@ -60,22 +60,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
             }
             indexDbData.putData(data)
         })
-        // // 显示权限请求弹窗
-        // chrome.windows.create({
-        //     url: chrome.runtime.getURL('popup/permissions.html'),
-        //     type: 'popup',
-        //     width: 400,
-        //     height: 300
-        // }, (window) => {
-        //     // 将权限请求信息传递给弹窗
-        //     chrome.tabs.sendMessage(window.tabs[0].id, {
-        //         action: 'set_permissions_request',
-        //         permissions: message.permissions
-        //     });
-        // });
-
-        // // 等待用户响应
-        // return true; // 表示需要异步处理
     }
 })
 
@@ -155,6 +139,9 @@ async function handleProviderRequest(request: any) {
             return await requestPermissions(request);
         case 'eth_chainId':
             return await getChainId();
+
+            case 'personal_sign':
+  return await handleSignMessage(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }
@@ -191,3 +178,49 @@ function sendMessageToAllTabs(message: any) {
         });
     });
 }
+
+// 添加处理签名请求的函数
+async function handleSignMessage(request: any) {
+    const [message, address] = request.params || [];
+    
+    // 获取当前活动标签页
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (!tab?.url) {
+      throw new Error('Unable to determine the current tab URL');
+    }
+  
+    const currentOrigin = new URL(tab.url).origin;
+  console.log(546546546465,`${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`);
+    // 创建签名弹窗
+    const popup = await chrome.windows.create({
+      url: chrome.runtime.getURL(`popup/index.html#/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`),
+      type: 'popup',
+      width: 400,
+      height: 600
+    });
+  
+    // 返回一个 Promise，等待用户响应
+    return new Promise((resolve, reject) => {
+      const handleMessage = (message: any) => {
+        console.log(message,"messagehandleMessage");
+        
+        if (message.action === 'signature_response') {
+          chrome.runtime.onMessage.removeListener(handleMessage);
+          
+          if (message.signature) {
+            resolve(message.signature);
+          } else {
+            reject(new Error(message.error || 'User rejected the request'));
+          }
+        }
+      };
+  
+      chrome.runtime.onMessage.addListener(handleMessage);
+  
+      // 设置超时
+      setTimeout(() => {
+        chrome.runtime.onMessage.removeListener(handleMessage);
+        reject(new Error('Sign request timeout'));
+      }, 300000); // 5分钟超时
+    });
+  }

@@ -104,11 +104,17 @@ const routes = [
     name: 'sendTrade',
     component: () => import("../popup/sendTrade/index.vue"),
   },
-  //连接
+  //授权
   {
     path: '/connect',
     name: 'connect',
     component: () => import("../popup/connect/index.vue"),
+  },
+  //签名
+  {
+    path: '/sign',
+    name: 'sign',
+    component: () => import("../popup/sign/index.vue")
   }
 
 ]
