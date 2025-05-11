@@ -1,44 +1,83 @@
 .sign-message {
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   max-width: 360px;
   margin: 0 auto;
   color: #666;
-}
-
-.origin {
-  margin: 10px 0;
-  font-size: 14px;
-  color: #666;
-  span{
-    font-size: 14px;
-  }
-}
-
-.message-box {
+  height: 100%;
   background: #f8f9fa;
-  padding: 15px;
-  border-radius: 8px;
-  margin: 20px 0;
-}
+  * {
+    font-size: 16px;
+  }
+  .account-top {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 20px;
+    background: #fff;
+    > img {
+      width: 40px;
+    }
+    > div {
+      display: flex;
+      flex-direction: column;
+      label{
+        font-weight: 600;
+      }
+    }
+  }
+  .account-mid {
+    height: 0;
+    flex: 1;
+    padding: 20px;
+    h2 {
+      font-size: 18px;
+      text-align: center;
+    }
+    .tip{
+      font-size: 14px;
+      color: #919191;
+      text-align: center;
+      margin : 5px 0;
+    }
+    .origin {
+      margin: 15px 0;
+      font-size: 14px;
+      color: #666;
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      span {
+        font-size: 14px;
+      }
+    }
+  }
 
-.message-box pre {
-  margin: 0;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
+  .actions {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px 10px;
+    gap: 30px;
 
-.actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-button {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 14px;
+    background: #fff;
+    button {
+      flex: 1;
+      border: 1px solid rgb(68, 89, 255);
+      padding: 10px;
+      border-radius: 30px;
+      color: rgb(68, 89, 255);
+      text-align: center;
+      cursor: pointer;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+    .btn-connect {
+      color: #fff;
+      background: rgb(68, 89, 255);
+    }
+  }
 }

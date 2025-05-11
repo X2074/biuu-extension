@@ -14,8 +14,10 @@ const message = ref('');
 const address = ref('');
 const origin = ref('');
 let passKey = ref('');
-let privateKey:any = ref(null)
+let privateKey: any = ref(null)
+let authorization:any = ref({});
 onMounted(async()=>{ 
+  authorization.value = await indexDbData.getData('authorization');
   indexDbData
   .getData(md5('secret'))
   .then((res: any) => {
@@ -26,7 +28,7 @@ onMounted(async()=>{
   });
     const hash = window.location.hash.substring(1); // 去掉 #
     const paramsString = hash.substring(hash.indexOf('?') + 1);
-const urlParams = new URLSearchParams(paramsString)
+const urlParams:any = new URLSearchParams(paramsString)
     console.log(urlParams,"urlParams");
     // if (message.value.startsWith('0x')) {
       // 如果是16进制，尝试解码
@@ -34,7 +36,7 @@ const urlParams = new URLSearchParams(paramsString)
         // 去掉0x前缀
         const hex:any = urlParams.get('message').slice(2);
         // 将16进制转换为字节数组
-        const bytes = new Uint8Array(hex.match(/.{1,2}/g)?.map(byte => parseInt(byte, 16)));
+        const bytes = new Uint8Array(hex.match(/.{1,2}/g)?.map((byte:any) => parseInt(byte, 16)));
         // 将字节数组转换为字符串
         message.value = new TextDecoder().decode(bytes);
       } catch (error) {
@@ -99,7 +101,7 @@ console.log(signature,  'signature');
       signature
     });
     // window.close();
-  } catch (error) {
+  } catch (error:any) {
     console.error('Sign error:', error);
     chrome.runtime.sendMessage({
       action: 'signature_response',

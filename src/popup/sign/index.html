@@ -1,13 +1,26 @@
 <div class="sign-message">
-  <h2>签名请求</h2>
-  <div class="origin">
-    <span>来自:</span>
-    <span>{{ origin }}</span>
+  <div class="account-top">
+      <img src="@/assets/images/user.png" alt="">
+      <div>
+        <label for="">{{authorization.userName || '--'}}</label>
+        <span>{{authorization.accountAddress || '--'}}</span>
+      </div>
   </div>
-  <div class="origin">
-    <span>消息内容:</span>
-    <span>{{ message }}</span>
+  <div class="account-mid">
+    <h2>签名请求</h2>
+    <p class="tip">在确认之前，请查看请求详情信息。</p>
+    <div class="origin">
+      <span>请求来自:</span>
+      <span>{{ origin }}</span>
+    </div>
+    <div class="origin">
+      <div>
+        <span>消息内容:</span>
+      </div>
+      <span>{{ message  }}</span>
+    </div>
   </div>
+  
   <div class="actions">
     <button @click="reject" class="reject">拒绝</button>
     <button @click="sign" class="sign">确认签名</button>
