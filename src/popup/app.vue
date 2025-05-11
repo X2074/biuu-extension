@@ -53,22 +53,22 @@ const pageTypes = ref(''); //判断当前应该展示那个页面
 let router = useRouter();
 onMounted(async () => {
   // 获取设置的密码
-  let secert = await indexDbData.getData(md5('secret'));
-  // 发送消息给 background 页面请求数据
-  let data: any = { action: 'getSecret' };
-  chrome.runtime.sendMessage(data, (response: any) => {
-    // 获取缓存的密码，浏览器关闭，删除缓存数据
-    if (!response.secret) {
+  // let secert = await indexDbData.getData(md5('secret'));
+  // // 发送消息给 background 页面请求数据
+  // let data: any = { action: 'getSecret' };
+  // chrome.runtime.sendMessage(data, (response: any) => {
+  //   // 获取缓存的密码，浏览器关闭，删除缓存数据
+  //   if (!response.secret) {
       loading.value = false;
-      if (secert && secert.secret) {
-        pageTypes.value = 'secret';
-      } else {
-        pageTypes.value = 'create';
-      }
-    } else {
-      getInfo();
-    }
-  });
+  //     if (secert && secert.secret) {
+  //       pageTypes.value = 'secret';
+  //     } else {
+  //       pageTypes.value = 'create';
+  //     }
+  //   } else {
+  //     getInfo();
+  //   }
+  // });
 });
 // 监听数据变化，跳转相应页面
 watch(pageTypes, (newV) => {

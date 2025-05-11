@@ -37,16 +37,14 @@ export const createEIP1193Provider = (): EthereumProvider => {
       const { method, params } = args;
       try {
         switch (method) {
+          
           case 'eth_requestAccounts':
-            return requestContentScript(method,params);
           case 'eth_chainId':
-            return provider.chainId;
-			case 'wallet_getPermissions':
-            return await getPermissions();
+			    case 'wallet_getPermissions':
           case 'wallet_requestPermissions':
             return await requestContentScript(method,params);
-			case 'personal_sign':
-  return await handlePersonalSign(params?.[0], params?.[1]);
+          case 'personal_sign':
+            return await handlePersonalSign(params?.[0], params?.[1]);
           default:
             throw new Error(`Method not supported: ${method}`);
         }
@@ -135,10 +133,6 @@ const requestContentScript = (method:any,params:any)=>{
 	
 		  window.addEventListener('message', listener);      
 	});
-}
-
-const getPermissions = ()=>{
-//   return indexDbData.getData('authorized_sites')
 }
 
 

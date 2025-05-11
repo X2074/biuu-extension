@@ -29,7 +29,7 @@ const requestContentScript = (method,params)=>{
 }
 
 /* 接收 wallet_requestPermissions 请求，并从中提取请求的权限参数
-    获取当前活动标签页的 URL 和 origin
+    获取当前活动标签页的 URL 和 origin  属性
     创建一个授权弹窗，将当前 origin 作为参数传递
     等待用户响应（授权或拒绝）
     如果用户授权，将权限信息保存到 IndexedDB

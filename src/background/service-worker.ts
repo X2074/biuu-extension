@@ -137,11 +137,12 @@ async function handleProviderRequest(request: any) {
         // }
         case 'wallet_requestPermissions':
             return await requestPermissions(request);
+        case "wallet_getPermissions":
+            return await requestGetPermissions(request);
         case 'eth_chainId':
             return await getChainId();
-
-            case 'personal_sign':
-  return await handleSignMessage(request);
+        case 'personal_sign':
+            return await handleSignMessage(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }
@@ -192,12 +193,14 @@ async function handleSignMessage(request: any) {
     const currentOrigin = new URL(tab.url).origin;
   console.log(546546546465,`${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`);
     // 创建签名弹窗
-    const popup = await chrome.windows.create({
-      url: chrome.runtime.getURL(`popup/index.html#/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`),
-      type: 'popup',
-      width: 400,
-      height: 600
-    });
+    // const popup = await chrome.windows.create({
+    //   url: ,
+    //   type: 'popup',
+    //   width: 400,
+    //   height: 600
+    // });
+    let url = chrome.runtime.getURL(`popup/index.html#/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`);
+    const popup = await showExtensionPopup(url)
   
     // 返回一个 Promise，等待用户响应
     return new Promise((resolve, reject) => {
@@ -224,3 +227,20 @@ async function handleSignMessage(request: any) {
       }, 300000); // 5分钟超时
     });
   }
+
+
+//   获取权限数据
+async function requestGetPermissions(){
+    try {
+        let authorized = await indexDbData.getData('authorized_sites');
+        return new Promise((resolve, reject) => {
+            if (authorized) {
+                resolve(authorized);
+            } else {
+                reject(new Error('No permissions found'));
+            }
+        });
+    }catch{
+
+    }
+}
