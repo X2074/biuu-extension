@@ -193,14 +193,14 @@ async function handleSignMessage(request: any) {
     const currentOrigin = new URL(tab.url).origin;
   console.log(546546546465,`${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`);
     // 创建签名弹窗
-    // const popup = await chrome.windows.create({
-    //   url: ,
-    //   type: 'popup',
-    //   width: 400,
-    //   height: 600
-    // });
-    let url = chrome.runtime.getURL(`popup/index.html#/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`);
-    const popup = await showExtensionPopup(url)
+    const popup = await chrome.windows.create({
+      url: chrome.runtime.getURL(`popup/index.html#/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`),
+      type: 'popup',
+      width: 400,
+      height: 600
+    });
+    // let url = chrome.runtime.getURL(`popup/index.html#/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`);
+    // const popup = await showExtensionPopup(url)
   
     // 返回一个 Promise，等待用户响应
     return new Promise((resolve, reject) => {
