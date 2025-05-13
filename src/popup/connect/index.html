@@ -7,16 +7,16 @@
   <div class="connect-mid">
     <span>账号信息</span>
     <div class="account-lists">
-      <div class="account-item" v-for="i in 3" :key="i">
+      <div class="account-item">
         <div class="account-left">
           <img src="@/assets/images/user.png" alt="">
           <div>
             <label for="">{{authorization.userName || '--'}}</label>
-            <span>{{authorization.accountAddress || '--'}}</span>
+            <span>{{authorization.accountAddress ? (authorization.accountAddress.substr(0, 6) + '...' + authorization.accountAddress.substr(-4)) : '--'}}</span>
           </div>
         </div>
         <div class="account-right">
-          <label for="">$0.00 USD</label>
+          <!-- <label for="">$0.00 USD</label> -->
           <span>{{authorization.blance || 0}} {{authorization.unit || '--'}}</span>
         </div>
       </div>

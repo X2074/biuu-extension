@@ -141,7 +141,7 @@ const getInfo = () => {
 <style lang="less">
 html {
   width: 360px !important;
-  height: 600px !important;
+  //height: 600px !important;
 }
 
 .meer-wallt {

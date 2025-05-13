@@ -5,7 +5,7 @@ import { EXTERNAL_PORT_NAME } from '../utils/provider/constants.js'
 import { showExtensionPopup } from '../utils/index.js'
 import indexDbData from '../utils/indexDB';
 import browser from 'webextension-polyfill';
-import { requestPermissions, requestAccountsWallt } from '../utils/request';
+import { requestPermissions, handleSignMessage,requestGetPermissions,getChainId} from '../utils/request';
 import './utils';
 import './test';
 
@@ -127,13 +127,10 @@ async function handleProviderRequest(request: any) {
     switch (request.method) {
         // 因为 DApp 在初始化时会自动调用 eth_requestAccounts 来检查是否已连接钱包，所以这里需要处理一下
         case 'eth_requestAccounts':
-            // 检查是否是初始化请求
-            // if (request.params && request.params.length === 0) {
             let wallt = await indexDbData.getData('currentWalltAddress');
-            // 处理账户请求
             return [wallt.address];
         // }else{
-        //     return await requestAccountsWallt(request);
+            // return await requestAccountsWallt(request);
         // }
         case 'wallet_requestPermissions':
             return await requestPermissions(request);
@@ -150,16 +147,9 @@ async function handleProviderRequest(request: any) {
 
 // 获取账户
 async function requestAccounts(params: any[]) {
-    console.log('requestAccounts', params);
     showExtensionPopup('/secret')
     // 这里实现账户请求逻辑
     // return ['0x1234567890123456789012345678901234567890'];
-}
-
-// 获取 chainId
-async function getChainId() {
-    console.log('getChainId');
-    return '0x1'; // 以太坊主网
 }
 
 
@@ -180,69 +170,5 @@ function sendMessageToAllTabs(message: any) {
     });
 }
 
-// 添加处理签名请求的函数
-async function handleSignMessage(request: any) {
-    const [message, address] = request.params || [];
-
-    // 获取当前活动标签页
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (!tab?.url) {
-        throw new Error('Unable to determine the current tab URL');
-    }
-
-    const currentOrigin = new URL(tab.url).origin;
-    // 创建签名弹窗
-    let url: any = `/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`;
-    let popupUrl: any = await showExtensionPopup(url);  
-    const popup = await chrome.windows.create({
-        // url: chrome.runtime.getURL(`popup/index.html#/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`),
-        url: popupUrl,
-        type: 'popup',
-        width: 400,
-        height: 600
-    });
-    // let url = chrome.runtime.getURL(`popup/index.html#/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`);
-    // const popup = await showExtensionPopup(url)
-
-    // 返回一个 Promise，等待用户响应
-    return new Promise((resolve, reject) => {
-        const handleMessage:any = (message: any) => {
-            console.log(message, "messagehandleMessage");
-
-            if (message.action === 'signature_response') {
-                chrome.runtime.onMessage.removeListener(handleMessage);
-
-                if (message.signature) {
-                    resolve(message.signature);
-                } else {
-                    reject(new Error(message.error || 'User rejected the request'));
-                }
-            }
-        };
-
-        chrome.runtime.onMessage.addListener(handleMessage);
-
-        // 设置超时
-        setTimeout(() => {
-            chrome.runtime.onMessage.removeListener(handleMessage);
-            reject(new Error('Sign request timeout'));
-        }, 300000); // 5分钟超时
-    });
-}
 
 
-//   获取权限数据
-async function requestGetPermissions() {
-    try {
-        let authorized = await indexDbData.getData('authorized_sites');
-        return new Promise((resolve, reject) => {
-            if (authorized) {
-                resolve(authorized);
-            } else {
-                reject(new Error('No permissions found'));
-            }
-        });
-    } catch {
-
-    }
-}

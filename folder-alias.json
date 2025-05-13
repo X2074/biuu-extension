@@ -235,5 +235,8 @@
     },
     "src/utils/request.ts": {
         "description": "钱包扩展的request方法"
+    },
+    "src/popup/sign": {
+        "description": "授权签名"
     }
 }

@@ -26,12 +26,15 @@
       label{
         font-weight: 600;
       }
+      span{
+        word-break: break-all;
+      }
     }
   }
   .account-mid {
     height: 0;
     flex: 1;
-    padding: 20px;
+    padding: 0 20px;
     h2 {
       font-size: 18px;
       text-align: center;
@@ -51,6 +54,7 @@
       border-radius: 5px;
       span {
         font-size: 14px;
+        word-break: break-all;
       }
     }
   }
@@ -59,7 +63,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 20px 10px;
+    padding: 10px;
     gap: 30px;
 
     background: #fff;

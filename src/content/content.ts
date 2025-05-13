@@ -116,7 +116,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
         // 调用 sendResponse 并返回 true 表示异步处理
         sendResponse({ response: 'content script 已处理消息' });
         return true; // 返回 true 表示需要异步处理
-    } else if (message.action === 'eip1193_event') {
+    } else if (message.action === 'send_to_dapp') {
         window.postMessage(
             {
                 ...message.data,
