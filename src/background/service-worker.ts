@@ -5,7 +5,7 @@ import { EXTERNAL_PORT_NAME } from '../utils/provider/constants.js'
 import { showExtensionPopup } from '../utils/index.js'
 import indexDbData from '../utils/indexDB';
 import browser from 'webextension-polyfill';
-import {requestPermissions,requestAccountsWallt} from '../utils/request';
+import { requestPermissions, requestAccountsWallt } from '../utils/request';
 import './utils';
 import './test';
 
@@ -138,7 +138,7 @@ async function handleProviderRequest(request: any) {
         case 'wallet_requestPermissions':
             return await requestPermissions(request);
         case "wallet_getPermissions":
-            return await requestGetPermissions(request);
+            return await requestGetPermissions();
         case 'eth_chainId':
             return await getChainId();
         case 'personal_sign':
@@ -183,54 +183,56 @@ function sendMessageToAllTabs(message: any) {
 // 添加处理签名请求的函数
 async function handleSignMessage(request: any) {
     const [message, address] = request.params || [];
-    
+
     // 获取当前活动标签页
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab?.url) {
-      throw new Error('Unable to determine the current tab URL');
+        throw new Error('Unable to determine the current tab URL');
     }
-  
+
     const currentOrigin = new URL(tab.url).origin;
-  console.log(546546546465,`${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`);
     // 创建签名弹窗
+    let url: any = `/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`;
+    let popupUrl: any = await showExtensionPopup(url);  
     const popup = await chrome.windows.create({
-      url: chrome.runtime.getURL(`popup/index.html#/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`),
-      type: 'popup',
-      width: 400,
-      height: 600
+        // url: chrome.runtime.getURL(`popup/index.html#/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`),
+        url: popupUrl,
+        type: 'popup',
+        width: 400,
+        height: 600
     });
     // let url = chrome.runtime.getURL(`popup/index.html#/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`);
     // const popup = await showExtensionPopup(url)
-  
+
     // 返回一个 Promise，等待用户响应
     return new Promise((resolve, reject) => {
-      const handleMessage = (message: any) => {
-        console.log(message,"messagehandleMessage");
-        
-        if (message.action === 'signature_response') {
-          chrome.runtime.onMessage.removeListener(handleMessage);
-          
-          if (message.signature) {
-            resolve(message.signature);
-          } else {
-            reject(new Error(message.error || 'User rejected the request'));
-          }
-        }
-      };
-  
-      chrome.runtime.onMessage.addListener(handleMessage);
-  
-      // 设置超时
-      setTimeout(() => {
-        chrome.runtime.onMessage.removeListener(handleMessage);
-        reject(new Error('Sign request timeout'));
-      }, 300000); // 5分钟超时
+        const handleMessage:any = (message: any) => {
+            console.log(message, "messagehandleMessage");
+
+            if (message.action === 'signature_response') {
+                chrome.runtime.onMessage.removeListener(handleMessage);
+
+                if (message.signature) {
+                    resolve(message.signature);
+                } else {
+                    reject(new Error(message.error || 'User rejected the request'));
+                }
+            }
+        };
+
+        chrome.runtime.onMessage.addListener(handleMessage);
+
+        // 设置超时
+        setTimeout(() => {
+            chrome.runtime.onMessage.removeListener(handleMessage);
+            reject(new Error('Sign request timeout'));
+        }, 300000); // 5分钟超时
     });
-  }
+}
 
 
 //   获取权限数据
-async function requestGetPermissions(){
+async function requestGetPermissions() {
     try {
         let authorized = await indexDbData.getData('authorized_sites');
         return new Promise((resolve, reject) => {
@@ -240,7 +242,7 @@ async function requestGetPermissions(){
                 reject(new Error('No permissions found'));
             }
         });
-    }catch{
+    } catch {
 
     }
 }

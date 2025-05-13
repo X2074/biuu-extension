@@ -1,6 +1,7 @@
 import indexDbData from './indexDB.js';
+import { showExtensionPopup } from './index.ts';
 // 从dapp发送消息到background，background响应消息到dapp
-const requestContentScript = (method,params)=>{
+const requestContentScript = (method:any,params:any)=>{
 	return new Promise((resolve, reject) => {
 		// 发送请求到 content script
 		window.postMessage({
@@ -47,11 +48,12 @@ export async function requestPermissions(request: any) {
       }
   
       const currentOrigin = new URL(tab.url).origin;
-      
+      const url:any = `/connect?origin=${encodeURIComponent(currentOrigin)}`;
+      const popupUrl:any=await showExtensionPopup(url);
       // 创建授权弹窗
       const popup = await chrome.windows.create({
-        url: chrome.runtime.getURL('popup/index.html#/connect') + 
-             `?origin=${encodeURIComponent(currentOrigin)}`,
+        url: popupUrl,
+        // chrome.runtime.getURL('popup/index.html#/connect') + `?origin=${encodeURIComponent(currentOrigin)}`,
         type: 'popup',
         width: 400,
         height: 600
@@ -60,7 +62,7 @@ export async function requestPermissions(request: any) {
       // 返回一个 Promise，等待用户响应
       return new Promise((resolve, reject) => {
         // 监听来自弹窗的响应
-        const handleMessage = (message: any) => {
+        const handleMessage:any = (message: any) => {
             console.log(message,"messagemessagemessage");
             
           if (message.action === 'authorization_response') {

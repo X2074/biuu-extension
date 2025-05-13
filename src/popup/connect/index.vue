@@ -7,9 +7,9 @@
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import indexDbData from '../../utils/indexDB';
-let authorization:any = ref(null);
+let authorization:any = ref({});
 onMounted(async()=>{
-    authorization.value = await indexDbData.getData('authorization');
+    authorization.value = await indexDbData.getData('authorization') || {};
 })
 
 const reject = ()=>{
