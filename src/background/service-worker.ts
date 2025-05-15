@@ -140,7 +140,9 @@ async function handleProviderRequest(request: any) {
         case 'wallet_addEthereumChain':
             return await requestMethodFn.addEthereumChain(request);
         case "eth_getBalance":
-            return await requestMethodFn.eth_getBalance(request);
+            return await requestMethodFn.eth_getBalance(request);        
+        case "wallet_switchEthereumChain":
+            return await requestMethodFn.switchEthereumChain(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }

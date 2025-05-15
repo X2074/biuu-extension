@@ -43,6 +43,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
 			case 'wallet_getPermissions':
           	case 'wallet_requestPermissions':
 			case 'eth_getBalance':
+			case 'wallet_switchEthereumChain':
             	return await requestContentScript(method,params);
           	case 'personal_sign':
             	return await handlePersonalSign(params?.[0], params?.[1]);
@@ -127,7 +128,7 @@ const requestContentScript = (method:any,params:any)=>{
 				if (event.data.type === method) {
 					resolve(event.data.accounts);
 				} else {
-					reject(new Error('Request failed'));
+					reject(event.data.error || new Error('Request failed'));
 				}
 			}
 		};
