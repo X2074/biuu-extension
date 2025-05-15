@@ -5,7 +5,7 @@ import { EXTERNAL_PORT_NAME } from '../utils/provider/constants.js'
 import { showExtensionPopup } from '../utils/index.js'
 import indexDbData from '../utils/indexDB';
 import browser from 'webextension-polyfill';
-import { requestPermissions, handleSignMessage,requestGetPermissions,getChainId} from '../utils/request';
+import requestMethodFn from '../utils/requestEVM';
 import './utils';
 import './test';
 
@@ -133,13 +133,19 @@ async function handleProviderRequest(request: any) {
             // return await requestAccountsWallt(request);
         // }
         case 'wallet_requestPermissions':
-            return await requestPermissions(request);
+            return await requestMethodFn.requestPermissions(request);
         case "wallet_getPermissions":
-            return await requestGetPermissions();
+            return await requestMethodFn.requestGetPermissions();
         case 'eth_chainId':
-            return await getChainId();
+            return await requestMethodFn.getChainId();
+        case 'web3_clientVersion':
+            return await requestMethodFn.getWalltVersion();
         case 'personal_sign':
-            return await handleSignMessage(request);
+            return await requestMethodFn.handleSignMessage(request);
+        case 'wallet_addEthereumChain':
+            return await requestMethodFn.addEthereumChain(request);
+        case "eth_getBalance":
+            return await requestMethodFn.eth_getBalance(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }

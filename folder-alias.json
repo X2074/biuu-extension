@@ -238,5 +238,8 @@
     },
     "src/popup/sign": {
         "description": "授权签名"
+    },
+    "src/utils/requestEVM.ts": {
+        "description": "evm版本发request"
     }
 }

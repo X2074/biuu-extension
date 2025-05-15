@@ -38,15 +38,16 @@ export const createEIP1193Provider = (): EthereumProvider => {
       try {
         switch (method) {
           
-          case 'eth_requestAccounts':
-          case 'eth_chainId':
-			    case 'wallet_getPermissions':
-          case 'wallet_requestPermissions':
-            return await requestContentScript(method,params);
-          case 'personal_sign':
-            return await handlePersonalSign(params?.[0], params?.[1]);
-          default:
-            throw new Error(`Method not supported: ${method}`);
+          	case 'eth_requestAccounts':
+          	case 'eth_chainId':
+			case 'wallet_getPermissions':
+          	case 'wallet_requestPermissions':
+			case 'eth_getBalance':
+            	return await requestContentScript(method,params);
+          	case 'personal_sign':
+            	return await handlePersonalSign(params?.[0], params?.[1]);
+          	default:
+            	throw new Error(`Method not supported: ${method}`);
         }
       } catch (error) {
         console.error('Request failed:', error);
@@ -119,19 +120,18 @@ const requestContentScript = (method:any,params:any)=>{
 		  }, '*');
 	
 		  // 监听响应
-		  const listener = (event: MessageEvent) => {
+		const listener = (event: MessageEvent) => {
 			console.log(event,"event465465");
 			if (event.data.target === 'biuu-window-provider') {
-			  window.removeEventListener('message', listener);
-			  if (event.data.type === method) {
-				resolve(event.data.accounts);
-			  } else {
-				reject(new Error('Request failed'));
-			  }
+				window.removeEventListener('message', listener);
+				if (event.data.type === method) {
+					resolve(event.data.accounts);
+				} else {
+					reject(new Error('Request failed'));
+				}
 			}
-		  };
-	
-		  window.addEventListener('message', listener);      
+		};
+		window.addEventListener('message', listener);      
 	});
 }
 
@@ -184,43 +184,37 @@ const handlePersonalSign = async (message: string, address: string): Promise<str
 	if (!message || !address) {
 	  throw new Error('Invalid parameters for personal_sign');
 	}
-  
 	// 发送签名请求到后台脚本
 	return new Promise((resolve, reject) => {
-	  const requestId = Date.now().toString();
-	  
-	  // 监听响应
-	  const handleResponse = (event: MessageEvent) => {
-      console.log(event, 'event465465签名叔叔叔叔啊');
-      
-		if (event.data.target === 'biuu-window-provider' && 
-			event.data.type === "personal_sign") {
-		  window.removeEventListener('message', handleResponse);
-		  
-		  if (event.data.error) {
-			reject(new Error(event.data.error));
-		  } else {
-			resolve(event.data.accounts);
-		  }
-		}
-	  };
-  
-	  window.addEventListener('message', handleResponse);
-  
-	  // 发送签名请求
-	  window.postMessage({
-		target: 'biuu-provider-bridge',
-		request: {
-		  method: 'personal_sign',
-		  params: [message, address],
-		  requestId
-		}
-	  }, '*');
-  
-	  // 设置超时
-	  setTimeout(() => {
-		window.removeEventListener('message', handleResponse);
-		reject(new Error('Sign request timeout'));
-	  }, 300000); // 5分钟超时
+		const requestId = Date.now().toString();
+		// 监听响应
+		const handleResponse = (event: MessageEvent) => {
+			if (event.data.target === 'biuu-window-provider' && 
+				event.data.type === "personal_sign") {
+				window.removeEventListener('message', handleResponse);
+				if (event.data.error) {
+					reject(new Error(event.data.error));
+				} else {
+					resolve(event.data.accounts);
+				}
+			}
+		};
+	
+		window.addEventListener('message', handleResponse);
+		// 发送签名请求
+		window.postMessage({
+			target: 'biuu-provider-bridge',
+			request: {
+			method: 'personal_sign',
+			params: [message, address],
+			requestId
+			}
+		}, '*');
+	
+		// 设置超时
+		setTimeout(() => {
+			window.removeEventListener('message', handleResponse);
+			reject(new Error('Sign request timeout'));
+		}, 300000); // 5分钟超时
 	});
-  };
+};
