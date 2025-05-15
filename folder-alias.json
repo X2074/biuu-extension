@@ -241,5 +241,17 @@
     },
     "src/utils/requestEVM.ts": {
         "description": "evm版本发request"
+    },
+    "src/utils/UTXO/request": {
+        "description": "复杂的操作"
+    },
+    "src/utils/UTXO/request/EVM": {
+        "description": "evm版本的"
+    },
+    "src/utils/UTXO/request/EVM/addEthereumChain.ts": {
+        "description": "添加以太坊链"
+    },
+    "src/utils/request/EVM/requestPermissions.ts": {
+        "description": "授权签名"
     }
 }

@@ -5,7 +5,7 @@ import { EXTERNAL_PORT_NAME } from '../utils/provider/constants.js'
 import { showExtensionPopup } from '../utils/index.js'
 import indexDbData from '../utils/indexDB';
 import browser from 'webextension-polyfill';
-import requestMethodFn from '../utils/requestEVM';
+import requestMethodFn from '../utils/request/EVM/requestEVM';
 import './utils';
 import './test';
 
@@ -44,12 +44,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
             web3Operate.transferUtxo(message)
         }
     }
-    if (message.action === 'test') {
-        console.log("service-worker接收到content的数据");
-        let aaa = { action: 'service', test: 'service-worker传递数据给content' }
-        sendResponse(aaa);
-        return true; // 保持消息通道打开，以便异步发送响应
-    }
+    
     // 处理权限请求
     if (message.action === 'authorization_response') {
         indexDbData.getData('authorization').then(async (data: any) => {
@@ -146,18 +141,12 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.addEthereumChain(request);
         case "eth_getBalance":
             return await requestMethodFn.eth_getBalance(request);
+        case "wallet_addEthereumChain":
+            return await requestMethodFn.addEthereumChain(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }
 }
-
-// 获取账户
-async function requestAccounts(params: any[]) {
-    showExtensionPopup('/secret')
-    // 这里实现账户请求逻辑
-    // return ['0x1234567890123456789012345678901234567890'];
-}
-
 
 // 发送消息到所有标签页的函数
 function sendMessageToAllTabs(message: any) {
