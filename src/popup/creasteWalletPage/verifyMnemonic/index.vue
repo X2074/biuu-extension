@@ -71,8 +71,8 @@ const UtxoEvmKey = () => {
   //   NoIndex: 1 //当前第几个用户
   // };
   let content: any = defaultAccount;
-  content['address'] = walltInfo.address;
-  content['keyStore'] = walltInfo.keyStore;
+  content['address'] = walltInfo.value.address;
+  content['keyStore'] = walltInfo.value.keyStore;
   content['userName'] = 'Wallt 01';
   content['netWorkType'] = 'EVM';
   indexDbData.putData(Object.assign({ id: 'currentWalltAddress' }, content));
