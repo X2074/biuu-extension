@@ -156,6 +156,7 @@ async function toDapp() {
         port.postMessage({
           action: 'send_to_dapp',
           data: {
+            type: 'eip1193:chainChanged',  
             accounts: ['0x1234567890abcdef'],
             selectedAccount: '0x1234567890abcdef',
             message: 'Hello from popup window',

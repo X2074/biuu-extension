@@ -77,7 +77,7 @@ chrome.runtime.onConnect.addListener((port) => {
         console.log('Valid connection established', portConnections);
         // 设置消息监听器
         port.onMessage.addListener(async (message) => {
-            console.log('Received message:', message.request);
+            console.log('Received message:', message);
             try {
                 // 处理不同的请求类型
                 if (message.request) {
@@ -89,13 +89,8 @@ chrome.runtime.onConnect.addListener((port) => {
                 } else {
                     // 转发消息到所有标签页，实现popup到dapp的通信
                     sendMessageToAllTabs({
-                        action: 'accounts_selected',
-                        data: {
-                            accounts: message.data.accounts,
-                            selectedAccount: message.data.selectedAccount,
-                            message: message.data.message,
-                            tabId: message.data.tab.id
-                        }
+                        action: 'send_to_dapp',
+                        data: message.data
                     });
                 }
             } catch (error: any) {
@@ -143,6 +138,7 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.eth_getBalance(request);        
         case "wallet_switchEthereumChain":
             return await requestMethodFn.switchEthereumChain(request);
+            
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }
@@ -152,7 +148,7 @@ async function handleProviderRequest(request: any) {
 function sendMessageToAllTabs(message: any) {
     chrome.tabs.query({}, (tabs) => {
         tabs.forEach((tab: any) => {
-            console.log(tab.id, "tabtabtabtabtabtabtab", message.data.tabId);
+            console.log(tab.id, "tabtabtabtabtabtabtab", message.data);
             chrome.tabs.sendMessage(tab.id, message, {}, (response) => {
                 console.log(response, 'response');
 

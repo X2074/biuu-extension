@@ -1,6 +1,9 @@
-
+import indexDbData from '../../indexDB.js';
+import { showExtensionPopup } from '../../index.ts';
 // 向钱包添加以太坊链 (EIP-3085)
 export default async function addEthereumChain(request: any): Promise<null> {
+    console.log(request,"requestaddEthereumChain");
+    
     try {
         const params = request.params?.[0];
         if (!params) {
@@ -16,10 +19,10 @@ export default async function addEthereumChain(request: any): Promise<null> {
             err.code = -32602;
             throw err;
         }
-
+        let chainIdNum:any;
         // 验证 chainId 数值范围
         try {
-            const chainIdNum = parseInt(chainId, 16);
+            chainIdNum = parseInt(chainId, 16);
             if (chainIdNum > Number.MAX_SAFE_INTEGER) {
                 const err = new Error(`Invalid chain ID "${chainId}": numerical value greater than max safe value. Received: ${chainId}`);
                 err.code = -32602;
@@ -62,6 +65,7 @@ export default async function addEthereumChain(request: any): Promise<null> {
             err.code = -32602;
             throw err;
         }
+console.log(chainIdNum,"chainIdNum");
 
         // 验证 blockExplorerUrls（如果提供）
         if (blockExplorerUrls !== undefined) {
@@ -73,36 +77,55 @@ export default async function addEthereumChain(request: any): Promise<null> {
                 throw err;
             }
         }
-
-        // 获取当前网络配置
-        const currentNetworks = (await indexDbData.getData('networks')) || {};
+        // 获取当前所有的链
+        let chainsEVM = await indexDbData.getData('EVM');
+        let chainsUTXO = await indexDbData.getData('UTXO');
+        let chainsEVMData  = chainsEVM['content'][chainIdNum]
+        let chainsUTXOData  = chainsUTXO['content'][chainIdNum]
         
         // 检查链是否已存在
-        if (currentNetworks[chainId]) {
+        if (chainsEVMData || chainsUTXOData) {
             // 链已存在，返回成功
-            return null;
+            return true;
+        }else{
+            // 添加新链
+            const newNetwork = {
+                id:'newNetwork',
+                chainId:chainIdNum,
+                chainName: chainName || `Chain ${chainId}`,
+                rpcUrls,
+                nativeCurrency: {
+                    name: nativeCurrency.name || 'Ether',
+                    symbol: nativeCurrency.symbol,
+                    decimals: nativeCurrency.decimals
+                },
+                blockExplorerUrls: blockExplorerUrls || [],
+                iconUrls: params.iconUrls || []
+            };
+            // await indexDbData.putData(newNetwork);
+            const popupUrl: any = await showExtensionPopup('/addEthereumChain');
+            // 返回一个 Promise，等待用户响应
+            return new Promise((resolve, reject) => {
+                const handleMessage:any = (message: any) => {
+                    console.log(message, "add_ethereumChain");
+                    if (message.action === 'add_ethereumChain') {
+                        if (message) {
+                            resolve(message.result);
+                        } else {
+                            reject(new Error(message.error || 'User rejected the request'));
+                        }
+                    }
+                };
+                chrome.runtime.onMessage.addListener(handleMessage);
+
+                // 设置超时
+                setTimeout(() => {
+                    chrome.runtime.onMessage.removeListener(handleMessage);
+                    reject(new Error('Sign request timeout'));
+                }, 300000); // 5分钟超时
+            });
+
         }
-
-        // 添加新链
-        const newNetwork = {
-            chainId,
-            chainName: chainName || `Chain ${chainId}`,
-            rpcUrls,
-            nativeCurrency: {
-                name: nativeCurrency.name || 'Ether',
-                symbol: nativeCurrency.symbol,
-                decimals: nativeCurrency.decimals
-            },
-            blockExplorerUrls: blockExplorerUrls || [],
-            iconUrls: params.iconUrls || []
-        };
-
-        // 保存到 IndexedDB
-        // currentNetworks[chainId] = newNetwork;
-        // await indexDbData.putData('networks', currentNetworks);
-
-        // 返回 null 表示成功（EIP-3085 规范）
-        return null;
 
     } catch (error) {
         console.error('Error in addEthereumChain:', error);

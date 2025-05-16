@@ -56,8 +56,7 @@ windowProvider()
 window.addEventListener('message', function (e) {
     console.log('我听到了contyent',e);
     if (e.data.type === 'eip1193:chainChanged') {
-        window.ethereum.emit('chainChanged', e.data.detail)
-
+        window.ethereum.emit('chainChanged', e.data.chainId)
     }
 })
 

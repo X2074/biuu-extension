@@ -9,6 +9,8 @@ function createProviderPort() {
         console.log('Port created:', providerPort);
         // 设置消息监听器
         providerPort.onMessage.addListener((data) => {
+            console.log(data,877);
+            
             // 将响应返回给 DApp-background
             window.postMessage(
                 {

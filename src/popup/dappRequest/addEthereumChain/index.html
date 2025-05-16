@@ -1,0 +1,17 @@
+<div class="sign-message">
+  <!-- <div class="account-top">
+      <img src="@/assets/images/user.png" alt="">
+      <div>
+        <label for="">{{authorization.userName || '--'}}</label>
+        <span>{{authorization.accountAddress || '--'}}</span>
+      </div>
+  </div> -->
+  <div class="account-mid">
+    {{newNetwork}}
+  </div>
+  
+  <div class="actions">
+    <button @click="reject" class="reject">拒绝</button>
+    <button @click="addEth" class="sign">确认新增</button>
+  </div>
+</div>

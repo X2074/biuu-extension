@@ -53,14 +53,6 @@ async function handleSignMessage(request: any) {
 	// 创建签名弹窗
 	let url: any = `/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`;
 	let popupUrl: any = await showExtensionPopup(url);  
-	// const popup = await chrome.windows.create({
-	//     // url: chrome.runtime.getURL(`popup/index.html#/sign?message=${encodeURIComponent(message)}&address=${address}&origin=${encodeURIComponent(currentOrigin)}`),
-	//     url: popupUrl,
-	//     type: 'popup',
-	//     width: 400,
-	//     height: 600
-	// });
-
 	// 返回一个 Promise，等待用户响应
 	return new Promise((resolve, reject) => {
 		const handleMessage:any = (message: any) => {
@@ -155,7 +147,7 @@ async function switchEthereumChain(request:any){
 			currentWalltAddress['id'] = 'currentWalltAddress';
 			currentWalltAddress['netWorkType'] = checkChain['netWorkType'];
 			indexDbData.putData(currentWalltAddress);
-			resolve(null)
+			resolve(true)
 		}else{
 			let err = {
 				"code": 4902,
@@ -164,15 +156,6 @@ async function switchEthereumChain(request:any){
 			reject(err)
 		}
 	})
-	// const decimal = 8131;
-// const hexString = '0x' + decimal.toString(16);
-// return;
-	// if(chainsEVM['content'][numChainId] || chainsUTXO['content'][numChainId])else{
-		// return {
-		// 	"code": 4902,
-		// 	"message": `Unrecognized chain ID \"$(request.params[0]).chainId)\". Try adding the chain using wallet_addEthereumChain first.`
-		// }
-	// }
 }
 
 // 撤销当前dapp的授权

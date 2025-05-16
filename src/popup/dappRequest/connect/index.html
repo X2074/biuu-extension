@@ -1,0 +1,29 @@
+<div class="connect-page">
+  <div class="connect-top">
+    <img :src="authorization?authorization.faviconUrl:'@/assets/images/logo/logo.png'" alt="" class="logo">
+    <h2>{{authorization?.title}}</h2>
+    <p>此网站想要：<a href="">了解更多</a></p>
+  </div>
+  <div class="connect-mid">
+    <span>账号信息</span>
+    <div class="account-lists">
+      <div class="account-item">
+        <div class="account-left">
+          <img src="@/assets/images/user.png" alt="">
+          <div>
+            <label for="">{{authorization.userName || '--'}}</label>
+            <span>{{authorization.accountAddress ? (authorization.accountAddress.substr(0, 6) + '...' + authorization.accountAddress.substr(-4)) : '--'}}</span>
+          </div>
+        </div>
+        <div class="account-right">
+          <!-- <label for="">$0.00 USD</label> -->
+          <span>{{authorization.blance || 0}} {{authorization.unit || '--'}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="connect-bottom">
+    <span class="btn-cancel" @click="reject">取消</span>
+    <span class="btn-connect" @click="approve">连接</span>
+  </div>
+</div>

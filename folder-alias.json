@@ -253,5 +253,14 @@
     },
     "src/utils/request/EVM/requestPermissions.ts": {
         "description": "授权签名"
+    },
+    "src/popup/dappRequest": {
+        "description": "对外操作页面"
+    },
+    "src/popup/dappRequest/addEthereumChain": {
+        "description": "添加EVM网络"
+    },
+    "src/utils/dappOnChange.ts": {
+        "description": "监听操作"
     }
 }

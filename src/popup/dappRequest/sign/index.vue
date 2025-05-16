@@ -4,7 +4,7 @@
 <template src="./index.html"></template>
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted, toRaw } from 'vue';
-import indexDbData from '../../utils/indexDB';
+import indexDbData from '@/utils/indexDB';
 import { Decrypt, getGas, evmKey, utxoKey, getBlance } from '@/utils/index';
 import md5 from 'js-md5';
 import { ethers } from 'ethers';

@@ -1,0 +1,84 @@
+.connect-page {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #000;
+  padding: 20px;
+  height: 100%;
+  * {
+    font-size: 16px;
+  }
+  .connect-top {
+    text-align: center;
+    padding: 10px;
+    background: #fff;
+    color: #000;
+    .logo {
+      width: 60px;
+      margin: 0 auto;
+    }
+    h2 {
+      font-size: 32px;
+    }
+  }
+  .connect-mid {
+    height: 0;
+    flex: 1;
+    .account-lists {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      .account-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background: #fff;
+        color: #000;
+        font-size: 16px;
+        .account-left {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          >img{
+            width: 40px;
+          }
+          > div {
+            display: flex;
+            flex-direction: column;
+          }
+        }
+        .account-right {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+        }
+      }
+    }
+  }
+  .connect-bottom {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 5px 10px;
+    gap: 30px;
+    span {
+      flex: 1;
+      border: 1px solid rgb(68, 89, 255);
+      padding: 10px;
+      border-radius: 30px;
+      color: rgb(68, 89, 255);
+      text-align: center;
+      cursor: pointer;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+    .btn-connect {
+      color: #fff;
+      background: rgb(68, 89, 255);
+    }
+  }
+}

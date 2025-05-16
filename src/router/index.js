@@ -108,13 +108,19 @@ const routes = [
   {
     path: '/connect',
     name: 'connect',
-    component: () => import("../popup/connect/index.vue"),
+    component: () => import("../popup/dappRequest/connect/index.vue"),
   },
   //签名
   {
     path: '/sign',
     name: 'sign',
-    component: () => import("../popup/sign/index.vue")
+    component: () => import("../popup/dappRequest/sign/index.vue")
+  },
+  //新增网络
+  {
+    path: '/addEthereumChain',
+    name: 'addEthereumChain',
+    component: () => import("../popup/dappRequest/addEthereumChain/index.vue")
   }
 
 ]
