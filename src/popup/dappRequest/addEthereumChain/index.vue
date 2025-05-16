@@ -27,7 +27,8 @@ const reject = () => {
     });
 };
 const addEth = async () => {
-    indexDbData.getData('EVM').then((res: any) => {
+        let chainEVM:any = await indexDbData.getData('EVM')
+//    .then((res: any) => {
         let ethereumChain:any = {};
         ethereumChain['CHAIN_ID'] = newNetwork.value['chainId'];
         ethereumChain['netName'] = newNetwork.value['chainName'];
@@ -38,20 +39,29 @@ const addEth = async () => {
         ethereumChain['blockExplorerUrls'] = newNetwork.value['blockExplorerUrls'];
         ethereumChain['nativeCurrency'] = newNetwork.value['nativeCurrency'];
         // 获取当前钱包账号信息
-        const walltInfo = Object.keys(res['content'])[0];
+        // const walltInfo = Object.keys(res['content'])[0];
+        let walltInfo;
+        for (const key in chainEVM['content']) {
+            if (chainEVM['content'].hasOwnProperty(key)) {
+                walltInfo = chainEVM['content'][key]['walltInfo'];
+                break;
+            }
+        }
         ethereumChain['walltInfo'] = walltInfo;
-        res.content[newNetwork.value['chainId']] = ethereumChain;
-        console.log(res, 'resresresresres');
+        chainEVM.content[newNetwork.value['chainId']] = ethereumChain;
+        console.log(chainEVM, 'resresresresres');
+        chainEVM = JSON.parse(JSON.stringify(chainEVM));
+        indexDbData.putData(chainEVM);
+        indexDbData.deleteData('newNetwork')
         // 发送添加结果
         chrome.runtime.sendMessage({
             action: 'add_ethereumChain',
             ethereumChain: ethereumChain,
             result: true
         });
-        chainChanged(newNetwork.value['chainId'])
 
-        indexDbData.putData(toRaw(res));
+        chainChanged(newNetwork.value['chainId'])
         window.close();
-    });
+    // });
 };
 </script>
