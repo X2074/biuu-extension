@@ -118,9 +118,9 @@ export async function showExtensionPopup(
 	let popupWindowId:any = await indexDbData.getData('popupWindowId')
 	console.log(popupWindowId,"popupWindowId");
 	let window:any;
-    try {
+    // try {
         // 首先尝试获取已存在的弹出窗口
-        if (popupWindowId.content) {
+        if (popupWindowId && popupWindowId.content) {
             try {
             const window = await browser.windows.get(popupWindowId.content);
 			console.log(window,'window');
@@ -138,22 +138,16 @@ export async function showExtensionPopup(
 				window = await createPopupWindow(url);
 
             }
-			// // 保存窗口ID
-			// popupWindowId = popupWindowId;
-			
-			// if (typeof popup.id !== 'undefined') {
-				// browser.windows.remove(popupWindowId);
-			//   }
         }else{
 			window = await createPopupWindow(url);
 		}
 		return window;
 
 			
-    } catch (error) {
-        console.error('Failed to show extension popup:', error);
-        throw error;
-    }
+    // } catch (error) {
+    //     console.error('Failed to show extension popup:', error);
+    //     throw error;
+    // }
 }
 
 

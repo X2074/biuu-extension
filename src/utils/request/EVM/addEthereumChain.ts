@@ -102,7 +102,7 @@ console.log(chainIdNum,"chainIdNum");
                 blockExplorerUrls: blockExplorerUrls || [],
                 iconUrls: params.iconUrls || []
             };
-            // await indexDbData.putData(newNetwork);
+            await indexDbData.putData(newNetwork);
             const popupUrl: any = await showExtensionPopup('/addEthereumChain');
             // 返回一个 Promise，等待用户响应
             return new Promise((resolve, reject) => {
