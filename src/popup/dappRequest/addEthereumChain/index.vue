@@ -16,7 +16,7 @@ let passKey = ref('');
 let privateKey: any = ref(null);
 let newNetwork: any = ref({});
 onMounted(async () => {
-    newNetwork.value = await indexDbData.getData('newNetwork');
+    newNetwork.value = await indexDbData.getData('newNetwork') || {};
 })
 
 const reject = () => {

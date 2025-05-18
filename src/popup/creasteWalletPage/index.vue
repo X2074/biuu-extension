@@ -3,10 +3,11 @@
         1、生成助记词
         2、验证助记词
     -->
+        {{ step }}==step
   <div class="create-wallt">
     <div class="header flex">
-      <img class="back-img" v-if="step >= 1" @click="step = step - 1" src="@/assets/images/icons/back.png" alt="" />
-      <img class="close-img" @click="step = 0" src="@/assets/images/icons/close.png" alt="" />
+      <img class="back-img" v-if="step >= 1" @click="changeStep" src="@/assets/images/icons/back.png" alt="" />
+      <!-- <img class="close-img" @click="step = 0" src="@/assets/images/icons/close.png" alt="" /> -->
     </div>
     <!-- 设置密码 -->
     <setPsd v-if="step == 1" />
@@ -29,7 +30,15 @@ import verifyMnemonic from './verifyMnemonic/index.vue';
 import setPsd from './setPsd/index.vue';
 import indexDbData from '@/utils/indexDB.js';
 import md5 from 'js-md5';
+import { useRouter } from 'vue-router';
+let router = useRouter();
 const step = ref(1);
+const changeStep = () => {
+  step.value = step.value - 1
+  if (step.value == 0) {
+    router.push('/create');
+  }
+};
 onMounted(() => {
   // 获取设置的密码
   indexDbData

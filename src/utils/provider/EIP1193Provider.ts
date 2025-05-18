@@ -48,7 +48,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
                 return await requestContentScript(method,params);
             case 'personal_sign':
               return await handlePersonalSign(params?.[0], params?.[1]);
-            default:
+          default:
               throw new Error(`Method not supported: ${method}`);
             }
       } catch (error) {
@@ -125,13 +125,14 @@ const requestContentScript = (method:any,params:any)=>{
 		const listener = (event: MessageEvent) => {
 			console.log(event,"event465465");
 			if (event.data.target === 'biuu-window-provider') {
-				window.removeEventListener('message', listener);
-				if (event.data.type === method) {
+       window.removeEventListener('message', listener); 
+				if (event.data.type === method && event.data.accounts) {
 					resolve(event.data.accounts);
 				} else {
 					reject(event.data.error || new Error('Request failed'));
 				}
-			}
+      }
+     
 		};
 		window.addEventListener('message', listener);      
 	});

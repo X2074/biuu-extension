@@ -171,7 +171,7 @@ async function watchAsset(){
 }
 
 // 返回给定地址的账户余额
-async function eth_getBalance(request): Promise<string> {
+async function eth_getBalance(request:any): Promise<string> {
 	try {
         const [address, blockTag = 'latest'] = request.params || [];
         if (!address) {

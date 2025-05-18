@@ -73,7 +73,9 @@ console.log(providerDetail,'providerDetail');
             }));
             
             // 重新宣布
-            announceProvider();
+            setTimeout(() => {
+                announceProvider();
+            }, 5000);
         } catch (error:any) {
             console.error('Connection failed:', error);
             // 发送断开连接事件
