@@ -1,17 +1,20 @@
 <div class="sign-message">
-  <!-- <div class="account-top">
-      <img src="@/assets/images/user.png" alt="">
-      <div>
-        <label for="">{{authorization.userName || '--'}}</label>
-        <span>{{authorization.accountAddress || '--'}}</span>
-      </div>
-  </div> -->
-  <div class="account-mid">
-    {{newNetwork}}
-  </div>
-  
-  <div class="actions">
-    <button @click="reject" class="reject">拒绝</button>
-    <button @click="addEth" class="sign">确认新增</button>
-  </div>
+    <div class="page-top">
+        <p>查看许可</p>
+    </div>
+    <div class="page-mid">
+        <!-- {{newNetwork}} -->
+        <div class="card-item">
+            <img src="@/assets/images/icons/wifi.svg" alt="" />
+            <div>
+                <label for="">切换并使用以下网络</label>
+                <span>现在为<img :src="newNetwork.iconUrls[0]" alt="" /><em>{{newNetwork.chainName}}</em>请求</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button @click="reject" class="reject">拒绝</button>
+        <button @click="addEth" class="sign">确认新增</button>
+    </div>
 </div>

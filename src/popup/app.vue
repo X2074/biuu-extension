@@ -59,7 +59,7 @@ onMounted(async () => {
   // chrome.runtime.sendMessage(data, (response: any) => {
   //   // 获取缓存的密码，浏览器关闭，删除缓存数据
   //   if (!response.secret) {
-      loading.value = false;
+  loading.value = false;
   //     if (secert && secert.secret) {
   //       pageTypes.value = 'secret';
   //     } else {
@@ -147,5 +147,6 @@ html {
 .meer-wallt {
   width: 360px;
   height: 600px;
+  background: #f8f9fa;
 }
 </style>

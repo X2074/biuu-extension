@@ -1,87 +1,71 @@
 .sign-message {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  max-width: 360px;
-  margin: 0 auto;
-  color: #666;
-  height: 100%;
-  background: #f8f9fa;
-  * {
-    font-size: 16px;
-  }
-  .account-top {
     display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 10px 20px;
-    background: #fff;
-    > img {
-      width: 40px;
-    }
-    > div {
-      display: flex;
-      flex-direction: column;
-      label{
-        font-weight: 600;
-      }
-      span{
-        word-break: break-all;
-      }
-    }
-  }
-  .account-mid {
-    height: 0;
-    flex: 1;
-    padding: 0 20px;
-    h2 {
-      font-size: 18px;
-      text-align: center;
-    }
-    .tip{
-      font-size: 14px;
-      color: #919191;
-      text-align: center;
-      margin : 5px 0;
-    }
-    .origin {
-      margin: 15px 0;
-      font-size: 14px;
-      color: #666;
-      background: #fff;
-      padding: 20px;
-      border-radius: 5px;
-      span {
-        font-size: 14px;
-        word-break: break-all;
-      }
-    }
-  }
+    flex-direction: column;
+    justify-content: space-between;
 
-  .actions {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 10px;
-    gap: 30px;
-
-    background: #fff;
-    button {
-      flex: 1;
-      border: 1px solid rgb(68, 89, 255);
-      padding: 10px;
-      border-radius: 30px;
-      color: rgb(68, 89, 255);
-      text-align: center;
-      cursor: pointer;
-      &:hover {
-        opacity: 0.8;
-      }
+    max-width: 360px;
+    margin: 0 auto;
+    color: #666;
+    height: 100%;
+    background: #f8f9fa;
+    * {
+        font-size: 16px;
     }
-    .btn-connect {
-      color: #fff;
-      background: rgb(68, 89, 255);
+    .card-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 10px 20px;
+        background: #fff;
+        > img {
+            width: 40px;
+        }
+        > div {
+            display: flex;
+            flex-direction: column;
+            label {
+                font-weight: 600;
+            }
+            span {
+                word-break: break-all;
+                color: #919191;
+            }
+            em {
+                font-style: normal;
+                margin: 0 2px;
+            }
+        }
     }
-  }
+    .page-top {
+        margin: 20px;
+        text-align: center;
+        font-size: 20px;
+    }
+    .page-mid {
+        height: 0;
+        flex: 1;
+        padding: 0 20px;
+        h2 {
+            font-size: 18px;
+            text-align: center;
+        }
+        .tip {
+            font-size: 14px;
+            color: #919191;
+            text-align: center;
+            margin: 5px 0;
+        }
+        .origin {
+            margin: 15px 0;
+            font-size: 14px;
+            color: #666;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            span {
+                font-size: 14px;
+                word-break: break-all;
+            }
+        }
+    }
 }
