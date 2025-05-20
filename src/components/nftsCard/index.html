@@ -4,7 +4,7 @@
             <img src="@/assets/images/icons/add.png" alt="">
             <p class="ml-10">导入 NFT</p>
         </div>
-        <p v-if="!nftsList" class="mt-25">还没有 NFT</p>
+        <p v-if="!nftsList || !nftsList.length" class="mt-25">还没有 NFT</p>
     </div>
     <div class="nft-type">
         <div v-if="onceNftList && onceNftList.length" class="nft-list pt-5 mt-10">

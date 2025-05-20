@@ -262,5 +262,17 @@
     },
     "src/utils/dappOnChange.ts": {
         "description": "监听操作"
+    },
+    "src/utils/request/EVM/watchAsset.ts": {
+        "description": "新增代币"
+    },
+    "src/popup/dappRequest/addToken": {
+        "description": "添加代币"
+    },
+    "src/popup/dappRequest/watchAsset": {
+        "description": "添加代币"
+    },
+    "src/utils/tokenService.ts": {
+        "description": "验证合约是721还是erc20并获取余额"
     }
 }

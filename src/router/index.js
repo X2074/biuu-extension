@@ -121,6 +121,13 @@ const routes = [
     path: '/addEthereumChain',
     name: 'addEthereumChain',
     component: () => import("../popup/dappRequest/addEthereumChain/index.vue")
+  },
+  
+  //添加代币
+  {
+    path: '/watchAsset',
+    name: 'watchAsset',
+    component: () => import("../popup/dappRequest/watchAsset/index.vue")
   }
 
 ]

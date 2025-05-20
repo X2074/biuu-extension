@@ -1,0 +1,51 @@
+.token-card {
+    width: 100%;
+    height: 300px;
+    background-color: #fff;
+    border-radius: 24px 24px 0px 0px;
+    padding: 16px;
+
+    .un-token {
+        .import-token {
+            width: 100%;
+            border-radius: 12px;
+            padding: 12px 16px 12px 16px;
+            border: 0.5px solid rgba(189, 189, 189, 1);
+            align-items: center;
+            cursor: pointer;
+
+            img {
+                width: 24px;
+                height: 24px;
+                cursor: pointer;
+            }
+
+            p {
+                font-size: 16px;
+                color: #000;
+                line-height: 20px;
+                cursor: pointer;
+            }
+        }
+
+        >p {
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
+            line-height: 20px;
+            color: rgba(104, 104, 104, 1);
+        }
+    }
+    .token-item{
+        justify-content: space-between;
+        img{
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        p{
+            font-size: 14px;
+            line-height: 20px;
+        }
+    }
+}
