@@ -12,7 +12,7 @@
             <div v-if="item.status != 'delete'" class="flex">
                 <div class="name-num">
                     <p>{{item.userName || item.NoIndex}}</p>
-                    <p class="price">{{item&&item.blance?item.blance : 0}} {{accountContent.unit}}</p>
+                    <p class="price">{{item&&item.balance?item.balance : 0}} {{accountContent.unit}}</p>
                 </div>
                 <div class="address-check flex mr-40">
                     <p v-if="item.utxoAddressTest">

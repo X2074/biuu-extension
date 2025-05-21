@@ -64,7 +64,7 @@ export async function isAddress(address: any) {
     return web3.utils.isAddress(address);
 }
 // 获取钱包余额
-export async function getEVMBlance(url: any, address: any) {// 获取钱包余额
+export async function getEVMBalance(url: any, address: any) {// 获取钱包余额
     // 定义rpc
     let web3 = new Web3(new Web3.providers.HttpProvider(url));
     let data = await web3.eth.getBalance(address);

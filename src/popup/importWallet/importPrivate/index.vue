@@ -171,7 +171,7 @@ const evmNetwork = (walltInfo: any) => {
       account['keyStoreType'] = 'privateKey';
       account['userName'] =
         'Wallt' +
-        (!data['NoIndex'] ? '01' : data['NoIndex'] + 1 > 10 ? data['NoIndex'] + 1 : '0' + (data['NoIndex'] + 1));
+        (!data['NoIndex'] ? '01' : data['NoIndex'] + 1 > 10 ? data['NoIndex'] + 1 : ' 0' + (data['NoIndex'] + 1));
       account['keyStore'] = walltInfo['keyStore'];
       account['NoIndex'] = data['NoIndex'];
       data.content[item].walltInfo.push(account);

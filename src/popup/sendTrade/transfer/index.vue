@@ -62,7 +62,7 @@ const toBack = () => {
 // 下一步转账
 const nextTransfer = async () => {
   loading.value = true;
-  if (totalPrice.value >= transferContent.value['blance']) {
+  if (totalPrice.value >= transferContent.value['balance']) {
     bus.emit('promptModalErr', '您的余额不足');
     return;
   }

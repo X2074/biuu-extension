@@ -5,7 +5,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB';
-import { Decrypt, getGas, evmKey, utxoKey, getBlance } from '@/utils/index';
+import { Decrypt, getGas, evmKey, utxoKey, getBalance } from '@/utils/index';
 import md5 from 'js-md5';
 import { ethers } from 'ethers';
 const message = ref('');
@@ -82,7 +82,7 @@ const sign = async () => {
             action: 'signature_response',
             signature
         });
-        // window.close();
+        window.close();
     } catch (error: any) {
         console.error('Sign error:', error);
         chrome.runtime.sendMessage({

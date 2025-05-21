@@ -6,7 +6,7 @@
 import { ref, onMounted, onUnmounted, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB';
 import { chainChanged } from '@/utils/dappOnChange';
-import { Decrypt, getGas, evmKey, utxoKey, getBlance } from '@/utils/index';
+import { Decrypt, getGas, evmKey, utxoKey, getBalance } from '@/utils/index';
 import md5 from 'js-md5';
 import { ethers } from 'ethers';
 const message = ref('');

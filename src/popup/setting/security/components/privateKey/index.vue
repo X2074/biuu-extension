@@ -8,7 +8,7 @@ export default {
 import { ref, onMounted, defineProps } from 'vue';
 import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB.js';
-import { Decrypt, getGas, evmKey, utxoKey, getBlance } from '@/utils/index';
+import { Decrypt, getGas, evmKey, utxoKey, getBalance } from '@/utils/index';
 import { editContent } from '@/utils/editContent.js';
 import md5 from 'js-md5';
 let loading = ref(true);
@@ -47,7 +47,7 @@ const initializeInfo = () => {
         console.log(data, 'data');
         nowAccount.value = data[0];
         userName.value = nowAccount.value.userName ? nowAccount.value.userName : nowAccount.value.NoIndex;
-        getBlance(res.url, nowAccount.value);
+        getBalance(res.url, nowAccount.value);
       }
     })
     .catch(() => {});

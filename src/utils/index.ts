@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import CryptoJS from 'crypto-js'
 import bip39 from 'bip39'
-import { getEVMBlance } from '@/utils/EVM/index.js';
+import { getEVMBalance } from '@/utils/EVM/index.js';
 import { getUTXOBalance } from '@/utils/UTXO/meerRpc.js'
 import ecc from 'tiny-secp256k1'
 import { BIP32Factory } from 'bip32'
@@ -70,11 +70,11 @@ export async function isAddress(address: any) {
 	return web3.utils.isAddress(address);
 }
 // 获取钱包余额
-export async function getBlance(url: any, data: any) {// 获取钱包余额
-	console.log(data, 'getBlance');
+export async function getBalance(url: any, data: any) {// 获取钱包余额
+	console.log(data, 'getBalance');
 	let netWork = data.netWorkType || data.netWork;
 	if (netWork.toLowerCase() == 'evm') {
-		return getEVMBlance(url, data.address)
+		return getEVMBalance(url, data.address)
 	} else {
 		return getUTXOBalance(url, data.utxoAddressTest || data.address)
 	}

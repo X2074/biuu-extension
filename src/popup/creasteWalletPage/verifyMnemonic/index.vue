@@ -137,6 +137,7 @@ const utxoNetwork = () => {
       utxoAccount['keyStore'] = walltInfo.value.keyStore;
       res.content[item].walltInfo.push(utxoAccount);
     });
+    res['NoIndex'] = 1;
     indexDbData.putData(res);
   });
 };

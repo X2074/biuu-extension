@@ -10,7 +10,8 @@ import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB.js';
 import Web3 from 'web3';
 import nftCard from '@/components/nftsCard/index.vue';
-import { getBlance } from '@/utils/index';
+import tokenCard from '@/components/tokenCard/index.vue';
+import { getBalance } from '@/utils/index';
 import { useRouter } from 'vue-router';
 let router = useRouter();
 const transactionHash = ref(0);
@@ -43,7 +44,7 @@ const getInfo = () => {
       if (res && res.address) {
         userAddress.value = res.utxoAddressTest || res.address;
         currentWallt.value = res;
-        getBlanceInfo();
+        getBalanceInfo();
       } else {
         loading.value = false;
       }
@@ -52,7 +53,7 @@ const getInfo = () => {
       loading.value = false;
     });
 };
-const getBlanceInfo = async () => {
+const getBalanceInfo = async () => {
   try {
     let data = await indexDbData.getData('rpc_url');
     walltContent.value = data;
@@ -60,7 +61,7 @@ const getBlanceInfo = async () => {
     walltContent.value.address = userAddress.value;
     console.log(11111, data);
 
-    walltContent.value.blance = await getBlance(
+    walltContent.value.balance = await getBalance(
       data.url,
       Object.assign({ netWorkType: data.netWorkType }, currentWallt.value)
     );
@@ -158,7 +159,9 @@ const toRouterPage = (url: string) => {
 };
 // 监听数据变化，跳转相应页面
 watch(walltAccount, (newV) => {
-  router.push('/' + newV);
+  if(newV != 'token'){
+    router.push('/' + newV); 
+  }
 });
 </script>
 <style lang="scss">

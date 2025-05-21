@@ -20,9 +20,9 @@ const assetNum = ref(0);
 const gasPrice = ref(100000000);
 const gasLimit = ref(53000);
 const sendMaxTotal = ref(0);
-const blance = ref(0);
+const balance = ref(0);
 const userAddress = ref(null);
-const blanceWei = ref(0);
+const balanceWei = ref(0);
 const sendTotal = ref(0);
 const dataKey = ref(null); //私钥
 const loading = ref(false);
@@ -71,26 +71,26 @@ const getInfo = () => {
       let data = res;
       if (data && data.address) {
         userAddress.value = data.address;
-        getBlance();
+        getBalance();
       } else {
         loading.value = false;
       }
     })
     .catch(() => {});
 };
-const getBlance = () => {
+const getBalance = () => {
   // 获取钱包余额
   web3.value.eth
     .getBalance(userAddress.value)
     .then((res: any) => {
-      blanceWei.value = res;
+      balanceWei.value = res;
       if (!res) {
         balance.value = 0;
       } else {
         let balance: any = web3.value.utils.fromWei(res, 'ether') * 1;
-        console.log(balance, 'blance');
+        console.log(balance, 'balance');
         balance = String(balance).replace(/^(.*\..{4}).*$/, '$1');
-        blance.value = balance;
+        balance.value = balance;
       }
     })
     .catch(() => {});
@@ -117,16 +117,16 @@ const handleChangeAsset = () => {
   let numMax = num * 1 + gasLimit.value * 1;
   sendTotal.value = web3.value.utils.fromWei(nums + '', 'ether');
   sendMaxTotal.value = web3.value.utils.fromWei(numMax + '', 'ether');
-  console.log(blanceWei.value, 'blanceWei.value', nums, 'nums');
+  console.log(balanceWei.value, 'balanceWei.value', nums, 'nums');
 
-  if (nums > blanceWei.value * 1) {
+  if (nums > balanceWei.value * 1) {
     alert('Insufficient balance!');
   } else {
     numberStep.value = 3;
   }
 };
 // 转账功能
-const swapBlance = () => {
+const swapBalance = () => {
   loading.value = true;
   console.log('gasPrice', gasPrice.value);
   let data = {

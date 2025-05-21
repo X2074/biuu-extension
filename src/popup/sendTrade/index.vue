@@ -12,7 +12,7 @@ export default {
 import { ref, onMounted, toRaw, defineProps } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus';
-import { Decrypt, getGas, evmKey, utxoKey, getBlance } from '@/utils/index';
+import { Decrypt, getGas, evmKey, utxoKey, getBalance } from '@/utils/index';
 import addressBook from '@/components/addressBook/index.vue';
 import transfer from './transfer/index.vue';
 import md5 from 'js-md5';
@@ -21,7 +21,7 @@ let currentWallt: any = ref(null); //当前钱包信息
 let sendTradePage = ref('home'); //当前转账页面显示内容
 let quantity: any = ref('1'); //转账数量
 let confirmPsd = ref(''); //密码
-let blanceSecre: any = ref(0); //余额
+let balanceSecre: any = ref(0); //余额
 let toAddress = ref(''); //付款地址
 let nonce = ref(0); //交易nonce
 let rpcUrlData: any = ref(null);
@@ -51,11 +51,11 @@ onMounted(async () => {
   rpcUrlData.value = await indexDbData.getData('rpc_url');
   try {
     // 钱包地址
-    blanceSecre.value = await getBlance(
+    balanceSecre.value = await getBalance(
       rpcUrlData.value.url,
       Object.assign({ netWorkType: rpcUrlData.value.netWorkType }, currentWallt.value)
     );
-    console.log(blanceSecre.value, '转账', sendTradePage.value);
+    console.log(balanceSecre.value, '转账', sendTradePage.value);
   } catch (error) {}
 });
 // 返回上一页面
@@ -106,7 +106,7 @@ const toTransfer = async () => {
     bus.emit('promptModalErr', '请选择收款地址');
     return;
   }
-  if (blanceSecre.value <= quantity.value) {
+  if (balanceSecre.value <= quantity.value) {
     bus.emit('promptModalErr', '您的余额不足');
     return;
   }
@@ -137,7 +137,7 @@ const toTransfer = async () => {
   console.log(privateKey.value, 'privateKey');
   if (rpcUrlData.value['netWorkType'].toLowerCase() == 'evm') {
     // nonce.value = await getNonce(currentWallt.value['address'], rpcUrlData.value['url']);
-    console.log(blanceSecre.value, 'blanceSecre');
+    console.log(balanceSecre.value, 'balanceSecre');
     let gas = await getGas(rpcUrlData.value['url'], currentWallt.value['address'], toAddress.value, quantity.value);
     transferContent.value = {
       to: toAddress.value, // 接收方地址
@@ -148,7 +148,7 @@ const toTransfer = async () => {
       gasPrice: gas.gasPrice,
       key: privateKey.value['privateKey'], //私钥
       url: rpcUrlData.value['url'],
-      blance: blanceSecre.value
+      balance: balanceSecre.value
     };
   } else {
     transferContent.value = {

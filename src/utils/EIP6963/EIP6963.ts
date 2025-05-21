@@ -43,9 +43,13 @@ export function announceProviderInject() {
 console.log(providerDetail,'providerDetail');
 
     function announceProvider() {
+        console.log('我声明了多少此');
+        
         window.dispatchEvent(
             new CustomEvent("eip6963:announceProvider", {
                 detail: Object.freeze(providerDetail),
+                bubbles: true,
+                cancelable: true
             })
         );
     }
@@ -62,20 +66,20 @@ console.log(providerDetail,'providerDetail');
             });
             console.log('Connected with accounts:', accounts);
             
-            // 发送账户变化事件
-            window.dispatchEvent(new CustomEvent("eip1193:accountsChanged", {
-                detail: accounts
-            }));
+            // // 发送账户变化事件
+            // window.dispatchEvent(new CustomEvent("eip1193:accountsChanged", {
+            //     detail: accounts
+            // }));
             
-            // 发送链变化事件
-            window.dispatchEvent(new CustomEvent("eip1193:chainChanged", {
-                detail: providerDetail.provider.chainId
-            }));
+            // // 发送链变化事件
+            // window.dispatchEvent(new CustomEvent("eip1193:chainChanged", {
+            //     detail: providerDetail.provider.chainId
+            // }));
             
             // 重新宣布
             setTimeout(() => {
                 announceProvider();
-            }, 5000);
+            }, 1000);
         } catch (error:any) {
             console.error('Connection failed:', error);
             // 发送断开连接事件
@@ -91,14 +95,14 @@ console.log(providerDetail,'providerDetail');
 }
 
 // 验证 provider detail 函数
-export function isValidProviderDetail(providerDetail: ProviderDetail): boolean {
-    console.log('announceProvider', providerDetail);
-    return true;
-}
+// export function isValidProviderDetail(providerDetail: ProviderDetail): boolean {
+//     console.log('announceProvider', providerDetail);
+//     return true;
+// }
 
-// 抛出错误函数
-export function throwErrorEIP6963(message: string): never {
-    throw new Error(
-        `${message} See https://eips.ethereum.org/EIPS/eip-6963 for requirements.`
-    );
-}
+// // 抛出错误函数
+// export function throwErrorEIP6963(message: string): never {
+//     throw new Error(
+//         `${message} See https://eips.ethereum.org/EIPS/eip-6963 for requirements.`
+//     );
+// }

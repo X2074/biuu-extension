@@ -8,7 +8,7 @@ export default {
 import { ref, onMounted, defineProps, nextTick } from 'vue';
 import bus from '@/utils/bus.js';
 import indexDbData from '@/utils/indexDB.js';
-import { Decrypt, evmKey, utxoKey, getBlance } from '@/utils/index';
+import { Decrypt, evmKey, utxoKey, getBalance } from '@/utils/index';
 import { editContent } from '@/utils/editContent.js';
 import QRCode from 'qrcodejs2-fix';
 import md5 from 'js-md5';
@@ -67,7 +67,7 @@ const initializeInfo = () => {
         console.log(data, 'data');
         nowAccount.value = data[0];
         userName.value = nowAccount.value.userName ? nowAccount.value.userName : nowAccount.value.NoIndex;
-        getBlance(res.url, Object.assign({ netWorkType: res.netWorkType }, nowAccount.value));
+        getBalance(res.url, Object.assign({ netWorkType: res.netWorkType }, nowAccount.value));
       }
     })
     .catch(() => {});
