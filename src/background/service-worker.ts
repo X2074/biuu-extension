@@ -134,6 +134,8 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.handleSignMessage(request);
         case 'wallet_addEthereumChain':
             return await requestMethodFn.addEthereumChain(request);
+        case 'wallet_watchAsset':
+            return await requestMethodFn.watchAsset(request);
         case "eth_getBalance":
             return await requestMethodFn.eth_getBalance(request);        
         case "wallet_switchEthereumChain":
@@ -151,7 +153,6 @@ function sendMessageToAllTabs(message: any) {
             console.log(tab.id, "tabtabtabtabtabtabtab", message.data);
             chrome.tabs.sendMessage(tab.id, message, {}, (response) => {
                 console.log(response, 'response');
-
                 let chromeInfo: any = chrome.runtime;
                 if (chromeInfo.lastError) {
                     console.error('Failed to send message to tab:', chromeInfo.lastError);
@@ -161,5 +162,44 @@ function sendMessageToAllTabs(message: any) {
     });
 }
 
+// 处理账户请求
+async function requestAccountsWallt(params: any) {
+    console.log(params,"params");
+    // 获取当前活动标签页
+    const tab:any = await chrome.tabs.query({ active: true, currentWindow: true });
+    console.log(tab,"获取当前活动页");
+    
+    if (!tab[0]) {
+        throw new Error('No active tab found');
+    }
+    // 获取标签页的 URL
+    const currentUrl = new URL(tab[0].url).origin;
 
+    const currentWalltAddress = await indexDbData.getData('currentWalltAddress') || {};
+    const rpc_url = await indexDbData.getData('rpc_url') || {};
+   // 检查是否已有授权
+   const authorizedSites = await indexDbData.getData('authorized_sites') || {};
+   if (authorizedSites && authorizedSites[currentUrl]) {
+        // 已授权，直接返回账户
+        const accounts = await indexDbData.getData('currentWalltAddress');
+        return accounts.address;
+    }else{
+        // 缓存当前dapp的页面数据
+        let dappPermission = {
+            id:'authorization',
+            key: 'string',
+            origin: params.windowInfo[2],
+            faviconUrl: params.windowInfo[1],
+            chainID: rpc_url.CHAIN_ID,
+            title: params.windowInfo[0],
+            state: null,
+            blance: currentWalltAddress.blance,
+            unit: rpc_url.unit,
+            userName: currentWalltAddress.userName,
+            accountAddress: currentWalltAddress.address
+        }
+        console.log(dappPermission,"dappPermission");
+        indexDbData.putData(dappPermission)
+    }
+}
 

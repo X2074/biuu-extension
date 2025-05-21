@@ -1,0 +1,18 @@
+<div class="watch-asset">
+    <p>你想导入这些代币吗？</p>
+    <div class="input-text flex">
+        <p class="title mb-10">代币：</p>
+        <p>
+            <img v-if="watchAsset && watchAsset.image" :src="watchAsset.image" alt="" />
+            {{watchAsset.symbol}}
+        </p>
+    </div>
+    <div class="input-text">
+        <p class="title mb-10">余额：</p>
+        <p>{{watchAsset.balance}}</p>
+    </div>
+	<div class="actions">
+	  <button @click="reject" class="reject">拒绝</button>
+	  <button @click="confirm" class="sign">确认</button>
+	</div>
+</div>

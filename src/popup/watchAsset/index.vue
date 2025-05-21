@@ -17,13 +17,13 @@ let loading = ref(false)
 let router = useRouter();
 const message = ref('');
 const storedNetworks:any = ref(null);
+let currentAddress:any = ref(null);
 const origin = ref('');
 let address = ref('');
 let symbol: any = ref('');
 let decimals: any = ref(0);
 let authorization: any = ref({});
 const web3 = ref<Web3 | null>(null);
-let currentAddress:any = ref(null);
 onMounted(async () => {
     // 获取当前网络作为默认值
     storedNetworks.value = await indexDbData.getData('rpc_url');

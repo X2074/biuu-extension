@@ -3,6 +3,7 @@ import { showExtensionPopup } from '../../index.ts';
 import { ethers } from 'ethers';
 import addEthereumChain from "./addEthereumChain";
 import requestPermissions from "./requestPermissions";
+import {watchAsset} from "./watchAsset";
 
 // 从dapp发送消息到background，background响应消息到dapp
 const requestContentScript = (method: any, params: any) => {
@@ -161,13 +162,6 @@ async function switchEthereumChain(request:any){
 // 撤销当前dapp的授权
 async function revokePermissions(){
 	
-	
-}
-
-// 添加代币
-async function watchAsset(){
-	
-	
 }
 
 // 返回给定地址的账户余额
@@ -200,5 +194,6 @@ export default {
 	getWalltVersion,
 	eth_getBalance,
 	addEthereumChain,
-	switchEthereumChain
+	switchEthereumChain,
+	watchAsset
 }

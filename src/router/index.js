@@ -127,9 +127,16 @@ const routes = [
   {
     path: '/watchAsset',
     name: 'watchAsset',
-    component: () => import("../popup/dappRequest/watchAsset/index.vue")
+    component: () => import("../popup/watchAsset/index.vue")
+  },
+  
+  //request添加代币
+  {
+    path: '/confirmWatchAsset',
+    name: 'confirmWatchAsset',
+    component: () => import("../popup/dappRequest/confirmWatchAsset/index.vue")
   }
-
+  
 ]
 
 const router = createRouter({

@@ -10,15 +10,23 @@ export default {
 <script lang="ts" setup>
 import { ref, onMounted, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
-import { getBlance } from '@/utils/index';
+import { getBalance } from '@/utils/index';
 import bus from '@/utils/bus.js';
 import md5 from 'js-md5';
+import {TokenService} from '@/utils/tokenService';
+import Web3 from 'web3';
 let loading = ref(false);
 let userAddress = ref(null);
 let walltContent: any = ref(null);
 let currentWallt = ref(null);
 let tokenList: any = ref([]);
+const storedNetworks:any = ref(null);
+let currentAddress:any = ref(null);
+const web3 = ref<Web3 | null>(null);
 onMounted(async () => {
+    // 获取当前网络作为默认值
+    storedNetworks.value = await indexDbData.getData('rpc_url');
+    currentAddress.value = await indexDbData.getData('currentWalltAddress');
     getInfo();
 });
 // 获取当前账户相关信息
@@ -35,7 +43,7 @@ const getInfo = () => {
             if (res && res.address) {
                 userAddress.value = res.utxoAddressTest || res.address;
                 currentWallt.value = res;
-                getBlanceInfo();
+                getBalanceInfo();
             } else {
                 loading.value = false;
             }
@@ -44,13 +52,13 @@ const getInfo = () => {
             loading.value = false;
         });
 };
-const getBlanceInfo = async () => {
+const getBalanceInfo = async () => {
     try {
         let data = await indexDbData.getData('rpc_url');
         walltContent.value = JSON.parse(JSON.stringify(data));
         // 钱包地址
         walltContent.value.address = userAddress.value;
-        walltContent.value.blance = await getBlance(
+        walltContent.value.balance = await getBalance(
             data.url,
             Object.assign({ netWorkType: data.netWorkType }, currentWallt.value)
         );
@@ -63,10 +71,8 @@ const getBlanceInfo = async () => {
 		
         tokenList.value.push(toRaw(walltContent.value));
 		tokenList.value = [...tokenList.value,...assets[0].asset]
-		// tokenList.value.push(assets[0].asset);
-		console.log(546846645645,tokenList.value,'tokenList.value');
-		
         loading.value = false;
+        getAssetBlance()
     } catch (error) {
         loading.value = false;
     }
@@ -74,4 +80,17 @@ const getBlanceInfo = async () => {
 const toImport = () => {
     bus.emit('homePageBack', { page: 'watchAsset' });
 };
+
+const getAssetBlance = async ()=>{
+    // 初始化 Web3
+    const web3:any = new Web3(new Web3.providers.HttpProvider(storedNetworks.value['url']));
+    const tokenService = new TokenService(web3.currentProvider);// 检测合约类型
+    for (let i = 0; i < tokenList.value.length; i++) {
+        if(tokenList.value[i].type){
+        const balanceInfo = await tokenService.getTokenBalance(tokenList.value[i].address, currentAddress.value['address']);
+            console.log(balanceInfo,"balanceInfo");
+            tokenList.value[i].balance = balanceInfo.balance;
+        }
+    }
+}
 </script>
