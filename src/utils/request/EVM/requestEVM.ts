@@ -113,7 +113,7 @@ async function requestAccounts(){
 
 // 获取钱包版本
 async function getWalltVersion(){
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		resolve('1.0.0')
 	})
 }

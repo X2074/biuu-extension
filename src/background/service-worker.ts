@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
     // 获取密码，判断是否显示输入密码页面
     if (message.action === 'getSecret') {
         chrome.storage.local.get('secret', function (data: any) {
-            console.log(data, 'datadatadata');
+            console.log(data,sender, 'datadatadata');
             sendResponse(data);
         });
         return true; // 保持消息通道打开，以便异步发送响应

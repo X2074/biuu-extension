@@ -72,7 +72,7 @@ export async function watchAsset(request: any): Promise<boolean> {
         if (!currentAddress) {
             throw new Error('No wallet address selected.');
         }
-        const erc721Abi = [
+        const erc721Abi:any = [
             {
                 constant: true,
                 inputs: [{ name: "_owner", type: "address" }],
@@ -139,7 +139,7 @@ export async function watchAsset(request: any): Promise<boolean> {
         const popupUrl = await showExtensionPopup('/confirmWatchAsset');
         
         return new Promise((resolve, reject) => {
-            const handleMessage = (message: any) => {
+            const handleMessage:any = (message: any) => {
                 if (message.action === 'watch_asset_response') {
                     chrome.runtime.onMessage.removeListener(handleMessage);
                     if (message.result) {
@@ -171,7 +171,7 @@ export async function watchAsset(request: any): Promise<boolean> {
             }, 300000); // 5分钟超时
         });
 
-    } catch (error) {
+    } catch (error:any) {
         console.error('Error in watchAsset:', error);
         
         // 如果已经有 code 则直接抛出
@@ -180,14 +180,14 @@ export async function watchAsset(request: any): Promise<boolean> {
         }
         
         // 其他错误
-        const err = new Error(error.message || 'Failed to wallet_watchAsset');
+        const err:any = new Error(error.message || 'Failed to wallet_watchAsset');
         err.code = -32602; // Invalid params
         throw err;
     }
 }
 // 同步修改indexDB数据
-export async function changeAssetIndexDB(data: any,address:string): Promise<boolean> { 
-    let chain;
+export async function changeAssetIndexDB(data: any,address:string): Promise<any> { 
+    let chain:any = '';
     let currentWalltAddress = await indexDbData.getData('currentWalltAddress');
     // 获取当前网络作为默认值
     await indexDbData.getData('rpc_url').then(async (res:any) => {

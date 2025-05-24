@@ -11,7 +11,7 @@ export class TokenService {
     // 检查是否是 ERC20 合约
     public async isERC20Contract(contractAddress: string): Promise<boolean> {
         try {
-            const erc20Abi = [
+            const erc20Abi:any = [
                 {
                     constant: true,
                     inputs: [{ name: "_owner", type: "address" }],
@@ -64,7 +64,7 @@ export class TokenService {
     // 检查是否是 ERC721 合约
     public async isERC721Contract(contractAddress: string): Promise<boolean> {
         try {
-            const erc721Abi = [
+            const erc721Abi:any = [
                 {
                     constant: true,
                     inputs: [{ name: "_owner", type: "address" }],
@@ -150,9 +150,9 @@ export class TokenService {
 
 
     // 获取 ERC20 代币余额
-    public async getERC20Balance(contractAddress: string, userAddress: string): Promise<{ balance: string; decimals: number }> {
+    public async getERC20Balance(contractAddress: string, userAddress: string): Promise<{ balance: string; decimals: number; type:string}> {
         try {
-            const erc20Abi = [
+            const erc20Abi:any = [
                 {
                     constant: true,
                     inputs: [{ name: "_owner", type: "address" }],
@@ -184,15 +184,15 @@ export class TokenService {
                 decimals: parseInt(decimals),
                 type: 'ERC20'
             };
-        } catch (error) {
+        } catch (error:any) {
             throw new Error(`Failed to get ERC20 balance: ${error.message}`);
         }
     }
 
     // 获取 ERC721 NFT 余额
-    public async getERC721Balance(contractAddress: string, userAddress: string): Promise<{ balance: number; tokens: Array<{ tokenId: string; tokenURI: string }> }> {
+    public async getERC721Balance(contractAddress: string, userAddress: string): Promise<{ balance: number; tokens: Array<{ tokenId: string; tokenURI: string }>;type:string }> {
         try {
-            const erc721Abi = [
+            const erc721Abi :any= [
                 {
                     constant: true,
                     inputs: [{ name: "_owner", type: "address" }],
@@ -246,7 +246,7 @@ export class TokenService {
                 tokens: tokens,
                 type: 'ERC721'
             };
-        } catch (error) {
+        } catch (error:any) {
             throw new Error(`Failed to get ERC721 balance: ${error.message}`);
         }
     }
