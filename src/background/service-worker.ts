@@ -142,7 +142,12 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.eth_gasPrice(request);
         case "wallet_switchEthereumChain":
             return await requestMethodFn.switchEthereumChain(request);
-            
+        case "eth_getBlockByHash":
+            return await requestMethodFn.eth_getBlockByHash(request);  
+        case "eth_coinbase":
+            return await requestMethodFn.eth_coinbase(request);
+        case "eth_newBlockFilter":
+            return await requestMethodFn.eth_newBlockFilter(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }

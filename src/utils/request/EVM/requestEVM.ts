@@ -191,13 +191,31 @@ async function eth_gasPrice(request:any){
 	let RPC_URL = await indexDbData.getData('rpc_url');
 const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
 
-  const gasPriceWei = await provider.getGasPrice(); // 返回 BigNumber 对象（wei）
-  const gasPriceGwei = ethers.utils.formatUnits(gasPriceWei, "gwei"); // 转为 Gwei
-  console.log(`当前 Gas 价格: ${gasPriceGwei} Gwei`);
-  return gasPriceWei;
+	const gasPriceWei = await provider.getGasPrice(); // 返回 BigNumber 对象（wei）
+	const gasPriceHex = gasPriceWei.toHexString(); // 转为 0x 开头的 16 进制字符串
+  console.log("Gas Price (Hex):", gasPriceHex); // 例如 "0x12a05f200"
+  /* const gasPriceGwei = ethers.utils.formatUnits(gasPriceWei, "gwei"); // 转为 Gwei
+  console.log(`当前 Gas 价格: ${gasPriceGwei} Gwei ,${gasPriceWei}`) */;
+  return gasPriceHex;
 	
 }
-
+async function eth_getBlockByHash(request:any){
+	// debugger
+	console.log(request,'requesteth_getBlockByHash');
+}
+async function eth_coinbase(request:any){
+	debugger
+	console.log(request, 'requesteth_coinbase');
+	let RPC_URL = await indexDbData.getData('rpc_url');
+	const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
+  const coinbase = await provider.send("eth_coinbase", []);
+	console.log("Coinbase 地址:", coinbase); // 例如 "0x123..."
+	return coinbase;
+}
+ async function eth_newBlockFilter(request:any){
+ 	debugger
+ 	console.log(request,'requesteth_newBlockFilter');
+ }
 export default {
 	requestPermissions,
 	handleSignMessage,
@@ -209,5 +227,8 @@ export default {
 	addEthereumChain,
 	switchEthereumChain,
 	watchAsset,
-	eth_gasPrice
+	eth_gasPrice,
+	eth_coinbase,
+	eth_getBlockByHash,
+	eth_newBlockFilter
 }

@@ -47,6 +47,9 @@ export const createEIP1193Provider = (): EthereumProvider => {
             case 'wallet_addEthereumChain':
             case 'wallet_watchAsset':
             case 'eth_gasPrice':
+          case 'eth_getBlockByHash': 
+          case 'eth_coinbase':
+            case 'eth_newBlockFilter':
                 return await requestContentScript(method,params);
             case 'personal_sign':
               return await handlePersonalSign(params?.[0], params?.[1]);
