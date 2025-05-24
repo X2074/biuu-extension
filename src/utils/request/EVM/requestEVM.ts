@@ -177,12 +177,25 @@ async function eth_getBalance(request:any): Promise<string> {
 		// const provider = new JsonRpcProvider(RPC_URL.url);  高版本的使用方式
         // 获取余额（返回的是 BigNumber）
         const balance = await provider.getBalance(address, blockTag);
-        // 返回十六进制格式的余额（以 wei 为单位）
+				debugger
+		// 返回十六进制格式的余额（以 wei 为单位）
         return ethers.utils.hexlify(balance);
     } catch (error) {
         console.error('Error in eth_getBalance:', error);
         throw error;
     }
+}
+async function eth_gasPrice(request:any){
+	console.log(request, 'requesteth_gasPrice');
+	debugger
+	let RPC_URL = await indexDbData.getData('rpc_url');
+const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
+
+  const gasPriceWei = await provider.getGasPrice(); // 返回 BigNumber 对象（wei）
+  const gasPriceGwei = ethers.utils.formatUnits(gasPriceWei, "gwei"); // 转为 Gwei
+  console.log(`当前 Gas 价格: ${gasPriceGwei} Gwei`);
+  return gasPriceWei;
+	
 }
 
 export default {
@@ -195,5 +208,6 @@ export default {
 	eth_getBalance,
 	addEthereumChain,
 	switchEthereumChain,
-	watchAsset
+	watchAsset,
+	eth_gasPrice
 }

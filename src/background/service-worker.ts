@@ -137,7 +137,9 @@ async function handleProviderRequest(request: any) {
         case 'wallet_watchAsset':
             return await requestMethodFn.watchAsset(request);
         case "eth_getBalance":
-            return await requestMethodFn.eth_getBalance(request);        
+            return await requestMethodFn.eth_getBalance(request); 
+        case "eth_gasPrice":
+            return await requestMethodFn.eth_gasPrice(request);
         case "wallet_switchEthereumChain":
             return await requestMethodFn.switchEthereumChain(request);
             
