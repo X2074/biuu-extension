@@ -162,6 +162,10 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.eth_uninstallFilter(request);
         case "eth_getCode":
             return await requestMethodFn.eth_getCode(request);
+        case "eth_getStorageAt":
+            return await requestMethodFn.eth_getStorageAt(request);
+        case "eth_getTransactionCount":
+            return await requestMethodFn.eth_getTransactionCount(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }

@@ -63,7 +63,9 @@ async function getChainId() {
         let rpcData: any = await indexDbData.getData('rpc_url');
         return new Promise((resolve, reject) => {
             if (rpcData) {
-                resolve(rpcData.CHAIN_ID);
+                  // 将 CHAIN_ID 转换为十六进制
+                  const hexChainId = `0x${Number(rpcData.CHAIN_ID).toString(16)}`;
+                resolve(hexChainId);
             } else {
                 reject(new Error('RPC URL not found'));
             }
@@ -225,6 +227,7 @@ async function eth_getFilterChanges(request: any) {
     debugger;
     console.log(request,'requesteth_getFilterChanges');
 }
+//检查节点是否正在同步区块链数据
 async function eth_syncing(request: any) {
     debugger;
     const rpc_url = await indexDbData.getData('rpc_url');
@@ -261,6 +264,7 @@ async function eth_uninstallFilter(request: any) {
     console.log(`过滤器${filterId}卸载${isUninstalled ? '成功' : '失败'}`);
     return isUninstalled
 }
+// 用于查询指定地址的合约字节码
 async function eth_getCode(request: any) {
     debugger      
     let address = request.params[0] || '';
@@ -270,6 +274,31 @@ async function eth_getCode(request: any) {
     console.log(`Bytecode: ${bytecode}`);
     return bytecode;
 }   
+async function eth_getStorageAt(request: any) {
+    
+    let RPC_URL = await indexDbData.getData('rpc_url');
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
+    const value = await provider.getStorageAt(
+        request.params[0], 
+        request.params[1]  // 存储位置
+    );
+    console.log(request, value,'requesteth_getStorageAt');
+    return value;
+}
+//返回从某个地址发送的交易数量。
+async function eth_getTransactionCount(request: any) {
+    debugger;
+    let RPC_URL = await indexDbData.getData('rpc_url');
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
+/* // 获取最新nonce
+const nonce = await provider.getTransactionCount(request.params[0]); */
+// 获取某状态的nonce(包含内存池中的交易)
+    const nonce = await provider.getTransactionCount(request.params[0], request.params[1]);
+// 将 nonce 转换为十六进制格式
+const nonceHex = `0x${nonce.toString(16)}`;
+console.log(nonceHex, 'requesteth_getTransactionCount (Hex)');
+return nonceHex;
+}
 export default {
     requestPermissions,
     handleSignMessage,
@@ -291,5 +320,7 @@ export default {
     eth_getFilterChanges,
     eth_syncing,
     eth_uninstallFilter,  //这个提示 web3.eth.filter.uninstall 不存在，还有报错
-    eth_getCode
+    eth_getCode,
+    eth_getStorageAt,
+    eth_getTransactionCount
 };
