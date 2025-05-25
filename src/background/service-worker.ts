@@ -154,6 +154,14 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.eth_coinbase(request);
         case "eth_newBlockFilter":
             return await requestMethodFn.eth_newBlockFilter(request);
+        case "eth_getFilterChanges":
+            return await requestMethodFn.eth_getFilterChanges(request);
+        case "eth_syncing":
+            return await requestMethodFn.eth_syncing(request);
+        case "eth_uninstallFilter":
+            return await requestMethodFn.eth_uninstallFilter(request);
+        case "eth_getCode":
+            return await requestMethodFn.eth_getCode(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }

@@ -124,7 +124,7 @@ async function switchEthereumChain(request: any) {
 async function revokePermissions() {}
 
 // 获取区块高度
-async function blockNumber(request: any): Promise<string> {
+async function blockNumber(): Promise<string> {
     try {
         // 获取当前网络配置
         const rpc_url = await indexDbData.getData('rpc_url');
@@ -195,7 +195,81 @@ async function eth_coinbase(request: any) {
 async function eth_newBlockFilter(request: any) {
     debugger;
     console.log(request, 'requesteth_newBlockFilter');
+    // 连接 Ethereum 节点
+    let RPC_URL = await indexDbData.getData('rpc_url');
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
+    let filterId = await provider.send('eth_newBlockFilter', []);
+    console.log("Filter ID:", filterId);
+    let lastBlock = null;
+    const checkBlocks = async () => {
+        try {
+            const newBlocks = await provider.send('eth_getFilterChanges', [filterId]);
+            if (newBlocks.length > 0) {
+                lastBlock = newBlocks[newBlocks.length - 1];
+                console.log('最新区块哈希:', lastBlock);
+            }
+        } catch (error) {
+            console.error('轮询失败:', error);
+            // 重新创建过滤器（如果超时）
+            filterId = await provider.send('eth_newBlockFilter', []);
+        }
+    };
+    const poll = async () => {
+        await checkBlocks();
+        setTimeout(poll, 5000);
+    };
+    
+    poll(); // 开始轮询
 }
+async function eth_getFilterChanges(request: any) {
+    debugger;
+    console.log(request,'requesteth_getFilterChanges');
+}
+async function eth_syncing(request: any) {
+    debugger;
+    const rpc_url = await indexDbData.getData('rpc_url');
+    if (!rpc_url?.url) {
+        throw new Error('No network selected');
+    }
+    // 创建 Web3 实例
+    const web3 = new Web3(new Web3.providers.HttpProvider(rpc_url.url));
+    const isSyncing:any = await web3.eth.isSyncing();
+  
+    if (isSyncing === false) {
+        console.log('节点已完全同步');
+      } else {
+        console.log('同步进度:', {
+          starting: parseInt(isSyncing.startingBlock, 16),
+          current: parseInt(isSyncing.currentBlock, 16),
+          highest: parseInt(isSyncing.highestBlock, 16),
+          progress: ((parseInt(isSyncing.currentBlock, 16) - parseInt(isSyncing.startingBlock, 16)) / 
+                    (parseInt(isSyncing.highestBlock, 16) - parseInt(isSyncing.startingBlock, 16)) * 100).toFixed(2)
+        });
+    }
+    return isSyncing
+}
+async function eth_uninstallFilter(request: any) {
+      // 连接 Ethereum 节点
+      let RPC_URL = await indexDbData.getData('rpc_url');
+      const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
+      let filterId = await provider.send('eth_newBlockFilter', []);
+    console.log("Filter ID:", filterId);
+    // 创建 Web3 实例
+    const web3:any= new Web3(new Web3.providers.HttpProvider(RPC_URL.url));
+      // 3. 卸载过滤器
+  const isUninstalled = await web3.eth.filter.uninstall(filterId);
+    console.log(`过滤器${filterId}卸载${isUninstalled ? '成功' : '失败'}`);
+    return isUninstalled
+}
+async function eth_getCode(request: any) {
+    debugger      
+    let address = request.params[0] || '';
+    let RPC_URL = await indexDbData.getData('rpc_url');
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
+    const bytecode = await provider.getCode(address);
+    console.log(`Bytecode: ${bytecode}`);
+    return bytecode;
+}   
 export default {
     requestPermissions,
     handleSignMessage,
@@ -213,5 +287,9 @@ export default {
     eth_coinbase,
     eth_getBlockByHash,
     eth_newBlockFilter,
-	eth_sendTransaction
+    eth_sendTransaction,
+    eth_getFilterChanges,
+    eth_syncing,
+    eth_uninstallFilter,  //这个提示 web3.eth.filter.uninstall 不存在，还有报错
+    eth_getCode
 };

@@ -50,7 +50,11 @@ export const createEIP1193Provider = (): EthereumProvider => {
                     case 'eth_gasPrice':
                     case 'eth_getBlockByHash':
                     case 'eth_coinbase':
-                    case 'eth_newBlockFilter':
+                  case 'eth_newBlockFilter':
+                  case 'eth_getFilterChanges':
+                  case 'eth_syncing':
+                  case 'eth_uninstallFilter':
+                    case 'eth_getCode':
                         return await requestContentScript(method, params);
                     case 'personal_sign':
                         return await handlePersonalSign(params?.[0], params?.[1]);
