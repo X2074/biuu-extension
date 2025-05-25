@@ -1,5 +1,9 @@
 import indexDbData from '../../indexDB.js';
 import Web3 from 'web3';
+import { showExtensionPopup,chromeNotifications } from '../../index.ts';
+import { hashSaveIndexDB } from '../../operateIndexDB.js';
+import EthereumTx from 'ethereumjs-tx'
+import { v4 as uuidv4 } from 'uuid';
 // 执行智能合约调用
 // utils/request/EVM/sendTransaction.ts
 
@@ -31,11 +35,11 @@ export default async function eth_sendTransaction(request: any): Promise<string>
         // }
         
         // 检查授权是否过期
-        const currentTime = Date.now();
-        const expirationTime = siteAuth.timestamp + 7 * 24 * 60 * 60 * 1000; // 7天有效期
-        if (currentTime > expirationTime) {
-            throw new Error('DApp authorization expired');
-        }
+        // const currentTime = Date.now();
+        // const expirationTime = siteAuth.timestamp + 7 * 24 * 60 * 60 * 1000; // 7天有效期
+        // if (currentTime > expirationTime) {
+        //     throw new Error('DApp authorization expired');
+        // }
 
         // 获取当前网络配置
         const rpc_url = await indexDbData.getData('rpc_url');
@@ -63,7 +67,8 @@ export default async function eth_sendTransaction(request: any): Promise<string>
             nonce: transaction.nonce,
             maxPriorityFeePerGas: transaction.maxPriorityFeePerGas,
             maxFeePerGas: transaction.maxFeePerGas,
-            chainId: transaction.chainId || rpc_url.CHAIN_ID
+            chainId: transaction.chainId || rpc_url.CHAIN_ID,
+            currentOrigin:currentOrigin
         };
 
         // 清理空值参数
@@ -91,23 +96,65 @@ export default async function eth_sendTransaction(request: any): Promise<string>
             txParams.nonce = `0x${nonce.toString(16)}`;
         }
         // 缓存当前交易数据
-        inndexDB.putData(currentWallt.address, txParams);
-        return;
-        // 显示确认弹窗
-        const popupUrl = await showExtensionPopup(`/signTransaction`);
+        // inndexDB.putData(currentWallt.address, txParams);
+        // 存储数据
+        chrome.storage.local.set({ sendTransaction: txParams }, function() {
+            console.log('Data saved in sync storage');
+        });
 
+        // 显示确认弹窗
+        const popupUrl = await showExtensionPopup(`/sendTransaction`);
+        const nonce = await web3.eth.getTransactionCount(txParams.from);
         // 等待用户响应
         return new Promise((resolve, reject) => {
             const handleMessage = (message: any) => {
+                // 将参数与hash合并，便于后面的取消和加速操作
+                let sendData = {
+                    uuid: uuidv4(),
+                    action: 'transferEVM',
+                    key: message['privateKey'],
+                    keyStore: currentWallt['keyStore'],
+                    // accountAddress: currentWallt['address'],
+                    gasUsed: txParams['gasPrice'],
+                    accountAddress: txParams['from'],
+                    balance:message.balance,
+                    chainId: rpc_url.CHAIN_ID,
+                    gasLimit: txParams['gas'],
+                }
                
                 if (message.action === 'eth_sendTransaction') {
-                    chrome.runtime.onMessage.removeListener(handleMessage);
-    
-                    if (message.signature) {
-                        resolve(message.signature);
-                    } else {
-                        reject(new Error(message.error || 'User rejected the request'));
+                    console.log(txParams,"txParams");
+                
+                    let details = {
+                        to: txParams.to, // 接收方地址                                                             
+                        value: txParams.value, // 转账 wei  
+                        // meer交易此处需要使用int类型
+                        gasLimit: txParams.gas,
+                        gasPrice: txParams.gasPrice,
+                        nonce: nonce,
+                        chainId: rpc_url.CHAIN_ID
                     }
+                    let tx = new EthereumTx(details)
+                    let privateKey = Buffer.from(message.privateKey, 'hex');
+                    tx.sign(privateKey)
+                    let serializedTx = tx.serialize();
+                    let raw = '0x' + serializedTx.toString('hex');
+                    web3.eth.sendSignedTransaction(raw).then(hash => {
+                        // indexDbData.getData('nonce').then(res => {
+                        //     res['content'] = nonce + 1;
+                        //     indexDbData.putData(res);
+                        // });
+                        console.log(hash, 'hash');
+                        chromeNotifications(hash)
+                        let info = Object.assign(sendData, hash)
+                        console.log(info,"缓存的交易数据");
+                        
+                        hashSaveIndexDB(currentWallt['keyStore'], 'dispose', info);
+                    }).catch(error => {
+                        console.log(error.message, 'error');
+                        hashSaveIndexDB(currentWallt['keyStore'], 'error', sendData)
+                        return;
+                    })
                 }
             };
 

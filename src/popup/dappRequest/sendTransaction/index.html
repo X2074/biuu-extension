@@ -2,32 +2,38 @@
     <div class="header flex">
         <div class="sign-address">
             <p>自</p>
-            <p>{{currentWallt.userName}}</p>
+            <p>{{currentWallt?.userName}}</p>
         </div>
 		<p>></p>
         <div class="sign-address">
             <p>至</p>
-            <p>{{currentWallt.userName}}</p>
+            <p>{{toAddress || '--'}}</p>
         </div>
     </div>
 	<div class="sign-network mt-20">
 		<div class="flex">
 			<p>网络</p>
-			<p>{{rpc_url.url}}</p>
+			<p>{{rpc_url?.url}}</p>
 		</div>
 		<div class="flex">
 			<p>请求来自</p>
-			<p>dasdasdasdad</p>
+			<p>{{sendTransaction?.currentOrigin}}</p>
 		</div>
 	</div>
 	<div class="sign-network mt-20">
 		<div class="flex">
 			<p>网络费</p>
-			<p>{{rpc_url.unit}}</p>
+			<p>{{gasPrice}}{{rpc_url?.unit}}</p>
 		</div>
 		<div class="flex">
 			<p>最大费用</p>
-			<p>dasdasdasdad</p>
+			<p>{{gasPrice}}</p>
+		</div>
+	</div>
+	<div class="sign-network mt-20">
+		<div class="flex">
+			<p>交易唯一标识号</p>
+			<p>{{Number(sendTransaction?.nonce)}}</p>
 		</div>
 	</div>
     <div class="actions mt-20">

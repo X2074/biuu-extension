@@ -7,6 +7,7 @@ import ecc from 'tiny-secp256k1'
 import { BIP32Factory } from 'bip32'
 import browser from 'webextension-polyfill';
 import indexDbData from './indexDB';
+import { v4 as uuidv4 } from 'uuid';
 import {AllowedQueryParamPageType} from "./types"// 使用最新版本浏览器不支持，只能使用1.x版本替换
 const bip32 = BIP32Factory(ecc)
 
@@ -193,3 +194,23 @@ const createPopupWindow = async (url: string) => {
 	});
 	return window;
 };
+
+export async function chromeNotifications(data: any) {
+    console.log(data, "传递的实际数据");
+    // 下面是测试数据
+    let info: any = {
+        type: 'list',
+        iconUrl: 'https://th.bing.com/th/id/R.9018c4f47b9796cbea207325cb60e457?rik=TKWy9KALYKcXBg&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f92%2f1692.jpg&ehk=YB59358%2fCaARUufRoOEdKK9gWz%2fCdnQLXvP%2fn8DAPrA%3d&risl=&pid=ImgRaw&r=0',
+        appIconMaskUrl: 'https://th.bing.com/th/id/R.9018c4f47b9796cbea207325cb60e457?rik=TKWy9KALYKcXBg&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f92%2f1692.jpg&ehk=YB59358%2fCaARUufRoOEdKK9gWz%2fCdnQLXvP%2fn8DAPrA%3d&risl=&pid=ImgRaw&r=0',
+        title: '通知主标题',
+        message: '通知副标题',
+        contextMessage: data.blockHash,
+        buttons: [{ title: '按钮1的标题', iconUrl: 'https://th.bing.com/th/id/R.9018c4f47b9796cbea207325cb60e457?rik=TKWy9KALYKcXBg&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f92%2f1692.jpg&ehk=YB59358%2fCaARUufRoOEdKK9gWz%2fCdnQLXvP%2fn8DAPrA%3d&risl=&pid=ImgRaw&r=0' }, { title: '按钮2的标题', iconUrl: 'https://th.bing.com/th/id/R.9018c4f47b9796cbea207325cb60e457?rik=TKWy9KALYKcXBg&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f92%2f1692.jpg&ehk=YB59358%2fCaARUufRoOEdKK9gWz%2fCdnQLXvP%2fn8DAPrA%3d&risl=&pid=ImgRaw&r=0' }],
+        items: [{ title: '消息1', message: '今天天气真好！' }, { title: '消息2', message: '明天天气估计也不错！' }],
+        eventTime: Date.now() + 2000
+    }
+    // 右下角提示,这个id是唯一的，每次都不一样，否则不能触发
+    chrome.notifications.create(uuidv4(), info, function (id) {
+        console.log(id);
+    });
+}
