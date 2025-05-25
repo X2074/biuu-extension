@@ -135,6 +135,12 @@ const routes = [
     path: '/confirmWatchAsset',
     name: 'confirmWatchAsset',
     component: () => import("../popup/dappRequest/confirmWatchAsset/index.vue")
+  },
+  //request交易
+  {
+    path: '/sendTransaction',
+    name: 'sendTransaction',
+    component: () => import("../popup/dappRequest/sendTransaction/index.vue")
   }
   
 ]

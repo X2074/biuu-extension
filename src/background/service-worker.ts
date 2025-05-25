@@ -128,6 +128,10 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.requestGetPermissions();
         case 'eth_chainId':
             return await requestMethodFn.getChainId();
+        case 'eth_call':
+            return await requestMethodFn.ethCall(request);
+        case 'eth_blockNumber':
+            return await requestMethodFn.blockNumber();
         case 'web3_clientVersion':
             return await requestMethodFn.getWalltVersion();
         case 'personal_sign':
@@ -138,6 +142,8 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.watchAsset(request);
         case "eth_getBalance":
             return await requestMethodFn.eth_getBalance(request); 
+        case "eth_sendTransaction":
+            return await requestMethodFn.eth_sendTransaction(request);  
         case "eth_gasPrice":
             return await requestMethodFn.eth_gasPrice(request);
         case "wallet_switchEthereumChain":

@@ -14,8 +14,13 @@ const origin = ref('');
 let passKey = ref('');
 let privateKey: any = ref(null);
 let authorization: any = ref({});
+let currentWallt:any = ref(null)
+let rpc_url:any = ref(null)
 onMounted(async () => {
     authorization.value = await indexDbData.getData('authorization');
+    rpc_url.value = await indexDbData.getData('rpc_url');
+    // 从 IndexedDB 获取私钥
+    currentWallt.value = await indexDbData.getData('currentWalltAddress');
     indexDbData
         .getData(md5('secret'))
         .then((res: any) => {
@@ -24,27 +29,7 @@ onMounted(async () => {
         .catch((err: any) => {
             console.log(err);
         });
-    const hash = window.location.hash.substring(1); // 去掉 #
-    const paramsString = hash.substring(hash.indexOf('?') + 1);
-    const urlParams: any = new URLSearchParams(paramsString);
-    console.log(urlParams, 'urlParams');
-    // if (message.value.startsWith('0x')) {
-    // 如果是16进制，尝试解码
-    try {
-        // 去掉0x前缀
-        const hex: any = urlParams.get('message').slice(2);
-        // 将16进制转换为字节数组 
-        const bytes = new Uint8Array(hex.match(/.{1,2}/g)?.map((byte: any) => parseInt(byte, 16)));
-        // 将字节数组转换为字符串
-        message.value = new TextDecoder().decode(bytes);
-    } catch (error) {
-        console.log('Failed to decode hex message, using original:', error);
-        message.value = message.value;
-    }
-    // }
-    // message.value = urlParams.get('message') || '';
-    address.value = urlParams.get('address') || '';
-    origin.value = urlParams.get('origin') || '';
+    
 });
 
 const reject = () => {
@@ -56,21 +41,42 @@ const reject = () => {
 };
 const sign = async () => {
     try {
-        // 从 IndexedDB 获取私钥
-        let currentWallt = await indexDbData.getData('currentWalltAddress');
         let data = await indexDbData.getData('keyStore');
-        let key = toRaw(data.secret[currentWallt['keyStore']]);
+        let key = toRaw(data.secret[currentWallt.value['keyStore']]);
         // 如果账户是私钥导入的，就直接赋值私钥
         // 907fd84538e3ac1caebdbbd35b00cad93986ee9ae34785e99e62843020c98f72
         let encryption = await Decrypt(key, passKey.value);
         console.log(encryption, 'encryption');
-        if (currentWallt['keyStoreType'] && currentWallt['keyStoreType'] == 'privateKey') {
+        if (currentWallt.value['keyStoreType'] && currentWallt.value['keyStoreType'] == 'privateKey') {
             privateKey.value = { privateKey: encryption };
         } else {
             privateKey.value = await evmKey(encryption);
         }
         console.log(privateKey.value['privateKey'], 'privateKey.value');
 
+            // if (message.action === 'eth_sendTransaction') {
+                //     chrome.runtime.onMessage.removeListener(handleMessage);
+
+                //     if (message.signature) {
+                //         // 使用私钥签名交易
+                //         const signedTx = web3.eth.accounts.signTransaction(txParams, currentWallt.privateKey);
+                //         signedTx.then((signed: any) => {
+                //             // 发送签名后的交易
+                //             web3.eth.sendSignedTransaction(signed.rawTransaction)
+                //                 .on('transactionHash', (hash: string) => {
+                //                     resolve(hash);
+                //                 })
+                //                 .on('error', (error: any) => {
+                //                     reject(error);
+                //                 });
+                //         });
+                //     } else {
+                //         reject(new Error('User rejected the transaction'));
+                //     }
+                // }
+
+
+        
         // 使用 web3.js 或 ethers.js 进行签名
         // 这里使用 ethers.js 作为示例
         const wallet = new ethers.Wallet(privateKey.value['privateKey']);

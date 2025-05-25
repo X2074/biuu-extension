@@ -49,6 +49,8 @@ export const AllowedQueryParamPage = {
   signMessage: '/sign',//消息签名请求
   addEthereumChain: '/addEthereumChain', //添加链请求
   confirmWatchAsset: '/confirmWatchAsset', //添加代币请求
+  sendTransaction: '/sendTransaction', //交易页面
+  
 
 } as const;
 
