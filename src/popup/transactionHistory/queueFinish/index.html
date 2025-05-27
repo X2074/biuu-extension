@@ -1,8 +1,8 @@
 <div v-if="transactionDetail">
     <div class="flex">
         <!-- 没有价格就是nft -->
-        <p class="name" v-if="!transactionDetail.value">发送NFT</p>
-        <p class="name" v-else>-{{transactionDetail.value.toLocaleString()}} {{rpc_url?.unit.toUpperCase()}}</p>
+        <p class="name" v-if="transactionDetail.type == 'nft'">发送NFT</p>
+        <p class="name" v-else>-{{transactionDetail.value || getPrice(transactionDetail.price)}} {{rpc_url?.unit.toUpperCase()}}</p>
         <p class="status ml-10"
             v-if="transactionDetail.status && transactionDetail.status != 'queue' && transactionDetail.status != 'dispose' && transactionDetail.status != 'error' && transactionDetail.status != 'dispose'">
             已确认</p>

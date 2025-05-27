@@ -1,13 +1,13 @@
-<template src='./index.html'></template>
-<script lang="ts" >
+<template src="./index.html"></template>
+<script lang="ts">
 export default {
-  name: 'transactionHistory'
+    name: 'transactionHistory'
 };
 </script>
-<style scoped lang='scss'>
+<style scoped lang="scss">
 @import './index.scss';
 </style>
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { ref, onMounted, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
 import { getUtxoHash } from '@/utils/UTXO/meerRpc.js';
@@ -34,90 +34,93 @@ let gasPrice: any = ref(0);
 let time = ref(null);
 let detailTransaction = ref(null);
 onMounted(async () => {
-  currentWallt.value = await indexDbData.getData('currentWalltAddress');
-  rpc_url.value = await indexDbData.getData('rpc_url');
-  // 定义rpc;
-  web3.value = new Web3(new Web3.providers.HttpProvider(rpc_url.value.url));
-  let data = await indexDbData.getData(md5('tradeHash'));
-  if (data) {
-    rawData.value = data;
-    console.log(data['content'], currentWallt.value);
-    if (!data['content'][currentWallt.value['keyStore']]) return;
-    transactionClassify(data['content'][currentWallt.value['keyStore']]);
-  }
+    currentWallt.value = await indexDbData.getData('currentWalltAddress');
+    rpc_url.value = await indexDbData.getData('rpc_url');
+    // 定义rpc;
+    web3.value = new Web3(new Web3.providers.HttpProvider(rpc_url.value.url));
+    let data = await indexDbData.getData(md5('tradeHash'));
+    if (data) {
+        rawData.value = data;
+        console.log(data['content'], currentWallt.value);
+        if (!data['content'][currentWallt.value['keyStore']]) return;
+        transactionClassify(data['content'][currentWallt.value['keyStore']]);
+    }
 });
 // 对交易数据进行分类
 const transactionClassify = (data: any[]) => {
-  data.forEach((item: any) => {
-    if (!item.status || item.status == 'queue' || item.status == 'dispose') {
-      queueTransactions.value.push(item);
-    } else {
-      finishTransactions.value.push(item);
-    }
-  });
-  console.log(queueTransactions.value, 'queueTransactions.value');
-  loading.value = false;
+    data.forEach((item: any) => {
+        if (!item.status || item.status == 'queue' || item.status == 'dispose') {
+            queueTransactions.value.push(item);
+        } else {
+            finishTransactions.value.push(item);
+        }
+    });
+    console.log(queueTransactions.value, 'queueTransactions.value');
+    loading.value = false;
 };
 // 更新交易状态
 bus.on('transactionStatusUpdates', (data: any) => {
-  loading.value = true;
-  // 获取当前账户下面的交易数据
-  let transaction = rawData.value['content'][currentWallt.value['keyStore']];
-  rawData.value['content'][currentWallt.value['keyStore']] = transaction.map((item: any) => {
-    if (item['uuid'] == data['uuid']) {
-      item.status = data['status'];
-    }
-    return toRaw(item);
-  });
-  indexDbData.putData(toRaw(rawData.value));
-  queueTransactions.value = [];
-  finishTransactions.value = [];
-  transactionClassify(rawData.value['content'][currentWallt.value['keyStore']]);
+    loading.value = true;
+    // 获取当前账户下面的交易数据
+    let transaction = rawData.value['content'][currentWallt.value['keyStore']];
+    rawData.value['content'][currentWallt.value['keyStore']] = transaction.map((item: any) => {
+        if (item['uuid'] == data['uuid']) {
+            item.status = data['status'];
+        }
+        return toRaw(item);
+    });
+    indexDbData.putData(toRaw(rawData.value));
+    queueTransactions.value = [];
+    finishTransactions.value = [];
+    transactionClassify(rawData.value['content'][currentWallt.value['keyStore']]);
 });
 
 const toDetail = async (data: any) => {
-  loading.value = true;
-  detailTransaction.value = data;
-  console.log(detailTransaction.value, 'datadatadata');
+    loading.value = true;
+    detailTransaction.value = data;
+    console.log(detailTransaction.value, 'datadatadata');
 
-  if (data.action == 'transferEVM') {
-    getEvm(data);
-  } else {
-    getUtxo(data);
-  }
+    if (!data.action || data.action == 'transferEVM') {
+        getEvm(data);
+    } else {
+        getUtxo(data);
+    }
 };
 const getUtxo = async (data: any) => {
-  let receipt = await getUtxoHash(data['url'], data['transactionHash']);
-  time.value = receipt['timestamp'];
-  transactionPage.value = 'detail';
-  loading.value = false;
+    let receipt = await getUtxoHash(data['url'], data['transactionHash']);
+    time.value = receipt['timestamp'];
+    transactionPage.value = 'detail';
+    loading.value = false;
 };
 const getEvm = async (data: any) => {
-  await getTransactionStatus(data);
-  await getWei(data.gasUsed);
-  if (!data['time']) {
-    await getWei(data.gasUsed);
-  } else {
-    time.value = data['time'];
-  }
-  transactionPage.value = 'detail';
-  loading.value = false;
+    // let receipt = await getTransactionStatus(data);
+	// console.log(receipt,"receipt0000");
+    // await getWei(data.gasUsed);
+    if (!data['time']) {
+        await getWei(data.gasUsed);
+    } else {
+        time.value = data['time'];
+    }
+    transactionPage.value = 'detail';
+    loading.value = false;
 };
 // 查询交易详情
 const getTransactionStatus = (data: { transactionHash: any }) => {
-  web3.value.eth.getTransactionReceipt(data.transactionHash, (error: any, receipt: any) => {
-    if (!error) {
-      console.log('Transaction status for transaction', receipt);
-    }
-  });
+    return web3.value.eth.getTransactionReceipt(data.transactionHash, (error: any, receipt: any) => {
+		console.log(receipt,"receipt");
+		
+        if (!error) {
+            console.log('Transaction status for transaction', receipt);
+        }
+    });
 };
 // gas转换
 const getWei = async (balance: string) => {
-  // 定义rpc
-  let web3 = new Web3(new Web3.providers.HttpProvider(rpc_url.value.url));
-  let price = web3.utils.fromWei(balance + '', 'ether');
-  console.log(price, 'balance');
-  gasPrice.value = price;
+    // 定义rpc
+    let web3 = new Web3(new Web3.providers.HttpProvider(rpc_url.value.url));
+    let price = web3.utils.fromWei(balance + '', 'ether');
+    console.log(price, 'balance');
+    gasPrice.value = price;
 };
 // 时间转换
 // const getTime = () => {
@@ -139,8 +142,8 @@ const getWei = async (balance: string) => {
 // };
 
 const toBack = () => {
-  // pageType.value = 'showKey';
-  // walltAccount.value = 'selectAccount';
-  router.push('/homePage');
+    // pageType.value = 'showKey';
+    // walltAccount.value = 'selectAccount';
+    router.push('/home');
 };
 </script>

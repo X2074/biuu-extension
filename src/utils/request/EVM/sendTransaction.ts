@@ -112,6 +112,7 @@ export default async function eth_sendTransaction(request: any): Promise<string>
                 let sendData = {
                     uuid: uuidv4(),
                     action: 'transferEVM',
+                    value: txParams.value,
                     key: message['privateKey'],
                     keyStore: currentWallt['keyStore'],
                     // accountAddress: currentWallt['address'],
@@ -120,11 +121,11 @@ export default async function eth_sendTransaction(request: any): Promise<string>
                     balance:message.balance,
                     chainId: rpc_url.CHAIN_ID,
                     gasLimit: txParams['gas'],
+                    type: 'sendtransfer'
                 }
                
                 if (message.action === 'eth_sendTransaction') {
                     console.log(txParams,"txParams");
-                
                     let details = {
                         to: txParams.to, // 接收方地址                                                             
                         value: txParams.value, // 转账 wei  
@@ -134,6 +135,8 @@ export default async function eth_sendTransaction(request: any): Promise<string>
                         nonce: nonce,
                         chainId: rpc_url.CHAIN_ID
                     }
+                    console.log(sendData,"sendDatasendDatasendDatasendData");
+                    
                     let tx = new EthereumTx(details)
                     let privateKey = Buffer.from(message.privateKey, 'hex');
                     tx.sign(privateKey)
@@ -148,10 +151,12 @@ export default async function eth_sendTransaction(request: any): Promise<string>
                         chromeNotifications(hash)
                         let info = Object.assign(sendData, hash)
                         console.log(info,"缓存的交易数据");
+                        resolve(hash);
                         
                         hashSaveIndexDB(currentWallt['keyStore'], 'dispose', info);
                     }).catch(error => {
-                        console.log(error.message, 'error');
+                        reject(error);
+                        console.log(sendData,"serroratasendDatasendData0.00.00.");
                         hashSaveIndexDB(currentWallt['keyStore'], 'error', sendData)
                         return;
                     })

@@ -13,6 +13,7 @@ import Web3 from 'web3';
 
 // 初始化 web3
 const web3 = new Web3();
+let priceValue:any = ref(0)
 let gasPrice:any = ref(0)
 let passKey:any = ref(null)
 let authorization:any = ref(null)
@@ -29,6 +30,7 @@ onMounted(async () => {
         console.log(sendTransaction.value,"sendTransaction.value");
         toAddress.value = sendTransaction.value.to.substr(0, 6) +'...'+ sendTransaction.value.to.substr(-4);
         gasPrice.value = await getGasFee();
+        priceValue.value = await getPrice();
         console.log(gasPrice.value,"gasPrice.value");
         // 获取钱包余额
         let rpcUrlData = await indexDbData.getData('rpc_url');
@@ -67,7 +69,20 @@ const getGasFee = async () => {
 
         console.log(gasFee, "gasFee");
         return parseFloat(gasFee).toFixed(4);
-  }
+}
+
+const getPrice = async () => { 
+    console.log(sendTransaction.value,"sendTransaction.value.value");
+    let price = sendTransaction.value;
+    // 使用BigInt处理大数
+   // 使用 web3.utils.fromWei 将 wei 转换为 ETH
+   price = web3.utils.fromWei(
+        web3.utils.toBN(price.value)
+            .toString()
+    );
+    console.log(price, "price");
+    return price;
+}
 const reject = () => {
     let data: any = { action: 'personal_sign', error: 'User rejected the request' };
     chrome.runtime.sendMessage(data, (response: any) => {
@@ -110,14 +125,14 @@ const sign = async () => {
             privateKey:privateKey.value['privateKey'],
             balance:balanceSecre.value
         });
-        // window.close();
+        window.close();
     } catch (error: any) {
         console.error('Sign error:', error);
         chrome.runtime.sendMessage({
-            action: 'personal_sign',
+            action: 'eth_sendTransaction',
             error: error.message
         });
-        // window.close();
+        window.close();
     }
 };
 </script>

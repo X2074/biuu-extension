@@ -277,5 +277,11 @@
     },
     "src/popup/dappRequest/confirmWatchAsset": {
         "description": "确认添加代币"
+    },
+    "src/popup/dappRequest/sign": {
+        "description": "简短数据签名"
+    },
+    "src/popup/dappRequest/sendTransaction": {
+        "description": "复杂交易签名"
     }
 }

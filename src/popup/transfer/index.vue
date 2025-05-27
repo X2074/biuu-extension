@@ -136,7 +136,8 @@ const swapBalance = () => {
         gasLimit: gasLimit.value,
         gasPrice: gasPrice.value,
         chainId: rpcUrl.value.CHAIN_ID,
-        key: dataKey.value //私钥
+        key: dataKey.value, //私钥,
+        type: 'sendtransfer'
     };
     // 转账函数  转账成功后会触发，可以添加loading状态
     evmTransfer(data).then((res: any) => {

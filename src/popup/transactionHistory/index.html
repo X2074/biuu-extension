@@ -10,7 +10,7 @@
         <p class="check-tabs">交易记录</p>
     </div>
     <div class="transaction-content" v-if="transactionPage == 'list'">
-        <div class="tabs mb-20 flex">
+        <div class="tabs flex">
             <p @click="transactionTabs = 'dispose'" :class="{'check-tabs':transactionTabs == 'dispose'}">
                 待处理({{queueTransactions.length}})</p>
             <p @click="transactionTabs = 'finish'" :class="{'check-tabs':transactionTabs == 'finish'}">
@@ -50,10 +50,14 @@
         <div class="detail-content flex mt-25">
             <p class="name">付款地址：</p>
             <div class="info flex">
-                <p>{{detailTransaction?.accountAddress.substr(0,4)}}...{{detailTransaction?.accountAddress.substr(-4)}}
+                <p v-if="detailTransaction?.accountAddress">{{detailTransaction?.accountAddress.substr(0,4)}}...{{detailTransaction?.accountAddress.substr(-4)}}
                 </p>
-                <img class="ml-10" @click="onCopy(detailTransaction?.accountAddress,'付款地址')"
+                <p v-if="detailTransaction?.from">{{detailTransaction?.from.substr(0,4)}}...{{detailTransaction?.from.substr(-4)}}
+                </p>
+                <img v-if="detailTransaction?.accountAddress" class="ml-10" @click="onCopy(detailTransaction?.accountAddress,'付款地址')"
                     src="@/assets/images/icons/copy.png" alt="">
+                <img v-if="detailTransaction?.from" class="ml-10" @click="onCopy(detailTransaction?.from,'付款地址')"
+                        src="@/assets/images/icons/copy.png" alt="">
             </div>
         </div>
         <!-- 收款地址 -->
@@ -85,7 +89,7 @@
                     alt="">
             </div>
         </div>
-        <div class="detail-content flex mt-25" v-if="detailTransaction['action'] == 'transferEVM'">
+        <div class="detail-content flex mt-25" v-if="!detailTransaction['action'] || detailTransaction['action'] == 'transferEVM'">
             <p class="name">GAS 费：</p>
             <div class="info flex">
                 <p class="price mr-5">{{gasPrice}}</p>
