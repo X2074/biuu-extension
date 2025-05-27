@@ -166,6 +166,10 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.eth_getStorageAt(request);
         case "eth_getTransactionCount":
             return await requestMethodFn.eth_getTransactionCount(request);
+        case "wallet_revokePermissions":
+            return await requestMethodFn.wallet_revokePermissions(request);
+        case "wallet_getCallsStatus":
+            return await requestMethodFn.wallet_getCallsStatus(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }
