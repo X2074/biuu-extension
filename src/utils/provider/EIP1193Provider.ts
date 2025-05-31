@@ -58,7 +58,10 @@ export const createEIP1193Provider = (): EthereumProvider => {
                   case 'eth_getStorageAt':
                     case 'eth_getTransactionCount':
                     case 'wallet_revokePermissions':
-                        case 'wallet_getCallsStatus':
+                    case 'wallet_getCallsStatus':
+                    case 'eth_subscribe':
+                    case 'eth_getBlockTransactionCountByHash':
+                        case 'eth_getBlockTransactionCountByNumber':
                         return await requestContentScript(method, params);
                     case 'personal_sign':
                         return await handlePersonalSign(params?.[0], params?.[1]);

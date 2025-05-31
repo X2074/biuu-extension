@@ -346,6 +346,64 @@ console.log(statuses, 'requestwallet_getCallsStatus');
         throw error;
     }
 }
+// 订阅事件
+async function eth_subscribe(request: any) {
+    console.log(request, 'eth_subscribe');
+ /*    try {
+        const [subscriptionType, ...params] = request.params || [];
+        debugger
+        let RPC_URL = await indexDbData.getData('rpc_url');
+        const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
+
+        // 处理不同类型的订阅
+        switch (subscriptionType) {
+            case 'newHeads':
+                const newHeadsSubscriptionId = await provider.send('eth_subscribe', ['newHeads']);
+                console.log('New heads subscription ID:', newHeadsSubscriptionId);
+                return newHeadsSubscriptionId;
+            case 'logs':
+                const logsFilter = params[0];
+                const logsSubscriptionId = await provider.send('eth_subscribe', ['logs', logsFilter]);
+                console.log('Logs subscription ID:', logsSubscriptionId);
+                return logsSubscriptionId;
+            case 'newPendingTransactions':
+                const newPendingTransactionsSubscriptionId = await provider.send('eth_subscribe', ['newPendingTransactions']);
+                console.log('New pending transactions subscription ID:', newPendingTransactionsSubscriptionId);
+                return newPendingTransactionsSubscriptionId;
+            case 'syncing':
+                const syncingSubscriptionId = await provider.send('eth_subscribe', ['syncing']);
+                console.log('Syncing subscription ID:', syncingSubscriptionId);
+                return syncingSubscriptionId;
+            default:
+                throw new Error(`Unsupported subscription type: ${subscriptionType}`);
+        }
+    } catch (error) {
+        console.error('Error in eth_subscribe:', error);
+        throw error;
+    } */
+}
+//返回与给定块哈希匹配的块中的交易数。
+async function eth_getBlockTransactionCountByHash(request: any) {
+    let RPC_URL = await indexDbData.getData('rpc_url');
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
+    const blockHash = request.params[0]; // 区块哈希
+    const txCount = await provider.send("eth_getBlockTransactionCountByHash", [blockHash]);
+    return txCount; // 返回十六进制格式的交易数量
+    // console.log("Transaction count:", parseInt(txCount, 16)); // 转为十进制
+}
+//返回与给定区块号匹配的块中的交易数。
+async function eth_getBlockTransactionCountByNumber(request:any) {
+    let RPC_URL = await indexDbData.getData('rpc_url');
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
+    let blockNumber=request.params[0];
+    const txCount = await provider.send(
+        "eth_getBlockTransactionCountByNumber",
+        [blockNumber]
+    );
+    return txCount;
+    console.log("Transaction count:", parseInt(txCount, 16));
+    
+}
 export default {
     requestPermissions,
     handleSignMessage,
@@ -371,5 +429,8 @@ export default {
     eth_getStorageAt,
     eth_getTransactionCount,
     wallet_revokePermissions,
-    wallet_getCallsStatus
+    wallet_getCallsStatus,
+    eth_subscribe,
+    eth_getBlockTransactionCountByHash,
+    eth_getBlockTransactionCountByNumber
 };
