@@ -283,5 +283,32 @@
     },
     "src/popup/dappRequest/sendTransaction": {
         "description": "复杂交易签名"
+    },
+    "src/utils/request/EVM/switchEthereumChain.ts": {
+        "description": "chain切换"
+    },
+    "src/utils/request/EVM/sendTransaction.ts": {
+        "description": "简单签名"
+    },
+    "src/utils/request/EVM/eth_getBalance.ts": {
+        "description": "账户余额"
+    },
+    "src/utils/request/EVM/eth_gasPrice.ts": {
+        "description": "获取gas"
+    },
+    "src/utils/request/EVM/eth_syncing.ts": {
+        "description": "检查节点是否正在同步区块链数据"
+    },
+    "src/utils/request/EVM/wallet_getCallsStatus.ts": {
+        "description": "获取批处理状态"
+    },
+    "src/utils/request/EVM/eth_subscribe.ts": {
+        "description": "订阅事件"
+    },
+    "src/utils/request/EVM/getWeb3.ts": {
+        "description": "获取web3"
+    },
+    "src/utils/request/EVM": {
+        "description": "getEthersProvider"
     }
 }

@@ -1,5 +1,5 @@
 import indexDbData from '../../indexDB.js';
-import Web3 from 'web3';
+import getWeb3Instance from './getWeb3';
 // 执行智能合约调用
 export default async function eth_call(request: any): Promise<string> {
     try {
@@ -14,13 +14,14 @@ export default async function eth_call(request: any): Promise<string> {
         }
 
         // 获取当前网络配置
-        const rpc_url = await indexDbData.getData('rpc_url');
-        if (!rpc_url?.url) {
-            throw new Error('No network selected');
-        }
+        // const rpc_url = await indexDbData.getData('rpc_url');
+        // if (!rpc_url?.url) {
+        //     throw new Error('No network selected');
+        // }
 
-        // 创建 Web3 实例
-        const web3 = new Web3(new Web3.providers.HttpProvider(rpc_url.url));
+        // // 创建 Web3 实例
+        // const web3 = new Web3(new Web3.providers.HttpProvider(rpc_url.url));
+        const web3 = await getWeb3Instance()
 
         // 构建基础交易对象
         const options = {

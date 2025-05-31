@@ -38,9 +38,9 @@ export const createEIP1193Provider = (): EthereumProvider => {
                 switch (method) {
                     case 'eth_requestAccounts':
                     case 'eth_chainId':
-					case 'eth_call':
-					case 'eth_blockNumber':
-					case 'eth_sendTransaction':
+                    case 'eth_call':
+                    case 'eth_blockNumber':
+                    case 'eth_sendTransaction':
                     case 'wallet_getPermissions':
                     case 'wallet_requestPermissions':
                     case 'eth_getBalance':
@@ -50,19 +50,20 @@ export const createEIP1193Provider = (): EthereumProvider => {
                     case 'eth_gasPrice':
                     case 'eth_getBlockByHash':
                     case 'eth_coinbase':
-                  case 'eth_newBlockFilter':
-                  case 'eth_getFilterChanges':
-                  case 'eth_syncing':
-                  case 'eth_uninstallFilter':
-                  case 'eth_getCode':
-                  case 'eth_getStorageAt':
+                    case 'eth_newBlockFilter':
+                    case 'eth_getFilterChanges':
+                    case 'eth_syncing':
+                    case 'eth_uninstallFilter':
+                    case 'eth_getCode':
+                    case 'eth_getStorageAt':
                     case 'eth_getTransactionCount':
                     case 'wallet_revokePermissions':
                     case 'wallet_getCallsStatus':
                     case 'eth_subscribe':
                     case 'eth_getBlockTransactionCountByHash':
                     case 'eth_getBlockTransactionCountByNumber':
-                        case 'eth_getTransactionByBlockHashAndIndex':
+                    case 'eth_getTransactionByBlockHashAndIndex':
+                    case 'eth_getTransactionReceipt':
                         return await requestContentScript(method, params);
                     case 'personal_sign':
                         return await handlePersonalSign(params?.[0], params?.[1]);

@@ -6,7 +6,7 @@ import store from '@/store';
 import { showExtensionPopup } from '../../index.ts';
 // watchAsset.ts
 // utils/request/EVM/requestEVM.ts
-export async function watchAsset(request: any): Promise<boolean> {
+export default async function watchAsset(request: any): Promise<boolean> {
     try {
         const { params } = request;
         

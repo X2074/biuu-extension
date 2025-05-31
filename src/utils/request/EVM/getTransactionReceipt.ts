@@ -1,5 +1,5 @@
 import indexDbData from '../../indexDB.js';
-import Web3 from 'web3';
+import getWeb3Instance from './getWeb3';
 
 /**
  * 获取交易收据
@@ -19,14 +19,16 @@ export default async function eth_getTransactionReceipt(request: any): Promise<a
             throw new Error('Invalid transaction hash');
         }
 
-        // 获取当前网络配置
-        const rpc_url = await indexDbData.getData('rpc_url');
-        if (!rpc_url?.url) {
-            throw new Error('No network selected');
-        }
+        // // 获取当前网络配置
+        // const rpc_url = await indexDbData.getData('rpc_url');
+        // if (!rpc_url?.url) {
+        //     throw new Error('No network selected');
+        // }
 
-        // 创建 Web3 实例
-        const web3 = new Web3(new Web3.providers.HttpProvider(rpc_url.url));
+        // // 创建 Web3 实例
+        // const web3 = new Web3(new Web3.providers.HttpProvider(rpc_url.url));
+        
+        const web3 = await getWeb3Instance()
         
 console.log(web3,"web3");
         // 获取交易收据

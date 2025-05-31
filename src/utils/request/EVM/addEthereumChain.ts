@@ -65,7 +65,7 @@ export default async function addEthereumChain(request: any): Promise<any> {
             err.code = -32602;
             throw err;
         }
-console.log(chainIdNum,"chainIdNum");
+        console.log(chainIdNum,"chainIdNum");
 
         // 验证 blockExplorerUrls（如果提供）
         if (blockExplorerUrls !== undefined) {
