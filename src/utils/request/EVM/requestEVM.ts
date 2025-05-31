@@ -5,6 +5,7 @@ import addEthereumChain from './addEthereumChain';
 import requestPermissions from './requestPermissions';
 import ethCall from './ethCall';
 import eth_sendTransaction from './sendTransaction';
+import eth_getTransactionReceipt from './getTransactionReceipt';
 import { watchAsset } from './watchAsset';
 import Web3 from 'web3';
 
@@ -447,5 +448,6 @@ export default {
     eth_subscribe,
     eth_getBlockTransactionCountByHash,
     eth_getBlockTransactionCountByNumber,
-    eth_getTransactionByBlockHashAndIndex
+    eth_getTransactionByBlockHashAndIndex,
+    eth_getTransactionReceipt
 };
