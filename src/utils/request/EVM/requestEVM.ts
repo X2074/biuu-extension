@@ -401,8 +401,22 @@ async function eth_getBlockTransactionCountByNumber(request:any) {
         [blockNumber]
     );
     return txCount;
-    console.log("Transaction count:", parseInt(txCount, 16));
+    // console.log("Transaction count:", parseInt(txCount, 16));
     
+}
+//根据区块哈希和交易索引（位置）查询交易详情,返回指定区块中特定位置的完整交易数据。
+async function eth_getTransactionByBlockHashAndIndex(request: any) {
+    debugger;
+    console.log(request, 'requesteth_getTransactionByBlockHashAndIndex');
+    const  [blockHash, index] = request.params;
+    let RPC_URL = await indexDbData.getData('rpc_url');
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
+    const tx = await provider.send(
+        "eth_getTransactionByBlockHashAndIndex",
+        [blockHash, index]
+    );
+    console.log("Transaction:", tx);
+    return tx
 }
 export default {
     requestPermissions,
@@ -432,5 +446,6 @@ export default {
     wallet_getCallsStatus,
     eth_subscribe,
     eth_getBlockTransactionCountByHash,
-    eth_getBlockTransactionCountByNumber
+    eth_getBlockTransactionCountByNumber,
+    eth_getTransactionByBlockHashAndIndex
 };
