@@ -76,10 +76,11 @@ console.log(providerDetail,'providerDetail');
             //     detail: providerDetail.provider.chainId
             // }));
             
+            announceProvider();
             // 重新宣布
             setTimeout(() => {
                 announceProvider();
-            }, 1000);
+            }, 500);
         } catch (error:any) {
             console.error('Connection failed:', error);
             // 发送断开连接事件
