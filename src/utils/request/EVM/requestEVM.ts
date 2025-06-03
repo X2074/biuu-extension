@@ -20,7 +20,7 @@ import watchAsset from './watchAsset';
 import wallet_getCallsStatus from './wallet_getCallsStatus';
 import {
     eth_getBlockByHash, eth_coinbase, eth_getFilterChanges, eth_uninstallFilter, eth_getCode, eth_getStorageAt, eth_getTransactionCount, wallet_revokePermissions, eth_getBlockTransactionCountByNumber, eth_getTransactionByBlockHashAndIndex, eth_getBlockTransactionCountByHash,
-    eth_getBlockByNumber
+    eth_getBlockByNumber,eth_getTransactionByBlockNumberAndIndex
 } from './getEtnRequest';
 //   获取权限数据
 function requestGetPermissions() {
@@ -55,7 +55,7 @@ async function getWalltVersion() {
 // 撤销当前dapp的授权
 async function revokePermissions() {}
 
-
+ 
 
 export default {
     requestPermissions,
@@ -88,5 +88,6 @@ export default {
     eth_getBlockTransactionCountByNumber,
     eth_getTransactionByBlockHashAndIndex,
     eth_getTransactionReceipt,
-    eth_getBlockByNumber
+    eth_getBlockByNumber,
+    eth_getTransactionByBlockNumberAndIndex
 };

@@ -180,6 +180,8 @@ async function handleProviderRequest(request: any) {
                  return await requestMethodFn.eth_getTransactionByBlockHashAndIndex(request);
         case "eth_getBlockByNumber":
             return await requestMethodFn.eth_getBlockByNumber(request);
+        case "eth_getTransactionByBlockNumberAndIndex":
+            return await requestMethodFn.eth_getTransactionByBlockNumberAndIndex(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }
