@@ -3,14 +3,71 @@ import { ethers } from 'ethers';
 import Web3 from 'web3';
 import indexDbData from '../../indexDB.js';
 export async function eth_getBlockByHash(request: any) {
-    // debugger
-    console.log(request, 'requesteth_getBlockByHash');
+debugger
+    try {
+        const provider = await getEthersProvider();
+        const blockHash = request.params[0]; // 获取请求参数中的区块哈希
+        if (!blockHash) {
+            throw new Error('缺少区块哈希参数');
+        }
+        const block = await provider.getBlock(blockHash);
+        console.log('获取到的区块信息:', block);
+        return block;
+    } catch (error) {
+        console.error('获取区块信息时出错:', error);
+        throw error;
+    }
+}
+/**
+ * 根据区块编号获取区块信息
+ * @param request 请求对象，params[0] 为区块编号，params[1] 为是否获取交易详情的布尔值
+ */
+export async function eth_getBlockByNumber(request: any) {
+    debugger
+    try {
+        // 获取以太坊提供者实例
+        const provider = await getEthersProvider();
+        
+        // 解析请求参数
+        const [blockNumberParam, includeTransactions = false] = request.params || [];
+        
+        // 处理区块编号参数，支持 'earliest'、'latest'、'pending' 等关键词，也支持数字
+        let blockNumber;
+        if (typeof blockNumberParam === 'string') {
+            if (['earliest', 'latest', 'pending'].includes(blockNumberParam)) {
+                blockNumber = blockNumberParam;
+            } else {
+                // 尝试将十六进制字符串转换为数字
+                blockNumber = parseInt(blockNumberParam, 16);
+            }
+        } else if (typeof blockNumberParam === 'number') {
+            blockNumber = blockNumberParam;
+        } else {
+            throw new Error('无效的区块编号参数');
+        }
+
+      
+     
+        // 如果不需要交易详情，重新获取不包含交易的区块信息
+        if (!includeTransactions) {
+            let block = await provider.getBlock(blockNumber);
+            console.log(block, 'block');
+            return block
+        } else {  // 获取区块信息，可选择是否包含交易详情
+            let block = await provider.getBlockWithTransactions(blockNumber);
+          
+            return block;
+        }
+
+        
+    } catch (error) {
+        console.error('获取区块信息时出错:', error);
+        throw error;
+    }
+
 }
 export async function eth_coinbase(request: any) {
     debugger;
-    console.log(request, 'requesteth_coinbase');
-    // let RPC_URL = await indexDbData.getData('rpc_url');
-    // const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
     const provider = await getEthersProvider();
     const coinbase = await provider.send('eth_coinbase', []);
     console.log('Coinbase 地址:', coinbase); // 例如 "0x123..."
@@ -24,8 +81,6 @@ export async function eth_getFilterChanges(request: any) {
 export async function eth_uninstallFilter(request: any) {
     // 连接 Ethereum 节点
     let RPC_URL = await indexDbData.getData('rpc_url');
-    // const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
-    
     const provider = await getEthersProvider();
     let filterId = await provider.send('eth_newBlockFilter', []);
     console.log('Filter ID:', filterId);
@@ -40,18 +95,12 @@ export async function eth_uninstallFilter(request: any) {
 export async function eth_getCode(request: any) {
     debugger;
     let address = request.params[0] || '';
-    // let RPC_URL = await indexDbData.getData('rpc_url');
-    // const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
-    
     const provider = await getEthersProvider();
     const bytecode = await provider.getCode(address);
     console.log(`Bytecode: ${bytecode}`);
     return bytecode;
 }
 export async function eth_getStorageAt(request: any) {
-    // let RPC_URL = await indexDbData.getData('rpc_url');
-    // const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
-    
     const provider = await getEthersProvider();
     const value = await provider.getStorageAt(
         request.params[0],
@@ -62,10 +111,6 @@ export async function eth_getStorageAt(request: any) {
 }
 //返回从某个地址发送的交易数量。
 export async function eth_getTransactionCount(request: any) {
-    debugger;
-    // let RPC_URL = await indexDbData.getData('rpc_url');
-    // const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
-    
     const provider = await getEthersProvider();
     /* // 获取最新nonce
 const nonce = await provider.getTransactionCount(request.params[0]); */
@@ -83,9 +128,6 @@ export async function wallet_revokePermissions(request: any) {
 }
 //返回与给定块哈希匹配的块中的交易数。
 export async function eth_getBlockTransactionCountByHash(request: any) {
-    // let RPC_URL = await indexDbData.getData('rpc_url');
-    // const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
-    
     const provider = await getEthersProvider();
     const blockHash = request.params[0]; // 区块哈希
     const txCount = await provider.send('eth_getBlockTransactionCountByHash', [blockHash]);
@@ -94,9 +136,6 @@ export async function eth_getBlockTransactionCountByHash(request: any) {
 }
 //返回与给定区块号匹配的块中的交易数。
 export async function eth_getBlockTransactionCountByNumber(request: any) {
-    // let RPC_URL = await indexDbData.getData('rpc_url');
-    // const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
-    
     const provider = await getEthersProvider();
     let blockNumber = request.params[0];
     const txCount = await provider.send('eth_getBlockTransactionCountByNumber', [blockNumber]);
@@ -105,12 +144,7 @@ export async function eth_getBlockTransactionCountByNumber(request: any) {
 }
 //根据区块哈希和交易索引（位置）查询交易详情,返回指定区块中特定位置的完整交易数据。
 export async function eth_getTransactionByBlockHashAndIndex(request: any) {
-    debugger;
-    console.log(request, 'requesteth_getTransactionByBlockHashAndIndex');
     const [blockHash, index] = request.params;
-    // let RPC_URL = await indexDbData.getData('rpc_url');
-    // const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
-    
     const provider = await getEthersProvider();
     const tx = await provider.send('eth_getTransactionByBlockHashAndIndex', [blockHash, index]);
     console.log('Transaction:', tx);

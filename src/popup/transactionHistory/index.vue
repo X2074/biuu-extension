@@ -94,7 +94,7 @@ const getUtxo = async (data: any) => {
 };
 const getEvm = async (data: any) => {
     // let receipt = await getTransactionStatus(data);
-	// console.log(receipt,"receipt0000");
+    // console.log(receipt,"receipt0000");
     // await getWei(data.gasUsed);
     if (!data['time']) {
         await getWei(data.gasUsed);
@@ -107,8 +107,8 @@ const getEvm = async (data: any) => {
 // 查询交易详情
 const getTransactionStatus = (data: { transactionHash: any }) => {
     return web3.value.eth.getTransactionReceipt(data.transactionHash, (error: any, receipt: any) => {
-		console.log(receipt,"receipt");
-		
+        console.log(receipt, 'receipt');
+
         if (!error) {
             console.log('Transaction status for transaction', receipt);
         }
@@ -135,11 +135,11 @@ const getWei = async (balance: string) => {
 //     }
 //   );
 // };
-// const onCopy = (text, name) => {
-//   navigator.clipboard.writeText(text);
-//   let title = name + "复制成功";
-//   bus.emit("promptModalSuccess", title);
-// };
+const onCopy = (text: any, name: any) => {
+    navigator.clipboard.writeText(text);
+    let title = name + '复制成功';
+    bus.emit('promptModalSuccess', title);
+};
 
 const toBack = () => {
     // pageType.value = 'showKey';

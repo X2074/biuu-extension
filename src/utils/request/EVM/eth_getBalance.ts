@@ -1,5 +1,6 @@
 import indexDbData from '../../indexDB.js';
 import getEthersProvider from './getEthers';
+import { ethers } from 'ethers';
 // 返回给定地址的账户余额
 export default async function eth_getBalance(request: any): Promise<string> {
     try {

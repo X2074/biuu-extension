@@ -18,7 +18,10 @@ import blockNumber from './blockNumber';
 
 import watchAsset from './watchAsset';
 import wallet_getCallsStatus from './wallet_getCallsStatus';
-import {eth_getBlockByHash,eth_coinbase,eth_getFilterChanges,eth_uninstallFilter,eth_getCode,eth_getStorageAt,eth_getTransactionCount,wallet_revokePermissions,eth_getBlockTransactionCountByNumber,eth_getTransactionByBlockHashAndIndex,eth_getBlockTransactionCountByHash} from './getEtnRequest';
+import {
+    eth_getBlockByHash, eth_coinbase, eth_getFilterChanges, eth_uninstallFilter, eth_getCode, eth_getStorageAt, eth_getTransactionCount, wallet_revokePermissions, eth_getBlockTransactionCountByNumber, eth_getTransactionByBlockHashAndIndex, eth_getBlockTransactionCountByHash,
+    eth_getBlockByNumber
+} from './getEtnRequest';
 //   获取权限数据
 function requestGetPermissions() {
     return indexDbData.getData('authorized_sites');
@@ -84,5 +87,6 @@ export default {
     eth_getBlockTransactionCountByHash,
     eth_getBlockTransactionCountByNumber,
     eth_getTransactionByBlockHashAndIndex,
-    eth_getTransactionReceipt
+    eth_getTransactionReceipt,
+    eth_getBlockByNumber
 };

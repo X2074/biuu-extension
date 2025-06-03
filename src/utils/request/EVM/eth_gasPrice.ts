@@ -1,5 +1,6 @@
 import indexDbData from '../../indexDB.js';
 import getEthersProvider from './getEthers';
+import { ethers } from 'ethers';
 export default async function eth_gasPrice(request: any) {
     console.log(request, 'requesteth_gasPrice');
     debugger;

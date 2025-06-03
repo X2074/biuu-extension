@@ -129,7 +129,7 @@ async function handleProviderRequest(request: any) {
         case 'eth_chainId':
             return await requestMethodFn.getChainId();
         case 'eth_call':
-            return await requestMethodFn.ethCall(request);
+            return await requestMethodFn.eth_call(request);
         case 'eth_blockNumber':
             return await requestMethodFn.blockNumber();
         case 'web3_clientVersion':
@@ -178,6 +178,8 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.eth_getBlockTransactionCountByNumber(request);
         case "eth_getTransactionByBlockHashAndIndex":
                  return await requestMethodFn.eth_getTransactionByBlockHashAndIndex(request);
+        case "eth_getBlockByNumber":
+            return await requestMethodFn.eth_getBlockByNumber(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }
