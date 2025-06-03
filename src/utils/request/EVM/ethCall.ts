@@ -14,17 +14,17 @@ export default async function eth_call(request: any): Promise<string> {
         }
 
         // 获取当前网络配置
-        // const rpc_url = await indexDbData.getData('rpc_url');
-        // if (!rpc_url?.url) {
-        //     throw new Error('No network selected');
-        // }
+        const rpc_url = await indexDbData.getData('rpc_url');
+        if (!rpc_url?.url) {
+            throw new Error('No network selected');
+        }
 
         // // 创建 Web3 实例
         // const web3 = new Web3(new Web3.providers.HttpProvider(rpc_url.url));
         const web3 = await getWeb3Instance()
 
         // 构建基础交易对象
-        const options = {
+        const options:any = {
             to: callObject.to,
             from: callObject.from || (await indexDbData.getData('currentWalltAddress'))?.address,
             data: callObject.input || callObject.data,

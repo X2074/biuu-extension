@@ -1,4 +1,7 @@
 import getEthersProvider from './getEthers';
+import { ethers } from 'ethers';
+import Web3 from 'web3';
+import indexDbData from '../../indexDB.js';
 export async function eth_getBlockByHash(request: any) {
     // debugger
     console.log(request, 'requesteth_getBlockByHash');
@@ -20,7 +23,7 @@ export async function eth_getFilterChanges(request: any) {
 
 export async function eth_uninstallFilter(request: any) {
     // 连接 Ethereum 节点
-    // let RPC_URL = await indexDbData.getData('rpc_url');
+    let RPC_URL = await indexDbData.getData('rpc_url');
     // const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
     
     const provider = await getEthersProvider();

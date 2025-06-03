@@ -57,7 +57,7 @@ export default async function eth_sendTransaction(request: any): Promise<string>
         const web3 = new Web3(new Web3.providers.HttpProvider(rpc_url.url));
 
         // 构建交易对象
-        const txParams = {
+        const txParams:any = {
             from: currentWallt.address,
             to: transaction.to,
             value: transaction.value,
@@ -107,7 +107,7 @@ export default async function eth_sendTransaction(request: any): Promise<string>
         const nonce = await web3.eth.getTransactionCount(txParams.from);
         // 等待用户响应
         return new Promise((resolve, reject) => {
-            const handleMessage = (message: any) => {
+            const handleMessage :any= (message: any) => {
                 // 将参数与hash合并，便于后面的取消和加速操作
                 let sendData = {
                     uuid: uuidv4(),
@@ -142,7 +142,7 @@ export default async function eth_sendTransaction(request: any): Promise<string>
                     tx.sign(privateKey)
                     let serializedTx = tx.serialize();
                     let raw = '0x' + serializedTx.toString('hex');
-                    web3.eth.sendSignedTransaction(raw).then(hash => {
+                    web3.eth.sendSignedTransaction(raw).then((hash:any) => {
                         // indexDbData.getData('nonce').then(res => {
                         //     res['content'] = nonce + 1;
                         //     indexDbData.putData(res);
