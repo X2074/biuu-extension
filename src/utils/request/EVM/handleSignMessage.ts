@@ -22,7 +22,7 @@ export default async function handleSignMessage(request: any) {
             const handleMessage: any = (message: any) => {
                 console.log(message, 'messagehandleMessage');
 
-                if (message.action === 'signature_response') {
+                if (message.action === 'personal_sign') {
                     chrome.runtime.onMessage.removeListener(handleMessage);
 
                     if (message.signature) {

@@ -77,6 +77,7 @@ const sign = async () => {
         const signature = await wallet.signMessage(message.value);
         // 0x14b75d96a426ff726a8b69f2372eefc5922f4400f98acbb16e0e01fa7b726e1e6bcb8acf1e2addd9386c62983786e7e8d4a4147149d7b1e03a2d82f99d446b551c
         console.log(signature, 'signature');
+        
         // 发送签名结果
         chrome.runtime.sendMessage({
             action: 'personal_sign',

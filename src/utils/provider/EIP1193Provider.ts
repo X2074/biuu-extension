@@ -219,6 +219,8 @@ const handlePersonalSign = async (message: string, address: string): Promise<str
         const handleResponse = (event: MessageEvent) => {
             if (event.data.target === 'biuu-window-provider' && event.data.type === 'personal_sign') {
                 window.removeEventListener('message', handleResponse);
+                console.log(event,"eventeventeventevent");
+                
                 if (event.data.error) {
                     reject(new Error(event.data.error));
                 } else {
