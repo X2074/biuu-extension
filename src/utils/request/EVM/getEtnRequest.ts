@@ -229,7 +229,10 @@ export async function eth_getTransactionByHash(request: any) {
         throw error;
     }
 }
-
+/**
+ * 根据区块哈希获取叔块数量
+ * @param request 请求对象，params[0] 为区块哈希
+ */
 export async function eth_getUncleCountByBlockHash(request: any) {
     try {
         const provider = await getEthersProvider();
@@ -247,6 +250,42 @@ export async function eth_getUncleCountByBlockHash(request: any) {
         throw error;
     }
 }
+/**
+ * 根据区块编号获取叔块数量
+ * @param request 请求对象，params[0] 为区块编号
+ */
+
 export async function eth_getUncleCountByBlockNumber(request: any) {
     debugger
+    try {
+        const provider = await getEthersProvider();
+        const blockNumberParam = request.params[0];
+
+        if (blockNumberParam === undefined) {
+            throw new Error('缺少区块编号参数');
+        }
+
+        // 处理区块编号参数，支持 'earliest'、'latest'、'pending' 等关键词，也支持数字和十六进制字符串
+        let blockNumber;
+        if (typeof blockNumberParam === 'string') {
+            if (['earliest', 'latest', 'pending'].includes(blockNumberParam)) {
+                blockNumber = blockNumberParam;
+            } else {
+                // 尝试将十六进制字符串转换为数字
+                blockNumber = parseInt(blockNumberParam, 16);
+            }
+        } else if (typeof blockNumberParam === 'number') {
+            blockNumber = blockNumberParam;
+        } else {
+            throw new Error('无效的区块编号参数');
+        }
+
+        const blockNumberHex = typeof blockNumber === 'number' ? ethers.utils.hexValue(blockNumber) : blockNumber;
+        const uncleCount = await provider.send('eth_getUncleCountByBlockNumber', [blockNumberHex]);
+        console.log(`区块编号 ${blockNumberHex} 的叔块数量: ${uncleCount}`);
+        return uncleCount;
+    } catch (error) {
+        console.error('获取叔块数量时出错:', error);
+        throw error;
+    }
 }
