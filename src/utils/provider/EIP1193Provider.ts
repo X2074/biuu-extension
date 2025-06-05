@@ -1,5 +1,6 @@
 // EIP1193Provider.ts
 import { WalletProvider } from '../../utils/types';
+import { getChainIdFromBackground } from '../backgroundBridge';
 // import indexDbData from "../../utils/indexDB.js"
 // 首先定义 EIP-1193 Provider 的类型
 export interface EthereumProvider {
@@ -27,11 +28,57 @@ export const providerInfo = {
 } as const;
 
 // 创建 EIP-1193 兼容的 provider
+let _internalChainId: string | null = null;
+let _internalAccounts: array<string> | null = null;
 export const createEIP1193Provider = (): EthereumProvider => {
+    // 使用闭包保存内部状态
+    let _isInitialized = false;
     const provider: EthereumProvider = {
-        accounts: [],
-        chainId: '0x1',
+        // accounts: [],
+        // chainId: '0x1',
+        
+        // _isInitialized: false,
         providerInfo,
+        // 使用getter和setter
+        get chainId() {
+            return _internalChainId || '0x1';
+        },
+        // 使用getter和setter
+        get accounts() {
+            return _internalAccounts || '0x1';
+        },
+        
+        set chainId(value: string) {
+            if (_internalChainId !== value) {
+                _internalChainId = value;  // 更新内部变量
+                // 可以在这里触发 chainChanged 事件
+                // window.dispatchEvent(
+                //     new CustomEvent('chainChanged', { detail: value })
+                // );
+            }
+        },
+        
+        set accounts(value: string) {
+            if (_internalAccounts !== value) {
+                _internalAccounts = value;  // 更新内部变量
+            }
+        },
+        // 初始化方法
+        async _initialize() {
+            if (_isInitialized) return;
+            
+            try {
+                const data = await getChainIdFromBackground();
+                console.log(data,"chainId");
+                
+                this.chainId = data.chainId;
+                this.accounts = data.accounts;
+                _isInitialized = true;
+            } catch (error) {
+                _isInitialized = true;
+                console.error('Failed to initialize chainId:', error);
+            }
+        },
         request: async (args: { method: string; params?: any[] }) => {
             const { method, params } = args;
             try {
@@ -137,6 +184,8 @@ export const createEIP1193Provider = (): EthereumProvider => {
             );
         }
     };
+    // 初始化
+   provider._initialize().catch(console.error);
     return provider;
 };
 const requestContentScript = (method: any, params: any) => {

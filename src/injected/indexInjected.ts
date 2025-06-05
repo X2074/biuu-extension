@@ -50,13 +50,13 @@ import { windowProvider } from '../utils/provider/window-provider';
 // (window as any).personInstance = personInstance;
 
 announceProviderInject()
-windowProvider()
+// windowProvider()
 
 console.log('我是biuu');
 
 window.addEventListener('message', function (e) {
     console.log('我是injected听到了contyent',e);
-    if (e.data.type === 'eip1193:chainChanged') {
+    if (e.data.type === 'chainChanged') {
         window.ethereum.emit('chainChanged', e.data.chainId)
     }
 })

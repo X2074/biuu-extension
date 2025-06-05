@@ -11,6 +11,7 @@ export default {
 <script lang='ts' setup>
 import { ref, onMounted, toRaw } from 'vue';
 import indexDbData from '@/utils/indexDB.js';
+import { chainChanged } from '@/utils/dappOnChange';
 import bus from '@/utils/bus.js';
 let settingStep = ref('options'); //设置页面当前展示内容
 let loading = ref(true);
@@ -48,6 +49,7 @@ const rpcChange = async (event: any, type: string) => {
   currentWalltAddress['netWorkType'] = type;
   indexDbData.putData(currentWalltAddress);
   loading.value = false;
+  chainChanged(event.CHAIN_ID)
   setTimeout(() => {
     bus.emit('nextPage', 'homePage');
   }, 300);

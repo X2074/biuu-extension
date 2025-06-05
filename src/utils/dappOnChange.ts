@@ -8,9 +8,9 @@ export async function chainChanged (chainId: string){
     port.postMessage({
         action: 'send_to_dapp',
         data: {
-            type: 'eip1193:chainChanged',  
+            type: 'chainChanged',  
             target: 'biuu-window-provider',  
-            chainId: chainId
+            chainId: `0x${Number(chainId).toString(16)}`
         }
     });
     // 添加消息监听器
