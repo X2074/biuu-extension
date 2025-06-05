@@ -66,6 +66,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
                     case 'eth_getTransactionByBlockNumberAndIndex':
                     case 'eth_getTransactionReceipt':
                     case 'eth_getBlockByNumber':
+                    case 'eth_getTransactionByHash':
                         return await requestContentScript(method, params);
                     case 'personal_sign':
                         return await handlePersonalSign(params?.[0], params?.[1]);
@@ -219,8 +220,8 @@ const handlePersonalSign = async (message: string, address: string): Promise<str
         const handleResponse = (event: MessageEvent) => {
             if (event.data.target === 'biuu-window-provider' && event.data.type === 'personal_sign') {
                 window.removeEventListener('message', handleResponse);
-                console.log(event,"eventeventeventevent");
-                
+                console.log(event, "eventeventeventevent");
+
                 if (event.data.error) {
                     reject(new Error(event.data.error));
                 } else {

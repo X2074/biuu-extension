@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
     // 获取密码，判断是否显示输入密码页面
     if (message.action === 'getSecret') {
         chrome.storage.local.get('secret', function (data: any) {
-            console.log(data,sender, 'datadatadata');
+            console.log(data, sender, 'datadatadata');
             sendResponse(data);
         });
         return true; // 保持消息通道打开，以便异步发送响应
@@ -44,7 +44,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
             web3Operate.transferUtxo(message)
         }
     }
-    
+
     // 处理权限请求
     if (message.action === 'authorization_response') {
         indexDbData.getData('authorization').then(async (data: any) => {
@@ -120,7 +120,7 @@ async function handleProviderRequest(request: any) {
             let wallt = await indexDbData.getData('currentWalltAddress');
             return [wallt?.address];
         // }else{
-            // return await requestAccountsWallt(request);
+        // return await requestAccountsWallt(request);
         // }
         case 'wallet_requestPermissions':
             return await requestMethodFn.requestPermissions(request);
@@ -141,15 +141,15 @@ async function handleProviderRequest(request: any) {
         case 'wallet_watchAsset':
             return await requestMethodFn.watchAsset(request);
         case "eth_getBalance":
-            return await requestMethodFn.eth_getBalance(request); 
+            return await requestMethodFn.eth_getBalance(request);
         case "eth_sendTransaction":
-            return await requestMethodFn.eth_sendTransaction(request);  
+            return await requestMethodFn.eth_sendTransaction(request);
         case "eth_gasPrice":
             return await requestMethodFn.eth_gasPrice(request);
         case "wallet_switchEthereumChain":
             return await requestMethodFn.switchEthereumChain(request);
         case "eth_getBlockByHash":
-            return await requestMethodFn.eth_getBlockByHash(request);  
+            return await requestMethodFn.eth_getBlockByHash(request);
         case "eth_coinbase":
             return await requestMethodFn.eth_coinbase(request);
         case "eth_newBlockFilter":
@@ -177,11 +177,13 @@ async function handleProviderRequest(request: any) {
         case "eth_getBlockTransactionCountByNumber":
             return await requestMethodFn.eth_getBlockTransactionCountByNumber(request);
         case "eth_getTransactionByBlockHashAndIndex":
-                 return await requestMethodFn.eth_getTransactionByBlockHashAndIndex(request);
+            return await requestMethodFn.eth_getTransactionByBlockHashAndIndex(request);
         case "eth_getBlockByNumber":
             return await requestMethodFn.eth_getBlockByNumber(request);
         case "eth_getTransactionByBlockNumberAndIndex":
             return await requestMethodFn.eth_getTransactionByBlockNumberAndIndex(request);
+        case "eth_getTransactionByHash":
+            return await requestMethodFn.eth_getTransactionByHash(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }
@@ -205,11 +207,11 @@ function sendMessageToAllTabs(message: any) {
 
 // 处理账户请求
 async function requestAccountsWallt(params: any) {
-    console.log(params,"params");
+    console.log(params, "params");
     // 获取当前活动标签页
-    const tab:any = await chrome.tabs.query({ active: true, currentWindow: true });
-    console.log(tab,"获取当前活动页");
-    
+    const tab: any = await chrome.tabs.query({ active: true, currentWindow: true });
+    console.log(tab, "获取当前活动页");
+
     if (!tab[0]) {
         throw new Error('No active tab found');
     }
@@ -218,16 +220,16 @@ async function requestAccountsWallt(params: any) {
 
     const currentWalltAddress = await indexDbData.getData('currentWalltAddress') || {};
     const rpc_url = await indexDbData.getData('rpc_url') || {};
-   // 检查是否已有授权
-   const authorizedSites = await indexDbData.getData('authorized_sites') || {};
-   if (authorizedSites && authorizedSites[currentUrl]) {
+    // 检查是否已有授权
+    const authorizedSites = await indexDbData.getData('authorized_sites') || {};
+    if (authorizedSites && authorizedSites[currentUrl]) {
         // 已授权，直接返回账户
         const accounts = await indexDbData.getData('currentWalltAddress');
         return accounts.address;
-    }else{
+    } else {
         // 缓存当前dapp的页面数据
         let dappPermission = {
-            id:'authorization',
+            id: 'authorization',
             key: 'string',
             origin: params.windowInfo[2],
             faviconUrl: params.windowInfo[1],
@@ -239,7 +241,7 @@ async function requestAccountsWallt(params: any) {
             userName: currentWalltAddress.userName,
             accountAddress: currentWalltAddress.address
         }
-        console.log(dappPermission,"dappPermission");
+        console.log(dappPermission, "dappPermission");
         indexDbData.putData(dappPermission)
     }
 }

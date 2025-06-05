@@ -202,3 +202,30 @@ export async function eth_getTransactionByBlockNumberAndIndex(request: any) {
         throw error;
     }
 }
+/**
+ * 根据交易哈希获取交易信息
+ * @param request 请求对象，params[0] 为交易哈希
+ */
+export async function eth_getTransactionByHash(request: any) {
+    debugger
+    try {
+        // 获取以太坊提供者实例
+        const provider = await getEthersProvider();
+
+        // 解析请求参数
+        const transactionHash = request.params[0];
+
+        if (!transactionHash) {
+            throw new Error('缺少交易哈希参数');
+        }
+
+        // 根据交易哈希获取交易信息
+        const transaction = await provider.getTransaction(transactionHash);
+
+        console.log('获取到的交易信息:', transaction);
+        return transaction;
+    } catch (error) {
+        console.error('获取交易信息时出错:', error);
+        throw error;
+    }
+}

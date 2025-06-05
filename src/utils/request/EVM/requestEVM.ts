@@ -20,7 +20,7 @@ import watchAsset from './watchAsset';
 import wallet_getCallsStatus from './wallet_getCallsStatus';
 import {
     eth_getBlockByHash, eth_coinbase, eth_getFilterChanges, eth_uninstallFilter, eth_getCode, eth_getStorageAt, eth_getTransactionCount, wallet_revokePermissions, eth_getBlockTransactionCountByNumber, eth_getTransactionByBlockHashAndIndex, eth_getBlockTransactionCountByHash,
-    eth_getBlockByNumber,eth_getTransactionByBlockNumberAndIndex
+    eth_getBlockByNumber, eth_getTransactionByBlockNumberAndIndex, eth_getTransactionByHash
 } from './getEtnRequest';
 //   获取权限数据
 function requestGetPermissions() {
@@ -40,10 +40,10 @@ async function getChainId() {
                 reject(new Error('RPC URL not found'));
             }
         });
-    } catch {}
+    } catch { }
 }
 // 获取授权签名的用户地址
-async function requestAccounts() {}
+async function requestAccounts() { }
 
 // 获取钱包版本
 async function getWalltVersion() {
@@ -53,9 +53,9 @@ async function getWalltVersion() {
 }
 
 // 撤销当前dapp的授权
-async function revokePermissions() {}
+async function revokePermissions() { }
 
- 
+
 
 export default {
     requestPermissions,
@@ -89,5 +89,6 @@ export default {
     eth_getTransactionByBlockHashAndIndex,
     eth_getTransactionReceipt,
     eth_getBlockByNumber,
-    eth_getTransactionByBlockNumberAndIndex
+    eth_getTransactionByBlockNumberAndIndex,
+    eth_getTransactionByHash
 };
