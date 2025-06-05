@@ -184,6 +184,11 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.eth_getTransactionByBlockNumberAndIndex(request);
         case "eth_getTransactionByHash":
             return await requestMethodFn.eth_getTransactionByHash(request);
+
+        case "eth_getUncleCountByBlockHash":
+            return await requestMethodFn.eth_getUncleCountByBlockHash(request);
+        case "eth_getUncleCountByBlockNumber":
+            return await requestMethodFn.eth_getUncleCountByBlockNumber(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }

@@ -229,3 +229,24 @@ export async function eth_getTransactionByHash(request: any) {
         throw error;
     }
 }
+
+export async function eth_getUncleCountByBlockHash(request: any) {
+    try {
+        const provider = await getEthersProvider();
+        const blockHash = request.params[0];
+
+        if (!blockHash) {
+            throw new Error('缺少区块哈希参数');
+        }
+
+        const uncleCount = await provider.send('eth_getUncleCountByBlockHash', [blockHash]);
+        console.log(`区块 ${blockHash} 的叔块数量: ${uncleCount}`);
+        return uncleCount;
+    } catch (error) {
+        console.error('获取叔块数量时出错:', error);
+        throw error;
+    }
+}
+export async function eth_getUncleCountByBlockNumber(request: any) {
+    debugger
+}

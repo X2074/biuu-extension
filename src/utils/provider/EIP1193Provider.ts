@@ -67,6 +67,8 @@ export const createEIP1193Provider = (): EthereumProvider => {
                     case 'eth_getTransactionReceipt':
                     case 'eth_getBlockByNumber':
                     case 'eth_getTransactionByHash':
+                    case 'eth_getUncleCountByBlockHash':
+                    case 'eth_getUncleCountByBlockNumber':
                         return await requestContentScript(method, params);
                     case 'personal_sign':
                         return await handlePersonalSign(params?.[0], params?.[1]);

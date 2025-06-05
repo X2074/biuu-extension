@@ -20,7 +20,8 @@ import watchAsset from './watchAsset';
 import wallet_getCallsStatus from './wallet_getCallsStatus';
 import {
     eth_getBlockByHash, eth_coinbase, eth_getFilterChanges, eth_uninstallFilter, eth_getCode, eth_getStorageAt, eth_getTransactionCount, wallet_revokePermissions, eth_getBlockTransactionCountByNumber, eth_getTransactionByBlockHashAndIndex, eth_getBlockTransactionCountByHash,
-    eth_getBlockByNumber, eth_getTransactionByBlockNumberAndIndex, eth_getTransactionByHash
+    eth_getBlockByNumber, eth_getTransactionByBlockNumberAndIndex, eth_getTransactionByHash,
+    eth_getUncleCountByBlockHash, eth_getUncleCountByBlockNumber
 } from './getEtnRequest';
 //   获取权限数据
 function requestGetPermissions() {
@@ -90,5 +91,7 @@ export default {
     eth_getTransactionReceipt,
     eth_getBlockByNumber,
     eth_getTransactionByBlockNumberAndIndex,
-    eth_getTransactionByHash
+    eth_getTransactionByHash,
+    eth_getUncleCountByBlockHash,
+    eth_getUncleCountByBlockNumber
 };
