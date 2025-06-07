@@ -13,6 +13,7 @@ import showPrivateKey from '../showPrivateKey/index.vue';
 import deleteWallt from '../deleteWallt/index.vue';
 import { getBalance, Encrypt } from '@/utils/index';
 import { addBalance } from '@/utils/UTXO/meerRpc.js';
+import { accountsChanged } from '@/utils/dappOnChange';
 import md5 from 'js-md5';
 import { rpcConfig, defaultAccount, defaultUTXOAccount } from '@/config/configuration';
 import { useRouter, useRoute } from 'vue-router';
@@ -204,6 +205,7 @@ const appendRecCurrent = (content: any) => {
                 contentRecCurrent['id'] = 'currentWalltAddress';
                 indexDbData.putData(contentRecCurrent);
             });
+            accountsChanged(content.address)
         }
     });
 };
@@ -233,6 +235,7 @@ const checkAccount = () => {
     currentWallt['id'] = 'currentWalltAddress';
     indexDbData.putData(currentWallt);
 
+    accountsChanged(currentWallt.address)
     setTimeout(() => {
         // bus.emit('nextPage', 'homePage');
         router.push('/homePage');

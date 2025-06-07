@@ -143,7 +143,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
 
                 // 创建消息监听器
                 const messageListener = (event: MessageEvent) => {
-                    if (event.data.type === `eip1193:${eventName}`) {
+                    if (event.data.type === `${eventName}`) {
                         listener(event.data.detail);
                     }
                 };
@@ -160,7 +160,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
             provider.accounts = [];
             provider.chainId = '';
             window.dispatchEvent(
-                new CustomEvent('eip1193:disconnect', {
+                new CustomEvent('disconnect', {
                     detail: { code: 1000, message: 'User disconnected' }
                 })
             );
@@ -169,7 +169,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
             console.log('Accounts changed:', accounts);
             provider.accounts = accounts;
             window.dispatchEvent(
-                new CustomEvent('eip1193:accountsChanged', {
+                new CustomEvent('accountsChanged', {
                     detail: accounts
                 })
             );
@@ -178,7 +178,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
             console.log('Chain changed:', chainId);
             provider.chainId = chainId;
             window.dispatchEvent(
-                new CustomEvent('eip1193:chainChanged', {
+                new CustomEvent('chainChanged', {
                     detail: chainId
                 })
             );
@@ -221,19 +221,19 @@ const requestContentScript = (method: any, params: any) => {
 // 事件处理函数
 export const setupEIP1193Events = (provider: EthereumProvider) => {
     // 处理账户变化事件
-    window.addEventListener('eip1193:accountsChanged', (event) => {
+    window.addEventListener('accountsChanged', (event) => {
         const accounts = (event as CustomEvent<string[]>).detail;
         provider.accounts = accounts;
     });
 
     // 处理链变化事件
-    window.addEventListener('eip1193:chainChanged', (event) => {
+    window.addEventListener('chainChanged', (event) => {
         const chainId = (event as CustomEvent<string>).detail;
         provider.chainId = chainId;
     });
 
     // 处理断开连接事件
-    window.addEventListener('eip1193:disconnect', (event) => {
+    window.addEventListener('disconnect', (event) => {
         console.log(event, 'disconnect');
 
         provider.disconnect();
@@ -242,13 +242,13 @@ export const setupEIP1193Events = (provider: EthereumProvider) => {
     // 返回清理函数
     return () => {
         // 清理事件监听器
-        window.removeEventListener('eip1193:accountsChanged', (event) => {
+        window.removeEventListener('accountsChanged', (event) => {
             console.log(event, 'accountsChanged');
         });
-        window.removeEventListener('eip1193:chainChanged', (event) => {
+        window.removeEventListener('chainChanged', (event) => {
             console.log(event, 'chainChanged');
         });
-        window.removeEventListener('eip1193:disconnect', (event) => {
+        window.removeEventListener('disconnect', (event) => {
             console.log(event, 'disconnect');
         });
     };

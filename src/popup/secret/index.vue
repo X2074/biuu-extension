@@ -164,16 +164,6 @@ async function toDapp() {
           }
         });
         
-        // 添加消息监听器
-        port.onMessage.addListener((response) => {
-          console.log('Response from content script:', response);
-        });
-        
-        // 添加断开连接的监听器
-        port.onDisconnect.addListener(() => {
-          console.log('Port disconnected');
-        });
-        
       } catch (error) {
         console.error('Failed to send message:', error);
       }
@@ -197,16 +187,6 @@ const testClick = async () => {
         target: 'biuu-window-provider',  
         tab: tab
       }
-    });
-
-    // 添加消息监听器
-    port.onMessage.addListener((response) => {
-      console.log('Chain change response:', response);
-    });
-
-    // 添加断开连接的监听器
-    port.onDisconnect.addListener(() => {
-      console.log('Port disconnected');
     });
 
   } catch (error) {
