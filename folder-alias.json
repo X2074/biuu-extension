@@ -310,5 +310,8 @@
     },
     "src/utils/request/EVM": {
         "description": "getEthersProvider"
+    },
+    "src/utils/backgroundBridge.ts": {
+        "description": "与background通信"
     }
 }

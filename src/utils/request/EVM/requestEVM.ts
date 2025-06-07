@@ -15,6 +15,7 @@ import eth_getTransactionReceipt from './getTransactionReceipt';
 import handleSignMessage from './handleSignMessage';
 import switchEthereumChain from './switchEthereumChain';
 import blockNumber from './blockNumber';
+import eth_sendRawTransaction from './eth_sendRawTransaction';
 
 import watchAsset from './watchAsset';
 import wallet_getCallsStatus from './wallet_getCallsStatus';
@@ -57,7 +58,6 @@ async function getWalltVersion() {
 async function revokePermissions() { }
 
 
-
 export default {
     requestPermissions,
     handleSignMessage,
@@ -93,5 +93,6 @@ export default {
     eth_getTransactionByBlockNumberAndIndex,
     eth_getTransactionByHash,
     eth_getUncleCountByBlockHash,
-    eth_getUncleCountByBlockNumber
+    eth_getUncleCountByBlockNumber,
+    eth_sendRawTransaction
 };

@@ -54,7 +54,7 @@ const windowOriginAtLoadTime = window.location.origin;
 window.addEventListener(
     'message',
     function (e: any) {
-        console.log('Message from DApp:', e.data);
+        console.log('Message from DApp:', e.data.data);
 
         // 将通信信息暴露给background页面，将消息过滤，获取属于自己的消息数据
         if (e.data == 'page') {

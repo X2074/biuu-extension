@@ -36,7 +36,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
     const provider: EthereumProvider = {
         // accounts: [],
         // chainId: '0x1',
-        
+
         // _isInitialized: false,
         providerInfo,
         // 使用getter和setter
@@ -47,30 +47,24 @@ export const createEIP1193Provider = (): EthereumProvider => {
         get accounts() {
             return _internalAccounts || '0x1';
         },
-        
+
         set chainId(value: string) {
             if (_internalChainId !== value) {
-                _internalChainId = value;  // 更新内部变量
-                // 可以在这里触发 chainChanged 事件
-                // window.dispatchEvent(
-                //     new CustomEvent('chainChanged', { detail: value })
-                // );
+                _internalChainId = value; // 更新内部变量=
             }
         },
-        
+
         set accounts(value: string) {
             if (_internalAccounts !== value) {
-                _internalAccounts = value;  // 更新内部变量
+                _internalAccounts = value; // 更新内部变量
             }
         },
         // 初始化方法
         async _initialize() {
             if (_isInitialized) return;
-            
+
             try {
                 const data = await getChainIdFromBackground();
-                console.log(data,"chainId");
-                
                 this.chainId = data.chainId;
                 this.accounts = data.accounts;
                 _isInitialized = true;
@@ -81,19 +75,23 @@ export const createEIP1193Provider = (): EthereumProvider => {
         },
         request: async (args: { method: string; params?: any[] }) => {
             const { method, params } = args;
+            console.log(method, '触发的request方法');
+
             try {
                 switch (method) {
+                    case 'wallet_getPermissions':
+                    case 'wallet_requestPermissions':
+                    case 'wallet_switchEthereumChain':
+                    case 'wallet_addEthereumChain':
+                    case 'wallet_watchAsset':
+                    case 'wallet_revokePermissions':
+                    case 'wallet_getCallsStatus':
                     case 'eth_requestAccounts':
                     case 'eth_chainId':
                     case 'eth_call':
                     case 'eth_blockNumber':
                     case 'eth_sendTransaction':
-                    case 'wallet_getPermissions':
-                    case 'wallet_requestPermissions':
                     case 'eth_getBalance':
-                    case 'wallet_switchEthereumChain':
-                    case 'wallet_addEthereumChain':
-                    case 'wallet_watchAsset':
                     case 'eth_gasPrice':
                     case 'eth_getBlockByHash':
                     case 'eth_coinbase':
@@ -104,8 +102,6 @@ export const createEIP1193Provider = (): EthereumProvider => {
                     case 'eth_getCode':
                     case 'eth_getStorageAt':
                     case 'eth_getTransactionCount':
-                    case 'wallet_revokePermissions':
-                    case 'wallet_getCallsStatus':
                     case 'eth_subscribe':
                     case 'eth_getBlockTransactionCountByHash':
                     case 'eth_getBlockTransactionCountByNumber':
@@ -116,6 +112,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
                     case 'eth_getTransactionByHash':
                     case 'eth_getUncleCountByBlockHash':
                     case 'eth_getUncleCountByBlockNumber':
+                    case 'eth_sendRawTransaction':
                         return await requestContentScript(method, params);
                     case 'personal_sign':
                         return await handlePersonalSign(params?.[0], params?.[1]);
@@ -185,7 +182,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
         }
     };
     // 初始化
-   provider._initialize().catch(console.error);
+    provider._initialize().catch(console.error);
     return provider;
 };
 const requestContentScript = (method: any, params: any) => {
@@ -204,10 +201,9 @@ const requestContentScript = (method: any, params: any) => {
 
         // 监听响应
         const listener = (event: MessageEvent) => {
-            console.log(event, 'event465465');
             if (event.data.target === 'biuu-window-provider') {
                 window.removeEventListener('message', listener);
-                if (event.data.type === method && event.data.accounts) {
+                if (event.data.type === method && (event.data.accounts || event.data.accounts === null)) {
                     resolve(event.data.accounts);
                 } else {
                     reject(event.data.error || new Error('Request failed'));
@@ -234,8 +230,6 @@ export const setupEIP1193Events = (provider: EthereumProvider) => {
 
     // 处理断开连接事件
     window.addEventListener('disconnect', (event) => {
-        console.log(event, 'disconnect');
-
         provider.disconnect();
     });
 
@@ -271,7 +265,7 @@ const handlePersonalSign = async (message: string, address: string): Promise<str
         const handleResponse = (event: MessageEvent) => {
             if (event.data.target === 'biuu-window-provider' && event.data.type === 'personal_sign') {
                 window.removeEventListener('message', handleResponse);
-                console.log(event, "eventeventeventevent");
+                console.log(event, 'eventeventeventevent');
 
                 if (event.data.error) {
                     reject(new Error(event.data.error));

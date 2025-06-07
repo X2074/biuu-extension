@@ -43,8 +43,6 @@ export function announceProviderInject() {
 console.log(providerDetail,'providerDetail');
 
     function announceProvider() {
-        console.log('我声明了多少此');
-        
         window.dispatchEvent(
             new CustomEvent("eip6963:announceProvider", {
                 detail: Object.freeze(providerDetail),
@@ -56,7 +54,6 @@ console.log(providerDetail,'providerDetail');
 
     // 使用 async/await 处理异步请求
     const handleProviderRequest = async (event: Event) => {
-        console.log('EIP6963 request received:', event);
         
         try {
             // 使用 EIP1193 provider 连接
