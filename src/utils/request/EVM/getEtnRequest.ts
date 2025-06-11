@@ -289,3 +289,24 @@ export async function eth_getUncleCountByBlockNumber(request: any) {
         throw error;
     }
 }
+
+
+export async function eth_estimateGas(request: any) {
+    debugger
+    try {
+        const provider = await getEthersProvider();
+        const transaction = request.params[0];
+
+        if (!transaction) {
+            throw new Error('缺少交易对象参数');
+        }
+
+        const estimatedGas = await provider.estimateGas(transaction);
+        const estimatedGasHex = ethers.utils.hexValue(estimatedGas);
+        console.log('估算的 Gas 数量（十六进制）:', estimatedGasHex);
+        return estimatedGasHex;
+    } catch (error) {
+        console.error('估算 Gas 数量时出错:', error);
+        throw error;
+    }
+}

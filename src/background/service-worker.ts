@@ -192,13 +192,14 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.eth_sendRawTransaction(request);
         case 'account_chainId':
             return await account_chainId(request);
-            
+        case 'eth_estimateGas':
+            return await requestMethodFn.eth_estimateGas(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }
 }
 // 更新accounts和chainId
-async function account_chainId (message: any){
+async function account_chainId(message: any) {
     try {
         let rpcData: any = await indexDbData.getData('rpc_url');
         return new Promise((resolve, reject) => {
@@ -206,12 +207,12 @@ async function account_chainId (message: any){
                 // 将 CHAIN_ID 转换为十六进制
                 const hexChainId = `0x${Number(rpcData.CHAIN_ID).toString(16)}`;
                 const accounts = [rpcData.walltInfo[0].address]
-                resolve({accounts:accounts, chainId: hexChainId});
+                resolve({ accounts: accounts, chainId: hexChainId });
             } else {
                 reject(new Error('RPC URL not found'));
             }
         });
-    } catch {}
+    } catch { }
 }
 // 发送消息到所有标签页的函数
 function sendMessageToAllTabs(message: any) {

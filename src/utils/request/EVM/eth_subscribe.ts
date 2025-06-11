@@ -1,39 +1,30 @@
 
 import getEthersProvider from './getEthers';
+/* import indexDbData from '../../indexDB.js';*/
+import { ethers } from 'ethers';
 // 订阅事件
 export default async function eth_subscribe(request: any) {
     console.log(request, 'eth_subscribe');
     /*    try {
-        const [subscriptionType, ...params] = request.params || [];
-        debugger
-        let RPC_URL = await indexDbData.getData('rpc_url');
-        const provider = new ethers.providers.JsonRpcProvider(RPC_URL.url);
-
-    const provider = await getEthersProvider()
-        // 处理不同类型的订阅
-        switch (subscriptionType) {
-            case 'newHeads':
-                const newHeadsSubscriptionId = await provider.send('eth_subscribe', ['newHeads']);
-                console.log('New heads subscription ID:', newHeadsSubscriptionId);
-                return newHeadsSubscriptionId;
-            case 'logs':
-                const logsFilter = params[0];
-                const logsSubscriptionId = await provider.send('eth_subscribe', ['logs', logsFilter]);
-                console.log('Logs subscription ID:', logsSubscriptionId);
-                return logsSubscriptionId;
-            case 'newPendingTransactions':
-                const newPendingTransactionsSubscriptionId = await provider.send('eth_subscribe', ['newPendingTransactions']);
-                console.log('New pending transactions subscription ID:', newPendingTransactionsSubscriptionId);
-                return newPendingTransactionsSubscriptionId;
-            case 'syncing':
-                const syncingSubscriptionId = await provider.send('eth_subscribe', ['syncing']);
-                console.log('Syncing subscription ID:', syncingSubscriptionId);
-                return syncingSubscriptionId;
-            default:
-                throw new Error(`Unsupported subscription type: ${subscriptionType}`);
-        }
-    } catch (error) {
-        console.error('Error in eth_subscribe:', error);
-        throw error;
-    } */
+           // 使用 WebSocket 提供者
+           const provider = new ethers.providers.WebSocketProvider(
+               '', // 替换为你的 WebSocket 提供者 URL
+           );
+   
+           // 监听新区块
+           provider.on('block', (blockNumber) => {
+               console.log('新区块号:', blockNumber);
+           });
+   
+           // 监听特定合约事件
+           let contractAddress = ''; // 替换为你的合约地址
+           let abi = ''
+           const contract = new ethers.Contract(contractAddress, abi, provider);
+           contract.on('EventName', (arg1, arg2, event) => {
+               console.log('事件触发:', arg1, arg2, event);
+           });
+       } catch (error) {
+           console.error('Error in eth_subscribe:', error);
+           throw error;
+       } */
 }

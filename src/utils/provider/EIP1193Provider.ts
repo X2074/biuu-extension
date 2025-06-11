@@ -64,7 +64,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
             if (_isInitialized) return;
 
             try {
-                const data = await getChainIdFromBackground();
+                const data: any = await getChainIdFromBackground();
                 this.chainId = data.chainId;
                 this.accounts = data.accounts;
                 _isInitialized = true;
@@ -113,6 +113,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
                     case 'eth_getUncleCountByBlockHash':
                     case 'eth_getUncleCountByBlockNumber':
                     case 'eth_sendRawTransaction':
+                    case 'eth_estimateGas':
                         return await requestContentScript(method, params);
                     case 'personal_sign':
                         return await handlePersonalSign(params?.[0], params?.[1]);
