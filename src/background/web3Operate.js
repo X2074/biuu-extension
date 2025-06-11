@@ -120,6 +120,7 @@ export async function utxoTransfer(data) {
     let allPrice = parseFloat(new BigNumber(valueTo).plus(remaining));
     console.log(allPrice, remaining, 'remaining');
     let selectUtxos;
+    // 选择对应的策略
     if (data.tactics == 'min') {
         selectUtxos = await selectMinUTXOs(utxos, allPrice);
     }
