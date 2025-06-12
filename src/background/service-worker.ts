@@ -196,6 +196,10 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.eth_estimateGas(request);
         case 'eth_feeHistory':
             return await requestMethodFn.eth_feeHistory(request);
+        case 'eth_getLogs':
+            return await requestMethodFn.eth_getLogs(request);
+            case 'eth_newPendingTransactionFilter':
+                return await requestMethodFn.eth_newPendingTransactionFilter(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }

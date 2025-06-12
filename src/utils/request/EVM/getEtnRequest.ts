@@ -333,3 +333,33 @@ export async function eth_feeHistory(request: any) {
         throw error;
     }
 }
+export async function eth_getLogs(request: any) {
+    debugger
+    try {
+        const provider = await getEthersProvider();
+        const filter = request.params[0];
+
+        if (!filter) {
+            throw new Error('缺少日志过滤器参数');
+        }
+
+        const logs = await provider.getLogs(filter);
+        console.log('获取到的日志信息:', logs);
+        return logs;
+    } catch (error) {
+        console.error('获取日志信息时出错:', error);
+        throw error;
+    }
+}
+export async function eth_newPendingTransactionFilter(request: any) {
+
+    try {
+        const provider = await getEthersProvider();
+        const filterId = await provider.send('eth_newPendingTransactionFilter', []);
+        console.log('新待处理交易过滤器 ID:', filterId);
+        return filterId;
+    } catch (error) {
+        console.error('创建新待处理交易过滤器时出错:', error);
+        throw error;
+    }
+}

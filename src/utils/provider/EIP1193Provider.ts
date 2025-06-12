@@ -115,6 +115,8 @@ export const createEIP1193Provider = (): EthereumProvider => {
                     case 'eth_sendRawTransaction':
                     case 'eth_estimateGas':
                     case 'eth_feeHistory':
+                    case 'eth_getLogs':
+                        case 'eth_newPendingTransactionFilter':
                         return await requestContentScript(method, params);
                     case 'personal_sign':
                         return await handlePersonalSign(params?.[0], params?.[1]);
