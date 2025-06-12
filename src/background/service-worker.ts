@@ -194,6 +194,8 @@ async function handleProviderRequest(request: any) {
             return await account_chainId(request);
         case 'eth_estimateGas':
             return await requestMethodFn.eth_estimateGas(request);
+        case 'eth_feeHistory':
+            return await requestMethodFn.eth_feeHistory(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }

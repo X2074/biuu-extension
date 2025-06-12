@@ -310,3 +310,26 @@ export async function eth_estimateGas(request: any) {
         throw error;
     }
 }
+export async function eth_feeHistory(request: any) {
+    debugger
+    try {
+        const provider = await getEthersProvider();
+        const [blockCount, newestBlock, rewardPercentiles] = request.params;
+
+        if (!blockCount || !newestBlock) {
+            throw new Error('缺少 blockCount 或 newestBlock 参数');
+        }
+
+        const feeHistory = await provider.send('eth_feeHistory', [
+            ethers.utils.hexValue(blockCount),
+            newestBlock,
+            rewardPercentiles
+        ]);
+
+        console.log('获取到的费用历史信息:', feeHistory);
+        return feeHistory;
+    } catch (error) {
+        console.error('获取费用历史信息时出错:', error);
+        throw error;
+    }
+}
