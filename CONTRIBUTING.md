@@ -25,7 +25,12 @@
 - [vue3-jazzicon](https://github.com/samuveth/vue3-jazzicon#readme) 用于生成基于 Jazzicon 的用户头像
 - [web3](https://github.com/ChainSafe/web3.js#readme) 一个广泛使用的 JavaScript 库，用于与以太坊区块链进行交互
 
+我们遵循以下EIP标准：
+- [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193)
+- [EIP-6963](https://eips.ethereum.org/EIPS/eip-6963)
+- [EIP-2255](https://eips.ethereum.org/EIPS/eip-2255)
+## Contributing
 
-
+If you'd like to contribute to this project, please follow these steps:
 
 And of course our premier language is [Typescript](https://www.typescriptlang.org/).
