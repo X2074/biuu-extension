@@ -26,8 +26,11 @@ import {
     eth_getLogs,eth_newPendingTransactionFilter
 } from './getEtnRequest';
 //   获取权限数据
-function requestGetPermissions() {
-    return indexDbData.getData('authorized_sites');
+async function requestGetPermissions() {
+    let permissions = await indexDbData.getData('authorized_sites');
+    console.log(permissions,"permissions");
+    
+    return permissions;
 }
 
 // 获取chainID

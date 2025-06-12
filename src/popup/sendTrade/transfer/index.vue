@@ -86,8 +86,7 @@ const nextTransfer = async () => {
                 action: 'transferUTXO',
                 keyStore: currentWallt.value['keyStore'],
                 accountAddress: currentWallt.value['utxoAddressTest'],
-                gasUsed: transferContent.value['gasPrice'],
-                type: 'sendtransfer'
+                gasUsed: transferContent.value['gasPrice']
             },
             toRaw(transferContent.value)
         );
