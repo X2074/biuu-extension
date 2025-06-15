@@ -113,6 +113,11 @@ export default async function watchAsset(request: any): Promise<boolean> {
                 throw new Error(`Suggested NFT of type ERC721 does not match received type ${params.type}`);
             }
         }
+
+        indexDbData.putData({
+            id:'wallet_watchAsset',
+            data:params
+        })
         
         // 验证代币是否已添加
         await indexDbData.getData('rpc_url').then(async (res:any) => {
@@ -154,6 +159,7 @@ export default async function watchAsset(request: any): Promise<boolean> {
                         };
                         // 保存到 IndexedDB
                         changeAssetIndexDB(newToken,address)
+                        indexDbData.deleteData('wallet_watchAsset')
                         // 返回成功
                         resolve(true);
                     } else {

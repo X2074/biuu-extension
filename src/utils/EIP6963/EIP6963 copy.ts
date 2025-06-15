@@ -53,9 +53,14 @@ let providerStatus: ProviderStatus = ProviderStatus.UNINITIALIZED;
 let retryCount = 0;
 const MAX_RETRIES = 3;
 
+// 定义 provider detail
+export const providerDetail: ProviderDetail = { 
+    info: EIP6963ProviderInfo,
+    provider: eip1193Provider
+};
 // 宣布提供商函数
 export function announceProviderInject() {
-    console.log(providerDetail,'providerDetail');
+    console.log(providerStatus,"cesdasdasdasds");
     // 验证 provider detail
     if (!providerDetail?.info || !providerDetail?.provider) {
         console.error('Invalid provider detail');
@@ -67,12 +72,7 @@ export function announceProviderInject() {
         console.log('Biuu provider already injected');
         return;
     }
-    // 错误处理
-    const handleError = (error: ErrorEvent) => {
-        console.error('Provider error:', error);
-        providerStatus = ProviderStatus.ERROR;
-        retryProvider();
-    };
+
     // 添加清理函数
     const cleanup = () => {
         window.removeEventListener('eip6963:requestProvider', handleProviderRequest);
@@ -85,15 +85,13 @@ export function announceProviderInject() {
         cleanup();
         providerStatus = ProviderStatus.UNINITIALIZED;
     };
-    function announceProvider() {
-        window.dispatchEvent(
-            new CustomEvent("eip6963:announceProvider", {
-                detail: Object.freeze(providerDetail),
-                bubbles: true,
-                cancelable: true
-            })
-        );
-    }
+
+    // 错误处理
+    const handleError = (error: ErrorEvent) => {
+        console.error('Provider error:', error);
+        providerStatus = ProviderStatus.ERROR;
+        retryProvider();
+    };
 
     // 重试机制
     const retryProvider = () => {
@@ -110,13 +108,52 @@ export function announceProviderInject() {
         }, 1000 * retryCount);
     };
 
-    // 使用 async/await 处理异步请求
+    // 处理 provider 请求
     const handleProviderRequest = async (event: Event) => {
+
+        // 宣布 provider
+        const announceProvider = () => {
+            if (providerStatus !== ProviderStatus.READY) {
+                return;
+            }
+    
+            window.dispatchEvent(
+                new CustomEvent("eip6963:announceProvider", {
+                    detail: Object.freeze(providerDetail),
+                    bubbles: true,
+                    cancelable: true
+                })
+            );
+        };
         try {
             if (providerStatus !== ProviderStatus.UNINITIALIZED) {
                 console.log('Provider is busy');
                 return;
             }
+
+            providerStatus = ProviderStatus.INITIALIZING;
+            retryCount = 0;
+
+            // 添加超时处理
+            const timeoutPromise = new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Provider initialization timeout')), 5000)
+            );
+
+            // 超时或成功
+            const result = await Promise.race([
+                providerDetail.provider.request({ 
+                    method: 'eth_requestAccounts',
+                    params: []
+                }),
+                timeoutPromise
+            ]);
+
+            if (result instanceof Error) {
+                throw result;
+            }
+
+            const accounts = result;
+            console.log('Connected with accounts:', accounts);
 
             // 设置状态为 READY
             providerStatus = ProviderStatus.READY;
@@ -131,16 +168,14 @@ export function announceProviderInject() {
 
             // 宣布 provider
             announceProvider();
-        } catch (error:any) {
+
+        } catch (error) {
             console.error('Connection failed:', error);
-            // // 发送断开连接事件
-            // window.dispatchEvent(new CustomEvent("eip1193:disconnect", {
-            //     detail: { code: 1000, message: error.message }
-            // }));
             providerStatus = ProviderStatus.ERROR;
             retryProvider();
         }
     };
+
     // 设置 provider 监听器
     const setupProviderListeners = () => {
         if (!providerDetail.provider) return;
@@ -168,8 +203,8 @@ export function announceProviderInject() {
             retryProvider();
         });
     };
+
     // 添加事件监听器
-    window.addEventListener("eip6963:requestProvider", handleProviderRequest);
     window.addEventListener('eip6963:requestProvider', handleProviderRequest);
     window.addEventListener('beforeunload', handleBeforeUnload);
     window.addEventListener('error', handleError);

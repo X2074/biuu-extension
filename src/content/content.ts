@@ -54,8 +54,6 @@ const windowOriginAtLoadTime = window.location.origin;
 window.addEventListener(
     'message',
     function (e: any) {
-        console.log('Message from DApp:', e.data.data);
-
         // 将通信信息暴露给background页面，将消息过滤，获取属于自己的消息数据
         if (e.data == 'page') {
             chrome.runtime.sendMessage(
@@ -129,9 +127,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
     }
 });
 // 初始化
+    console.log('dom未完全加载');
 // connectProviderBridge();
-
-// 页面加载时注入我们的内容脚本
-const script = document.createElement('script');
-script.src = chrome.runtime.getURL('injected/indexInjected.js');
-(document.head || document.documentElement).appendChild(script);
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('dom完全加载');
+    // 页面加载时注入我们的内容脚本
+    const script = document.createElement('script');
+    script.src = chrome.runtime.getURL('injected/indexInjected.js');
+    (document.head || document.documentElement).appendChild(script);
+    
+})

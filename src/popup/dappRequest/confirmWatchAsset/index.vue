@@ -14,14 +14,15 @@ const origin = ref('');
 let passKey = ref('');
 let privateKey: any = ref(null);
 let authorization: any = ref({});
-let watchAsset:object = ref({
+let watchAsset:any = ref({
     image:'',
     symbol:'',
     balance:''
 })
 onMounted(async () => {
-   console.log(store,"store");
-   
+   let data:any = await indexDbData.getData('wallet_watchAsset') || {};
+   console.log(data,"data");
+   watchAsset.value = data.data;
 });
 const reject = () => {
     let data: any = { action: 'watch_asset_response', error: 'User rejected the request' };
