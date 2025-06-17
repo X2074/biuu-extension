@@ -18,6 +18,7 @@ export interface EthereumProvider {
         identityFlag: string;
         checkIdentity: (provider: WalletProvider) => boolean;
     };
+    _initialize: () => Promise<void>;
 }
 // Provider 信息配置，用于判断钱包的身份标识
 export const providerInfo = {
@@ -29,7 +30,7 @@ export const providerInfo = {
 
 // 创建 EIP-1193 兼容的 provider
 let _internalChainId: string | null = null;
-let _internalAccounts: array<string> | null = null;
+let _internalAccounts: Array<string> | null = null;
 export const createEIP1193Provider = (): EthereumProvider => {
     // 使用闭包保存内部状态
     let _isInitialized = false;
@@ -45,7 +46,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
         },
         // 使用getter和setter
         get accounts() {
-            return _internalAccounts || '0x1';
+            return _internalAccounts || ['0x1'];
         },
 
         set chainId(value: string) {
@@ -54,7 +55,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
             }
         },
 
-        set accounts(value: string) {
+        set accounts(value: string[]) {
             if (_internalAccounts !== value) {
                 _internalAccounts = value; // 更新内部变量
             }
@@ -233,7 +234,7 @@ export const setupEIP1193Events = (provider: EthereumProvider) => {
     });
 
     // 处理断开连接事件
-    window.addEventListener('disconnect', (event) => {
+    window.addEventListener('disconnect', () => {
         provider.disconnect();
     });
 

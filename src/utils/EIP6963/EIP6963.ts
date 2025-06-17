@@ -33,7 +33,7 @@ export const EIP6963ProviderInfo: EIP6963ProviderInfo = {
 };
 
 // 定义 provider detail
-export const providerDetail: ProviderDetail = { 
+export const providerDetail: ProviderDetail = {
     info: EIP6963ProviderInfo,
     provider: eip1193Provider
 };
@@ -55,7 +55,7 @@ const MAX_RETRIES = 3;
 
 // 宣布提供商函数
 export function announceProviderInject() {
-    console.log(providerDetail,'providerDetail');
+    console.log(providerDetail, 'providerDetail');
     // 验证 provider detail
     if (!providerDetail?.info || !providerDetail?.provider) {
         console.error('Invalid provider detail');
@@ -112,6 +112,7 @@ export function announceProviderInject() {
 
     // 使用 async/await 处理异步请求
     const handleProviderRequest = async (event: Event) => {
+        console.log(event, 'handleProviderRequest')
         try {
             if (providerStatus !== ProviderStatus.UNINITIALIZED) {
                 console.log('Provider is busy');
@@ -131,7 +132,7 @@ export function announceProviderInject() {
 
             // 宣布 provider
             announceProvider();
-        } catch (error:any) {
+        } catch (error: any) {
             console.error('Connection failed:', error);
             // // 发送断开连接事件
             // window.dispatchEvent(new CustomEvent("eip1193:disconnect", {

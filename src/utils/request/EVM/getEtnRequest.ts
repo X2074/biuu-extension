@@ -67,7 +67,7 @@ export async function eth_getBlockByNumber(request: any) {
 
 }
 export async function eth_coinbase(request: any) {
-    debugger;
+    console.log(request, 'requesteth_coinbase');
     const provider = await getEthersProvider();
     const coinbase = await provider.send('eth_coinbase', []);
     console.log('Coinbase 地址:', coinbase); // 例如 "0x123..."
@@ -79,6 +79,7 @@ export async function eth_getFilterChanges(request: any) {
 }
 
 export async function eth_uninstallFilter(request: any) {
+    console.log(request, 'requesteth_coinbase');
     // 连接 Ethereum 节点
     let RPC_URL = await indexDbData.getData('rpc_url');
     const provider = await getEthersProvider();
@@ -352,7 +353,7 @@ export async function eth_getLogs(request: any) {
     }
 }
 export async function eth_newPendingTransactionFilter(request: any) {
-
+    console.log(request);
     try {
         const provider = await getEthersProvider();
         const filterId = await provider.send('eth_newPendingTransactionFilter', []);

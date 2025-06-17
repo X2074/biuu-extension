@@ -1,7 +1,8 @@
-
-export default async function eth_sendRawTransaction(request) { 
+import indexDbData from '../../indexDB.js';
+import Web3 from 'web3';
+export default async function eth_sendRawTransaction(request: any) {
     const rawTransaction = request.params[0];
-            
+
     try {
         // 1. 获取当前连接的节点信息
         const rpcData = await indexDbData.getData('rpc_url');

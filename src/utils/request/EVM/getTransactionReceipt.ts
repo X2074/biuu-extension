@@ -9,11 +9,11 @@ import getWeb3Instance from './getWeb3';
 export default async function eth_getTransactionReceipt(request: any): Promise<any> {
     try {
         const { params } = request;
-        console.log(params,'params');
-        
+        console.log(params, 'params');
+
         const [txHash] = params || [];
 
-        console.log(txHash,'txHash');
+        console.log(txHash, 'txHash');
         // 验证交易哈希
         if (!txHash || typeof txHash !== 'string' || !txHash.startsWith('0x')) {
             throw new Error('Invalid transaction hash');
@@ -27,14 +27,14 @@ export default async function eth_getTransactionReceipt(request: any): Promise<a
 
         // // 创建 Web3 实例
         // const web3 = new Web3(new Web3.providers.HttpProvider(rpc_url.url));
-        
+
         const web3 = await getWeb3Instance()
-        
-console.log(web3,"web3");
+
+        console.log(web3, "web3");
         // 获取交易收据
         const receipt = await web3.eth.getTransactionReceipt(txHash);
-        console.log(receipt,"新增的方阿飞");
-        
+        console.log(receipt, "新增的方阿飞");
+
         if (!receipt) {
             // 如果收据不存在，返回 null 而不是抛出错误，这是标准 JSON-RPC 行为
             return null;
@@ -55,7 +55,7 @@ console.log(web3,"web3");
         //         blockNumber: log.blockNumber ? web3.utils.toHex(log.blockNumber) : null
         //     })) : []
         // };
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error in eth_getTransactionReceipt:', error);
         throw new Error(`Failed to get transaction receipt: ${error.message}`);
     }

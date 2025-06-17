@@ -1,8 +1,8 @@
-import indexDbData from '../../indexDB.js';
+// import indexDbData from '../../indexDB.js';
 import getWeb3Instance from './getWeb3';
 //检查节点是否正在同步区块链数据
 export default async function eth_syncing(request: any) {
-    debugger;
+    console.log(request)
     // const rpc_url = await indexDbData.getData('rpc_url');
     // if (!rpc_url?.url) {
     //     throw new Error('No network selected');

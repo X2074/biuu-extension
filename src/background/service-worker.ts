@@ -198,14 +198,15 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.eth_feeHistory(request);
         case 'eth_getLogs':
             return await requestMethodFn.eth_getLogs(request);
-            case 'eth_newPendingTransactionFilter':
-                return await requestMethodFn.eth_newPendingTransactionFilter(request);
+        case 'eth_newPendingTransactionFilter':
+            return await requestMethodFn.eth_newPendingTransactionFilter(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }
 }
 // 更新accounts和chainId
 async function account_chainId(message: any) {
+    console.log('account_chainId', message);
     try {
         let rpcData: any = await indexDbData.getData('rpc_url');
         return new Promise((resolve, reject) => {

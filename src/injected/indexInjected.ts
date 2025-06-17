@@ -1,7 +1,7 @@
 // // injected.ts
-export {}
+export { }
 import { announceProviderInject } from '../utils/EIP6963/EIP6963';
-import { windowProvider } from '../utils/provider/window-provider';
+// import { windowProvider } from '../utils/provider/window-provider';
 announceProviderInject()
 window.addEventListener('message', function (e) {
     if (e.data.type === 'chainChanged') {
