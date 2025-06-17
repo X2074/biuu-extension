@@ -117,6 +117,7 @@ async function handleProviderRequest(request: any) {
     switch (request.method) {
         // 因为 DApp 在初始化时会自动调用 eth_requestAccounts 来检查是否已连接钱包，所以这里需要处理一下
         case 'eth_requestAccounts':
+        case 'eth_accounts':
             let wallt = await indexDbData.getData('currentWalltAddress');
             return [wallt?.address];
         // }else{

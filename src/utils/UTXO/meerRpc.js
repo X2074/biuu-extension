@@ -51,6 +51,7 @@ export async function getUTXOBalance(url, address) {
         if (response.result) {
             let x = new BigNumber(response.result)
             let y = new BigNumber(100000000)
+            console.log(x.dividedBy(y), 'utxo的余额');
             return x.dividedBy(y);
         } else {
             return 0
@@ -62,7 +63,7 @@ export async function getUTXOBalance(url, address) {
 // 获取utxo（未花费交易对）
 export async function getUtxos(url, address) {
     try {
-        const response = await rpc(url, 'getBalanceInfo', [address, 0])
+        const response = await rpc(url, 'getBalanceInfo', [address, 0, true])
         const result = response.result;
         return result.utxos
     } catch (error) {

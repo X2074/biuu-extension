@@ -88,6 +88,8 @@ export const createEIP1193Provider = (): EthereumProvider => {
                     case 'wallet_revokePermissions':
                     case 'wallet_getCallsStatus':
                     case 'eth_requestAccounts':
+                    case 'eth_accounts':
+                    case 'web3_clientVersion':
                     case 'eth_chainId':
                     case 'eth_call':
                     case 'eth_blockNumber':

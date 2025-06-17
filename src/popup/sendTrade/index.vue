@@ -51,10 +51,15 @@ onMounted(async () => {
   rpcUrlData.value = await indexDbData.getData('rpc_url');
   try {
     // 钱包地址
-    balanceSecre.value = await getBalance(
+    let balance:any = await getBalance(
       rpcUrlData.value.url,
       Object.assign({ netWorkType: rpcUrlData.value.netWorkType }, currentWallt.value)
     );
+    if(rpcUrlData.value.netWorkType == 'utxo'){
+      balanceSecre.value = balance.toLocaleString()
+    }else{
+      balanceSecre.value = balance;
+    }
     console.log(balanceSecre.value, '转账', sendTradePage.value);
   } catch (error) {}
 });
@@ -106,7 +111,7 @@ const toTransfer = async () => {
     bus.emit('promptModalErr', '请选择收款地址');
     return;
   }
-  if (balanceSecre.value <= quantity.value) {
+  if (balanceSecre.value * 1 <= quantity.value) {
     bus.emit('promptModalErr', '您的余额不足');
     return;
   }

@@ -150,7 +150,7 @@ const evmNetwork = (data: any) => {
     let content: any = defaultAccount;
     content['address'] = data.address;
     content['keyStore'] = data.keyStore;
-    content['userName'] = 'Wallt' + (index > 10 ? index + 1 : '0' + index);
+    content['userName'] = 'Wallt' + (index > 10 ? index : '0' + index);
     content['netWorkType'] = 'EVM';
     content['NoIndex'] = index;
     indexDbData.getData('EVM').then((res: any) => {
@@ -175,7 +175,7 @@ const utxoNetwork = async (data: any) => {
     utxoAccount['keyStore'] = data.keyStore;
     utxoAccount['NoIndex'] = index;
     utxoAccount['netWorkType'] = 'UTXO';
-    utxoAccount['userName'] = 'Wallt' + (index > 10 ? '' : '0') + index;
+    utxoAccount['userName'] = 'Wallt' + (index > 10 ? index : '0' + index);
     indexDbData.getData('UTXO').then((res: any) => {
         res['NoIndex'] = index;
         Object.keys(res.content).forEach((item) => {
