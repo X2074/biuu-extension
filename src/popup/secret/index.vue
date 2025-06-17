@@ -1,8 +1,7 @@
-
 <template src="./index.html"></template>
-<script lang="ts" >
+<script lang="ts">
 export default {
-  name: 'secret'
+    name: 'secret'
 };
 </script>
 <script lang="ts" setup>
@@ -30,101 +29,100 @@ let textConPsd = ref('psd');
 let conNewfirmPsd = ref('');
 let conConfirmPsd = ref('');
 onMounted(() => {
-  // 获取设置的密码
-  indexDbData
-    .getData(md5('secret'))
-    .then((res: any) => {
-      passKey.value = res.secret;
-    })
-    .catch(() => {});
+    // 获取设置的密码
+    indexDbData
+        .getData(md5('secret'))
+        .then((res: any) => {
+            passKey.value = res.secret;
+        })
+        .catch(() => {});
 });
 const forget = () => {
-  secretStep.value = 2;
+    secretStep.value = 2;
 };
 
 const unlock = async () => {
-  if (!psdText.value || psdText.value.length < 8) {
-    newPsdBol.value = true;
-    confirmPsd.value = '请输入至少 8 位密码';
-    return;
-  }
-  if (passKey.value != md5(psdText.value)) {
-    newPsdBol.value = true;
-    confirmPsd.value = '您输入的密码有误';
-    return;
-  }
-  // 发送消息给 background 页面请求数据
-  chrome.runtime.sendMessage({ action: 'setSecret', text: md5(psdText.value) });
-  bus.emit('nextPage', 'homePage');
+    if (!psdText.value || psdText.value.length < 8) {
+        newPsdBol.value = true;
+        confirmPsd.value = '请输入至少 8 位密码';
+        return;
+    }
+    if (passKey.value != md5(psdText.value)) {
+        newPsdBol.value = true;
+        confirmPsd.value = '您输入的密码有误';
+        return;
+    }
+    // 发送消息给 background 页面请求数据
+    chrome.runtime.sendMessage({ action: 'setSecret', text: md5(psdText.value) });
+    bus.emit('nextPage', 'homePage');
 };
 
 // 匹配钱包的助记词
 const matchingWallt = () => {
-  if (!mnemonicPhrase.value) {
-    mnemonicPhraseBol.value = '请输入助记词';
-    return;
-  }
-  indexDbData.getData('keyStore').then((res: any) => {
-    console.log(res);
-    // 第二个参数为密码，后期改为获取数据库密码或者是用户输入
-    let encryption = Decrypt(res.secret, passKey.value);
-    console.log(encryption, 'encryption');
-    if (encryption != mnemonicPhrase.value) {
-      mnemonicPhraseBol.value = '助记词不正确';
-      return;
-    } else {
-      mnemonicPhraseBol.value = '';
-      secretStep.value = 4;
+    if (!mnemonicPhrase.value) {
+        mnemonicPhraseBol.value = '请输入助记词';
+        return;
     }
-  });
+    indexDbData.getData('keyStore').then((res: any) => {
+        console.log(res);
+        // 第二个参数为密码，后期改为获取数据库密码或者是用户输入
+        let encryption = Decrypt(res.secret, passKey.value);
+        console.log(encryption, 'encryption');
+        if (encryption != mnemonicPhrase.value) {
+            mnemonicPhraseBol.value = '助记词不正确';
+            return;
+        } else {
+            mnemonicPhraseBol.value = '';
+            secretStep.value = 4;
+        }
+    });
 };
 // 恢复钱包
 const restoreWallet = async () => {
-  conNewfirmPsd.value = '';
-  conConfirmPsd.value = '';
-  if (!psdNewText.value || psdNewText.value.length < 8) {
-    conNewfirmPsd.value = '请输入8位数密码';
-    return;
-  }
-  if (!psdConText.value || psdConText.value.length < 8) {
-    conConfirmPsd.value = '请输入8位数密码';
-    return;
-  }
-  if (psdNewText.value != psdConText.value) {
-    conConfirmPsd.value = '请再次确认密码';
-    return;
-  }
+    conNewfirmPsd.value = '';
+    conConfirmPsd.value = '';
+    if (!psdNewText.value || psdNewText.value.length < 8) {
+        conNewfirmPsd.value = '请输入8位数密码';
+        return;
+    }
+    if (!psdConText.value || psdConText.value.length < 8) {
+        conConfirmPsd.value = '请输入8位数密码';
+        return;
+    }
+    if (psdNewText.value != psdConText.value) {
+        conConfirmPsd.value = '请再次确认密码';
+        return;
+    }
 
-  chrome.runtime.sendMessage({ action: 'setSecret', data: md5(psdNewText.value) });
+    chrome.runtime.sendMessage({ action: 'setSecret', data: md5(psdNewText.value) });
 
-  // 存储密码
-  indexDbData.putData({
-    id: md5('secret'),
-    secret: md5(psdNewText.value)
-  });
-  // 获取所有的密钥
-  let data = await indexDbData.getData('keyStore');
-  // 更新所有助记词密码
-  for (let key in data['secret']) {
-    // 解密助记词
-    let mnemonic = await Decrypt(data['secret'][key], passKey.value);
-    console.log(mnemonic, 'mnemonic');
-    // 助记词加密
-    let ciphertext = await Encrypt(mnemonic, md5(psdNewText.value));
+    // 存储密码
+    indexDbData.putData({
+        id: md5('secret'),
+        secret: md5(psdNewText.value)
+    });
+    // 获取所有的密钥
+    let data = await indexDbData.getData('keyStore');
+    // 更新所有助记词密码
+    for (let key in data['secret']) {
+        // 解密助记词
+        let mnemonic = await Decrypt(data['secret'][key], passKey.value);
+        console.log(mnemonic, 'mnemonic');
+        // 助记词加密
+        let ciphertext = await Encrypt(mnemonic, md5(psdNewText.value));
 
-    data['secret'][key] = ciphertext;
-  }
-  indexDbData.putData(data);
+        data['secret'][key] = ciphertext;
+    }
+    indexDbData.putData(data);
 
-  bus.emit('nextPage', 'homePage');
+    bus.emit('nextPage', 'homePage');
 };
-
 
 // async function toDapp() {
 //     try {
 //         // 获取当前激活的标签页
 //         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-        
+
 //         if (!tab?.id) {
 //             throw new Error('No active tab found');
 //         }
@@ -144,55 +142,29 @@ const restoreWallet = async () => {
 //     }
 // }
 
-async function toDapp() {
-  try {
-    // 获取当前激活的标签页
-        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-        // 创建到后台的端口连接
-        
-        let data:any = {name:'biuu-external'};
-        const port = chrome.runtime.connect(data);
-        // 发送消息到DApp
-        port.postMessage({
-          action: 'send_to_dapp',
-          data: {
-            type: 'eip1193:chainChanged',  
-            accounts: ['0x1234567890abcdef'],
-            selectedAccount: '0x1234567890abcdef',
-            message: 'Hello from popup window',
-            tab:tab
-          }
-        });
-        
-      } catch (error) {
-        console.error('Failed to send message:', error);
-      }
-}
-
 const testClick = async () => {
-  try {
-    // 获取当前激活的标签页
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    let data:any = { name: 'biuu-external' }
-    
-    // 创建到后台的端口连接
-    const port = chrome.runtime.connect(data);
-    
-    // 发送 chainChanged 事件到 DApp
-    port.postMessage({
-      action: 'send_to_dapp',
-      data: {
-        type: 'eip1193:chainChanged',  
-        detail: '0x2',  
-        target: 'biuu-window-provider',  
-        tab: tab
-      }
-    });
+    try {
+        // 获取当前激活的标签页
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        let data: any = { name: 'biuu-external' };
 
-  } catch (error) {
-    console.error('Failed to send chain change event:', error);
-  }
-}
+        // 创建到后台的端口连接
+        const port = chrome.runtime.connect(data);
+
+        // 发送 chainChanged 事件到 DApp
+        port.postMessage({
+            action: 'send_to_dapp',
+            data: {
+                type: 'eip1193:chainChanged',
+                detail: '0x2',
+                target: 'biuu-window-provider',
+                tab: tab
+            }
+        });
+    } catch (error) {
+        console.error('Failed to send chain change event:', error);
+    }
+};
 </script>
 <style lang="scss">
 @import './index.scss';

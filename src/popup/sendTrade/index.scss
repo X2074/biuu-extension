@@ -6,7 +6,6 @@
     bottom: 0;
     background-color: #fff;
 
-
     .trade-address {
         margin-top: 18px;
         justify-content: space-between;
@@ -48,7 +47,6 @@
             }
         }
 
-
         .prompt {
             border-radius: 8px;
             background: rgba(255, 72, 160, 0.1);
@@ -71,14 +69,13 @@
         }
     }
 
-
     button {
         margin: 60px 0 0;
         border-radius: 30px;
         background: rgba(177, 218, 90, 1);
         padding: 14px 12px;
         height: 48px;
-        width: 328px;
+        width: 100%;
         font-size: 14px;
         font-weight: 500;
         color: #000;
@@ -97,5 +94,4 @@
             }
         }
     }
-
 }
