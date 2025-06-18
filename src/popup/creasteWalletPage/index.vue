@@ -1,28 +1,28 @@
 <template>
-  <!-- 生成钱包分两步
+    <!-- 生成钱包分两步
         1、生成助记词
         2、验证助记词
     -->
-        {{ step }}==step
-  <div class="create-wallt">
-    <div class="header flex">
-      <img class="back-img" v-if="step >= 1" @click="changeStep" src="@/assets/images/icons/back.png" alt="" />
-      <!-- <img class="close-img" @click="step = 0" src="@/assets/images/icons/close.png" alt="" /> -->
+    {{ step }}==step
+    <div class="create-wallt">
+        <div class="header flex">
+            <img class="back-img" v-if="step >= 1" @click="changeStep" src="@/assets/images/icons/back.png" alt="" />
+            <!-- <img class="close-img" @click="step = 0" src="@/assets/images/icons/close.png" alt="" /> -->
+        </div>
+        <!-- 设置密码 -->
+        <!-- <setPsd v-if="step == 1" /> -->
+        <!-- 创建助记词 -->
+        <createMnemonic v-show="step == 2" />
+        <!-- 再次确认助记词 -->
+        <verifyMnemonic v-show="step == 3" />
     </div>
-    <!-- 设置密码 -->
-    <setPsd v-if="step == 1" />
-    <!-- 创建助记词 -->
-    <createMnemonic v-show="step == 2" />
-    <!-- 再次确认助记词 -->
-    <verifyMnemonic v-show="step == 3" />
-  </div>
 </template>
-<script lang="ts" >
+<script lang="ts">
 export default {
-  name: 'creasteWalletPage'
+    name: 'creasteWalletPage'
 };
 </script>
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import bus from '@/utils/bus.js';
 import createMnemonic from './createMnemonic/index.vue';
@@ -34,58 +34,58 @@ import { useRouter } from 'vue-router';
 let router = useRouter();
 const step = ref(1);
 const changeStep = () => {
-  step.value = step.value - 1
-  if (step.value == 0) {
-    router.push('/create');
-  }
+    step.value = step.value - 1;
+    if (step.value == 1) {
+        router.push('/create');
+    }
 };
 onMounted(() => {
-  // 获取设置的密码
-  indexDbData
-    .getData(md5('secret'))
-    .then((res: any) => {
-      step.value = res ? 2 : 1;
-    })
-    .catch(() => {});
+    // 获取设置的密码
+    indexDbData
+        .getData(md5('secret'))
+        .then((res: any) => {
+            step.value = res ? 2 : 1;
+        })
+        .catch(() => {});
 });
 bus.on('nextCreatePage', (res: any) => {
-  if (res == 'setPsd') step.value = 1;
-  if (res == 'createMnemonic') step.value = 2;
-  if (res == 'verifyMnemonic') step.value = 3;
-  console.log(step.value, 'shuju事故局');
-  if (res == 'userContent') {
-    window.location.href = 'userContentPage.html';
-  }
-  // if (res == 'buyPage') {
-  //     window.location.href = 'userContentPage.html';
-  // };
+    if (res == 'setPsd') step.value = 1;
+    if (res == 'createMnemonic') step.value = 2;
+    if (res == 'verifyMnemonic') step.value = 3;
+    console.log(step.value, 'shuju事故局');
+    if (res == 'userContent') {
+        window.location.href = 'userContentPage.html';
+    }
+    // if (res == 'buyPage') {
+    //     window.location.href = 'userContentPage.html';
+    // };
 });
 </script>
 <style lang="scss">
 .create-wallt {
-  width: 360px;
-  height: 600px;
-  padding: 18px 16px;
-  position: relative;
-  .header {
-    align-items: center;
-    justify-content: space-between;
-    img {
-      width: 24px;
-      height: 24px;
-      cursor: pointer;
+    width: 360px;
+    height: 600px;
+    padding: 18px 16px;
+    position: relative;
+    .header {
+        align-items: center;
+        justify-content: space-between;
+        img {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
     }
-  }
-  .title {
-    font-size: 28px;
-    font-weight: 600;
-    line-height: 40px;
-    color: #000;
-  }
+    .title {
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 40px;
+        color: #000;
+    }
 
-  .text {
-    font-size: 14px;
-    line-height: 22px;
-  }
+    .text {
+        font-size: 14px;
+        line-height: 22px;
+    }
 }
 </style>
