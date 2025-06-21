@@ -2,64 +2,61 @@
     <div class="user-type flex">
         <div class="select flex">
             <p>{{walltEnvironment?.netName}}</p>
-            <img class="ml-5" src="@/assets/images/icons/arrowhead-g.svg" alt="">
+            <img class="ml-5" src="@/assets/images/icons/arrowhead-g.svg" alt="" />
         </div>
-        <p class="flex" @click="toRouterPage('selectAccount')"> 钱包管理
-            <img class="ml-5" src="@/assets/images/icons/arrowhead.svg" alt="">
+        <p class="flex" @click="toRouterPage('selectAccount')">
+            钱包管理
+            <img class="ml-5" src="@/assets/images/icons/arrowhead.svg" alt="" />
         </p>
         <div v-if="!walltAccount || walltAccount == 'nfts'" class="more-components">
-            <img src="@/assets/images/icons/more.png" @click="moreShow = !moreShow;" alt="">
+            <img src="@/assets/images/icons/more.png" @click="moreShow = !moreShow;" alt="" />
             <div class="more-content" v-if="moreShow" @click.self="moreShow = !moreShow">
                 <div class="options-list">
                     <div class="option flex" @click="toPage">
-                        <img class="mr-10" src="@/assets/images/icons/detail.png" alt="">
+                        <img class="mr-10" src="@/assets/images/icons/detail.png" alt="" />
                         <p>账户详情</p>
                     </div>
                     <div class="option flex">
-                        <img class="mr-10" src="@/assets/images/icons/explorer.png" alt="">
+                        <img class="mr-10" src="@/assets/images/icons/explorer.png" alt="" />
                         <p>View on explorer</p>
                     </div>
                     <div class="option flex" @click="walltAccount = 'networkSwitching'">
-                        <img class="mr-10" src="@/assets/images/icons/netWork.png" alt="">
+                        <img class="mr-10" src="@/assets/images/icons/netWork.png" alt="" />
                         <p>已连接的网络</p>
                     </div>
                     <div class="option flex" @click="walltAccount = 'addNetwork'">
-                        <img class="mr-10" src="@/assets/images/icons/netWork.png" alt="">
+                        <img class="mr-10" src="@/assets/images/icons/netWork.png" alt="" />
                         <p>新增网络</p>
                     </div>
                     <div class="option flex">
-                        <img class="mr-10" src="@/assets/images/icons/unfold.png" alt="">
+                        <img class="mr-10" src="@/assets/images/icons/unfold.png" alt="" />
                         <p>展开视窗</p>
                     </div>
                     <div class="option flex" @click="moreShow = false;walltAccount = 'setting'">
-                        <img class="mr-10" src="@/assets/images/icons/setting.png" alt="">
+                        <img class="mr-10" src="@/assets/images/icons/setting.png" alt="" />
                         <p>设置</p>
                     </div>
-                    <div class="option flex">
-                        <img class="mr-10" src="@/assets/images/icons/out.png" alt="">
+                    <!-- <div class="option flex">
+                        <img class="mr-10" src="@/assets/images/icons/out.png" alt="" />
                         <p>退出</p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
     </div>
     <div class="user-info pt-20">
         <div class="user-currency mt-10 flex">
-            <p class="ml-10" v-if="walltContent && walltContent.balance">{{walltContent.balance
-                || 0}}
-                {{walltContent.unit}}
+            <p class="ml-10" v-if="walltContent && walltContent.balance">
+                {{walltContent.balance || 0}} {{walltContent.unit}}
             </p>
-            <p class="ml-10" v-else>0
-            </p>
+            <p class="ml-10" v-else>0</p>
         </div>
         <div class="info-name" v-if="walltContent">
             <div class="user-address flex">
-                <p class="mr-5">
-                    {{walltContent.address.substr(0,6)}}...{{walltContent.address.substr(-4)}}</p>
-                <img @click="onCopy" src="@/assets/images/icons/copy.png" alt="">
+                <p class="mr-5">{{walltContent.address.substr(0,6)}}...{{walltContent.address.substr(-4)}}</p>
+                <img @click="onCopy" src="@/assets/images/icons/copy.png" alt="" />
             </div>
             <!-- <p>{{walltContent&&walltContent.userName?walltContent.userName:'Account 1'}}</p> -->
-
         </div>
         <div class="uesr-btn mt-25 flex">
             <!-- <p @click="toPage('buyPage')">
@@ -70,7 +67,6 @@
             </p> -->
             <p @click="walltAccount = 'sendTrade'">转账</p>
         </div>
-
     </div>
     <div class="footer mt-20">
         <div class="refresh mt-10 flex">

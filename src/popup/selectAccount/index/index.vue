@@ -106,9 +106,10 @@ const createAccount = async () => {
             });
             indexDbData.putData(res);
             loading.value = false;
+
+            bus.emit('promptModalSuccess', '账户创建成功');
+            router.push('/homePage');
         });
-        bus.emit('promptModalSuccess', '账户创建成功');
-        router.push('/homePage');
     }
 };
 
@@ -146,7 +147,8 @@ const createWalletAccount = async () => {
 };
 
 const evmNetwork = (data: any) => {
-    let index = Number(accountContent.value['NoIndex']) + 1;
+    console.log(accountContent.value, 'accountContent.value');
+    let index = Number((accountContent.value['NoIndex'] || 0) * 1) + 1;
     let content: any = defaultAccount;
     content['address'] = data.address;
     content['keyStore'] = data.keyStore;
@@ -167,7 +169,7 @@ const utxoNetwork = async (data: any) => {
     let rpcData: any = await indexDbData.getData('rpc_url');
     // 创建完utxo账户后需要新增节点方法，让节点对该地址进行关注
     await addBalance(rpcData['url'], data['utxoAddressTest']);
-    let index = Number(accountContent.value['NoIndex']) + 1;
+    let index = Number((accountContent.value['NoIndex'] || 0) * 1) + 1;
     // 给新增的utxo账号赋值
     let utxoAccount: any = defaultUTXOAccount;
     utxoAccount['utxoAddressTest'] = data.utxoAddressTest;
@@ -195,7 +197,7 @@ const appendRecCurrent = (content: any) => {
 
         // 只有新增的网络和rec网络一致才添加
         if (res.netWorkType.toLowerCase() == content.netWorkType.toLowerCase()) {
-            res['NoIndex'] = res['NoIndex'] + 1;
+            res['NoIndex'] = res['NoIndex'] || 0 + 1;
             res.walltInfo.push(content);
             // 保存key
             indexDbData.putData(res);
@@ -205,7 +207,7 @@ const appendRecCurrent = (content: any) => {
                 contentRecCurrent['id'] = 'currentWalltAddress';
                 indexDbData.putData(contentRecCurrent);
             });
-            accountsChanged(content.address)
+            accountsChanged(content.address);
         }
     });
 };
@@ -235,7 +237,7 @@ const checkAccount = () => {
     currentWallt['id'] = 'currentWalltAddress';
     indexDbData.putData(currentWallt);
 
-    accountsChanged(currentWallt.address)
+    accountsChanged(currentWallt.address);
     setTimeout(() => {
         // bus.emit('nextPage', 'homePage');
         router.push('/homePage');
