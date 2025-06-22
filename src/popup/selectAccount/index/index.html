@@ -1,13 +1,12 @@
 <div class="select-wallt" v-loading:[loadingText]="loading">
     <div class="header flex">
-        <img class="back-img" @click="backPage" src="@/assets/images/icons/back.png" alt="">
+        <img class="back-img" @click="backPage" src="@/assets/images/icons/back.png" alt="" />
         <p>选择账户</p>
     </div>
     <!-- 账户的展示与操作 -->
     <div class="account-content pt-10 pb-10">
         <!-- 账户展示 -->
         <div v-if="accountType == 'list'" class="content" v-for="item in accountList" @click="checkAddress(item)">
-
             <!-- 如果是标记为删除，不显示 -->
             <div v-if="item.status != 'delete'" class="flex">
                 <div class="name-num">
@@ -16,10 +15,15 @@
                 </div>
                 <div class="address-check flex mr-40">
                     <p v-if="item.utxoAddressTest">
-                        {{item.utxoAddressTest.substr(0,4)}}...{{item.utxoAddressTest.substr(-4)}}</p>
+                        {{item.utxoAddressTest.substr(0,4)}}...{{item.utxoAddressTest.substr(-4)}}
+                    </p>
                     <p v-else>{{item.address.substr(0,4)}}...{{item.address.substr(-4)}}</p>
-                    <img v-if="nowAccount && nowAccount.address == item.address" class="mr-15"
-                        src="@/assets/images/icons/check-fill.png" alt="">
+                    <img
+                        v-if="nowAccount && nowAccount.address == item.address"
+                        class="mr-15"
+                        src="@/assets/images/icons/check-fill.png"
+                        alt=""
+                    />
                 </div>
             </div>
         </div>
@@ -29,17 +33,19 @@
         <deleteWallt v-if="accountType == 'deleteAccount'" :address="checkAddressText" />
         <!-- 导入账户 -->
         <importWallet v-if="accountType == 'import'" />
-
     </div>
     <div class="footer-btn" v-if="accountType != 'import'">
         <p @click="createAccount">添加账号</p>
         <p @click="toCreate('importWallet')" class="flex">
-            <img class="mr-10" src="@/assets/images/icons/import.png" alt="">
+            <img class="mr-10" src="@/assets/images/icons/import.png" alt="" />
             导入账户
         </p>
     </div>
 </div>
 <div class="account-operate flex" v-if="accountType == 'model'">
+    <div class="header flex">
+        <img class="back-img" @click="accountType = 'list'" src="@/assets/images/icons/back.png" alt="" />
+    </div>
     <div class="operate-list">
         <p @click="checkAccount">选为主账号</p>
         <p @click="accountType = 'showKey'">详情</p>
