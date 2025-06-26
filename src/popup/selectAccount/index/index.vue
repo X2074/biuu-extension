@@ -86,8 +86,10 @@ const createAccount = async () => {
     console.log(data, 'datadatadatadata');
 
     if (!data || !data.length) {
+        //没有删除的就创建新账号
         createWalletAccount();
     } else {
+        //有删除的就恢复账号
         rpc_url.walltInfo.forEach((item: any) => {
             if (item.address == data[0]['address']) {
                 item.status = '';
@@ -136,6 +138,7 @@ const createWalletAccount = async () => {
             secret: data
         });
     });
+
     evmNetwork(account); //新增并存储evm网络
     try {
         await utxoNetwork(account); //新增并存储evm网络
@@ -149,6 +152,7 @@ const createWalletAccount = async () => {
 const evmNetwork = (data: any) => {
     console.log(accountContent.value, 'accountContent.value');
     let index = Number((accountContent.value['NoIndex'] || 0) * 1) + 1;
+    debugger;
     let content: any = defaultAccount;
     content['address'] = data.address;
     content['keyStore'] = data.keyStore;
@@ -197,7 +201,7 @@ const appendRecCurrent = (content: any) => {
 
         // 只有新增的网络和rec网络一致才添加
         if (res.netWorkType.toLowerCase() == content.netWorkType.toLowerCase()) {
-            res['NoIndex'] = res['NoIndex'] || 0 + 1;
+            res['NoIndex'] = content.NoIndex; // res['NoIndex'] || 0 + 1;
             res.walltInfo.push(content);
             // 保存key
             indexDbData.putData(res);

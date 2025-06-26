@@ -40,7 +40,10 @@ bus.on('importWalletPage', (res: any) => {
 const changeStep = () => {
     step.value = step.value - 1;
     if (step.value == 0) {
-        router.push('/create');
+        // router.push('/create');
+        router.go(-1).catch(() => {
+            router.push('/create'); // 回退失败时跳转到首页
+        });
     }
 };
 </script>
