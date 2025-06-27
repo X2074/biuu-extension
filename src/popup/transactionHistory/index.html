@@ -73,7 +73,7 @@
             </div>
         </div>
         <!-- 收款地址 -->
-        <div v-if="detailTransaction && detailTransaction.price" class="detail-content flex mt-25">
+        <div class="detail-content flex mt-25">
             <p class="name">收款地址：</p>
             <div class="info flex">
                 <p>{{detailTransaction?.to.substr(0,4)}}...{{detailTransaction?.to.substr(-4)}}</p>
@@ -86,10 +86,10 @@
             </div>
         </div>
         <!-- 转账 -->
-        <div v-if="detailTransaction && detailTransaction.price" class="detail-content flex mt-25">
+        <div v-if="detailTransaction" class="detail-content flex mt-25">
             <p class="name">交易数额：</p>
             <div class="info flex">
-                <p class="price mr-5">369</p>
+                <p class="price mr-5">{{ detailTransaction.value}}</p>
                 <p>{{rpc_url?.unit.toUpperCase()}}</p>
             </div>
         </div>

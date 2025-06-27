@@ -23,11 +23,15 @@
         </div>
         <div class="address-list" v-else>
             <ul class="mt-15">
-                <li class="flex" v-for="item in addressList" @click="checkAddress(item)">
-                    <jazzicon :address="item.address" :diameter="36" />
-                    <div class="list-content ml-10">
+                <li class="flex" v-for="item in addressList">
+                    <jazzicon :address="item.address" :diameter="36" @click="checkAddress(item)" />
+                    <div class="list-content ml-10" @click="checkAddress(item)">
                         <p class="name">{{item.name}}</p>
                         <p class="address">{{item.address.substr(0,4)}}...{{item.address.substr(-4)}}</p>
+                    </div>
+                    <div class="btns">
+                        <img @click="onCopy(item.address)" src="@/assets/images/icons/copy.png" alt="" />
+                        <img @click="deleteAddress(item.address)" src="@/assets/images/icons/delete.png" alt="" />
                     </div>
                 </li>
             </ul>

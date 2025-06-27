@@ -96,8 +96,8 @@ const getEvm = async (data: any) => {
     // let receipt = await getTransactionStatus(data);
     // console.log(receipt,"receipt0000");
     // await getWei(data.gasUsed);
+    await getWei(data.gasPrice);
     if (!data['time']) {
-        await getWei(data.gasPrice);
     } else {
         time.value = data['time'];
     }

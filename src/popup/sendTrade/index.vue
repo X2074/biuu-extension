@@ -110,7 +110,7 @@ const toTransfer = async () => {
         bus.emit('promptModalErr', '请选择收款地址');
         return;
     }
-    if (currentWallt.value['address'] && currentWallt.value['address'] == toAddress) {
+    if (currentWallt.value['address'] && currentWallt.value['address'] == toAddress.value) {
         bus.emit('promptModalErr', '付款地址和接收地址不能相同');
         return;
     }
