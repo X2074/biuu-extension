@@ -7,36 +7,10 @@ import { showExtensionPopup } from '../../index.ts';
 	如果用户授权，将权限信息保存到 IndexedDB
 	返回符合 EIP-2255 标准的权限响应
 */
-// 权限类型定义
-interface Permission {
-    id: string;
-    parentCapability: string;
-    invoker: string;
-    caveats: Array<{
-        type: string;
-        value: any;
-    }>;
-    date: number;
-}
-
-// 权限请求参数类型
-interface PermissionRequest {
-    eth_accounts?: {
-        eth?: {
-            methods?: string[];
-            events?: string[];
-        };
-    };
-    wallet?: {
-        rpc?: string[];
-    };
-}
 export default async function requestPermissions(request: any) {
 	try {
 	const { params } = request;
 	const [permissions] = params || [{}];
-	console.log(request,"permissionspermissionspermissions");
-	
 
 	// 获取当前活动标签页
 	const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -47,106 +21,53 @@ export default async function requestPermissions(request: any) {
 	const currentOrigin = new URL(tab.url).origin;
 	const url: any = `/connect?origin=${encodeURIComponent(currentOrigin)}`;
 	const popupUrl: any = await showExtensionPopup(url);
-	// 生成权限ID
-	const generatePermissionId = () => {
-		return crypto.randomUUID();
-	};
+
 	// 返回一个 Promise，等待用户响应
 	return new Promise((resolve, reject) => {
 		// 监听来自弹窗的响应
 		const handleMessage: any = (message: any) => {
 		console.log(message, 'messagemessagemessage');
 		if (message.action === 'authorization_response') {
+			// 清理消息监听
 			chrome.runtime.onMessage.removeListener(handleMessage);
 
-				if (message.approved) {
-					// 获取当前钱包地址
-					const walletAddress = message.currentWallt.address
-					|| '';
+			if (message.approved) {
+			// 用户已授权，保存权限信息
+			indexDbData
+				.getData('authorized_sites')
+				.then((sites: any) => {
+				const authorizedSites = sites || {};
+				authorizedSites['id'] = 'authorized_sites';
+				authorizedSites[currentOrigin] = {
+					permissions: Object.keys(permissions),
+					timestamp: Date.now()
+				};
 
-					// 构建权限响应
-					const grantedPermissions: Permission[] = [];
-
-					// 处理 eth_accounts 权限
-					if (permissions.eth_accounts) {
-						const accountPermission: Permission = {
-							id: generatePermissionId(),
-							parentCapability: 'eth_accounts',
-							invoker: currentOrigin,
-							caveats: [
-								{
-									type: 'allowedOrigins',
-									value: [currentOrigin]
-								},
-								{
-									type: 'filterResponse',
-									value: [walletAddress]
-								}
-							],
-							date: Date.now()
-						};
-						grantedPermissions.push(accountPermission);
+				return indexDbData.putData(authorizedSites);
+				})
+				.then(() => {
+				// 返回符合 EIP-2255 的响应
+				resolve([
+					{
+					parentCapability: 'eth_accounts',
+					invoker: currentOrigin,
+					caveats: [
+						{
+						type: 'filterResponse',
+						value: [message.account || ''] // 使用从弹窗返回的账户地址
+						}
+					]
 					}
-
-					// 处理 wallet_rpc 权限
-					if (permissions.wallet?.rpc) {
-						const rpcPermission: Permission = {
-							id: generatePermissionId(),
-							parentCapability: 'wallet_rpc',
-							invoker: currentOrigin,
-							caveats: [
-								{
-									type: 'allowedOrigins',
-									value: [currentOrigin]
-								},
-								{
-									type: 'allowedMethods',
-									value: permissions.wallet.rpc
-								}
-							],
-							date: Date.now()
-						};
-						grantedPermissions.push(rpcPermission);
-					}
-
-					// 保存到 IndexedDB
-					indexDbData.getData('authorized_sites')
-						.then((sites: any) => {
-							console.log(sites,"sitessitessites");
-							 // 如果不存在 authorized_sites 记录，则创建新的
-							 if (!sites) {
-								return indexDbData.putData({
-									id: 'authorized_sites',
-									[currentOrigin]: {
-										permissions: grantedPermissions,
-										timestamp: Date.now()
-									}
-								});
-							}
-							// 如果存在 authorized_sites 记录，则更新它
-							return indexDbData.getData('authorized_sites')
-							.then((existingSites: any) => {
-								const updatedSites = {
-									...existingSites,
-									[currentOrigin]: {
-										permissions: grantedPermissions,
-										timestamp: Date.now()
-									}
-								};
-								return indexDbData.putData(updatedSites);
-							});
-						})
-						.then(() => {
-							resolve(grantedPermissions);
-						})
-						.catch((error: any) => {
-							console.error('Error saving permissions:', error);
-							reject(error);
-						});
-				} else {
-					reject(new Error('User rejected permissions request'));
-				}
+				]);
+				})
+				.catch((error: any) => {
+				console.error('Error saving permissions:', error);
+				reject(new Error('Failed to save permissions'));
+				});
+			} else {
+			reject(new Error('User rejected the request'));
 			}
+		}
 		};
 
 		// 添加消息监听

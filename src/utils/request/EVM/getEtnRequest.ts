@@ -146,10 +146,13 @@ export async function eth_getBlockTransactionCountByNumber(request: any) {
 //根据区块哈希和交易索引（位置）查询交易详情,返回指定区块中特定位置的完整交易数据。
 export async function eth_getTransactionByBlockHashAndIndex(request: any) {
     const [blockHash, index] = request.params;
-    const provider = await getEthersProvider();
-    const tx = await provider.send('eth_getTransactionByBlockHashAndIndex', [blockHash, index]);
-    console.log('Transaction:', tx);
-    return tx;
+    const rpc_url = await indexDbData.getData('rpc_url');
+    // const provider = await getEthersProvider();
+    // const tx = await provider.getBlockWithTransactions(blockHash);
+    const web3 = new Web3(new Web3.providers.HttpProvider(rpc_url.url));
+    const transaction = await web3.eth.getTransactionFromBlock(blockHash, Web3.utils.hexToNumber(index));
+    console.log('Transaction:', transaction);
+    return transaction;
 }
 //根据区块编号和交易索引获取指定交易的详细信息
 export async function eth_getTransactionByBlockNumberAndIndex(request: any) {

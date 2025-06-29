@@ -20,9 +20,8 @@ const reject = ()=>{
     });
 
 }
-const approve = async()=>{
-    let currentWallt = await indexDbData.getData('currentWalltAddress') || {};
-    let data: any = { action: 'authorization_response', approved: true,currentWallt};
+const approve = ()=>{
+    let data: any = { action: 'authorization_response', approved: true };
     chrome.runtime.sendMessage(data, (response: any) => {
         console.log(response,"response");
         window.close();

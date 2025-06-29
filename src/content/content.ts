@@ -128,12 +128,46 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse: any) => {
 });
 // 初始化
     console.log('dom未完全加载');
+    // 使用标志位防止重复注入
+    let isInjected = false;
 // connectProviderBridge();
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('dom完全加载');
-    // 页面加载时注入我们的内容脚本
+
+// 在脚本开始处立即注入 provider
+function injectProvider() {
+    console.log(window.ethereum,"window.ethereum");
+    
+     // 检查是否已经注入过
+     if (isInjected || (window.ethereum && window.ethereum.isBiuu)) {
+        console.log('Provider already injected or already exists');
+        return;
+    }
+    console.log("是否注入了");
+    isInjected = true;
+    // 创建注入脚本
     const script = document.createElement('script');
     script.src = chrome.runtime.getURL('injected/indexInjected.js');
+    script.onload = function() {
+        // 注入完成后移除脚本标签
+        if (script.parentNode) {
+            script.parentNode.removeChild(script);
+        }
+    };
     (document.head || document.documentElement).appendChild(script);
-    
-})
+}
+
+
+// 立即尝试注入（适用于页面加载前）
+if (document.readyState === 'loading') {
+    // 如果文档还在加载，添加 DOMContentLoaded 监听
+    document.addEventListener('DOMContentLoaded', injectProvider);
+} else {
+    // 如果文档已经加载完成，直接注入
+    injectProvider();
+}
+
+// 同时监听页面可见性变化，处理SPA路由切换
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && !window.ethereum?.isBiuu) {
+        injectProvider();
+    }
+});
