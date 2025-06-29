@@ -1,6 +1,6 @@
 <div class="home-page" v-loading:[loadingText]="loading">
     <div class="user-type flex">
-        <div class="select flex">
+        <div class="select flex" @click="toRouterPage('networkSwitching')">
             <p>{{walltEnvironment?.netName}}</p>
             <img class="ml-5" src="@/assets/images/icons/arrowhead-g.svg" alt="" />
         </div>

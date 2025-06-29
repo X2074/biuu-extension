@@ -27,6 +27,7 @@
                 line-height: 40px;
                 font-weight: 500;
                 cursor: pointer;
+                &.current,
                 &:hover {
                     color: #b1da5a;
                 }

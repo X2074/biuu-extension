@@ -1,23 +1,26 @@
 <div class="watch-asset" v-loading:[loadingText]="loading">
-  <p>添加代币</p>
-  <div class="input-text" v-if="storedNetworks">
-    <p class="title mb-10">代币网络：</p>
-    <p>{{storedNetworks.url}}</p>
-  </div>
-  <div class="input-text">
-      <p class="title mb-10">代币合约地址：</p>
-      <input type="text" v-model="address" placeholder="0x...">
-  </div>
-  <div class="input-text">
-      <p class="title mb-10">代币符号：</p>
-      <input type="text" v-model="symbol" placeholder="">
-  </div>
-  <div class="input-text">
-      <p class="title mb-10">代币小数：</p>
-      <input type="text" v-model="decimals" placeholder="">
-  </div>
-  <div class="actions">
-    <button @click="reject" class="reject">拒绝</button>
-    <button @click="watchAsset" class="yes">确认添加</button>
-  </div>
+    <div class="header flex">
+        <img class="back-img" @click="reject" src="@/assets/images/icons/back.png" alt="" />
+    </div>
+    <p>添加代币</p>
+    <div class="input-text" v-if="storedNetworks">
+        <p class="title mb-10">代币网络：</p>
+        <p>{{storedNetworks.url}}</p>
+    </div>
+    <div class="input-text">
+        <p class="title mb-10">代币合约地址：</p>
+        <input type="text" v-model="address" placeholder="0x..." />
+    </div>
+    <div class="input-text">
+        <p class="title mb-10">代币符号：</p>
+        <input type="text" v-model="symbol" placeholder="" />
+    </div>
+    <div class="input-text">
+        <p class="title mb-10">代币小数：</p>
+        <input type="text" v-model="decimals" placeholder="" />
+    </div>
+    <div class="actions">
+        <button @click="reject" class="reject">拒绝</button>
+        <button @click="watchAsset" class="yes">确认添加</button>
+    </div>
 </div>

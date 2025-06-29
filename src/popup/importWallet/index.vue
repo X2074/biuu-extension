@@ -1,7 +1,6 @@
 <template>
     <div class="import-wallt">
         <div class="header flex">
-            {{ step }}==step
             <img class="back-img" v-if="step >= 1" @click="changeStep" src="@/assets/images/icons/back.png" alt="" />
             <!-- <img class="close-img" @click="step = 0" src="@/assets/images/icons/close.png" alt="" /> -->
         </div>
