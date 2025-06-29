@@ -128,7 +128,7 @@ const toPage = () => {
 // 当前网络数据
 const netWorkChange = (type: any) => {
     netWorkType.value = type.toUpperCase();
-    indexDbData.getData(type).then((res: any) => {
+    indexDbData.getData(netWorkType.value).then((res: any) => {
         let data = Object.values(res.content);
         netWorkList.value = data;
         console.log(netWorkList.value, 'netWorkList.value');

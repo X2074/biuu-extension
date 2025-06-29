@@ -20,7 +20,7 @@ let networkModel = ref({
     evm: null,
     utxo: null
 });
-const currentType = ref(null);
+const currentType = ref({});
 onMounted(async () => {
     let evmInfo = await indexDbData.getData('EVM');
     let utxoInfo = await indexDbData.getData('UTXO');
