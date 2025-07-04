@@ -156,7 +156,8 @@ export async function eth_getTransactionByBlockHashAndIndex(request: any) {
 }
 //根据区块编号和交易索引获取指定交易的详细信息
 export async function eth_getTransactionByBlockNumberAndIndex(request: any) {
-    debugger
+    console.log(request.params,"request.params");
+    
     try {
         // 获取以太坊提供者实例
         const provider = await getEthersProvider();
@@ -193,13 +194,13 @@ export async function eth_getTransactionByBlockNumberAndIndex(request: any) {
                  throw new Error('无效的交易索引参数');
              }
       */
-        // 调用原始 JSON-RPC
-        const tx = await provider.send('eth_getTransactionByBlockNumberAndIndex', [
-            ethers.utils.hexValue(blockNumberParam), // 区块号（支持 "latest"）
-            ethers.utils.hexValue(transactionIndexParam),     // 交易索引
-        ]);
-        console.log(tx, 'tx');
-        return tx;
+    //  两个参数都需要是10进制
+    const web3 = new Web3(new Web3.providers.HttpProvider('https://qng.rpc.qitmeer.io'));
+    // 获取交易详情
+    const transaction = await web3.eth.getTransactionFromBlock(blockNumber,transactionIndex);
+    console.log(transaction,"transaction ");
+    
+        return transaction;
 
     } catch (error) {
         console.error('获取交易信息时出错:', error);

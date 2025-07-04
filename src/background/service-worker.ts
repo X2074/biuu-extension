@@ -118,6 +118,7 @@ async function handleProviderRequest(request: any) {
         // 因为 DApp 在初始化时会自动调用 eth_requestAccounts 来检查是否已连接钱包，所以这里需要处理一下
         case 'eth_requestAccounts':
         case 'eth_accounts':
+            await requestAccountsWallt(request);
             let wallt = await indexDbData.getData('currentWalltAddress');
             return [wallt?.address];
         // }else{
@@ -201,6 +202,8 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.eth_getLogs(request);
         case 'eth_newPendingTransactionFilter':
             return await requestMethodFn.eth_newPendingTransactionFilter(request);
+        case 'eth_getTransactionReceipt':
+            return await requestMethodFn.eth_getTransactionReceipt(request);
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }

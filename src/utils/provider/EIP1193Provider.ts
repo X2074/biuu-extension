@@ -31,6 +31,9 @@ export const providerInfo = {
 // 创建 EIP-1193 兼容的 provider
 let _internalChainId: string | null = null;
 let _internalAccounts: Array<string> | null = null;
+// 在文件顶部添加状态变量
+let isInitialized = false;
+let isConnected = false;
 export const createEIP1193Provider = (): EthereumProvider => {
     // 使用闭包保存内部状态
     let _isInitialized = false;
@@ -73,6 +76,15 @@ export const createEIP1193Provider = (): EthereumProvider => {
                 _isInitialized = true;
                 console.error('Failed to initialize chainId:', error);
             }
+        },
+        isBiuu: true,
+        isConnected:true,
+        isAuthorized: async () => {
+           try {
+             return true;
+           } catch (error) {
+            return false;
+           }
         },
         request: async (args: { method: string; params?: any[] }) => {
             const { method, params } = args;
@@ -138,6 +150,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
                 accountsChanged: new Set<(...args: any[]) => void>(),
                 chainChanged: new Set<(...args: any[]) => void>(),
                 disconnect: new Set<(...args: any[]) => void>(),
+                connect: new Set<(...args: any[]) => void>(),
                 message: new Set<(...args: any[]) => void>()
             };
             console.log(eventName, 'eventNameeventNameeventName');
@@ -153,7 +166,12 @@ export const createEIP1193Provider = (): EthereumProvider => {
                 };
 
                 window.addEventListener('message', messageListener);
-
+                // 如果是 connect 事件，并且已经连接，立即触发一次
+                if (eventName === 'connect') {
+                    Promise.resolve().then(() => {
+                        listener({ chainId: "0x1fc3" });
+                    });
+                }
                 return () => {
                     eventListeners[eventName].delete(listener);
                     window.removeEventListener('message', messageListener);
@@ -208,6 +226,8 @@ const requestContentScript = (method: any, params: any) => {
 
         // 监听响应
         const listener = (event: MessageEvent) => {
+            console.log(method,"method:",event.data);
+            
             if (event.data.target === 'biuu-window-provider') {
                 window.removeEventListener('message', listener);
                 if (event.data.type === method && (event.data.accounts || event.data.accounts === null)) {

@@ -146,6 +146,14 @@ export function announceProviderInject() {
     const setupProviderListeners = () => {
         if (!providerDetail.provider) return;
 
+        // 监听网络变化
+        providerDetail.provider.on('connect', (chainId: string) => {
+            console.log('connect:', chainId);
+            window.dispatchEvent(new CustomEvent("eip1193:connect", {
+                detail: chainId
+            }));
+        });
+
         // 监听账户变化
         providerDetail.provider.on('accountsChanged', (accounts: string[]) => {
             console.log('Accounts changed:', accounts);

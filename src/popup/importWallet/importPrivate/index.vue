@@ -161,6 +161,7 @@ const evmNetwork = (walltInfo: any) => {
       let walltAccount = data.content[item].walltInfo.filter((item: any) => {
         return item.address == walltInfo.address;
       });
+      data.content[item]['NoIndex'] = data['NoIndex'];
       if (walltAccount && walltAccount.length) {
         bus.emit('promptModalErr', '重复的钱包地址');
         return;
@@ -211,6 +212,7 @@ const utxoNetwork = (walltInfo: any) => {
         bus.emit('promptModalErr', '重复的钱包地址');
         return;
       }
+      data.content[item]['NoIndex'] = data['NoIndex'];
       // 给新增的utxo账号赋值
       let utxoAccount: any = defaultUTXOAccount;
       utxoAccount['utxoAddressTest'] = walltInfo.utxoAddressTest;
