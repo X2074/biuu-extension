@@ -141,7 +141,7 @@ const evmNetwork = (walltInfo: any) => {
     });
     Object.keys(data.content).forEach((item) => {
       let index = data['NoIndex'];
-      data.content[item]['NoIndex'] = index + 1;
+      data.content[item]['NoIndex'] = index;
       let account: any = defaultAccount;
       account['address'] = walltInfo.address;
       account['userName'] = 'Wallt' + (!index ? '01' : index > 10 ? index : '0' + index);
@@ -177,7 +177,7 @@ const utxoNetwork = (walltInfo: any) => {
     });
     Object.keys(data.content).forEach((item) => {
       let index = data['NoIndex'];
-      data.content[item]['NoIndex'] = index + 1;
+      data.content[item]['NoIndex'] = index;
       // 给新增的utxo账号赋值
       let utxoAccount: any = defaultUTXOAccount;
       utxoAccount['utxoAddressTest'] = walltInfo.utxoAddressTest;
