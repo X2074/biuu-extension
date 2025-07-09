@@ -6,12 +6,13 @@ import { getChainIdFromBackground } from '../backgroundBridge';
 export interface EthereumProvider {
     request(args: { method: string; params?: any[] }): Promise<any>;
     on(eventName: string, listener: (...args: any[]) => void): void;
-    disconnect(): void;
     accounts: string[];
     chainId: string;
     accountsChanged: (accounts: string[]) => void;
     chainChanged: (chainId: string) => void;
     disconnect: () => void;
+    isAuthorized: () => void;
+    
     providerInfo: {
         label: string;
         injectedNamespace: string;
@@ -77,8 +78,6 @@ export const createEIP1193Provider = (): EthereumProvider => {
                 console.error('Failed to initialize chainId:', error);
             }
         },
-        isBiuu: true,
-        isConnected:true,
         isAuthorized: async () => {
            try {
              return true;

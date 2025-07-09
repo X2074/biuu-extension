@@ -38,11 +38,12 @@ bus.on('importWalletPage', (res: any) => {
 });
 const changeStep = () => {
     step.value = step.value - 1;
-    if (step.value == 0) {
-        // router.push('/create');
-        router.go(-1).catch(() => {
-            router.push('/create'); // 回退失败时跳转到首页
-        });
+    if (step.value === 0) {
+        if (window.history.length > 1) {
+            router.go(-1);
+        } else {
+            router.push('/create');
+        }
     }
 };
 </script>

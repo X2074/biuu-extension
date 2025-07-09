@@ -160,46 +160,47 @@ export async function eth_getTransactionByBlockNumberAndIndex(request: any) {
     
     try {
         // 获取以太坊提供者实例
-        const provider = await getEthersProvider();
+        // const provider = await getEthersProvider();
+        // 获取当前网络配置
+        const rpc_url = await indexDbData.getData('rpc_url');
 
         // 解析请求参数
         const [blockNumberParam, transactionIndexParam] = request.params || [];
 
-        /*      if (blockNumberParam === undefined || transactionIndexParam === undefined) {
-                 throw new Error('缺少区块编号或交易索引参数');
-             }
-     
-             // 处理区块编号参数，支持 'earliest'、'latest'、'pending' 等关键词，也支持数字
-             let blockNumber;
-             if (typeof blockNumberParam === 'string') {
-                 if (['earliest', 'latest', 'pending'].includes(blockNumberParam)) {
-                     blockNumber = blockNumberParam;
-                 } else {
-                     // 尝试将十六进制字符串转换为数字
-                     blockNumber = parseInt(blockNumberParam, 16);
-                 }
-             } else if (typeof blockNumberParam === 'number') {
-                 blockNumber = blockNumberParam;
-             } else {
-                 throw new Error('无效的区块编号参数');
-             }
-     
-             // 处理交易索引参数
-             let transactionIndex;
-             if (typeof transactionIndexParam === 'string') {
-                 transactionIndex = parseInt(transactionIndexParam, 16);
-             } else if (typeof transactionIndexParam === 'number') {
-                 transactionIndex = transactionIndexParam;
-             } else {
-                 throw new Error('无效的交易索引参数');
-             }
-      */
-    //  两个参数都需要是10进制
-    const web3 = new Web3(new Web3.providers.HttpProvider('https://qng.rpc.qitmeer.io'));
-    // 获取交易详情
-    const transaction = await web3.eth.getTransactionFromBlock(blockNumber,transactionIndex);
-    console.log(transaction,"transaction ");
+        if (blockNumberParam === undefined || transactionIndexParam === undefined) {
+                throw new Error('缺少区块编号或交易索引参数');
+            }
     
+            // 处理区块编号参数，支持 'earliest'、'latest'、'pending' 等关键词，也支持数字
+            let blockNumber:any;
+            if (typeof blockNumberParam === 'string') {
+                if (['earliest', 'latest', 'pending'].includes(blockNumberParam)) {
+                    blockNumber = blockNumberParam;
+                } else {
+                    // 尝试将十六进制字符串转换为数字
+                    blockNumber = parseInt(blockNumberParam, 16);
+                }
+            } else if (typeof blockNumberParam === 'number') {
+                blockNumber = blockNumberParam;
+            } else {
+                throw new Error('无效的区块编号参数');
+            }
+    
+            // 处理交易索引参数
+            let transactionIndex:any;
+            if (typeof transactionIndexParam === 'string') {
+                transactionIndex = parseInt(transactionIndexParam, 16);
+            } else if (typeof transactionIndexParam === 'number') {
+                transactionIndex = transactionIndexParam;
+            } else {
+                throw new Error('无效的交易索引参数');
+            }
+        //  两个参数都需要是10进制
+        const web3 = new Web3(new Web3.providers.HttpProvider(rpc_url.url));
+        // 获取交易详情
+        const transaction = await web3.eth.getTransactionFromBlock(blockNumber,transactionIndex);
+        console.log(transaction,"transaction ");
+
         return transaction;
 
     } catch (error) {
