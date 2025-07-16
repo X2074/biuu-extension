@@ -32,6 +32,13 @@ async function requestGetPermissions() {
     
     return permissions;
 }
+//   删除权限信息
+async function eth_disconnect() {
+    await indexDbData.deleteData('authorized_sites');
+    await indexDbData.deleteData('authorization');
+    console.log(permissions,"permissions");
+    return []
+}
 
 // 获取chainID
 async function getChainId() {
@@ -48,6 +55,20 @@ async function getChainId() {
         });
     } catch { }
 }
+// 获取连接状态
+async function isAuthorized() {
+    try {
+        let rpcData: any = await indexDbData.getData('authorized_sites');
+        return new Promise((resolve, reject) => {
+            if (rpcData) {
+                resolve(true);
+            } else {
+                reject(false);
+            }
+        });
+    } catch { }
+}
+
 // 获取授权签名的用户地址
 async function requestAccounts() { }
 
@@ -102,5 +123,6 @@ export default {
     eth_estimateGas,
     eth_feeHistory,
     eth_getLogs,
-    eth_newPendingTransactionFilter
+    eth_newPendingTransactionFilter,
+    eth_disconnect
 }

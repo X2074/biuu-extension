@@ -124,6 +124,7 @@ async function handleProviderRequest(request: any) {
             let account:any = await indexDbData.getData('currentWalltAddress');
             return [account?.address];
         case 'wallet_requestPermissions':
+            await requestAccountsWallt(request);
             return await requestMethodFn.requestPermissions(request);
         case "wallet_getPermissions":
             return await requestMethodFn.requestGetPermissions();
@@ -203,6 +204,10 @@ async function handleProviderRequest(request: any) {
             return await requestMethodFn.eth_newPendingTransactionFilter(request);
         case 'eth_getTransactionReceipt':
             return await requestMethodFn.eth_getTransactionReceipt(request);
+        case 'eth_disconnect':
+            return await requestMethodFn.eth_disconnect(request);
+        case 'isAuthorized':
+            return await requestMethodFn.isAuthorized();
         default:
             throw new Error(`Method not supported: ${request.method}`);
     }

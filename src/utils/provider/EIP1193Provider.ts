@@ -79,11 +79,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
             }
         },
         isAuthorized: async () => {
-           try {
-             return true;
-           } catch (error) {
-            return false;
-           }
+            return await requestContentScript({method:'isAuthorized'});
         },
         request: async (args: { method: string; params?: any[] }) => {
             const { method, params } = args;
@@ -180,11 +176,22 @@ export const createEIP1193Provider = (): EthereumProvider => {
         disconnect: () => {
             provider.accounts = [];
             provider.chainId = '';
-            window.dispatchEvent(
-                new CustomEvent('disconnect', {
-                    detail: { code: 1000, message: 'User disconnected' }
-                })
+            window.ethereum.emit('accountsChanged', []);
+            // 发送请求到 content script
+            window.postMessage(
+                {
+                    target: 'biuu-provider-bridge',
+                    request: {
+                        method: 'eth_disconnect'
+                    }
+                },
+                '*'
             );
+            // window.dispatchEvent(
+            //     new CustomEvent('disconnect', {
+            //         detail: { code: 1000, message: 'User disconnected' }
+            //     })
+            // );
         },
         accountsChanged: (accounts: string[]) => {
             console.log('Accounts changed:', accounts);
