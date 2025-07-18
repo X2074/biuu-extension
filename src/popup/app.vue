@@ -28,18 +28,10 @@ export default {
 <script lang="ts" setup>
 import { ref, onMounted, watch } from 'vue';
 import md5 from 'js-md5';
-// 因为popup的特殊原因，此处只有一个入口，页面切换靠各种类型的判断
-// import homePage from '@/components/homePage.vue'
-// 已有账号，重新进入需要登录
-//import loginwallt from './components/loginwallt/index.vue';
-// import create from './components/create/index.vue';
-// import secret from './components/secret/index.vue';
-// import creasteWalletPage from './components/creasteWalletPage/index.vue';
-// import importWallet from '@/components/popup/components/importWallet/index.vue';
-// import homePage from './components/homePage/index.vue';
-// import transfer from './components/transfer/index.vue';
+import Web3 from 'web3'
 // 全局提示
 import prompt from '@/components/prompt/index.vue';
+import {getUtxos, sendTraction,buildExportToEvmTx} from  "@/utils/UTXO/meerRpc"
 import { getBalance } from '@/utils/index';
 import indexDbData from '@/utils/indexDB.js';
 import bus from '@/utils/bus.js';
@@ -69,6 +61,7 @@ onMounted(async () => {
             getInfo();
         }
     });
+    // testTransfer()
 });
 // 监听数据变化，跳转相应页面
 watch(pageTypes, (newV) => {
@@ -135,6 +128,35 @@ const getInfo = () => {
         .catch(() => {
             loading.value = false;
         });
+};
+
+
+const testTransfer = async() => { 
+    // 参数（请根据实际情况替换）
+    const fromAddress = 'TnEvLExwzew6LPL13yXmWKnnZxD1c5Lr8Tw';
+    const pkaddrKey = '907fd84538e3ac1caebdbbd35b00cad93986ee9ae34785e99e62843020c98f72';
+    const secretKey = 'e2ec07936723d6b8c054f1f6bfe2cf1c439733303e5a6f0062d54168d9265b14';
+    const amountToEvm = 100000000; // 2 MEER
+    const network = 'testnet';
+     // 2. 查询UTXO
+     const utxos = await getUtxos("https://testnet-qng.rpc.qitmeer.io/rpc/", fromAddress);
+    // 3. 构建交易
+    const hex = await buildExportToEvmTx(fromAddress, pkaddrKey, secretKey, amountToEvm, utxos);
+    console.log('\n[成功] 构建交易HEX如下：');
+    console.log(hex);
+    // 4. 广播交易
+    try {
+        console.log('\n--- 广播交易 ---');
+        const sendResult = await sendTraction("https://testnet-qng.rpc.qitmeer.io/rpc/", hex);
+        console.log('广播', sendResult);
+        if (sendResult?.result) {
+            console.log('[广播成功] TXID:', sendResult.result);
+        } else {
+            console.error('[广播失败]', sendResult);
+        }
+    } catch (e) {
+        console.error('[异常] 广播交易时出错:', e.message);
+    }
 };
 </script>
 
