@@ -1,0 +1,78 @@
+<div class="send-trade" v-loading:[loadingText]="loading">
+    <div class="header flex" @click="toBack">
+        <img class="back-img" src="@/assets/images/icons/back.png" alt="" />
+        <p>{{rpcData?.unit.toUpperCase()}}划转</p>
+    </div>
+
+    <div class="trade-address mt-10" v-if="sendTradePage == 'home'">
+        <div class="input-address">
+            <p>付款地址：</p>
+            <input
+                v-if="currentWallt && currentWallt['utxoAddressTest']"
+                disabled
+                class="mt-10"
+                maxlength="16"
+                v-model="currentWallt['utxoAddressTest']"
+            />
+            <input
+                v-if="currentWallt && !currentWallt['utxoAddressTest']"
+                disabled
+                class="mt-10"
+                maxlength="16"
+                v-model="currentWallt['address']"
+            />
+        </div>
+        <div class="input-address mt-15">
+            <div class="flex">
+                <p>接收地址：</p>
+            </div>
+            
+      <CustomSelect
+      v-model="selectedEvmAddress"
+      :options="toEvmAddress"
+      option-label="address"
+      option-value="address"
+      placeholder="请选择接收地址"
+      @change="handleAddressChange"
+    />
+        </div>
+        <div class="input-address mt-15">
+            <div class="flex">
+                <p>密码：</p>
+            </div>
+            <input class="mt-5" type="password" maxlength="16" v-model="confirmPsd" />
+        </div>
+        <div class="input-address mt-15">
+            <div class="flex">
+                <p>转账数量：</p>
+                <div class="trade-fun flex">
+                    <p>可用：</p>
+                    <p class="price">{{balanceSecre.toLocaleString()}}</p>
+                    <p>{{rpcData?.unit.toUpperCase()}}</p>
+                </div>
+            </div>
+            <input class="mt-5" maxlength="16" v-model="quantity" @input="validateNumberInput" />
+        </div>
+        <div v-if="rpcData?.netWorkType.toUpperCase() == 'UTXO'" class="utxo-tactics">
+            <p :class="{'check':utxoTactics=='min' }" @click="utxoTactics = 'min'">
+                最小先出（First-In-First-Out，FIFO）
+            </p>
+            <p :class="{'check':utxoTactics=='max' }" @click="utxoTactics = 'max'">
+                最大先出（Last-In-First-Out，LIFO）
+            </p>
+            <p :class="{'check':utxoTactics=='minimum' }" @click="utxoTactics = 'minimum'">
+                最小可行金额（Minimum Viable Amount）
+            </p>
+            <p :class="{'check':utxoTactics=='branch' }" @click="utxoTactics = 'branch'">
+                分支限界算法（Branch and Bound）
+            </p>
+        </div>
+        <div class="prompt flex mt-15">
+            <img class="mr-10 mt-5" src="@/assets/images/icons/warn-red.png" alt="" />
+            <p>目前只支持qitmeer的UTXO模式划转到qitmeer的EVM模式</p>
+        </div>
+
+        <button @click="toTransfer">划转</button>
+    </div>
+    <transfer v-if="sendTradePage == 'transfer'" :transferContent="transferContent" />
+</div>

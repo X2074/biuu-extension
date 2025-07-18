@@ -152,7 +152,6 @@ const createWalletAccount = async () => {
 const evmNetwork = (data: any) => {
     console.log(accountContent.value, 'accountContent.value');
     let index = Number((accountContent.value['NoIndex'] || 0) * 1) + 1;
-    debugger;
     let content: any = defaultAccount;
     content['address'] = data.address;
     content['keyStore'] = data.keyStore;

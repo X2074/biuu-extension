@@ -190,26 +190,30 @@ export async function utxoTransfer(data) {
 }
 // 划转
 export async function transferUtxo(data) {
-    // 获取公钥地址
-    const seed = await bip39.mnemonicToSeed(data.mnemonic, "")
-    // 通过种子生成BIP32主节点
-    const masterNode = bip32.fromSeed(seed);
-    // 派生一个子密钥对的BIP32导出路径
-    const path = "m/44'/60'/0'/0/0"; // 你可以更改路径来生成不同的子密钥
-    const childNode = masterNode.derivePath(path);
-    const pkaddr = qitmeer.address.ecToPkAddress(childNode.publicKey, 'testnet')
+    console.log(data, 'data');
+    
+    const network = qitmeer.networks.testnet;
+    const keyPair = qitmeer.ec.fromPrivateKey(Buffer.from(data.key, 'hex'));
+    const bnalance = await getUTXOBalance(data.url, data.from)
+    const txb = qitmeer.txsign.newSigner(network);
 
-    const keyPair = qitmeer.ec.fromPrivateKey(Buffer.from(data.key, 'hex'))
-    // 获取发送方地址的余额
-    const balance1 = await getUTXOBalance(data.url, data.accountAddress)
-    const utxos = await getUtxos(data.url, data.accountAddress)
+    // 设置时间戳，避免timestamp为0导致交易被拒绝
+    const lockTime = Math.floor(Date.now() / 1000);
+    txb.setTimestamp(lockTime);
+
+    const utxos = await getUtxos(data.url, data.from)
+    console.log(utxos, 'utxos');
+    // 估算手续费
     let y = new BigNumber(100000000)
-    let num = parseFloat(Math.ceil(data.value / 1024));
+    let num = parseFloat(Math.ceil(1 / 1024));
     let gas = parseFloat(new BigNumber(num).multipliedBy(0.0002).multipliedBy(y));
     let valueTo = parseFloat(new BigNumber(data.value).multipliedBy(y));
-    let remaining = parseFloat(new BigNumber(balance1).multipliedBy(y).minus(valueTo).minus(gas));
+    let remaining = parseFloat(new BigNumber(bnalance).multipliedBy(y).minus(valueTo).minus(gas));
     let allPrice = parseFloat(new BigNumber(valueTo).plus(remaining));
+    // 选取足够的UTXO
+    let selectedUtxos = [];
     let selectUtxos;
+    // 选择对应的策略
     if (data.tactics == 'min') {
         selectUtxos = await selectMinUTXOs(utxos, allPrice);
     }
@@ -222,38 +226,35 @@ export async function transferUtxo(data) {
     if (data.tactics == 'branch') {
         selectUtxos = await selectUtxosBranchAndBound(utxos, allPrice);
     }
-    let network;
-    // 设置网络 mainnet【主网】, testnet【测试】, privnet【私有】
-    if (rpcUrls.testnet.includes(data.url)) {
-        network = qitmeer.networks.testnet;
-    } else {
-        network = qitmeer.networks.mainnet;
-    }
-    const txb = qitmeer.txsign.newSigner(network);
-    const lockTime = parseInt(new Date().getTime() / 1000);
-    txb.setTimestamp(lockTime);
-    // 选取合适的utxo
-    for (let utxo of selectUtxos.selectedUTXOs) {
+    selectedUtxos = selectUtxos.selectedUTXOs;
+    // 添加输入
+    selectedUtxos.forEach((utxo, i) => {
         txb.addInput(utxo.txid, utxo.idx);
-    }
-    txb.addOutput(pkaddr, valueTo, 1);
-    txb.addOutput(data.accountAddress, remaining);
+    });
+    console.log(gas,"gas");
+    console.log(txb,"txbtxbtxb");
 
-    console.log(txb, '交易的数据txb');
-    // 使用前面通过私钥生成的密钥对签署交易
-    utxos.map((v, i) => {
+    // 添加输出1：EVM pkaddr，coinID=1，pubkey
+    txb.addOutput(data.to, valueTo, 1, 'pubkey');
+    // 添加输出2：找零回原地址，coinID=0，pubkeyhash
+    txb.addOutput(data.from, remaining, 0, 'pubkeyhash');
+    // 签名
+    selectedUtxos.forEach((v, i) => {
         txb.sign(i, keyPair);
-    })
-    // 构建交易体
-    const newTransaction = txb.build().toBuffer().toString('hex');
+    });
+    // 构建交易
+    const hex = txb.build().toBuffer().toString('hex');
     // 发送交易
     try {
-        const response = await sendTraction(data.url, newTransaction)
+        const response = await sendTraction(data.url, hex)
+        console.log(response,"response");
+        
         let info = Object.assign(data, { 'transactionHash': response })
+        console.log(info, 'info')
         chromeNotifications(response);
         hashSaveIndexDB(data['keyStore'], 'dispose', info);
     } catch (error) {
-        hashSaveIndexDB(data['keyStore'], 'error', data)
+        // hashSaveIndexDB(data['keyStore'], 'error', data)
         console.log(error, 'error');
     }
 }

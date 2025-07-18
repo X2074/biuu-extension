@@ -78,7 +78,7 @@
             <p v-if="walltEnvironment.netWorkType != 'utxo'" @click="tabsOption = 'nfts'" class="mr-25">NFTS</p>
             <p @click="walltAccount = 'sendTrade'" class="mr-25">转账</p>
             <p @click="walltAccount = 'transactionHistory'" class="mr-25">交易记录</p>
-            <p @click="walltAccount = 'transfer'" class="mr-25">划转</p>
+            <p v-if="walltEnvironment.netWorkType == 'utxo'" @click="walltAccount = 'utxoToEvm'" class="mr-25">划转</p>
             <p @click="walltAccount = 'token'">代币</p>
         </div>
         <!-- <nftCard v-if="walltEnvironment.netWorkType != 'utxo' && walltAccount != 'token'" /> -->

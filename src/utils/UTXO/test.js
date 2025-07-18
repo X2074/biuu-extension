@@ -1,7 +1,5 @@
 import BigNumber from 'bignumber.js';
 // const axios = require('axios');
-import qitmeer from 'qitmeer-js';
-import { selectMinUTXOs } from './calculateTxid.js';
 const config = {
     headers: {
         'Content-Type': 'application/json'
@@ -65,7 +63,7 @@ export async function getUTXOBalance(url, address) {
 // 获取utxo（未花费交易对）
 export async function getUtxos(url, address) {
     try {
-        const response = await rpc(url, 'getBalanceInfo', [address, 0, true])
+        const response = await rpc(url, 'getBalanceInfo', [address, 0])
         const result = response.result;
         return result.utxos
     } catch (error) {
@@ -125,77 +123,4 @@ export async function getUtxoHash(url, txid) {
     } catch (error) {
         console.error('Error:', error);
     }
-}
-
-/**
- * 构建 UTXO -> EVM (cross chain export) 交易
- * @param {string} fromAddress - UTXO地址
- * @param {string} pkaddr - 目标EVM pkaddr（如 Tk2ccA1wxfrXEseUCYqss7N7RbhHAprVwmZrDvodcE8qcqYxTbDTD）
- * @param {string} secretKey - 主私钥（hex字符串）
- * @param {number} amountToEvm - 转到EVM的金额（最小单位）
- * @param {Array} utxos - 可用UTXO列表 [{txid, idx, amount}]
- * @returns {string|null} 交易HEX字符串
- */
-export async function buildExportToEvmTx(fromAddress, pkaddrKey, secretKey, amountToEvm, utxos) {
-    let pkaddr = evmKeyToPkaddr(pkaddrKey)
-    const network = qitmeer.networks.testnet;
-    const keyPair = qitmeer.ec.fromPrivateKey(Buffer.from(secretKey, 'hex'));
-    const totalInput = await getUTXOBalance("https://testnet-qng.rpc.qitmeer.io/rpc/", fromAddress)
-    const txb = qitmeer.txsign.newSigner(network);
-
-    // 设置时间戳，避免timestamp为0导致交易被拒绝
-    const lockTime = Math.floor(Date.now() / 1000);
-    txb.setTimestamp(lockTime);
-
-    // 估算手续费
-    let y = new BigNumber(100000000)
-    let num = parseFloat(Math.ceil(1 / 1024));
-    let gas = parseFloat(new BigNumber(num).multipliedBy(0.0002).multipliedBy(y));
-    let valueTo = parseFloat(new BigNumber(1).multipliedBy(y));
-    let remaining = parseFloat(new BigNumber(totalInput).multipliedBy(y).minus(valueTo).minus(gas));
-    let allPrice = parseFloat(new BigNumber(valueTo).plus(remaining));
-    // 选取足够的UTXO
-    let selectedUtxos = [];
-    let selectUtxos = await selectMinUTXOs(utxos, allPrice);
-    selectedUtxos = selectUtxos.selectedUTXOs;
-    // 添加输入
-    selectedUtxos.forEach((utxo, i) => {
-        txb.addInput(utxo.txid, utxo.idx);
-    });
-    console.log(gas,"gas");
-    console.log(txb,"txbtxbtxb");
-
-    // 添加输出1：EVM pkaddr，coinID=1，pubkey
-    txb.addOutput(pkaddr, valueTo, 1, 'pubkey');
-    // 添加输出2：找零回原地址，coinID=0，pubkeyhash
-    txb.addOutput(fromAddress, remaining, 0, 'pubkeyhash');
-    // 签名
-    selectedUtxos.forEach((v, i) => {
-        txb.sign(i, keyPair);
-    });
-    // 构建交易
-    const hex = txb.build().toBuffer().toString('hex');
-    return hex;
-}
-
-function estimateFee(inputCount, outputCount, feeRate = 1000) {
-     // 交易大小 = 输入数量 * 148 + 输出数量 * 34 + 10（固定开销）
-    const txSize = inputCount * 148 + outputCount * 34 + 10;
-    // 手续费 = 交易大小 * 费率（satoshi/字节）
-    return txSize * feeRate;
-}
-
-
-function evmKeyToPkaddr(secretKey){
-
-    // 生成 keyPair
-    const keyPair = qitmeer.ec.fromPrivateKey(Buffer.from(secretKey, 'hex'));
-
-    // 生成 pkaddr（EVM公钥地址，Tk开头）
-    const pkaddr = qitmeer.address.ecToPkAddress(keyPair.publicKey, 'testnet');
-    console.log('EVM pkaddr (Tk开头):', pkaddr);
-    return pkaddr;
-    // 生成普通 UTXO 地址（Tn开头）
-    // const utxoAddr = qitmeer.address.ecToPkHAddress(keyPair.publicKey, 'testnet');
-    // console.log('UTXO地址 (Tn开头):', utxoAddr); 
 }

@@ -219,6 +219,8 @@ const utxoNetwork = (walltInfo: any) => {
       utxoAccount['address'] = walltInfo.utxoAddressMain;
       utxoAccount['keyStore'] = walltInfo.keyStore;
       utxoAccount['NoIndex'] = data['NoIndex'];
+      //标记为私钥导入
+      utxoAccount['keyStoreType'] = 'privateKey';
       utxoAccount['userName'] =
         'Wallt' +
         (!data['NoIndex'] ? '01' : data['NoIndex'] > 10 ? data['NoIndex'] : '0' + (data['NoIndex']));

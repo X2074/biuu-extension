@@ -141,6 +141,12 @@ const routes = [
     path: '/sendTransaction',
     name: 'sendTransaction',
     component: () => import("../popup/dappRequest/sendTransaction/index.vue")
+  },
+  //划转交易
+  {
+    path: '/utxoToEvm',
+    name: 'utxoToEvm',
+    component: () => import("../popup/utxoToEvm/index.vue")
   }
   
 ]

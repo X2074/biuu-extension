@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 // const axios = require('axios');
 import qitmeer from 'qitmeer-js';
-import { selectMinUTXOs } from './calculateTxid.js';
 const config = {
     headers: {
         'Content-Type': 'application/json'
@@ -140,39 +139,47 @@ export async function buildExportToEvmTx(fromAddress, pkaddrKey, secretKey, amou
     let pkaddr = evmKeyToPkaddr(pkaddrKey)
     const network = qitmeer.networks.testnet;
     const keyPair = qitmeer.ec.fromPrivateKey(Buffer.from(secretKey, 'hex'));
-    const totalInput = await getUTXOBalance("https://testnet-qng.rpc.qitmeer.io/rpc/", fromAddress)
     const txb = qitmeer.txsign.newSigner(network);
+    // 选取足够的UTXO
+    let totalInput = 0;
+    const selectedUtxos = [];
+    for (const utxo of utxos) {
+        selectedUtxos.push(utxo);
+        totalInput += utxo.amount;
+    }
+
+    // 添加输入
+    selectedUtxos.forEach((utxo, i) => {
+        txb.addInput(utxo.txid, utxo.idx);
+    });
 
     // 设置时间戳，避免timestamp为0导致交易被拒绝
     const lockTime = Math.floor(Date.now() / 1000);
     txb.setTimestamp(lockTime);
 
     // 估算手续费
-    let y = new BigNumber(100000000)
-    let num = parseFloat(Math.ceil(1 / 1024));
-    let gas = parseFloat(new BigNumber(num).multipliedBy(0.0002).multipliedBy(y));
-    let valueTo = parseFloat(new BigNumber(1).multipliedBy(y));
-    let remaining = parseFloat(new BigNumber(totalInput).multipliedBy(y).minus(valueTo).minus(gas));
-    let allPrice = parseFloat(new BigNumber(valueTo).plus(remaining));
-    // 选取足够的UTXO
-    let selectedUtxos = [];
-    let selectUtxos = await selectMinUTXOs(utxos, allPrice);
-    selectedUtxos = selectUtxos.selectedUTXOs;
-    // 添加输入
-    selectedUtxos.forEach((utxo, i) => {
-        txb.addInput(utxo.txid, utxo.idx);
-    });
-    console.log(gas,"gas");
-    console.log(txb,"txbtxbtxb");
+    const inputCount = selectedUtxos.length;
+    const outputCount = 2;
+    const fee = estimateFee(inputCount, outputCount);
+    const change = totalInput - amountToEvm - fee;
+    if (change < 0) {
+        console.error('余额不足，无法支付手续费');
+        return null;
+    }
+console.log(txb,"txbtxbtxb");
 
     // 添加输出1：EVM pkaddr，coinID=1，pubkey
-    txb.addOutput(pkaddr, valueTo, 1, 'pubkey');
+    txb.addOutput(pkaddr, amountToEvm, 1, 'pubkey');
     // 添加输出2：找零回原地址，coinID=0，pubkeyhash
-    txb.addOutput(fromAddress, remaining, 0, 'pubkeyhash');
+    if (change > 0) {
+        txb.addOutput(fromAddress, change, 0, 'pubkeyhash');
+    }
+
     // 签名
     selectedUtxos.forEach((v, i) => {
         txb.sign(i, keyPair);
     });
+
     // 构建交易
     const hex = txb.build().toBuffer().toString('hex');
     return hex;

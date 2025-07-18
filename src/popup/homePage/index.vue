@@ -76,8 +76,8 @@ const initialize = async () => {
 
     let data = await indexDbData.getData('rpc_url');
     if (!data) {
-        return;
         netWorkChange('EVM');
+        return;
     } else {
         // 是否有选中的模式
         await netWorkChange(data.netWorkType ? data.netWorkType : 'EVM');
