@@ -90,7 +90,6 @@ const nextTransfer = async () => {
             },
             toRaw(transferContent.value)
         );
-        loading.value = false;
     }
     console.log(data, 'utxo的交易数据');
     chrome.runtime.sendMessage(data, (response: any) => {

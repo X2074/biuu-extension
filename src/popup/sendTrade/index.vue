@@ -128,7 +128,7 @@ const toTransfer = async () => {
     // 如果账户是私钥导入的，就直接赋值私钥
     let encryption = await Decrypt(key, passKey.value);
     console.log(encryption, 'encryption');
-
+// 此处需要判断是私钥还是助记词，助记词需要转成私钥，之前版本没有加keyStoreType
     if (currentWallt.value['keyStoreType'] && currentWallt.value['keyStoreType'] == 'privateKey') {
         privateKey.value = { privateKey: encryption };
         if (props['type'] && props['type'] == 'transfer') {
@@ -137,9 +137,11 @@ const toTransfer = async () => {
         }
     } else {
         if (rpcUrlData.value['netWorkType'].toLowerCase() == 'evm') {
-            privateKey.value = await evmKey(encryption);
+            let txt:any = await evmKey(encryption);
+            privateKey.value = txt['privateKey']
         } else {
-            privateKey.value = await utxoKey(encryption);
+            let txt:any = await utxoKey(encryption);
+            privateKey.value = txt['privateKey']
         }
     }
     console.log(privateKey.value, 'privateKey');

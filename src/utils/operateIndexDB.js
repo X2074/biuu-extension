@@ -94,7 +94,13 @@ export async function hashSaveIndexDB(keyStore, status, data) {
         gasUsed 消耗的gas费
         from 发送方地址
         to 消息的目标地址（nft所在合约）
-        status 交易的状态：队列中queue 已确认confirmed
+        status 交易的状态：队列中queue 已确认confirmed，
+        type:交易类型： 
+            nft：nft交易
+            EVMtoEVM：evm转账evm
+            UTXOtoUTXO: utxo转账utxo
+            UTXOtoEvm：utxo转evm
+            EVMtoUTXO：evm转utxo
     */
     let hashContent = {
         blockHash: data.blockHash || '',
@@ -105,7 +111,8 @@ export async function hashSaveIndexDB(keyStore, status, data) {
         to: data.to || '',
         status: status || '',
         price: data['value'] ? data['value'] : 0,
-        uuid: data.uuid
+        uuid: data.uuid,
+        type:data.type
     }
     // 如果没有保存过hash
     if (!tradeHash) {

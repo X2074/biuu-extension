@@ -29,6 +29,7 @@ let accountType = ref(''); //当前展示钱包那一套流程
 
 let loading = ref(false);
 let loadingText = ref('加载中...');
+let utxoType = ref(false);//是否是测试网络
 
 // let prop = defineProps(['pageType']);
 let pageType: any = ref('');
@@ -57,6 +58,9 @@ const initializeInfo = async () => {
     // 获取当前展示的钱包数据
     nowAccount.value = await indexDbData.getData('currentWalltAddress');
     accountContent.value = await indexDbData.getData('rpc_url');
+    if(accountContent.value["netWork"] == 'UTXO'){//说明是utxo网络
+        utxoType.value = accountContent.value["url"].includes('testnet');
+    }
     // 指定钱包单位\
     let data = accountContent.value.walltInfo.reverse();
     data.forEach((item: any) => {

@@ -24,7 +24,8 @@ export async function evmTransfer(data) {
         gasLimit: web3.utils.toHex(data.gasLimit),
         gasPrice: web3.utils.toHex(data.gasPrice),
         nonce: await web3.eth.getTransactionCount(data.accountAddress),
-        chainId: data.chainId
+        chainId: data.chainId,
+        type:'EVMtoEVM'
     }
     let tx = new EthereumTx(details)
     let privateKey = Buffer.from(data.key, 'hex');
@@ -165,21 +166,10 @@ export async function utxoTransfer(data) {
     // 构建交易体
     const newTransaction = txb.build().toBuffer().toString('hex');
     console.log(newTransaction, 'newTransaction')
-    // 过滤已经交易过的txid
-    // let transferTxid = await indexDbData.getData('transferTxid');
-    // if (!transferTxid) {
-    //     let txidList = {
-    //         id: "transferTxid", content: txids
-    //     }
-    //     indexDbData.putData(txidList)
-    // } else {
-    //     transferTxid['content'] = [...transferTxid['content'], ...txids];
-    //     indexDbData.putData(transferTxid)
-    // }
     // 发送交易
     try {
         const response = await sendTraction(data.url, newTransaction)
-        let info = Object.assign(data, { 'transactionHash': response })
+        let info = Object.assign(data, { 'transactionHash': response,type:'UTXOtoUTXO' })
         console.log(info, 'info')
         chromeNotifications(response);
         hashSaveIndexDB(data['keyStore'], 'dispose', info);
@@ -191,7 +181,6 @@ export async function utxoTransfer(data) {
 // 划转
 export async function transferUtxo(data) {
     console.log(data, 'data');
-    
     const network = qitmeer.networks.testnet;
     const keyPair = qitmeer.ec.fromPrivateKey(Buffer.from(data.key, 'hex'));
     const bnalance = await getUTXOBalance(data.url, data.from)
@@ -235,7 +224,7 @@ export async function transferUtxo(data) {
     console.log(txb,"txbtxbtxb");
 
     // 添加输出1：EVM pkaddr，coinID=1，pubkey
-    txb.addOutput(data.to, valueTo, 1, 'pubkey');
+    txb.addOutput(data.pkaddr, valueTo, 1, 'pubkey');
     // 添加输出2：找零回原地址，coinID=0，pubkeyhash
     txb.addOutput(data.from, remaining, 0, 'pubkeyhash');
     // 签名
@@ -247,9 +236,7 @@ export async function transferUtxo(data) {
     // 发送交易
     try {
         const response = await sendTraction(data.url, hex)
-        console.log(response,"response");
-        
-        let info = Object.assign(data, { 'transactionHash': response })
+        let info = Object.assign(data, { 'transactionHash': response,type:'UTXOtoEVM' })
         console.log(info, 'info')
         chromeNotifications(response);
         hashSaveIndexDB(data['keyStore'], 'dispose', info);

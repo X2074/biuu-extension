@@ -51,9 +51,6 @@ const changeStep = () => {
 .import-wallt {
     width: 360px;
     padding: 18px 16px;
-    position: absolute;
-    bottom: 0;
-    top: 60px;
     .header {
         align-items: center;
         justify-content: space-between;

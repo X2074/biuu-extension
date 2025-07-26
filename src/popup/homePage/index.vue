@@ -27,7 +27,9 @@ let loading = ref(true);
 let nftDetails = ref(null);
 let userAddress = ref(null);
 let currentWallt = ref(null);
-onMounted(() => {
+let rpc_urlData:any = ref(null);
+onMounted(async() => {
+    rpc_urlData.value = await indexDbData.getData('rpc_url');
     initialize();
     getInfo();
 }); // 获取账户相关信息
@@ -42,7 +44,11 @@ const getInfo = () => {
                 return;
             }
             if (res && res.address) {
-                userAddress.value = res.utxoAddressTest || res.address;
+                if(rpc_urlData.value.url.includes('testnet')){//测试环境
+                    userAddress.value = res.utxoAddressTest || res.address;
+                }else{
+                    userAddress.value = res.address;
+                }
                 currentWallt.value = res;
                 getBalanceInfo();
             } else {
@@ -55,15 +61,14 @@ const getInfo = () => {
 };
 const getBalanceInfo = async () => {
     try {
-        let data = await indexDbData.getData('rpc_url');
-        walltContent.value = data;
+        walltContent.value = rpc_urlData.value;
         // 钱包地址
         walltContent.value.address = userAddress.value;
-        console.log(11111, data);
+        console.log(11111, rpc_urlData.value);
 
         walltContent.value.balance = await getBalance(
-            data.url,
-            Object.assign({ netWorkType: data.netWorkType }, currentWallt.value)
+            rpc_urlData.value.url,
+            Object.assign({ netWorkType: rpc_urlData.value.netWorkType }, currentWallt.value)
         );
         loading.value = false;
     } catch (error) {

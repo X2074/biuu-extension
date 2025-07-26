@@ -1,13 +1,13 @@
 <div class="transaction-history" v-loading:[loadingText]="loading">
-    <div class="header flex" @click="toBack">
+    <div v-if="transactionPage != 'detail'" class="header flex" @click="toBack">
         <img class="back-img" src="@/assets/images/icons/back.png" alt="" />
-        <p>{{rpcData?.unit.toUpperCase()}}转账</p>
+        <p>{{rpcData?.unit.toUpperCase()}}交易记录</p>
     </div>
-    <div class="tabs flex">
+    <!-- <div class="tabs flex">
         <p>tokens</p>
         <p>收藏品</p>
         <p class="check-tabs">交易记录</p>
-    </div>
+    </div> -->
     <div class="transaction-content" v-if="transactionPage == 'list'">
         <div class="tabs flex">
             <p @click="transactionTabs = 'dispose'" :class="{'check-tabs':transactionTabs == 'dispose'}">
@@ -38,6 +38,13 @@
         <div class="detail-content flex mt-15">
             <p class="name">状态：</p>
             <div class="price">已确认</div>
+        </div>
+        <div class="detail-content flex mt-15">
+            <p class="name">交易类型：</p>
+            <div class="price" v-if="detailTransaction.type == 'EVMtoEVM'">EVM to EVM</div>
+            <div class="price" v-if="detailTransaction.type == 'UTXOtoUTXO'">UTXO to UTXO</div>
+            <div class="price" v-if="detailTransaction.type == 'UTXOtoEVM'">UTXO to EVM</div>
+            <div class="price" v-if="detailTransaction.type == 'EVMtoUTXO'">EVM to UTXO</div>
         </div>
         <div class="detail-content flex mt-25">
             <p class="name">交易哈希：</p>

@@ -14,10 +14,13 @@
                     <p class="price">{{item&&item.balance?item.balance : 0}} {{accountContent.unit}}</p>
                 </div>
                 <div class="address-check flex mr-40">
-                    <p v-if="item.utxoAddressTest">
+                    <p v-if="item.utxoAddressTest && utxoType">
                         {{item.utxoAddressTest.substr(0,4)}}...{{item.utxoAddressTest.substr(-4)}}
                     </p>
-                    <p v-else>{{item.address.substr(0,4)}}...{{item.address.substr(-4)}}</p>
+                    <p v-if="item.utxoAddressTest && !utxoType">
+                        {{item.address.substr(0,4)}}...{{item.address.substr(-4)}}
+                    </p>
+                    <p v-if="!item.utxoAddressTest && !utxoType">{{item.address.substr(0,4)}}...{{item.address.substr(-4)}}</p>
                     <img
                         v-if="nowAccount && nowAccount.address == item.address"
                         class="mr-15"

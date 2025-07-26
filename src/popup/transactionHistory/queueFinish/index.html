@@ -10,6 +10,10 @@
         <p class="status ml-10" v-if="transactionDetail.status == 'queue'">队列中</p>
         <p class="status error ml-10" v-if="transactionDetail.status == 'error'">失败</p>
     </div>
+    <p class="times mt-5" v-if="transactionDetail.type == 'EVMtoEVM'">EVM to EVM</p>
+    <p class="times mt-5" v-if="transactionDetail.type == 'UTXOtoUTXO'">UTXO to UTXO</p>
+    <p class="times mt-5" v-if="transactionDetail.type == 'UTXOtoEVM'">UTXO to EVM</p>
+    <p class="times mt-5" v-if="transactionDetail.type == 'EVMtoUTXO'">EVM to UTXO</p>
     <p class="times mt-5" v-if="transactionDetail['time']">
         {{dayjs(transactionDetail['time']).format('YYYY-MM-DD HH:mm')}}
     </p>

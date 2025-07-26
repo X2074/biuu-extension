@@ -151,8 +151,9 @@ const toTransfer = async () => {
     // 获取toEVM的私钥
     console.log('privateKeyEvm', privateKeyEvm);
     transferContent.value = {
-        from: currentWallt.value['utxoAddressTest'], // 接收方地址
-        to: pkaddr, // 接收方地址
+        from: currentWallt.value['utxoAddressTest'], // 发送方地址
+        to:selectedEvmAddress.value['address'],//接收方evm地址
+        pkaddr: pkaddr, // 接收方地址UTXO地址
         toShow:selectedEvmAddress.value['address'],
         value: quantity.value, // 转账
         chainId: rpcUrlData.value['CHAIN_ID'],

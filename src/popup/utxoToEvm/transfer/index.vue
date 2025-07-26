@@ -59,6 +59,7 @@ const nextTransfer = async () => {
     loading.value = true;
     if (totalPrice.value >= transferContent.value['balance']) {
         bus.emit('promptModalErr', '您的余额不足');
+        loading.value = false;
         return;
     }
     // 发送消息给 background 页面请求数据
@@ -75,7 +76,6 @@ const nextTransfer = async () => {
             },
             toRaw(transferContent.value)
         );
-        loading.value = false;
     console.log(data, 'utxo的交易数据');
     chrome.runtime.sendMessage(data, (response: any) => {
         console.log('Received data from background:', response);

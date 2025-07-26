@@ -87,8 +87,10 @@ const toDetail = async (data: any) => {
     }
 };
 const getUtxo = async (data: any) => {
+    if(!data['transactionHash']) return;
     let receipt = await getUtxoHash(data['url'], data['transactionHash']);
-    time.value = receipt['timestamp'];
+    console.log(receipt, 'receiptreceipt');
+    time.value = receipt['timestamp'] || "";
     transactionPage.value = 'detail';
     loading.value = false;
 };
