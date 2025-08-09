@@ -84,7 +84,7 @@ const validateNumberInput = () => {
 };
 
 const handleAddressChange = async (e:any)=>{
-    console.log(selectedEvmAddress.value, 'encryption');
+    console.log(selectedEvmAddress.value, e,'encryption');
 }
 // 跳转转账页面
 const toTransfer = async () => {

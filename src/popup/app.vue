@@ -154,7 +154,7 @@ const testTransfer = async() => {
         } else {
             console.error('[广播失败]', sendResult);
         }
-    } catch (e) {
+    } catch (e:any) {
         console.error('[异常] 广播交易时出错:', e.message);
     }
 };

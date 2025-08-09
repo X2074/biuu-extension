@@ -79,7 +79,7 @@ export const createEIP1193Provider = (): EthereumProvider => {
             }
         },
         isAuthorized: async () => {
-            return await requestContentScript({method:'isAuthorized'});
+            return await requestContentScript({method:'isAuthorized'},'');
         },
         request: async (args: { method: string; params?: any[] }) => {
             const { method, params } = args;

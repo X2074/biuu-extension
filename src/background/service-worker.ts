@@ -205,7 +205,7 @@ async function handleProviderRequest(request: any) {
         case 'eth_getTransactionReceipt':
             return await requestMethodFn.eth_getTransactionReceipt(request);
         case 'eth_disconnect':
-            return await requestMethodFn.eth_disconnect(request);
+            return await requestMethodFn.eth_disconnect();
         case 'isAuthorized':
             return await requestMethodFn.isAuthorized();
         default:

@@ -36,7 +36,6 @@ async function requestGetPermissions() {
 async function eth_disconnect() {
     await indexDbData.deleteData('authorized_sites');
     await indexDbData.deleteData('authorization');
-    console.log(permissions,"permissions");
     return []
 }
 
@@ -124,5 +123,6 @@ export default {
     eth_feeHistory,
     eth_getLogs,
     eth_newPendingTransactionFilter,
-    eth_disconnect
+    eth_disconnect,
+    isAuthorized
 }

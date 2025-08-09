@@ -3,7 +3,6 @@ import { ethers } from 'ethers';
 import Web3 from 'web3';
 import indexDbData from '../../indexDB.js';
 export async function eth_getBlockByHash(request: any) {
-    debugger
     try {
         const provider = await getEthersProvider();
         const blockHash = request.params[0]; // 获取请求参数中的区块哈希
@@ -23,7 +22,6 @@ export async function eth_getBlockByHash(request: any) {
  * @param request 请求对象，params[0] 为区块编号，params[1] 为是否获取交易详情的布尔值
  */
 export async function eth_getBlockByNumber(request: any) {
-    debugger
     try {
         // 获取以太坊提供者实例
         const provider = await getEthersProvider();
@@ -74,7 +72,6 @@ export async function eth_coinbase(request: any) {
     return coinbase;
 }
 export async function eth_getFilterChanges(request: any) {
-    debugger;
     console.log(request, 'requesteth_getFilterChanges');
 }
 
@@ -94,7 +91,6 @@ export async function eth_uninstallFilter(request: any) {
 }
 // 用于查询指定地址的合约字节码
 export async function eth_getCode(request: any) {
-    debugger;
     let address = request.params[0] || '';
     const provider = await getEthersProvider();
     const bytecode = await provider.getCode(address);
@@ -124,7 +120,6 @@ const nonce = await provider.getTransactionCount(request.params[0]); */
 }
 // 撤销当前dapp的授权
 export async function wallet_revokePermissions(request: any) {
-    debugger;
     console.log(request, 'requestwallet_revokePermissions');
 }
 //返回与给定块哈希匹配的块中的交易数。
@@ -213,7 +208,6 @@ export async function eth_getTransactionByBlockNumberAndIndex(request: any) {
  * @param request 请求对象，params[0] 为交易哈希
  */
 export async function eth_getTransactionByHash(request: any) {
-    debugger
     try {
         // 获取以太坊提供者实例
         const provider = await getEthersProvider();
@@ -262,7 +256,6 @@ export async function eth_getUncleCountByBlockHash(request: any) {
  */
 
 export async function eth_getUncleCountByBlockNumber(request: any) {
-    debugger
     try {
         const provider = await getEthersProvider();
         const blockNumberParam = request.params[0];
@@ -298,7 +291,6 @@ export async function eth_getUncleCountByBlockNumber(request: any) {
 
 
 export async function eth_estimateGas(request: any) {
-    debugger
     try {
         const provider = await getEthersProvider();
         const transaction = request.params[0];
@@ -317,7 +309,6 @@ export async function eth_estimateGas(request: any) {
     }
 }
 export async function eth_feeHistory(request: any) {
-    debugger
     try {
         const provider = await getEthersProvider();
         const [blockCount, newestBlock, rewardPercentiles] = request.params;
@@ -340,7 +331,6 @@ export async function eth_feeHistory(request: any) {
     }
 }
 export async function eth_getLogs(request: any) {
-    debugger
     try {
         const provider = await getEthersProvider();
         const filter = request.params[0];
